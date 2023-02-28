@@ -23,7 +23,7 @@ public class MainView extends VerticalLayout {
         addButton.addClickShortcut(Key.ENTER);
 
         add(
-                new H1("Vaadin Todo"),
+                new H1("Vaadin Todo Test"),
                 todosList,
                 new HorizontalLayout(
                         taskField,
