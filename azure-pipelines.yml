@@ -26,10 +26,24 @@ steps:
       jdkSourceOption: "PreInstalled"
     displayName: "Setup JDK 17"
 
-  - task: PushToHeroku@0
+  - task: Gradle@3
     inputs:
-      ApiKey: '$(HEROKU_API_KEY)'
-      AppName: 'fortyloveapp'
-      PushRoot: '$(System.DefaultWorkingDirectory)'
+      workingDirectory: ""
+      gradleWrapperFile: "gradlew"
+      gradleOptions: "-Xmx3072m"
+      options: "-Pvaadin.productionMode --stacktrace --info"
+      javaHomeOption: "JDKVersion"
+      jdkVersionOption: "1.17"
+      jdkArchitectureOption: "x64"
+      publishJUnitResults: true
+      testResultsFiles: "**/TEST-*.xml"
+      tasks: "build"
+    displayName: "Gradle Build"
+
+  - task: netplus-vsextension-heroku@1
+    inputs:
+      herokuApplicationName: "fortyloveapp"
+      herokuApiKey: "$(HEROKU_API_KEY)"
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
     displayName: "Deploy to Heroku"
+
