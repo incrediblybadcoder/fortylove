@@ -16,7 +16,7 @@ steps:
     inputs:
       key: 'gradle | "$(Agent.OS)" | **/build/**'
       restoreKeys: 'gradle | "$(Agent.OS)"'
-      path: '$(System.DefaultWorkingDirectory)/.gradle'
+      path: '.gradle'
     displayName: 'Cache dependencies and build directory'
 
   - task: JavaToolInstaller@0
@@ -26,23 +26,10 @@ steps:
       jdkSourceOption: "PreInstalled"
     displayName: "Setup JDK 17"
 
-  - task: Gradle@3
+  - task: PushToHeroku@0
     inputs:
-      workingDirectory: ""
-      gradleWrapperFile: "gradlew"
-      gradleOptions: "-Xmx3072m"
-      options: "-Pvaadin.productionMode --stacktrace --info"
-      javaHomeOption: "JDKVersion"
-      jdkVersionOption: "1.17"
-      jdkArchitectureOption: "x64"
-      publishJUnitResults: true
-      testResultsFiles: "**/TEST-*.xml"
-      tasks: "build"
-    displayName: "Gradle Build"
-    
-  - task: netplus-vsextension-heroku@1
-    inputs:
-      herokuApplicationName: "fortyloveapp"
-      herokuApiKey: "$(HEROKU_API_KEY)"
+      ApiKey: '$(HEROKU_API_KEY)'
+      AppName: 'fortyloveapp'
+      PushRoot: '$(System.DefaultWorkingDirectory)'
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
     displayName: "Deploy to Heroku"
