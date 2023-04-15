@@ -32,3 +32,8 @@ steps:
     displayName: 'Clean'
   - script: ./gradlew build -Pvaadin.productionMode --stacktrace --info --no-daemon
     displayName: 'Build'
+    
+  - task: netplus-vsextension-heroku@1
+    inputs:
+      herokuApplicationName: 'fortyloveapp'
+      herokuApiKey: '$(HEROKU_API_KEY)'
