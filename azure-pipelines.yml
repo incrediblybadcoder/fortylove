@@ -23,7 +23,8 @@ steps:
     inputs:
       workingDirectory: ""
       gradleWrapperFile: "gradlew"
-      gradleOptions: "-Xmx3072m --Pvaadin.productionMode --stacktrace --info --no-daemon"
+      gradleOptions: "-Xmx3072m"
+      options: "-Pvaadin.productionMode --stacktrace --info --no-daemon"
       javaHomeOption: "JDKVersion"
       jdkVersionOption: "1.17"
       jdkArchitectureOption: "x64"
