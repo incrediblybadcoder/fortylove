@@ -42,11 +42,12 @@ steps:
 
   - script: |
       curl https://cli-assets.heroku.com/install.sh | sh
-      heroku login -i
-      heroku container:login
+      echo $(HEROKU_API_KEY) | heroku login --interactive
+#      heroku login -i
+#      heroku container:login
     displayName: 'Install and authenticate with Heroku CLI'
 
-  - script: heroku deploy:jar --app fortyloveapp build/libs/fortylove-0.0.1-SNAPSHOT.jar 
+  - script: heroku deploy:jar --app fortyloveapp build/libs/fortylove-0.0.1-SNAPSHOT.jar
     env:
       HEROKU_EMAIL: $(HEROKU_EMAIL)
       HEROKU_API_KEY: $(HEROKU_API_KEY)
