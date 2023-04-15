@@ -17,6 +17,8 @@ steps:
       versionSpec: "17"
       jdkArchitectureOption: "x64"
       jdkSourceOption: "PreInstalled"
+    displayName: "Declare JDK 17"
+
   - task: Gradle@3
     inputs:
       workingDirectory: ""
@@ -28,12 +30,16 @@ steps:
       publishJUnitResults: true
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
+    displayName: "Gradle Build"
+
   - script: ./gradlew clean
-    displayName: 'Clean'
+    displayName: "Gradle Clean"
+
   - script: ./gradlew build -Pvaadin.productionMode --stacktrace --info --no-daemon
-    displayName: 'Build'
+    displayName: "Build Production"
     
   - task: netplus-vsextension-heroku@1
     inputs:
-      herokuApplicationName: 'fortyloveapp'
-      herokuApiKey: '$(HEROKU_API_KEY)'
+      herokuApplicationName: "fortyloveapp"
+      herokuApiKey: "$(HEROKU_API_KEY)"
+    displayName: "Deploy to Heroku"
