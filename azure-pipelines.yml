@@ -42,4 +42,5 @@ steps:
     inputs:
       herokuApplicationName: "fortyloveapp"
       herokuApiKey: "$(HEROKU_API_KEY)"
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
     displayName: "Deploy to Heroku"
