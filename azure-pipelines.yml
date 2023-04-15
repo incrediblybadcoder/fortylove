@@ -44,9 +44,9 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        git checkout $(Build.SourceBranchName)
+        git checkout main
         git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
-        git push heroku $(Build.SourceBranchName)
+        git push heroku main
     displayName: "Deploy to Heroku"
 
 #  - task: netplus-vsextension-heroku@1
