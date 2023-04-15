@@ -36,6 +36,13 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+vaadin {
+	pnpmEnable = true
+	productionMode = true
+	generateBundle(true)
+	optimizeBundle(true)
+}
+
+test {
 	useJUnitPlatform()
 }
