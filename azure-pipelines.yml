@@ -23,7 +23,7 @@ steps:
     inputs:
       workingDirectory: ""
       gradleWrapperFile: "gradlew"
-      gradleOptions: "-Xmx3072m"
+      gradleOptions: "-Xmx3072m -Pvaadin.productionMode --stacktrace --info --no-daemon"
       javaHomeOption: "JDKVersion"
       jdkVersionOption: "1.17"
       jdkArchitectureOption: "x64"
@@ -31,12 +31,6 @@ steps:
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
     displayName: "Gradle Build"
-
-  - script: ./gradlew clean
-    displayName: "Gradle Clean"
-
-  - script: ./gradlew build -Pvaadin.productionMode --stacktrace --info --no-daemon
-    displayName: "Build Production"
     
   - task: netplus-vsextension-heroku@1
     inputs:
