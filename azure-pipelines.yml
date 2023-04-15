@@ -40,14 +40,26 @@ steps:
 #      tasks: "build"
 #    displayName: "Gradle Build"
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        git checkout main
-        git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
-        git push heroku main
-    displayName: "Deploy to Heroku"
+  - script: |
+      curl https://cli-assets.heroku.com/install.sh | sh
+      heroku login -i
+      heroku container:login
+    displayName: 'Install and authenticate with Heroku CLI'
+
+  - script: heroku deploy:jar build/libs/fortylove-0.0.1-SNAPSHOT.jar --fortyloveapp
+    env:
+      HEROKU_EMAIL: $(HEROKU_EMAIL)
+      HEROKU_API_KEY: $(HEROKU_API_KEY)
+    displayName: 'Deploy to Heroku'
+
+#  - task: PowerShell@2
+#    inputs:
+#      targetType: 'inline'
+#      script: |
+#        git checkout $(Build.SourceBranchName)
+#        git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
+#        git push heroku $(Build.SourceBranchName)
+#    displayName: "Deploy to Heroku"
 
 #  - task: netplus-vsextension-heroku@1
 #    inputs:
