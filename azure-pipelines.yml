@@ -42,7 +42,11 @@ steps:
 
   - script: |
       curl https://cli-assets.heroku.com/install.sh | sh
-      echo $(HEROKU_API_KEY) | heroku login --interactive
+      (
+        echo "$(HEROKU_EMAIL)"
+        echo "$(HEROKU_PASSWORD)"
+      ) | heroku login
+#      echo $(HEROKU_API_KEY) | heroku login --interactive
 #      heroku login -i
 #      heroku container:login
     displayName: 'Install and authenticate with Heroku CLI'
