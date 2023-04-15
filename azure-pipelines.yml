@@ -26,24 +26,33 @@ steps:
       jdkSourceOption: "PreInstalled"
     displayName: "Setup JDK 17"
 
-  - task: Gradle@3
-    inputs:
-      workingDirectory: ""
-      gradleWrapperFile: "gradlew"
-      gradleOptions: "-Xmx3072m"
-      options: "-Pvaadin.productionMode --stacktrace --info"
-      javaHomeOption: "JDKVersion"
-      jdkVersionOption: "1.17"
-      jdkArchitectureOption: "x64"
-      publishJUnitResults: true
-      testResultsFiles: "**/TEST-*.xml"
-      tasks: "build"
-    displayName: "Gradle Build"
+#  - task: Gradle@3
+#    inputs:
+#      workingDirectory: ""
+#      gradleWrapperFile: "gradlew"
+#      gradleOptions: "-Xmx3072m"
+#      options: "-Pvaadin.productionMode --stacktrace --info"
+#      javaHomeOption: "JDKVersion"
+#      jdkVersionOption: "1.17"
+#      jdkArchitectureOption: "x64"
+#      publishJUnitResults: true
+#      testResultsFiles: "**/TEST-*.xml"
+#      tasks: "build"
+#    displayName: "Gradle Build"
 
-  - task: netplus-vsextension-heroku@1
+  - task: PowerShell@2
     inputs:
-      herokuApplicationName: "fortyloveapp"
-      herokuApiKey: "$(HEROKU_API_KEY)"
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+      targetType: 'inline'
+      script: |
+        git checkout $(Build.SourceBranchName)
+        git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
+        git push heroku $(Build.SourceBranchName)
     displayName: "Deploy to Heroku"
+
+#  - task: netplus-vsextension-heroku@1
+#    inputs:
+#      herokuApplicationName: "fortyloveapp"
+#      herokuApiKey: "$(HEROKU_API_KEY)"
+#    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+#    displayName: "Deploy to Heroku"
 
