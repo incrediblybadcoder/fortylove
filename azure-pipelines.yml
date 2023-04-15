@@ -12,11 +12,11 @@ pool:
   vmImage: "ubuntu-latest"
 
 steps:
-  - task: UseJavaVersion@1
+  - task: JavaToolInstaller@0
     inputs:
       versionSpec: "17"
       architecture: "x64"
-      jdkSourceOption: "PreInstalledJdk"
+      jdkSourceOption: "PreInstalled"
   - task: Gradle@3
     inputs:
       workingDirectory: ""
