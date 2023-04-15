@@ -16,7 +16,7 @@ steps:
     inputs:
       key: 'gradle | "$(Agent.OS)" | **/build/**'
       restoreKeys: 'gradle | "$(Agent.OS)"'
-      path: '$(System.DefaultWorkingDirectory)/vsts/.gradle'
+      path: '$(System.DefaultWorkingDirectory)/.gradle'
     displayName: 'Cache dependencies and build directory'
 
   - task: JavaToolInstaller@0
