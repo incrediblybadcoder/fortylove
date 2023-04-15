@@ -17,15 +17,14 @@ steps:
       key: 'gradle | "$(Agent.OS)" | **/build/**'
       restoreKeys: 'gradle | "$(Agent.OS)"'
       path: '$(System.DefaultWorkingDirectory)/.gradle'
-      cacheHitVar: 'GRADLE_CACHE_HIT'
-    displayName: 'Cache Gradle dependencies and build directory'
+    displayName: 'Cache dependencies and build directory'
 
   - task: JavaToolInstaller@0
     inputs:
       versionSpec: "17"
       jdkArchitectureOption: "x64"
       jdkSourceOption: "PreInstalled"
-    displayName: "Declare JDK 17"
+    displayName: "Setup JDK 17"
 
   - task: Gradle@3
     inputs:
