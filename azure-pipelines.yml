@@ -12,14 +12,18 @@ pool:
   vmImage: "ubuntu-latest"
 
 steps:
-
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: "17"
+      architecture: "x64"
+      jdkSourceOption: "PreInstalledJdk"
   - task: Gradle@3
     inputs:
       workingDirectory: ""
       gradleWrapperFile: "gradlew"
       gradleOptions: "-Xmx3072m"
       javaHomeOption: "JDKVersion"
-      jdkVersionOption: "1.11"
+      jdkVersionOption: "1.17"
       jdkArchitectureOption: "x64"
       publishJUnitResults: true
       testResultsFiles: "**/TEST-*.xml"
