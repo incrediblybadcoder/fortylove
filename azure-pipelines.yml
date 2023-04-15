@@ -15,7 +15,7 @@ steps:
   - task: JavaToolInstaller@0
     inputs:
       versionSpec: "17"
-      architecture: "x64"
+      jdkArchitectureOption: "x64"
       jdkSourceOption: "PreInstalled"
   - task: Gradle@3
     inputs:
