@@ -30,12 +30,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-jar {
-	manifest {
-		attributes "Start-Class": "ch.fortylove.FortyloveApplication"
-	}
-}
-
 dependencyManagement {
 	imports {
 		mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
