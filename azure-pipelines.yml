@@ -46,6 +46,20 @@ steps:
       tasks: "build"
     displayName: "Gradle Build"
 
+  - task: PowerShell@2
+    inputs:
+      targetType: "inline"
+      script: |
+        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
+        Write-Host "Build.Reason: $(Build.Reason)"
+        Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        Write-Host "isMainDirect: $(isMainDirect)"
+        Write-Host "isMainPullRequest: $(isMainPullRequest)"
+        Write-Host "isDevelopDirect: $(isDevelopDirect)"
+        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
+    condition: always()
+    displayName: "Print Deployment Variables"
+
   - task: PushToHeroku@0
     inputs:
       ApiKey: "$(HEROKU_API_KEY)"
