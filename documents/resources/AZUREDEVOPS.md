@@ -23,6 +23,13 @@ Die Pipeline wird in folgenden Situationen ausgeführt:
 * Pull-Request auf *development*-Branch
 * Code-Push auf Branches im Ordner *feature/**
 
+#### Environment Variables
+Spring-Boot-Data-JPA hat im [application-properties](../../src/main/resources/application.properties) diverse Variablen definiert. Diese sind während dem Gradle-Build
+nötig, um die Verbindung zur Datenbank zu testen. Diese Werte sind mit Environment Variables umgesetzt, welche an folgenden Orten eingefügt werden müssen:
+* Intellij Run-Configuration
+* Heroku App-Settings
+* Gradle-Build-Task in der Pipeline
+
 Es gibt die Möglichkeit bei Code-Pushes auf die *feature*-Branches den Pipeline-Run zu unterbinden. Dies kann hilfreich sein, wenn viele kleine Änderungen separat
 gepushed werden sollen. Durch das einfügen von `[skip ci]` in der Commit-Message beim Push auf einen *feature*-Branch, wird die Pipeline nicht ausgeführt.
 
