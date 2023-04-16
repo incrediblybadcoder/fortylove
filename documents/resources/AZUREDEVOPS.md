@@ -2,6 +2,17 @@
 ## Azure SQL
 * [Use Java and JDBC with Azure SQL Database](https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-query-java?view=azuresql)
 
+### SQL Server Connection
+#### Local
+* Name: jdbc:sqlserver://localhost:1433;databaseName=fortylovedb;integratedSecurity=true;
+* User: *empty*
+* Password: *empty*
+
+#### Azure Sql
+* Name: jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedb
+* User: fortylove
+* Password: nonstandard
+
 ## Azure Devops
 ### Pipeline
 * [Azure Pipeline Documentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops)
@@ -35,7 +46,7 @@ Das Deployment auf Heroku funktioniert automatisch durch die Build-Pipeline nach
   * *ApiKey* $(HEROKU_API_KEY)
   * *AppName* $(HEROKU_APP_NAME)
   * *PushRoot* $(System.DefaultWorkingDirectory)
-* Condition an *PushToHeroku* Task anbringen, damit Task nur bei Azure-Repo Branch *main* läuft durch *condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')*
+* Condition an *PushToHeroku* Task anbringen, damit Task nur bei Azure-Repo Branch *main* läuft
 
 #### [Procfile](../../Procfile)
 Das [Procfile](../../Procfile) definiert, wie das gebuildete App auf Heroku gestartet wird. Es muss an Azure-Repo-Root erstellt werden.
