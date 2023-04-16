@@ -44,6 +44,8 @@ steps:
       publishJUnitResults: true
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
+    env:
+      SPRING_DATASOURCE_URL: "$(SPRING_DATASOURCE_URL)"
     displayName: "Gradle Build"
 
   - task: PowerShell@2
