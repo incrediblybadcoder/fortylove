@@ -45,5 +45,5 @@ steps:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))
     displayName: "Deploy to Heroku"
