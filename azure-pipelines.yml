@@ -36,7 +36,7 @@ steps:
     inputs:
       workingDirectory: ""
       gradleWrapperFile: "gradlew.bat"
-      gradleOptions: "-Xmx3072m"
+      gradleOptions: "-Xmx3072m --build-cache"
       options: "-Pvaadin.productionMode --stacktrace --info"
       javaHomeOption: "JDKVersion"
       jdkVersionOption: "1.17"
@@ -65,7 +65,7 @@ steps:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(variables.isMainDirect, variables.isMainPullRequest))
+    condition: and(succeeded(), or(eq(variables.isMainDirect, true), eq(variables.isMainPullRequest, true)))
     displayName: "Deploy to Heroku Production"
 
   - task: PushToHeroku@0
@@ -73,5 +73,5 @@ steps:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME_DEVELOP)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(variables.isDevelopDirect, variables.isDevelopPullRequest))
+    condition: and(succeeded(), or(eq(variables.isDevelopDirect, true), eq(variables.isDevelopPullRequest, true)))
     displayName: "Deploy to Heroku Develop"
