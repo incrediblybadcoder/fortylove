@@ -65,11 +65,26 @@ steps:
 #        git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
 #        git push heroku $(Build.SourceBranchName)
 #    displayName: "Deploy to Heroku"
+  - script: |
+      npm install -global Heroku
+      sudo snap install --classic heroku
+    displayName: 'i heroku cli'
+  - script: |
+      echo CONTAINER LOGIN
+      heroku container:login
+      echo PUSH
+      heroku container:push -a $HEROKU_APP_NAME web
+      echo RELEASE
+      heroku container:release -a $HEROKU_APP_NAME web
+    displayName: 'heroku push'
+    env:
+      HEROKU_API_KEY: $(HEROKU_API_KEY)
+      HEROKU_APP_NAME: $(HEROKU_APP_NAME)
 
-  - task: netplus-vsextension-heroku@1
-    inputs:
-      herokuApplicationName: "fortyloveapp"
-      herokuApiKey: "$(HEROKU_API_KEY)"
-      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-    displayName: "Deploy to Heroku"
+#  - task: netplus-vsextension-heroku@1
+#    inputs:
+#      herokuApplicationName: "fortyloveapp"
+#      herokuApiKey: "$(HEROKU_API_KEY)"
+#      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+#    displayName: "Deploy to Heroku"
 
