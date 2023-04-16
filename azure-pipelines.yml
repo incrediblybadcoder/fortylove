@@ -6,6 +6,8 @@
 variables:
   isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+  isDevelopDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
 
 trigger:
   branches:
@@ -47,7 +49,15 @@ steps:
   - task: PushToHeroku@0
     inputs:
       ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME)"
+      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(eq(variables.isMainDirect, true), eq(variables.isMainPullRequest, true)))
-    displayName: "Deploy to Heroku"
+    condition: and(succeeded(), or(variables.isMainDirect, variables.isMainPullRequest))
+    displayName: "Deploy to Heroku Production"
+
+  - task: PushToHeroku@0
+    inputs:
+      ApiKey: "$(HEROKU_API_KEY)"
+      AppName: "$(HEROKU_APP_NAME_DEVELOP)"
+      PushRoot: "$(System.DefaultWorkingDirectory)"
+    condition: and(succeeded(), or(variables.isDevelopDirect, variables.isDevelopPullRequest))
+    displayName: "Deploy to Heroku Develop"

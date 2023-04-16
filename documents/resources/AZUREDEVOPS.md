@@ -40,13 +40,19 @@ Das Deployment auf Heroku funktioniert automatisch durch die Build-Pipeline nach
 * [azure-pipeline.yaml](../../azure-pipelines.yml) muss als vmImage *windows-latest* konfiguriert sein (Plugin ist für Windoes konzipiert)
 * [Heroku API-Key](https://dashboard.heroku.com/account/applications) erstellen
 * In Pipeline über Azure-Seite folgende Variablen hinzufügen:
-  * *HEROKU_APP_NAME* mit Name der App auf Heroku
+  * *HEROKU_APP_NAME_PRODUCTION* mit Name der Production-App auf Heroku
+  * *HEROKU_APP_NAME_DEVELOP* mit Name der Develop-App auf Heroku
   * *HEROKU_API_KEY* mit [Heroku API-Key](https://dashboard.heroku.com/account/applications)
 * Task *PushToHeroku* über Tasks in Pipeline einfügen mit folgenden Werten:
   * *ApiKey* $(HEROKU_API_KEY)
-  * *AppName* $(HEROKU_APP_NAME)
+  * *AppName* $(HEROKU_APP_NAME_PRODUCTION)
   * *PushRoot* $(System.DefaultWorkingDirectory)
-* Condition an *PushToHeroku* Task anbringen, damit Task nur bei Azure-Repo Branch *main* läuft
+  * Condition an *PushToHeroku* Task anbringen, damit Task nur bei Azure-Repo Branch *main* läuft
+* Task *PushToHeroku* über Tasks in Pipeline einfügen mit folgenden Werten:
+  * *ApiKey* $(HEROKU_API_KEY)
+  * *AppName* $(HEROKU_APP_NAME_DEVELOP)
+  * *PushRoot* $(System.DefaultWorkingDirectory)
+  * Condition an *PushToHeroku* Task anbringen, damit Task nur bei Azure-Repo Branch *develop* läuft
 
 #### [Procfile](../../Procfile)
 Das [Procfile](../../Procfile) definiert, wie das gebuildete App auf Heroku gestartet wird. Es muss an Azure-Repo-Root erstellt werden.
