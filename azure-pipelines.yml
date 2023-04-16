@@ -3,6 +3,10 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
+variables:
+  isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+
 trigger:
   branches:
     include:
@@ -39,11 +43,11 @@ steps:
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
     displayName: "Gradle Build"
-  
+
   - task: PushToHeroku@0
     inputs:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), or(eq(variables.isMainDirect, true), eq(variables.isMainPullRequest, true)))
     displayName: "Deploy to Heroku"
