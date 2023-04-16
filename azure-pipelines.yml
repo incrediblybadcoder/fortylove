@@ -9,7 +9,7 @@ trigger:
       - feature/*
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: "windows-latest"
 
 steps:
   - task: Cache@2
@@ -29,7 +29,7 @@ steps:
   - task: Gradle@3
     inputs:
       workingDirectory: ""
-      gradleWrapperFile: "gradlew"
+      gradleWrapperFile: "gradlew.bat"
       gradleOptions: "-Xmx3072m"
       options: "-Pvaadin.productionMode --stacktrace --info"
       javaHomeOption: "JDKVersion"
@@ -39,37 +39,10 @@ steps:
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
     displayName: "Gradle Build"
-
-      #  - script: |
-      #      curl https://cli-assets.heroku.com/install.sh | sh
-      #      (
-      #        echo "$(HEROKU_EMAIL)"
-      #        echo "$(HEROKU_PASSWORD)"
-    #      ) | heroku login
-#      echo $(HEROKU_API_KEY) | heroku login --interactive
-#      heroku login -i
-#      heroku container:login
-  #    displayName: 'Install and authenticate with Heroku CLI'
-
-    #  - script: heroku deploy:jar --app fortyloveapp build/libs/fortylove-0.0.1-SNAPSHOT.jar
-      #    env:
-      #      HEROKU_EMAIL: $(HEROKU_EMAIL)
-    #HEROKU_API_KEY: $(HEROKU_API_KEY)
-    #displayName: 'Deploy to Heroku'
-
-#  - task: PowerShell@2
-#    inputs:
-#      targetType: 'inline'
-#      script: |
-#        git checkout $(Build.SourceBranchName)
-#        git remote add heroku https://heroku:$(HEROKU_API_KEY)@git.heroku.com/fortyloveapp.git
-#        git push heroku $(Build.SourceBranchName)
-#    displayName: "Deploy to Heroku"
-
-  - task: netplus-vsextension-heroku@1
+  
+  - task: PushToHeroku@0
     inputs:
-      herokuApplicationName: "fortyloveapp"
-      herokuApiKey: "$(HEROKU_API_KEY)"
-      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-    displayName: "Deploy to Heroku"
-
+      ApiKey: '$(HEROKU_API_KEY)'
+      AppName: '$(HEROKU_APP_NAME)'
+      PushRoot: '$(System.DefaultWorkingDirectory)'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
