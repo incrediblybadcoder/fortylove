@@ -45,4 +45,4 @@ steps:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: eq(variables["Build.SourceBranch"], "refs/heads/main")
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
