@@ -26,22 +26,22 @@ steps:
       jdkSourceOption: "PreInstalled"
     displayName: "Setup JDK 17"
 
-  - task: Gradle@3
-    inputs:
-      workingDirectory: ""
-      gradleWrapperFile: "gradlew.bat"
-      gradleOptions: "-Xmx3072m"
-      options: "-Pvaadin.productionMode --stacktrace --info"
-      javaHomeOption: "JDKVersion"
-      jdkVersionOption: "1.17"
-      jdkArchitectureOption: "x64"
-      publishJUnitResults: true
-      testResultsFiles: "**/TEST-*.xml"
-      tasks: "build"
-    displayName: "Gradle Build"
+#  - task: Gradle@3
+#    inputs:
+#      workingDirectory: ""
+#      gradleWrapperFile: "gradlew.bat"
+#      gradleOptions: "-Xmx3072m"
+#      options: "-Pvaadin.productionMode --stacktrace --info"
+#      javaHomeOption: "JDKVersion"
+#      jdkVersionOption: "1.17"
+#      jdkArchitectureOption: "x64"
+#      publishJUnitResults: true
+#      testResultsFiles: "**/TEST-*.xml"
+#      tasks: "build"
+#    displayName: "Gradle Build"
   
   - task: PushToHeroku@0
     inputs:
-      ApiKey: '$(HEROKU_API_KEY)'
-      AppName: '$(HEROKU_APP_NAME)'
+      ApiKey: '31b91a26-0664-48b4-af16-6e06b15fc8a1'
+      AppName: 'fortyloveapp'
       PushRoot: '$(System.DefaultWorkingDirectory)'
