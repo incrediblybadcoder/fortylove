@@ -6,6 +6,15 @@
 ### Pipeline
 * [Azure Pipeline Documentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops)
 
+#### Pipeline-Runs
+Die Pipeline wird in folgenden Situationen ausgeführt:
+* Pull-Request auf *main*-Branch
+* Pull-Request auf *development*-Branch
+* Code-Push auf Branches im Ordner *feature/**
+
+Es gibt die Möglichkeit bei Code-Pushes auf die *feature*-Branches den Pipeline-Run zu unterbinden. Dies kann hilfreich sein, wenn viele kleine Änderungen separat
+gepushed werden sollen. Durch das einfügen von `[skip ci]` in der Commit-Message beim Push auf einen *feature*-Branch, wird die Pipeline nicht ausgeführt.
+
 ### Heroku Deployment
 Das Deployment auf Heroku funktioniert automatisch durch die Build-Pipeline nach einem Build auf dem Azure-Repo-Branch *main*.
 
