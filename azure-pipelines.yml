@@ -46,3 +46,4 @@ steps:
       AppName: "$(HEROKU_APP_NAME)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    displayName: "Deploy to Heroku"
