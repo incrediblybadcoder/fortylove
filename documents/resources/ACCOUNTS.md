@@ -8,7 +8,8 @@
 * Password: standard
 
 [Azure SQL Server](https://portal.azure.com/#@msolombrinohotmail.onmicrosoft.com/resource/subscriptions/f0a71b7c-089b-4b57-9427-2171fc0aee67/resourceGroups/fortylove/providers/Microsoft.Sql/servers/fortylove/overview)
-* Server nanme: fortylove.database.windows.net
+* Server name: fortylove.database.windows.net
+* User: fortylove
 * Password: non-standard
 
 [Heroku](https://dashboard.heroku.com/apps)
