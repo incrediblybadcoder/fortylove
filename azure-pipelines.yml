@@ -36,7 +36,7 @@ steps:
     inputs:
       workingDirectory: ""
       gradleWrapperFile: "gradlew.bat"
-      gradleOptions: "-Xmx3072m --build-cache"
+      gradleOptions: "-Xmx3072m"
       options: "-Pvaadin.productionMode --stacktrace --info"
       javaHomeOption: "JDKVersion"
       jdkVersionOption: "1.17"
