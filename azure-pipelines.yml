@@ -49,15 +49,21 @@ steps:
     inputs:
       targetType: "inline"
       script: |
+        Write-Host "Printing Pipeline Variables"
+        Write-Host "-----------------------------------------------------------------------"
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
-        Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        if ("$(Build.Reason)" -eq "PullRequest") {
+          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        }
+        Write-Host "-----------------------------------------------------------------------"
         Write-Host "isMainDirect: $(isMainDirect)"
         Write-Host "isMainPullRequest: $(isMainPullRequest)"
         Write-Host "isDevelopDirect: $(isDevelopDirect)"
         Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
+        Write-Host "-----------------------------------------------------------------------"
     condition: always()
-    displayName: "Print Deployment Variables"
+    displayName: "Print Pipeline Variables"
 
   - task: PushToHeroku@0
     inputs:
