@@ -1,4 +1,4 @@
-INSERT INTO tennis_clubs (name, adresse)
+INSERT INTO tennis_clubs (name, address)
 VALUES
     ('TC Grün-Weiss', 'Musterstraße 1, 12345 Musterstadt'),
     ('Tennis-Club 2000', 'Hauptstraße 10, 54321 Hauptstadt'),
