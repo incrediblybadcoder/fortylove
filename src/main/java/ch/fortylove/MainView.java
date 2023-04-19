@@ -19,8 +19,8 @@ public class MainView extends VerticalLayout {
 
     public MainView() {
         TextField textField = new TextField("Your name");
-
-        Button button = new Button("Say hello", e -> Notification.show("Hello " + textField.getValue()));
+        GreetingService greetingService = new GreetingService();
+        Button button = new Button("Say hello", e -> Notification.show(greetingService.greet(textField.getValue())));
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         button.addClickShortcut(Key.ENTER);
 
