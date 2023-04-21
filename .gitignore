@@ -41,6 +41,7 @@ webpack.generated.js
 target
 out
 pnpmfile.js
+.pnpmfile.cjs
 pnpm-lock.yaml
 .npmrc
 frontend/generated/
