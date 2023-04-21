@@ -8,8 +8,8 @@ variables:
 trigger:
   branches:
     include:
-      - develop/*
-      - main/*
+      - develop
+      - main
 
 pool:
   vmImage: "windows-latest"
