@@ -4,7 +4,7 @@ trigger:
       - feature/*
 
 pool:
-  vmImage: "windows-latest"
+  vmImage: "ubuntu-latest"
 
 steps:
   - task: Cache@2
@@ -24,7 +24,7 @@ steps:
   - task: Gradle@3
     inputs:
       workingDirectory: ""
-      gradleWrapperFile: "gradlew.bat"
+      gradleWrapperFile: "gradlew"
       gradleOptions: "-Xmx3072m"
       options: "-Pvaadin.productionMode --stacktrace --info"
       javaHomeOption: "JDKVersion"
