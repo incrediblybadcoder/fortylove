@@ -1,3 +1,4 @@
+# Deploy pipeline: http://fortyloveappdev.herokuapp.com/
 variables:
   isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
@@ -7,64 +8,40 @@ variables:
 trigger:
   branches:
     include:
-      - feature/*
+      - develop
+      - main
 
 pool:
   vmImage: "windows-latest"
 
 steps:
-  - task: Cache@2
-    inputs:
-      key: "gradle | \"$(Agent.OS)\" | **/build/**"
-      restoreKeys: "gradle | \"$(Agent.OS)\""
-      path: ".gradle"
-    displayName: "Cache dependencies and build directory"
-
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: "17"
-      jdkArchitectureOption: "x64"
-      jdkSourceOption: "PreInstalled"
-    displayName: "Setup JDK 17"
-
-  - task: Gradle@3
-    inputs:
-      workingDirectory: ""
-      gradleWrapperFile: "gradlew.bat"
-      gradleOptions: "-Xmx3072m"
-      options: "-Pvaadin.productionMode --stacktrace --info"
-      javaHomeOption: "JDKVersion"
-      jdkVersionOption: "1.17"
-      jdkArchitectureOption: "x64"
-      publishJUnitResults: true
-      testResultsFiles: "**/TEST-*.xml"
-      tasks: "build"
-    env:
-      SPRING_DATASOURCE_URL: "$(SPRING_DATASOURCE_URL)"
-      SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
-      SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
-    displayName: "Gradle Build"
 
   - task: PowerShell@2
     inputs:
       targetType: "inline"
       script: |
+        Write-Host "Printing Pipeline Variables"
+        Write-Host "-----------------------------------------------------------------------"
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
-        Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        if ("$(Build.Reason)" -eq "PullRequest") {
+          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        }
+        Write-Host "-----------------------------------------------------------------------"
         Write-Host "isMainDirect: $(isMainDirect)"
         Write-Host "isMainPullRequest: $(isMainPullRequest)"
         Write-Host "isDevelopDirect: $(isDevelopDirect)"
         Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
+        Write-Host "-----------------------------------------------------------------------"
     condition: always()
-    displayName: "Print Deployment Variables"
+    displayName: "Print Pipeline Variables"
 
   - task: PushToHeroku@0
     inputs:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(eq(variables.isMainDirect, true), eq(variables.isMainPullRequest, true)))
+    condition: and(succeeded(), eq(variables['isDevelopDirect'], true))
     displayName: "Deploy to Heroku Production"
 
   - task: PushToHeroku@0
@@ -72,5 +49,5 @@ steps:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME_DEVELOP)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(eq(variables.isDevelopDirect, true), eq(variables.isDevelopPullRequest, true)))
+    condition: and(succeeded(), eq(variables['isMainDirect'], true))
     displayName: "Deploy to Heroku Develop"
