@@ -1,9 +1,3 @@
-variables:
-  isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
-  isDevelopDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
-  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
-
 trigger:
   branches:
     include:
@@ -44,39 +38,3 @@ steps:
       SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
       SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
     displayName: "Gradle Build"
-
-  - task: PowerShell@2
-    inputs:
-      targetType: "inline"
-      script: |
-        Write-Host "Printing Pipeline Variables"
-        Write-Host "-----------------------------------------------------------------------"
-        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-        Write-Host "Build.Reason: $(Build.Reason)"
-        if ("$(Build.Reason)" -eq "PullRequest") {
-          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
-        }
-        Write-Host "-----------------------------------------------------------------------"
-        Write-Host "isMainDirect: $(isMainDirect)"
-        Write-Host "isMainPullRequest: $(isMainPullRequest)"
-        Write-Host "isDevelopDirect: $(isDevelopDirect)"
-        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
-        Write-Host "-----------------------------------------------------------------------"
-    condition: always()
-    displayName: "Print Pipeline Variables"
-
-  - task: PushToHeroku@0
-    inputs:
-      ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
-      PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(eq(variables.isMainDirect, true), eq(variables.isMainPullRequest, true)))
-    displayName: "Deploy to Heroku Production"
-
-  - task: PushToHeroku@0
-    inputs:
-      ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME_DEVELOP)"
-      PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), or(eq(variables.isDevelopDirect, true), eq(variables.isDevelopPullRequest, true)))
-    displayName: "Deploy to Heroku Develop"
