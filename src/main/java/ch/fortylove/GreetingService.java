@@ -6,7 +6,7 @@ public class GreetingService {
         if (name == null || name.isEmpty()) {
             return "Hello anonymous user";
         } else if (name.equals("Jonas")) {
-            return "Welcome Jonas, you look great today!!!";
+            return "Welcome Jonas, you look great today!!! :)";
         } else {
             return "Hello " + name;
         }
