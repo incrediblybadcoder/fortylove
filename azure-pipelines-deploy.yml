@@ -1,0 +1,33 @@
+# Deploy pipeline: http://fortyloveappdev.herokuapp.com/
+variables:
+  isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+  isDevelopDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
+
+trigger:
+  branches:
+    include:
+      - develop/*
+      - main/*
+
+pool:
+  vmImage: "windows-latest"
+
+steps:
+
+  - task: PushToHeroku@0
+    inputs:
+      ApiKey: "$(HEROKU_API_KEY)"
+      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
+      PushRoot: "$(System.DefaultWorkingDirectory)"
+    condition: and(succeeded(), eq(variables['isDevelopDirect'], true))
+    displayName: "Deploy to Heroku Production"
+
+  - task: PushToHeroku@0
+    inputs:
+      ApiKey: "$(HEROKU_API_KEY)"
+      AppName: "$(HEROKU_APP_NAME_DEVELOP)"
+      PushRoot: "$(System.DefaultWorkingDirectory)"
+    condition: and(succeeded(), eq(variables['isMainDirect'], true))
+    displayName: "Deploy to Heroku Develop"
