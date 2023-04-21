@@ -1,50 +1,25 @@
-variables:
-  isMainDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
-  isDevelopDirect: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
-  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
-
 trigger:
   branches:
     include:
-      - develop
       - main
+      - develop
 
 pool:
   vmImage: "windows-latest" # Task: PushToHeroku needs windows-vmImage
 
 steps:
-  - task: PowerShell@2
+  - task: PushToHeroku@0
     inputs:
-      targetType: "inline"
-      script: |
-        Write-Host "Printing Pipeline Variables"
-        Write-Host "-----------------------------------------------------------------------"
-        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-        Write-Host "Build.Reason: $(Build.Reason)"
-        if ("$(Build.Reason)" -eq "PullRequest") {
-          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
-        }
-        Write-Host "-----------------------------------------------------------------------"
-        Write-Host "isMainDirect: $(isMainDirect)"
-        Write-Host "isMainPullRequest: $(isMainPullRequest)"
-        Write-Host "isDevelopDirect: $(isDevelopDirect)"
-        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
-        Write-Host "-----------------------------------------------------------------------"
-    displayName: "Print Pipeline Variables"
+      ApiKey: "$(HEROKU_API_KEY)"
+      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
+      PushRoot: "$(System.DefaultWorkingDirectory)"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    displayName: "Deploy to Heroku Production"
 
   - task: PushToHeroku@0
     inputs:
       ApiKey: "$(HEROKU_API_KEY)"
       AppName: "$(HEROKU_APP_NAME_DEVELOP)"
       PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), eq(variables['isMainDirect'], true))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     displayName: "Deploy to Heroku Develop"
-
-  - task: PushToHeroku@0
-    inputs:
-      ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
-      PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: and(succeeded(), eq(variables['isDevelopDirect'], true))
-    displayName: "Deploy to Heroku Production"
