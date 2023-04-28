@@ -15,13 +15,13 @@ steps:
       definition: '9'
       specificBuildWithTriggering: true
       buildVersionToDownload: 'latest'
-      artifactName: 'fortyloveapp'
-      targetPath: '$(Pipeline.Workspace)/app'
+      artifactName: 'fortylove_releaseCandidate'
+      targetPath: '$(Pipeline.Workspace)'
+    displayName: "Download Release-Candidate Build Artifact"
 
-  - task: AzureWebApp@1
+  - task: PublishBuildArtifacts@1
     inputs:
-      azureSubscription: 'Azure subscription 1(1)(f0a71b7c-089b-4b57-9427-2171fc0aee67)'
-      appType: 'webAppLinux'
-      appName: 'fortylove'
-      package: '$(Pipeline.Workspace)/app/fortylove-0.0.1-SNAPSHOT.jar'
-      runtimeStack: 'JAVA|17-java17'
+      PathtoPublish: '$(Pipeline.Workspace)/fortylove-0.0.1-SNAPSHOT.jar'
+      ArtifactName: 'fortylove_release'
+      publishLocation: 'Container'
+    displayName: "Publish Release Build Artifact"
