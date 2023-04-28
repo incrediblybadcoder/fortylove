@@ -9,37 +9,37 @@ import jakarta.persistence.Id;
 
 import javax.annotation.Nonnull;
 
-@Entity(name = "persons")
+@Entity(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Person {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
-    private Long person_id;
+    @Column(name = "user_id")
+    private Long user_id;
 
     @Column(name = "name")
     private String name;
 
-    public Person() {
+    public User() {
     }
 
-    public Person(final String name) {
+    public User(final String name) {
         this.name = name;
     }
 
-    public Person(@Nonnull final Long person_id,
-                  @Nonnull final String name) {
-        this.person_id = person_id;
+    public User(@Nonnull final Long user_id,
+                @Nonnull final String name) {
+        this.user_id = user_id;
         this.name = name;
     }
 
-    public Long getPerson_id() {
-        return person_id;
+    public Long getUser_id() {
+        return user_id;
     }
 
-    public void setPerson_id(@Nonnull final Long person_id) {
-        this.person_id = person_id;
+    public void setUser_id(@Nonnull final Long user_id) {
+        this.user_id = user_id;
     }
 
     @Nonnull
@@ -53,8 +53,8 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "person_id=" + person_id +
+        return "User{" +
+                "user_id=" + user_id +
                 ", name='" + name +
                 '}';
     }

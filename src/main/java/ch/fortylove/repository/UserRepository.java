@@ -1,9 +1,9 @@
 package ch.fortylove.repository;
 
-import ch.fortylove.model.Person;
+import ch.fortylove.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

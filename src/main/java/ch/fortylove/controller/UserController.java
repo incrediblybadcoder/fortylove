@@ -1,7 +1,7 @@
 package ch.fortylove.controller;
 
-import ch.fortylove.model.Person;
-import ch.fortylove.service.PersonService;
+import ch.fortylove.model.User;
+import ch.fortylove.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,36 +16,36 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/persons")
-public class PersonController {
+@RequestMapping("/api/v1/users")
+public class UserController {
 
     @Autowired
-    private PersonService personService;
+    private UserService userService;
 
     @GetMapping
-    public List<Person> list() {
-        return personService.findAll();
+    public List<User> list() {
+        return userService.findAll();
     }
 
     @GetMapping
     @RequestMapping("{id}")
-    public Person get(@PathVariable Long id) {
-        return personService.find(id);
+    public User get(@PathVariable Long id) {
+        return userService.find(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Person create(@RequestBody final Person person) {
-        return personService.create(person);
+    public User create(@RequestBody final User user) {
+        return userService.create(user);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
-        personService.delete(id);
+        userService.delete(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public Person update(@PathVariable Long id, @RequestBody Person person) {
-        return personService.update(id, person);
+    public User update(@PathVariable Long id, @RequestBody User user) {
+        return userService.update(id, user);
     }
 }
