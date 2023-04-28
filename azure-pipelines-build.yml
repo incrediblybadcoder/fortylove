@@ -17,11 +17,11 @@ steps:
       targetType: "inline"
       script: |
         Write-Host "Printing Pipeline Variables"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "----------------------------------------------------------------------"
         Write-Host "Build.Reason: $(Build.Reason)"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "----------------------------------------------------------------------"
         Write-Host "isPullRequest: $(isPullRequest)"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "----------------------------------------------------------------------"
     displayName: "Print Deployment Variables"
 
   - task: Cache@2
