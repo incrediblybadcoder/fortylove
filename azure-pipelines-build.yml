@@ -38,11 +38,9 @@ steps:
       SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
       SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
     displayName: "Gradle Build"
-
-  - task: AzureWebApp@1
+    
+  - task: PublishBuildArtifacts@1
     inputs:
-      azureSubscription: 'Azure subscription 1(1)(f0a71b7c-089b-4b57-9427-2171fc0aee67)'
-      appType: 'webAppLinux'
-      appName: 'fortylove'
-      package: '$(System.DefaultWorkingDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar'
-      runtimeStack: 'JAVA|17-java17'
+      PathtoPublish: '$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar'
+      ArtifactName: 'fortyloveapp'
+      publishLocation: 'Container'
