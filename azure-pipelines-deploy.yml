@@ -5,21 +5,24 @@ trigger:
       - develop
 
 pool:
-  vmImage: "windows-latest" # Task: PushToHeroku needs windows-vmImage
+  vmImage: 'ubuntu-latest'
 
 steps:
-  - task: PushToHeroku@0
-    inputs:
-      ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME_PRODUCTION)"
-      PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-    displayName: "Deploy to Heroku Production"
 
-  - task: PushToHeroku@0
+  - task: DownloadPipelineArtifact@2
     inputs:
-      ApiKey: "$(HEROKU_API_KEY)"
-      AppName: "$(HEROKU_APP_NAME_DEVELOP)"
-      PushRoot: "$(System.DefaultWorkingDirectory)"
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
-    displayName: "Deploy to Heroku Develop"
+      buildType: 'specific'
+      project: 'e6858bfb-b65c-4bd5-a31a-631bcc276778'
+      definition: '9'
+      specificBuildWithTriggering: true
+      buildVersionToDownload: 'latest'
+      artifactName: 'fortyloveapp'
+      targetPath: '$(Pipeline.Workspace)/app'
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'Azure subscription 1(1)(f0a71b7c-089b-4b57-9427-2171fc0aee67)'
+      appType: 'webAppLinux'
+      appName: 'fortylove'
+      package: '$(Pipeline.Workspace)/app'
+      runtimeStack: 'JAVA|17-java17'
