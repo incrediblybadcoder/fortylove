@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+actor "User" as Actor
+rectangle fortylove {
+    Actor --> (UC_1\nTennisplatz reservieren)
+    Actor --> (UC_2\nPlatzbelegung anzeigen)
+    Actor --> (Reservierung löschen)
+    Actor --> (Übersicht der Reservierungen anzeigen)
+    Actor --> (Reservierung bearbeiten)
+    Actor --> (Statistik anzeigen)
+    Actor --> (Buchungsontingent anzeigen)
+    Actor --> (Eigenes Profil anzeigen)
+    Actor --> (Favoriten erstellen)
+    Actor --> (Anfrage für Clubbeitritt stellen)
+}
+
+@enduml
+

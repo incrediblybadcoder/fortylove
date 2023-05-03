@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+actor "UnregisterdUser" as Actor
+rectangle fortylove {
+    Actor --> (Profil erstellen)
+}
+
+@enduml
+

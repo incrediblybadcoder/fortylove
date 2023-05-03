@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+actor "Admin" as Actor
+rectangle fortylove {
+    Actor --> (Tennisplätze erstellen)
+    Actor --> (Tennisplätze löschen)
+    Actor --> (Tennisplätze konfigurieren)
+    Actor --> (User verwalten)
+}
+
+@enduml
+
