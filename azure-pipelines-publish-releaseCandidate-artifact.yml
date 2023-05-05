@@ -23,7 +23,7 @@ steps:
         Write-Host "======================================================================="
         Write-Host "PRINTING VARIABLES"
         Write-Host "======================================================================="
-        Write-Host "SourceBranchName: $(SourceBranchName)"
+        Write-Host "SourceBranchName: $(Build.SourceBranchName)"
         Write-Host "-----------------------------------------------------------------------"
         Write-Host "artifactName: $(artifactName)"
         Write-Host "======================================================================="
