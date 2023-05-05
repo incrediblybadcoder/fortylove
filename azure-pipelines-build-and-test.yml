@@ -15,16 +15,15 @@ variables:
     artifactName: "fortylove_main"
   ${{ elseif eq(variables.isDevelopPullRequest, true) }}:
     artifactName: "fortylove_develop"
-  ${{ else }}:
-    artifactName: "fortylove_feature"
 
 steps:
   - task: PowerShell@2
     inputs:
       targetType: "inline"
       script: |
-        Write-Host "Printing Pipeline Variables"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "======================================================================="
+        Write-Host "PRINTING PIPELINE VARIABLES"
+        Write-Host "======================================================================="
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
         if ("$(Build.Reason)" -eq "PullRequest") {
@@ -34,7 +33,7 @@ steps:
         Write-Host "isMainPullRequest: $(isMainPullRequest)"
         Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
         Write-Host "artifactName: $(artifactName)"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "======================================================================="
     displayName: "Print Deployment Variables"
 
   - task: Cache@2
@@ -75,4 +74,4 @@ steps:
       ArtifactName: $(variables.artifactName)
       publishLocation: "Container"
     condition: and(succeeded(), or(eq(variables.isMainPullRequest, true), eq(variables.isDevelopPullRequest, true)))
-    displayName: "Publish $(artifactName) Build Artifact"
+    displayName: "Publish Build Artifact"
