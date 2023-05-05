@@ -18,14 +18,14 @@ steps:
     inputs:
       targetType: "inline"
       script: |
-        Write-Host "======================================================================="
+        Write-Host "========================================================================"
         Write-Host "PRINTING VARIABLES"
-        Write-Host "======================================================================="
+        Write-Host "========================================================================"
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "-------------------------------------------------------------------.----"
         Write-Host "isMain: $(isMain)"
         Write-Host "isDevelop: $(isDevelop)"
-        Write-Host "======================================================================="
+        Write-Host "========================================================================"
     displayName: "Print Deployment Variables"
 
   - task: DownloadPipelineArtifact@2

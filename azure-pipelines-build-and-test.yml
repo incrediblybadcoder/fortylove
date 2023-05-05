@@ -19,16 +19,16 @@ steps:
       script: |
         Write-Host "======================================================================="
         Write-Host "PRINTING VARIABLES"
-        Write-Host "======================================================================="
+        Write-Host "========================================================================"
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
         if ("$(Build.Reason)" -eq "PullRequest") {
           Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
         }
-        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "------------------------------------------------------------------------"
         Write-Host "isMainPullRequest: $(isMainPullRequest)"
         Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
-        Write-Host "======================================================================="
+        Write-Host "========================================================================"
     displayName: "Print Variables"
 
   - task: Cache@2
