@@ -30,8 +30,6 @@ steps:
           Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
         }
         Write-Host "-----------------------------------------------------------------------"
-        Write-Host "isMainPullRequest: $(isMainPullRequest)"
-        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
         Write-Host "artifactName: $(artifactName)"
         Write-Host "======================================================================="
     displayName: "Print Variables"
