@@ -38,7 +38,7 @@ public class MainView extends VerticalLayout {
 
         TextField visitor = new TextField("Your name");
 
-        Button addVisitor = new Button("Ich war hier", e -> {
+        Button addVisitor = new Button("Ich war hier!", e -> {
             usersDisplay.clear();
             User user = new User(visitor.getValue());
             userService.create(user);

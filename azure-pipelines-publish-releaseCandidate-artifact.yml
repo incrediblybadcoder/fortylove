@@ -22,7 +22,7 @@ steps:
         Write-Host "PRINTING VARIABLES"
         Write-Host "========================================================================"
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-        Write-Host "-------------------------------------------------------------------.----"
+        Write-Host "------------------------------------------------------------------------"
         Write-Host "isMain: $(isMain)"
         Write-Host "isDevelop: $(isDevelop)"
         Write-Host "========================================================================"
