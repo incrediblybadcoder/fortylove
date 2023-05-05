@@ -9,12 +9,8 @@ pool:
   vmImage: "ubuntu-latest"
 
 variables:
-  ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main')) }}:
-    artifactName: "fortylove_main"
-  ${{ elseif and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop')) }}:
-    artifactName: "fortylove_develop"
-  ${{ else }}:
-    artifactName: ""
+  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
 
 steps:
   - task: PowerShell@2
@@ -30,6 +26,8 @@ steps:
           Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
         }
         Write-Host "-----------------------------------------------------------------------"
+        Write-Host "isMainPullRequest: $(isMainPullRequest)"
+        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
         Write-Host "artifactName: $(artifactName)"
         Write-Host "======================================================================="
     displayName: "Print Variables"
@@ -69,7 +67,12 @@ steps:
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: "$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar"
-      ArtifactName: $(variables.artifactName)
+      ArtifactName: $(ARTIFACT_NAME)
       publishLocation: "Container"
-    condition: and(succeeded(), ne(variables.artifactName, ''))
+    env:
+      ${{ if eq(variables.isMainPullRequest, true) }}:
+        ARTIFACT_NAME: "fortylove_main"
+      ${{ elseif eq(variables.isDevelopPullRequest, true) }}:
+        ARTIFACT_NAME: "fortylove_develop"
+    condition: and(succeeded(), or(eq(variables.isMainPullRequest, true), eq(variables.isDevelopPullRequest, true)))
     displayName: "Publish Build Artifact"
