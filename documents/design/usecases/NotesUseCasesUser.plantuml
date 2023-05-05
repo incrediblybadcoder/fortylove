@@ -14,15 +14,15 @@ object UC_1 {
 
 object UC_2 {
 <#lightblue,#black>|= Name|<#white> Platzbelegung anzeigen |
-<#lightblue,#black>|= Ziel im Kontext |<#white>  |
-<#lightblue,#black>|= Kurzbeschreibung |<#white>  |
-<#lightblue,#black>|= Vorbedingungen |<#white>  |
-<#lightblue,#black>|= Akteure |<#white>  |
-<#lightblue,#black>|= Trigger |<#white>  |
-<#lightblue,#black>|= Essenzielle Schritte |<#white>  |
-<#lightblue,#black>|= Erweiterungen |<#white>  |
-<#lightblue,#black>|= Nachbedingungen |<#white>  |
-<#lightblue,#black>|= Fragen, Kommentare |<#white>  |
+<#lightblue,#black>|= Ziel im Kontext |<#white> User sehen die Status der Plätze eines Clubs  |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein User navigiert zur Seite, auf welcher die Plätze des Clubs angezeigt werden.\n Die Status der Plätze werden pro Zeitslot angezeigt.  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - User hat ein Login\n - User gehört einem Club an\n - Club besitzt Plätze  |
+<#lightblue,#black>|= Akteure |<#white> User |
+<#lightblue,#black>|= Trigger |<#white> User möchte sich einen Überblick der aktuellen Platzauslastung machen |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. User loggt sich ein\n 2. User navigiert zur Platzübersichts Ansicht  |
+<#lightblue,#black>|= Erweiterungen |<#white> 1.5 User navigiert zu gewünschtem Verein\n |
+<#lightblue,#black>|= Nachbedingungen |<#white> keine |
+<#lightblue,#black>|= Fragen, Kommentare |<#white> - Loggt man sich auf einen Verein ein oder auf die App auf welcher dann mehrer Verein ersichtlich sind? |
 }
 
 @enduml
