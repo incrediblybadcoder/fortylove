@@ -9,7 +9,14 @@ pool:
   vmImage: "ubuntu-latest"
 
 variables:
-  isPullRequest: $[eq(variables['Build.Reason'], 'PullRequest')]
+  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
+  ${{ if eq(variables.isMainPullRequest, true) }}:
+    artifactName: "fortylove_main"
+  ${{ elseif eq(variables.isDevelopPullRequest, true) }}:
+    artifactName: "fortylove_develop"
+  ${{ else }}:
+    artifactName: "fortylove_feature"
 
 steps:
   - task: PowerShell@2
@@ -17,11 +24,17 @@ steps:
       targetType: "inline"
       script: |
         Write-Host "Printing Pipeline Variables"
-        Write-Host "----------------------------------------------------------------------"
+        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
-        Write-Host "----------------------------------------------------------------------"
-        Write-Host "isPullRequest: $(isPullRequest)"
-        Write-Host "----------------------------------------------------------------------"
+        if ("$(Build.Reason)" -eq "PullRequest") {
+          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        }
+        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "isMainPullRequest: $(isMainPullRequest)"
+        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
+        Write-Host "artifactName: $(artifactName)"
+        Write-Host "-----------------------------------------------------------------------"
     displayName: "Print Deployment Variables"
 
   - task: Cache@2
@@ -55,11 +68,11 @@ steps:
       SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
       SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
     displayName: "Gradle Build"
-    
+
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar'
-      ArtifactName: 'fortylove_releaseCandidate'
-      publishLocation: 'Container'
-    condition: and(succeeded(), eq(variables.isPullRequest, true))
-    displayName: "Publish Release-Candidate Build Artifact"
+      PathtoPublish: "$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar"
+      ArtifactName: $(variables.artifactName)
+      publishLocation: "Container"
+    condition: and(succeeded(), or(eq(variables.isMainPullRequest, true), eq(variables.isDevelopPullRequest, true)))
+    displayName: "Publish $(artifactName) Build Artifact"
