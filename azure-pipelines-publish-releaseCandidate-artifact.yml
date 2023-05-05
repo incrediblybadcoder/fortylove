@@ -9,12 +9,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main')) }}:
-    artifactName: "fortylove_main"
-  ${{ elseif and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop')) }}:
-    artifactName: "fortylove_develop"
-
 steps:
   - task: PowerShell@2
     inputs:
@@ -23,20 +17,23 @@ steps:
         Write-Host "======================================================================="
         Write-Host "PRINTING VARIABLES"
         Write-Host "======================================================================="
-        Write-Host "SourceBranchName: $(Build.SourceBranchName)"
-        Write-Host "-----------------------------------------------------------------------"
-        Write-Host "artifactName: $(artifactName)"
+        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "======================================================================="
     displayName: "Print Deployment Variables"
 
   - task: DownloadPipelineArtifact@2
+    env:
+      ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        ARTIFACT_NAME: "fortylove_main"
+      ${{ elseif eq(eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
+        ARTIFACT_NAME: "fortylove_develop"
     inputs:
       buildType: "specific"
       project: "e6858bfb-b65c-4bd5-a31a-631bcc276778"
       definition: "9"
       specificBuildWithTriggering: true
       buildVersionToDownload: "latest"
-      artifactName: $(variables.artifactName)
+      artifactName: $(ARTIFACT_NAME)
       targetPath: "$(Pipeline.Workspace)"
     displayName: "Download $(artifactName) Build Artifact"
 

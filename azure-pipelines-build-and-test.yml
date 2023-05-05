@@ -64,14 +64,14 @@ steps:
     displayName: "Gradle Build"
 
   - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: "$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar"
-      ArtifactName: $(ARTIFACT_NAME)
-      publishLocation: "Container"
     env:
       ${{ if eq(variables.isMainPullRequest, true) }}:
         ARTIFACT_NAME: "fortylove_main"
       ${{ elseif eq(variables.isDevelopPullRequest, true) }}:
         ARTIFACT_NAME: "fortylove_develop"
+    inputs:
+      PathtoPublish: "$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar"
+      ArtifactName: $(ARTIFACT_NAME)
+      publishLocation: "Container"
     condition: and(succeeded(), or(eq(variables.isMainPullRequest, true), eq(variables.isDevelopPullRequest, true)))
     displayName: "Publish Build Artifact"
