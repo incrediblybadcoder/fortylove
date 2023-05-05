@@ -32,7 +32,7 @@ steps:
         Write-Host "-----------------------------------------------------------------------"
         Write-Host "isMainPullRequest: $(isMainPullRequest)"
         Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
-        if ("$(artifactName)" -ne "") {
+        if ("$(Build.Reason)" -eq "PullRequest") {
           Write-Host "artifactName: $(artifactName)"
         }
         Write-Host "======================================================================="
