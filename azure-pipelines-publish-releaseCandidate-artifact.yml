@@ -9,21 +9,52 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+
 steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: "inline"
+      script: |
+        Write-Host "======================================================================="
+        Write-Host "PRINTING VARIABLES"
+        Write-Host "======================================================================="
+        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
+        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "isMain: $(isMain)"
+        Write-Host "isDevelop: $(isDevelop)"
+        Write-Host "======================================================================="
+    displayName: "Print Deployment Variables"
+
   - task: DownloadPipelineArtifact@2
     inputs:
-      buildType: 'specific'
-      project: 'e6858bfb-b65c-4bd5-a31a-631bcc276778'
-      definition: '9'
+      buildType: "specific"
+      project: "e6858bfb-b65c-4bd5-a31a-631bcc276778"
+      definition: "9"
       specificBuildWithTriggering: true
-      buildVersionToDownload: 'latest'
-      artifactName: 'fortylove_releaseCandidate'
-      targetPath: '$(Pipeline.Workspace)'
-    displayName: "Download Release-Candidate Build Artifact"
+      buildVersionToDownload: "latest"
+      artifactName: "fortylove"
+      targetPath: "$(Pipeline.Workspace)"
+    displayName: "Download Build Artifact"
 
-  - task: PublishBuildArtifacts@1
+  - task: AzureWebApp@1
     inputs:
-      PathtoPublish: '$(Pipeline.Workspace)/fortylove-0.0.1-SNAPSHOT.jar'
-      ArtifactName: 'fortylove_release'
-      publishLocation: 'Container'
-    displayName: "Publish Release Build Artifact"
+      azureSubscription: "Azure subscription 1(1)(f0a71b7c-089b-4b57-9427-2171fc0aee67)"
+      appType: "webAppLinux"
+      appName: "fortylove"
+      package: "$(Pipeline.Workspace)/fortylove-0.0.1-SNAPSHOT.jar"
+      runtimeStack: "JAVA|17-java17"
+    condition: eq(variables.isMain, true)
+    displayName: "Deploy to webapp: fortylove"
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: "Azure subscription 1(1)(f0a71b7c-089b-4b57-9427-2171fc0aee67)"
+      appType: "webAppLinux"
+      appName: "fortylovedev"
+      package: "$(Pipeline.Workspace)/fortylove-0.0.1-SNAPSHOT.jar"
+      runtimeStack: "JAVA|17-java17"
+    condition: eq(variables.isDevelop, true)
+    displayName: "Deploy to webapp: fortylovedev"
