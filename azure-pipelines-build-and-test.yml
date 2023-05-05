@@ -22,7 +22,7 @@ steps:
       targetType: "inline"
       script: |
         Write-Host "======================================================================="
-        Write-Host "PRINTING PIPELINE VARIABLES"
+        Write-Host "PRINTING VARIABLES"
         Write-Host "======================================================================="
         Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
         Write-Host "Build.Reason: $(Build.Reason)"
@@ -36,7 +36,7 @@ steps:
           Write-Host "artifactName: $(artifactName)"
         }
         Write-Host "======================================================================="
-    displayName: "Print Deployment Variables"
+    displayName: "Print Variables"
 
   - task: Cache@2
     inputs:
