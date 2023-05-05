@@ -18,15 +18,15 @@ variables:
 steps:
   - task: PowerShell@2
       inputs:
-        targetType: "inline"
-        script: |
-          Write-Host "======================================================================="
-          Write-Host "PRINTING VARIABLES"
-          Write-Host "======================================================================="
-          Write-Host "SourceBranchName: $(SourceBranchName)"
-          Write-Host "-----------------------------------------------------------------------"
-          Write-Host "artifactName: $(artifactName)"
-          Write-Host "======================================================================="
+      targetType: "inline"
+      script: |
+        Write-Host "======================================================================="
+        Write-Host "PRINTING VARIABLES"
+        Write-Host "======================================================================="
+        Write-Host "SourceBranchName: $(SourceBranchName)"
+        Write-Host "-----------------------------------------------------------------------"
+        Write-Host "artifactName: $(artifactName)"
+        Write-Host "======================================================================="
       displayName: "Print Deployment Variables"
 
   - task: DownloadPipelineArtifact@2
