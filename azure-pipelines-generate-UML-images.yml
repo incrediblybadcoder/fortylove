@@ -34,6 +34,7 @@ steps:
     script: |
             git config --global user.email "jonas.cahenzli@gmail.com"
             git config --global user.name "Yoohnas"
+            git branch
             git status
             
             git checkout "$Env:BUILD_SOURCEBRANCHNAME"
