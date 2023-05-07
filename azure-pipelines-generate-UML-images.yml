@@ -3,7 +3,12 @@
 pool:
   vmImage: 'windows-latest'
 trigger:
- batch: true
+  branches:
+    include:
+      - develop
+  paths:
+    include:
+      - 'documents/design/*'
 workspace:
     clean: all
     
