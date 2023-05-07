@@ -1,7 +1,7 @@
 # Pipeline to generate PlantUML diagrams
 # Build PNG files from PUML
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: 'windows-latest'
 trigger:
  batch: true
 workspace:
