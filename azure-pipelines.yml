@@ -1,0 +1,58 @@
+# Pipeline to generate PlantUML diagrams
+# Build PNG files from PUML
+pool:
+  vmImage: 'vs2017-win2016'
+trigger:
+ batch: true
+workspace:
+    clean: all
+    
+steps:
+- checkout: self
+  persistCredentials: true
+- task: UseNode@1
+  displayName: Install Node
+  inputs:
+    version: '6.x'
+- task: Npm@1
+  displayName: Install Node Plant UML
+  inputs:
+    command: 'custom'
+    customCommand: 'install node-plantuml -g' 
+- task: PowerShell@2
+  displayName: Check Out
+  inputs:
+    targetType: 'inline'
+    script: |
+            git config --global user.email "jonas.cahenzli@gmail.com"
+            git config --global user.name "Yoohnas"
+            git status
+            
+            git checkout "$Env:BUILD_SOURCEBRANCHNAME"
+
+- task: PowerShell@2
+  displayName: Build Images
+  inputs:
+    targetType: 'inline'
+    script: |
+            $sourceRoot = "$Env:Build.SourcesDirectory"
+            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+                Foreach-Object   {
+                    $fileWithPath = $_.Fullname         
+                    $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
+                    $execute = "puml generate $fileWithPath -o $png "; 
+                    Invoke-Expression -Command $execute 
+                }
+
+- task: PowerShell@2
+  displayName: Check In
+  inputs:
+    targetType: 'inline'
+    script: |
+            git add --all
+            git commit -m "$Env:BUILD_BUILDNUMBER [skip ci]"
+            #git checkout "$Env:BUILD_SOURCEBRANCHNAME"
+            #git merge "$Env:BUILD_SOURCEBRANCHNAME" -m "$Env:BUILD_BUILDNUMBER"
+            #git branch -d "$Env:BUILD_BUILDNUMBER"
+            git push origin  
+          
