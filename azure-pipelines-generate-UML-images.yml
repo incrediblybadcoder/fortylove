@@ -19,6 +19,14 @@ steps:
   inputs:
     command: 'custom'
     customCommand: 'install node-plantuml -g' 
+
+- task: PowerShell@2
+  displayName: Print Variables
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "BUILD_SOURCEBRANCHNAME = $Env:BUILD_SOURCEBRANCHNAME"
+      
 - task: PowerShell@2
   displayName: Check Out
   inputs:
