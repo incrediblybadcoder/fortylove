@@ -47,7 +47,7 @@ steps:
     targetType: 'inline'
     script: |
             $sourceRoot = "$Env:Build.SourcesDirectory"
-            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+            Get-ChildItem $sourceDir -Recurse -Filter "*.plantuml" |
                 Foreach-Object   {
                     $fileWithPath = $_.Fullname         
                     $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
