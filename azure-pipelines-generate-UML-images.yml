@@ -32,7 +32,6 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "BUILD_SOURCEBRANCHNAME = $Env:BUILD_SOURCEBRANCHNAME"
-      Write-Host "Build.SourcesDirectory = $Env:Build.SourcesDirectory"
       
 - task: PowerShell@2
   displayName: Check Out
@@ -40,11 +39,11 @@ steps:
     targetType: 'inline'
     script: |
             git config --global user.email "jonas.cahenzli@gmail.com"
-            git config --global user.name "Yoohnas"
+            git config --global user.name "generate-UML-images-pipeline"
             git branch
             git status
-            
-            git checkout develop
+      
+            git checkout "$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
   displayName: Build Images
@@ -52,7 +51,7 @@ steps:
     targetType: 'inline'
     script: |
             $sourceRoot = "$Env:Build.SourcesDirectory"
-            Get-ChildItem $sourceDir -Recurse -Filter "*.plantuml" |
+            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
                 Foreach-Object   {
                     $fileWithPath = $_.Fullname         
                     $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
