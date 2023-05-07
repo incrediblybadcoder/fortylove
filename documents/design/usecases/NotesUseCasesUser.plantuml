@@ -1,28 +1,28 @@
 @startuml
 object UC_1 {
 <#lightblue,#black>|= Name |<#white> Tennisplatz reservieren |
-<#lightblue,#black>|= Ziel im Kontext |<#white>  |
-<#lightblue,#black>|= Kurzbeschreibung |<#white>  |
-<#lightblue,#black>|= Vorbedingungen |<#white>  |
-<#lightblue,#black>|= Akteure |<#white>  |
-<#lightblue,#black>|= Trigger |<#white>  |
-<#lightblue,#black>|= Essenzielle Schritte |<#white>  |
-<#lightblue,#black>|= Erweiterungen |<#white>  |
-<#lightblue,#black>|= Nachbedingungen |<#white>  |
-<#lightblue,#black>|= Fragen, Kommentare |<#white>  |
+<#lightblue,#black>|= Ziel im Kontext |<#white> Ein User reserviert einen Tennisplatz |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein User sucht sich einen freien Zeitslot, wählt einen weiteren User (Spielpartner) aus mit welchem die Reservation getätigt wird.  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - User hat ein Login\n - User hat ausreichen "Kontigent / Budget" für die gewünschte Platzreservation\n - Spielpartner-User hat ausreichend "Kontigent / Budget" für die gewünschte Platzreservation\n - Freie Plätze sind vorhanden  |
+<#lightblue,#black>|= Akteure |<#white> - User 1 (der der die Reservation tätig)\n - User 2 (der Spielpartner-User) |
+<#lightblue,#black>|= Trigger |<#white> User tätigt eine Reservation  |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. User wählt freien Zeitslot aus\n\t-> Reaktion des Systems: List mit verfügbaren User (Spielpartner-User) wird zur Auswahl bereitgestellt\n 2. User wählt gewünschten Spielpartner-User aus und bestätigt Reservation\n\t-> Reaktion des Systems: Reservation wird im System registriert  |
+<#lightblue,#black>|= Erweiterungen |<#white> 2a. System stellt fest, dass User 1 oder User 2 zu wenig "Kontigent / Budget" hat\n 2b. System informiert User über zu wenig "Kontigent / Budget" und lehnt Reservationsanfrage ab |
+<#lightblue,#black>|= Nachbedingungen |<#white> - User 1 und User 2 erhalten Reservationsbestätigung\n - Reservation ist im System sichtbar\n - Reservierter Platz ist für weitere Reservation nicht mehr erhältlich\n - "Kontigent / Budget" Konto der beiden User wird aktuallisiert |
+<#lightblue,#black>|= Fragen, Kommentare |<#with> - Wie sollen die beiden User eine Reservationsbestätigung erhalten?\n\t-> per Mail?\n\t-> per SMS?\n\t-> per WhatsApp?\n\t-> per App? |
 }
 
 object UC_2 {
 <#lightblue,#black>|= Name|<#white> Platzbelegung anzeigen |
-<#lightblue,#black>|= Ziel im Kontext |<#white>  |
-<#lightblue,#black>|= Kurzbeschreibung |<#white>  |
-<#lightblue,#black>|= Vorbedingungen |<#white>  |
-<#lightblue,#black>|= Akteure |<#white>  |
-<#lightblue,#black>|= Trigger |<#white>  |
-<#lightblue,#black>|= Essenzielle Schritte |<#white>  |
-<#lightblue,#black>|= Erweiterungen |<#white>  |
-<#lightblue,#black>|= Nachbedingungen |<#white>  |
-<#lightblue,#black>|= Fragen, Kommentare |<#white>  |
+<#lightblue,#black>|= Ziel im Kontext |<#white> User sehen die Status der Plätze eines Clubs  |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein User navigiert zur Seite, auf welcher die Plätze des Clubs angezeigt werden.\n Die Status der Plätze werden pro Zeitslot angezeigt.  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - User hat ein Login\n - User gehört einem Club an\n - Club besitzt Plätze  |
+<#lightblue,#black>|= Akteure |<#white> User |
+<#lightblue,#black>|= Trigger |<#white> User möchte sich einen Überblick der aktuellen Platzauslastung machen |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. User loggt sich ein\n 2. User navigiert zur Platzübersichts Ansicht  |
+<#lightblue,#black>|= Erweiterungen |<#white> 1.5 User navigiert zu gewünschtem Verein\n |
+<#lightblue,#black>|= Nachbedingungen |<#white> keine |
+<#lightblue,#black>|= Fragen, Kommentare |<#white> - Loggt man sich auf einen Verein ein oder auf die App auf welcher dann mehrer Verein ersichtlich sind? |
 }
 
 @enduml
