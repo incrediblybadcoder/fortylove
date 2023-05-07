@@ -10,6 +10,7 @@ workspace:
 steps:
 - checkout: self
   persistCredentials: true
+  fetchDepth: 0
 - task: UseNode@1
   displayName: Install Node
   inputs:
@@ -38,7 +39,7 @@ steps:
             git branch
             git status
             
-            git checkout "$Env:BUILD_SOURCEBRANCHNAME"
+            git checkout develop
 
 - task: PowerShell@2
   displayName: Build Images
