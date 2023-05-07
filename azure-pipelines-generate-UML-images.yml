@@ -26,6 +26,7 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "BUILD_SOURCEBRANCHNAME = $Env:BUILD_SOURCEBRANCHNAME"
+      Write-Host "Build.SourcesDirectory = $Env:Build.SourcesDirectory"
       
 - task: PowerShell@2
   displayName: Check Out
