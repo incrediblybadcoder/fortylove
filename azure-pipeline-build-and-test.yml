@@ -1,0 +1,72 @@
+name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  branches:
+    include:
+      - feature/*
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  isMainPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'))]
+  isDevelopPullRequest: $[and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'))]
+
+steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: "inline"
+      script: |
+        Write-Host "======================================================================="
+        Write-Host "PRINTING VARIABLES"
+        Write-Host "========================================================================"
+        Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
+        Write-Host "Build.Reason: $(Build.Reason)"
+        if ("$(Build.Reason)" -eq "PullRequest") {
+          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+        }
+        Write-Host "------------------------------------------------------------------------"
+        Write-Host "isMainPullRequest: $(isMainPullRequest)"
+        Write-Host "isDevelopPullRequest: $(isDevelopPullRequest)"
+        Write-Host "========================================================================"
+    displayName: "Print Variables"
+
+  - task: Cache@2
+    inputs:
+      key: "gradle | \"$(Agent.OS)\" | **/build/**"
+      restoreKeys: "gradle | \"$(Agent.OS)\""
+      path: ".gradle"
+    displayName: "Cache dependencies and build directory"
+
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: "17"
+      jdkArchitectureOption: "x64"
+      jdkSourceOption: "PreInstalled"
+    displayName: "Setup JDK 17"
+
+  - task: Gradle@3
+    inputs:
+      workingDirectory: ""
+      gradleWrapperFile: "gradlew"
+      gradleOptions: "-Xmx3072m"
+      options: "-Pvaadin.productionMode --stacktrace --info"
+      javaHomeOption: "JDKVersion"
+      jdkVersionOption: "1.17"
+      jdkArchitectureOption: "x64"
+      publishJUnitResults: true
+      testResultsFiles: "**/TEST-*.xml"
+      tasks: "build"
+    env:
+      SPRING_DATASOURCE_URL: "$(SPRING_DATASOURCE_URL)"
+      SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
+      SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
+    displayName: "Gradle Build"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(Build.SourcesDirectory)/build/libs/fortylove-0.0.1-SNAPSHOT.jar"
+      ArtifactName: "fortylove"
+      publishLocation: "Container"
+    condition: and(succeeded(), or(eq(variables.isMainPullRequest, true), eq(variables.isDevelopPullRequest, true)))
+    displayName: "Publish Build Artifact"
