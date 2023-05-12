@@ -101,6 +101,8 @@ steps:
                     Write-Host "Converting $pumlFilePath to $pngFilePath ..."
                     java -jar $plantUmlJarPath $pumlFilePath -o $pngFilePath 
                 }
+       env:
+       JAVA_HOME: $(JAVA_HOME)
 
 - task: PowerShell@2
   displayName: Check In
