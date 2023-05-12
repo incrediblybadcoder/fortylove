@@ -58,6 +58,13 @@ steps:
         New-Item -ItemType Directory -Force -Path $Env:USERPROFILE\.plantuml
         Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
       }
+- task: PowerShell@2
+  displayName: List Source Directory Contents
+  inputs:
+    targetType: 'inline'
+    script: |
+      $sourceRoot = "$Env:Build.SourcesDirectory"
+      Get-ChildItem $sourceRoot
 
 - task: PowerShell@2
   displayName: Print PUML File Paths
