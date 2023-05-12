@@ -1,7 +1,7 @@
 package ch.fortylove.controller;
 
-import ch.fortylove.model.User;
-import ch.fortylove.service.UserService;
+import ch.fortylove.data.entity.User;
+import ch.fortylove.data.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
