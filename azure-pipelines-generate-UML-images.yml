@@ -42,7 +42,7 @@ steps:
             git config --global user.name "generate-UML-images-pipeline"
             git branch
             git status
-      
+            Write-Host "checkout branch = feature/$Env:BUILD_SOURCEBRANCHNAME"
             git checkout "feature/$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
@@ -65,7 +65,8 @@ steps:
     script: |
       $sourceRoot = "$Env:Build.SourcesDirectory"
       Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
-        Write-Host $_.FullName
+        Write-Host "$_.FullName"
+        Write-Host "1"
       }
 
 - task: PowerShell@2
