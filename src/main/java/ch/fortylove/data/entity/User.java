@@ -16,11 +16,10 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public User(@Nonnull final String name) {
+    public User(final String name) {
         this.name = name;
     }
 
-    @Nonnull
     public String getName() {
         return name;
     }
@@ -30,7 +29,6 @@ public class User extends AbstractEntity {
     }
 
     @Override
-    @Nonnull
     public String toString() {
         return "User{" +
                 ", name='" + name +

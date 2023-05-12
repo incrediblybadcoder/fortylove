@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import javax.annotation.Nonnull;
-
 @Entity(name = "tennis_clubs")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TennisClub extends AbstractEntity {
@@ -19,32 +17,29 @@ public class TennisClub extends AbstractEntity {
     public TennisClub() {
     }
 
-    public TennisClub(@Nonnull final String name,
-                      @Nonnull final String address) {
+    public TennisClub(final String name,
+                      final String address) {
         this.name = name;
         this.address = address;
     }
 
-    @Nonnull
     public String getName() {
         return name;
     }
 
-    public void setName(@Nonnull final String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Nonnull
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(@Nonnull final String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
     @Override
-    @Nonnull
     public String toString() {
         return "TennisClub{" +
                 ", name='" + name + '\'' +
