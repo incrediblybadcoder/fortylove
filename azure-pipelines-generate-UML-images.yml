@@ -88,6 +88,21 @@ steps:
                 }
 
 - task: PowerShell@2
+  displayName: Build Images with plantUML jar
+  inputs:
+    targetType: 'inline'
+    script: |
+            $sourceRoot = "$Env:Build.SourcesDirectory"
+            $plantUmlJarPath = "$(System.DefaultWorkingDirectory)/plantuml.jar"
+            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+                Foreach-Object   {
+                    $pumlFilePath = $_.FullName
+                    $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
+                    Write-Host "Converting $pumlFilePath to $pngFilePath ..."
+                    java -jar $plantUmlJarPath $pumlFilePath -o $pngFilePath 
+                }
+
+- task: PowerShell@2
   displayName: Check In
   inputs:
     targetType: 'inline'
