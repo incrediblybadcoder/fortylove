@@ -63,7 +63,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $sourceRoot = "$Env:Build.SourcesDirectory"
+      Write-Host "default directory = $(System.DefaultWorkingDirectory)"
+      $sourceRoot = $(System.DefaultWorkingDirectory)
       Get-ChildItem $sourceRoot
 
 - task: PowerShell@2
