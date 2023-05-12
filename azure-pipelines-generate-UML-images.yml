@@ -52,12 +52,13 @@ steps:
     targetType: 'inline'
     script: |
             $sourceRoot = "$Env:Build.SourcesDirectory"
-            Write-Host "sourceRoot $(sourceRoot)"
-            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+            Write-Host "sourceRoot $sourceRoot"
+            Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" |
                 Foreach-Object   {
                     $fileWithPath = $_.Fullname         
-                    Write-Host "Puml-File $(fileWithPath)"
+                    Write-Host "Puml-File $fileWithPath"
                 }
+
 
 - task: PowerShell@2
   displayName: Install PlantUML JAR
