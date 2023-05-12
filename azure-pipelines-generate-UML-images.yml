@@ -72,7 +72,7 @@ steps:
         New-Item -ItemType Directory -Force -Path $Env:USERPROFILE\.plantuml
         Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
       }
-      
+
 - task: PowerShell@2
   displayName: Build Images
   inputs:
@@ -81,8 +81,7 @@ steps:
             $sourceRoot = "$Env:Build.SourcesDirectory"
             Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
                 Foreach-Object   {
-                    $fileWithPath = $_.Fullname
-                    Write-Host "fileWithPath = $(fileWithPath)"         
+                    $fileWithPath = $_.Fullname       
                     $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
                     $execute = "puml generate $fileWithPath -o $png "; 
                     Invoke-Expression -Command $execute 
