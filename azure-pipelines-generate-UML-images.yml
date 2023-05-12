@@ -53,7 +53,7 @@ steps:
     script: |
             $sourceRoot = "$Env:Build.SourcesDirectory"
             Write-Host "sourceRoot $sourceRoot"
-            Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" |
+            Get-ChildItem $sourceRoot -Recurse -Filter "*.java" |
                 Foreach-Object   {
                     $fileWithPath = $_.Fullname         
                     Write-Host "Puml-File $fileWithPath"
