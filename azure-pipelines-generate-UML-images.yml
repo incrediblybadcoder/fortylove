@@ -68,6 +68,7 @@ steps:
       $plantumlVersion = "1.2021.7"
       $plantumlUrl = "https://sourceforge.net/projects/plantuml/files/$plantumlVersion/plantuml.$plantumlVersion.jar/download"
       $plantumlPath = "$Env:USERPROFILE\.plantuml\plantuml.jar"
+      Write-Host "JarfileUp = $(plantumlPath)"
       if(!(Test-Path -Path $plantumlPath)) {
         New-Item -ItemType Directory -Force -Path $Env:USERPROFILE\.plantuml
         Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
@@ -97,6 +98,7 @@ steps:
         $pumlFilePath = $_.FullName
         $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
         Write-Host "Converting $pumlFilePath to $pngFilePath ..."
+        Write-Host "JarfileDown = $(plantumlPath)"
         java -jar $plantumlPath $pumlFilePath -o $pngFilePath 
       }
   env:
