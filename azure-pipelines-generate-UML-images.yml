@@ -32,6 +32,7 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "BUILD_SOURCEBRANCHNAME = $Env:BUILD_SOURCEBRANCHNAME"
+      Write-Host "USERPROFILE = $Env:USERPROFILE"
       
 - task: PowerShell@2
   displayName: Check Out
@@ -63,6 +64,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      Write-Host "Start Printing PUML Files"
+      Write-Host "sourceRoot = "$Env:Build.SourcesDirectory"
       $sourceRoot = "$Env:Build.SourcesDirectory"
       Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
         Write-Host "$_.FullName"
