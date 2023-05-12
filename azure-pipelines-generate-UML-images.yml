@@ -46,18 +46,42 @@ steps:
             git checkout "$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
+  displayName: Install PlantUML JAR
+  inputs:
+    targetType: 'inline'
+    script: |
+      $plantumlVersion = "1.2021.7"
+      $plantumlUrl = "https://sourceforge.net/projects/plantuml/files/$plantumlVersion/plantuml.$plantumlVersion.jar/download"
+      $plantumlPath = "$Env:USERPROFILE\.plantuml\plantuml.jar"
+      if(!(Test-Path -Path $plantumlPath)) {
+        New-Item -ItemType Directory -Force -Path $Env:USERPROFILE\.plantuml
+        Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
+      }
+
+- task: PowerShell@2
+  displayName: Print PUML File Paths
+  inputs:
+    targetType: 'inline'
+    script: |
+      $sourceRoot = "$Env:Build.SourcesDirectory"
+      Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
+        Write-Host $_.FullName
+      }
+
+- task: PowerShell@2
   displayName: Build Images
   inputs:
     targetType: 'inline'
     script: |
-            $sourceRoot = "$Env:Build.SourcesDirectory"
-            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
-                Foreach-Object   {
-                    $fileWithPath = $_.Fullname         
-                    $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
-                    $execute = "puml generate $fileWithPath -o $png "; 
-                    Invoke-Expression -Command $execute 
-                }
+      $sourceRoot = "$Env:Build.SourcesDirectory"
+      Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
+        $fileWithPath = $_.FullName         
+        $png = Join-Path -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename)
+        $execute = "java -jar $plantumlPath generate $fileWithPath -o $png"
+        Write-Host "Executing command: $execute"
+        Invoke-Expression -Command $execute 
+      }
+
 
 - task: PowerShell@2
   displayName: Check In
