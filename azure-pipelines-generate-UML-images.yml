@@ -47,6 +47,19 @@ steps:
             git checkout "feature/$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
+  displayName: Print All Puml Files
+  inputs:
+    targetType: 'inline'
+    script: |
+            $sourceRoot = "$Env:Build.SourcesDirectory"
+            Write-Host "sourceRoot $(sourceRoot)"
+            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+                Foreach-Object   {
+                    $fileWithPath = $_.Fullname         
+                    Write-Host "Puml-File $(fileWithPath)"
+                }
+
+- task: PowerShell@2
   displayName: Install PlantUML JAR
   inputs:
     targetType: 'inline'
