@@ -99,7 +99,7 @@ steps:
         $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
         Write-Host "Converting $pumlFilePath to $pngFilePath ..."
         Write-Host "JarfileDown = $plantumlPath"
-        java -jar $plantumlPath $pumlFilePath -o $pngFilePath 
+        java -jar C:\Users\VssAdministrator\.plantuml\plantuml.jar $pumlFilePath -o $pngFilePath 
       }
   env:
     JAVA_HOME: $(JAVA_HOME)
