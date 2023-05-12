@@ -65,7 +65,7 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "Start Printing PUML Files"
-      Write-Host "sourceRoot = "$Env:Build.SourcesDirectory"
+      Write-Host "sourceRoot = $Env:Build.SourcesDirectory"
       $sourceRoot = "$Env:Build.SourcesDirectory"
       Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
         Write-Host "$_.FullName"
