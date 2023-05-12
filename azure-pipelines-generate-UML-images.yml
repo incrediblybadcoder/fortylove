@@ -73,41 +73,19 @@ steps:
         Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
       }
 - task: PowerShell@2
-  displayName: List Source Directory Contents
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "default directory = $(System.DefaultWorkingDirectory)"
-      $sourceRoot = $(System.DefaultWorkingDirectory)
-      Get-ChildItem $sourceRoot
-
-- task: PowerShell@2
-  displayName: Print PUML File Paths
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "Start Printing PUML Files"
-      Write-Host "sourceRoot = $Env:Build.SourcesDirectory"
-      $sourceRoot = "$Env:Build.SourcesDirectory"
-      Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
-        Write-Host "$_.FullName"
-        Write-Host "1"
-      }
-
-- task: PowerShell@2
   displayName: Build Images
   inputs:
     targetType: 'inline'
     script: |
-      $sourceRoot = "$Env:Build.SourcesDirectory"
-      Get-ChildItem $sourceRoot -Recurse -Filter "*.puml" | foreach {
-        $fileWithPath = $_.FullName         
-        $png = Join-Path -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename)
-        $execute = "java -jar $plantumlPath generate $fileWithPath -o $png"
-        Write-Host "Executing command: $execute"
-        Invoke-Expression -Command $execute 
-      }
-
+            $sourceRoot = "$Env:Build.SourcesDirectory"
+            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
+                Foreach-Object   {
+                    $fileWithPath = $_.Fullname
+                    Write-Host "fileWithPath = $(fileWithPath)"         
+                    $png =  Join-Path  -Path $_.DirectoryName -ChildPath ("{0}.png" -f $_.Basename ) 
+                    $execute = "puml generate $fileWithPath -o $png "; 
+                    Invoke-Expression -Command $execute 
+                }
 
 - task: PowerShell@2
   displayName: Check In
@@ -119,5 +97,5 @@ steps:
             #git checkout "$Env:BUILD_SOURCEBRANCHNAME"
             #git merge "$Env:BUILD_SOURCEBRANCHNAME" -m "$Env:BUILD_BUILDNUMBER"
             #git branch -d "$Env:BUILD_BUILDNUMBER"
-            git push origin  
+            git push origin 
           
