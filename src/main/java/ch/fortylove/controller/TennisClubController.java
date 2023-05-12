@@ -1,8 +1,7 @@
 package ch.fortylove.controller;
 
-import ch.fortylove.model.TennisClub;
-import ch.fortylove.service.TennisClubService;
-import org.atmosphere.config.service.Get;
+import ch.fortylove.data.entity.TennisClub;
+import ch.fortylove.data.service.TennisClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

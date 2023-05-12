@@ -1,19 +1,19 @@
 package ch.fortylove.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ch.fortylove.model.TennisClub;
-import ch.fortylove.repository.TennisClubRepository;
+import ch.fortylove.data.entity.TennisClub;
+import ch.fortylove.data.repository.TennisClubRepository;
+import ch.fortylove.data.service.TennisClubService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 class TennisClubServiceTest {
 
