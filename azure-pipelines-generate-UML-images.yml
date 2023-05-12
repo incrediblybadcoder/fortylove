@@ -60,12 +60,12 @@ steps:
                 }
 
 
-- task: PowerShell@2
+- task: InstallPlantUMLJar
   displayName: Install PlantUML JAR
   inputs:
     targetType: 'inline'
     script: |
-      $plantumlVersion = "1.2021.7"
+      $plantumlVersion = "1.2023.6"
       $plantumlUrl = "https://sourceforge.net/projects/plantuml/files/$plantumlVersion/plantuml.$plantumlVersion.jar/download"
       $plantumlPath = "$Env:USERPROFILE\.plantuml\plantuml.jar"
       Write-Host "JarfileUp = $plantumlPath"
@@ -73,6 +73,8 @@ steps:
         New-Item -ItemType Directory -Force -Path $Env:USERPROFILE\.plantuml
         Invoke-WebRequest -Uri $plantumlUrl -OutFile $plantumlPath
       }
+  outputs:
+   jarPath: $plantumlPath
 
 - task: PowerShell@2
   displayName: Build Images
@@ -90,16 +92,18 @@ steps:
 
 - task: PowerShell@2
   displayName: Build Images with plantUML jar
+  dependsOn: InstallPlantUMLJar
   inputs:
     targetType: 'inline'
+    myJarPath:  $[ dependencies.InstallPlantUMLJar.outputs['jarPath'] ]
     script: |
       $sourceDir = "$Env:BUILD_SOURCESDIRECTORY"
+      Write-Host "JarfilePassedDown = $myJarPath"
       Get-ChildItem $sourceDir -Recurse -Filter "*.puml" | ForEach-Object {
         $pumlFilePath = $_.FullName
         $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
         Write-Host "Converting $pumlFilePath to $pngFilePath ..."
-        Write-Host "JarfileDown = $plantumlPath"
-        java -jar C:\Users\VssAdministrator\.plantuml\plantuml.jar $pumlFilePath -o $pngFilePath 
+        java -jar $myJarPath $pumlFilePath -o $pngFilePath 
       }
   env:
     JAVA_HOME: $(JAVA_HOME)
