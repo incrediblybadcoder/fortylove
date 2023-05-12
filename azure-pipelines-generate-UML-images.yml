@@ -92,17 +92,17 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-            $sourceRoot = "$Env:Build.SourcesDirectory"
-            $plantUmlJarPath = "$(System.DefaultWorkingDirectory)/plantuml.jar"
-            Get-ChildItem $sourceDir -Recurse -Filter "*.puml" |
-                Foreach-Object   {
-                    $pumlFilePath = $_.FullName
-                    $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
-                    Write-Host "Converting $pumlFilePath to $pngFilePath ..."
-                    java -jar $plantUmlJarPath $pumlFilePath -o $pngFilePath 
-                }
-       env:
-       JAVA_HOME: $(JAVA_HOME)
+      $sourceDir = "$Env:BUILD_SOURCESDIRECTORY"
+      $plantUmlJarPath = "$(System.DefaultWorkingDirectory)/plantuml.jar"
+      Get-ChildItem $sourceDir -Recurse -Filter "*.puml" | ForEach-Object {
+        $pumlFilePath = $_.FullName
+        $pngFilePath = $_.DirectoryName + "\" + $_.BaseName + ".png"
+        Write-Host "Converting $pumlFilePath to $pngFilePath ..."
+        java -jar $plantUmlJarPath $pumlFilePath -o $pngFilePath 
+      }
+  env:
+    JAVA_HOME: $(JAVA_HOME)
+
 
 - task: PowerShell@2
   displayName: Check In
