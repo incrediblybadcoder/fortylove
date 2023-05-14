@@ -28,7 +28,7 @@ steps:
             git branch
             git status
       
-            git checkout "$Env:BUILD_SOURCEBRANCHNAME"
+            git checkout "feature/$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
   displayName: Generate PlantUML diagrams and check them into the repo
