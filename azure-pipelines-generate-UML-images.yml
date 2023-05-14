@@ -1,10 +1,36 @@
 trigger:
-- main
+  branches:
+    include:
+      - feature/*
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+
+- task: PowerShell@2
+  displayName: Print Variables
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "BUILD_SOURCEBRANCHNAME = $Env:BUILD_SOURCEBRANCHNAME"
+
+- task: PowerShell@2
+  displayName: Check Out
+  inputs:
+    targetType: 'inline'
+    script: |
+            git config --global user.email "jonas.cahenzli@gmail.com"
+            git config --global user.name "generate-UML-images-pipeline"
+            git branch
+            git status
+      
+            git checkout "$Env:BUILD_SOURCEBRANCHNAME"
+
+- task: BuildUMLs
 - script: |
     # Install required packages
     sudo apt-get update
