@@ -23,38 +23,38 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-            git config --global user.email "jonas.cahenzli@gmail.com"
-            git config --global user.name "generate-UML-images-pipeline"
-            git branch
-            git status
+      git config --global user.email "jonas.cahenzli@gmail.com"
+      git config --global user.name "generate-UML-images-pipeline"
+      git branch
+      git status
       
-            git checkout "feature/$Env:BUILD_SOURCEBRANCHNAME"
+      git checkout "feature/$Env:BUILD_SOURCEBRANCHNAME"
 
 - task: PowerShell@2
   displayName: Generate PlantUML diagrams and check them into the repo
   inputs:
     targetType: 'inline'
     script: |
-# Install required packages
-apt-get update
-apt-get install -y graphviz openjdk-8-jre-headless
+      # Install required packages
+      apt-get update
+      apt-get install -y graphviz openjdk-8-jre-headless
 
-# Download and install PlantUML
-Invoke-WebRequest -Uri 'https://sourceforge.net/projects/plantuml/files/plantuml.1.2021.16.jar/download' -OutFile 'plantuml.jar'
-Move-Item -Path ./plantuml.jar -Destination /usr/local/bin/plantuml.jar
-Set-ItemProperty -Path /usr/local/bin/plantuml.jar -Name IsReadOnly -Value $false
+      # Download and install PlantUML
+      Invoke-WebRequest -Uri "https://sourceforge.net/projects/plantuml/files/plantuml.1.2021.16.jar/download" -OutFile "plantuml.jar"
+      Move-Item -Path "./plantuml.jar" -Destination "/usr/local/bin/plantuml.jar"
+      Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -Scope LocalMachine
 
-# Generate PlantUML diagrams
-New-Item -ItemType Directory -Path ./plantuml/generated -Force
-foreach ($file in Get-ChildItem -Path ./plantuml/*.puml) {
-    Write-Host "Generating diagram for file $($file.FullName)"
-    & java -jar /usr/local/bin/plantuml.jar -tpng $file.FullName -o ./plantuml/generated
+      # Generate PlantUML diagrams
+      mkdir -Force plantuml/generated
+      Get-ChildItem -Path "./plantuml" -Filter "*.puml" | ForEach-Object {
+          $file = $_.FullName
+          Write-Host "Generating diagram for file $file"
+          java -jar /usr/local/bin/plantuml.jar -tpng "$file" -o plantuml/generated
 
-    # Check in the generated PNG files to the repo
-    git config --global user.email "jonas.cahenzli@gmail.com"
-    git config --global user.name "generate-UML-images-pipeline"
-    git add .
-    git commit -m "Add generated diagram for file $($file.FullName)"
-    git push origin
-}
-
+          # Check in the generated PNG files to the repo
+          git config --global user.email "jonas.cahenzli@gmail.com"
+          git config --global user.name "generate-UML-images-pipeline"
+          git add .
+          git commit -m "Add generated diagram for file $file"
+          git push origin
+      }
