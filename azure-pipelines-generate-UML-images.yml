@@ -32,28 +32,27 @@ steps:
 
 - task: PlantUML@1
   displayName: Generate PlantUML diagrams and check them into the repo
-    inputs:
+  inputs:
     targetType: 'inline'
     script: |
-    # Install required packages
-    sudo apt-get update
-    sudo apt-get install -y graphviz openjdk-8-jre-headless
+      # Install required packages
+      sudo apt-get update
+      sudo apt-get install -y graphviz openjdk-8-jre-headless
 
-    # Download and install PlantUML
-    curl -L https://sourceforge.net/projects/plantuml/files/plantuml.1.2021.16.jar/download > plantuml.jar
-    sudo mv plantuml.jar /usr/local/bin/plantuml.jar
-    sudo chmod +x /usr/local/bin/plantuml.jar
+      # Download and install PlantUML
+      curl -L https://sourceforge.net/projects/plantuml/files/plantuml.1.2021.16.jar/download > plantuml.jar
+      sudo mv plantuml.jar /usr/local/bin/plantuml.jar
+      sudo chmod +x /usr/local/bin/plantuml.jar
 
-    # Generate PlantUML diagrams
-    mkdir -p plantuml/generated
-    for file in plantuml/*.puml; do
-        echo "Generating diagram for file $file"
-        java -jar /usr/local/bin/plantuml.jar -tpng "$file" -o plantuml/generated
-        # Check in the generated PNG files to the repo
-        git config --global user.email "jonas.cahenzli@gmail.com"
-        git config --global user.name "generate-UML-images-pipeline"
-        git add .
-        git commit -m "Add generated diagram for file $file"
-        git push origin
-    done
-
+      # Generate PlantUML diagrams
+      mkdir -p plantuml/generated
+      for file in plantuml/*.puml; do
+          echo "Generating diagram for file $file"
+          java -jar /usr/local/bin/plantuml.jar -tpng "$file" -o plantuml/generated
+          # Check in the generated PNG files to the repo
+          git config --global user.email "jonas.cahenzli@gmail.com"
+          git config --global user.name "generate-UML-images-pipeline"
+          git add .
+          git commit -m "Add generated diagram for file $file"
+          git push origin
+      done
