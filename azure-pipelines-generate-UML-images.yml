@@ -23,7 +23,7 @@ steps:
         # Check in the generated PNG files to the repo
         git config --global user.email "jonas.cahenzli@gmail.com"
         git config --global user.name "generate-UML-images-pipeline"
-        git add plantuml/generated/*.png
+        git add .
         git commit -m "Add generated diagram for file $file"
     done
   displayName: Generate PlantUML diagrams and check them into the repo
