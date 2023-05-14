@@ -25,5 +25,6 @@ steps:
         git config --global user.name "generate-UML-images-pipeline"
         git add .
         git commit -m "Add generated diagram for file $file"
+        git push origin develop
     done
   displayName: Generate PlantUML diagrams and check them into the repo
