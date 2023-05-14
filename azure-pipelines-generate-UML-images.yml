@@ -34,7 +34,7 @@ steps:
   displayName: Generate PlantUML diagrams and check them into the repo
     inputs:
     targetType: 'inline'
-- script: |
+    script: |
     # Install required packages
     sudo apt-get update
     sudo apt-get install -y graphviz openjdk-8-jre-headless
