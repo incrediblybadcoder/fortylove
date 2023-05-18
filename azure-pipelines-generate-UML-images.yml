@@ -6,7 +6,7 @@ trigger:
     - feature/*
   paths:
     include:
-    - plantuml/*
+    - documents/design/*
 
 pool:
   vmImage: windows-latest
