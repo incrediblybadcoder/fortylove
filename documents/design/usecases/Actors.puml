@@ -1,9 +1,9 @@
 @startuml
 
-actor User
-actor Admin
-actor App-Developer
-actor Guest
-actor Unregistered-User
+actor :Member:
+actor :Admin:
+actor :App-Developer:
+actor :Guest:
+actor :Unregistered-User:
 
 @enduml
