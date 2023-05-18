@@ -63,11 +63,14 @@ steps:
   displayName: 'Push generated PNGs to current branch'
   inputs:
     script: |
+      setlocal enabledelayedexpansion
+      set "branchPrefix=refs/heads/"
+      echo !BUILD_SOURCEBRANCH:%branchPrefix%=!
       git config --global user.email "jonas.cahenzli@gmail.com"
       git config --global user.name "Azure Windows Agent"
       git add .
       git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-      git push origin  $(folderName)/$(Build.SourceBranchName)
+      git push origin  !BUILD_SOURCEBRANCH:%branchPrefix%=!
 
 
 
