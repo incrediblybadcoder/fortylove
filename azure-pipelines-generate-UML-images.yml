@@ -3,35 +3,28 @@
 trigger:
   branches:
     include:
-    - main
+    - feature/*
   paths:
     include:
-    - 'README.md'
-    - 'src/**/*'
+    - plantuml/*
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
+
+workspace:
+  clean: all
 
 steps:
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+
 - task: PowerShell@2
-  displayName: Install packages and generate diagrams
+  displayName: 'Print Variables'
   inputs:
     targetType: 'inline'
     script: |
-$folder = "plantuml/"
-
-# Get all .puml files in the folder
-$pumlFiles = Get-ChildItem -Path $folder -Filter *.puml
-
-# Loop through the files and create a text file with the same name
-foreach ($file in $pumlFiles) {
-    $txtFile = $file.FullName -replace "\.puml$", ".txt"
-    Write-Host "Creating $txtFile"
-    Add-Content -Path $txtFile -Value $file.Name
-}
-
-          git config --global user.email "jonas.cahenzli@gmail.com"
-          git config --global user.name "generate-UML-images-pipeline"
-          git add .
-          git commit -m "Add generated diagram for file $file"
-          git push origin
+      Get-ChildItem -Path Env: | Sort-Object Name | ForEach-Object {
+        Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
+      }
+      Write-Host "Print Variables End"
