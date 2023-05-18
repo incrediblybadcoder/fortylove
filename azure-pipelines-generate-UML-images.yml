@@ -66,15 +66,11 @@ steps:
     script: |
             git config --global user.email "jonas.cahenzli@gmail.com"
             git config --global user.name "Azure Windows Agent"
-            #git branch
-            #git status
-            git add --all
-            git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            #git checkout "$Env:BUILD_SOURCEBRANCHNAME"
-            #git merge "$Env:BUILD_SOURCEBRANCHNAME" -m "$Env:BUILD_BUILDNUMBER"
-            #git branch -d "$Env:BUILD_BUILDNUMBER"
+            Write-Host "current source branch: $Env:BUILD_SOURCEBRANCH"
             git checkout "$Env:BUILD_SOURCEBRANCH"
             git status
+            git add --all
+            git commit -m "Adding generated UML diagrams as PNG [skip ci]"
             git push origin
 
 
