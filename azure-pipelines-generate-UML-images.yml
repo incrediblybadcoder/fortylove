@@ -59,24 +59,13 @@ steps:
         java -jar "$(Pipeline.Workspace)/PlantUML.jar" %%F -tpng -o
       )
 
-- task: CmdLine@2
-  displayName: 'Push generated PNGs to current branch'
-  inputs:
-    script: |
-      setlocal enabledelayedexpansion
-      set "branchPrefix=refs/heads/"
-      echo !BUILD_SOURCEBRANCH:%branchPrefix%=!
-      git config --global user.email "jonas.cahenzli@gmail.com"
-      git config --global user.name "Azure Windows Agent"
-      git add .
-      git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-      git push origin feature/39plantUMLpipeline
-
 - task: PowerShell@2
   displayName: 'Push generated PNGs to current branch'
   inputs:
     targetType: 'inline'
     script: |
+            git config --global user.email "jonas.cahenzli@gmail.com"
+            git config --global user.name "Azure Windows Agent"
             git add --all
             git commit -m "$Env:BUILD_BUILDNUMBER Adding generated UML diagrams as PNG [skip ci]"
             #git checkout "$Env:BUILD_SOURCEBRANCHNAME"
