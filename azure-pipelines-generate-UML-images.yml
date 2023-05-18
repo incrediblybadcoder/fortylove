@@ -70,7 +70,7 @@ steps:
       git config --global user.name "Azure Windows Agent"
       git add .
       git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-      git push origin  /feature/39plantUMLpipeline
+      git push origin /feature/39plantUMLpipeline
 
 
 
