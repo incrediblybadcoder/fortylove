@@ -67,7 +67,9 @@ steps:
             git config --global user.email "jonas.cahenzli@gmail.com"
             git config --global user.name "Azure Windows Agent"
             Write-Host "current source branch: $Env:BUILD_SOURCEBRANCH"
-            git checkout "$Env:BUILD_SOURCEBRANCH"
+            $branchName = $Env:BUILD_SOURCEBRANCH.Replace("refs/heads/", "")
+            Write-Host "Branch name without prefix: $branchName"
+            git checkout "$branchName"
             git status
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
