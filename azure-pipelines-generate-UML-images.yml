@@ -28,3 +28,11 @@ steps:
         Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
       }
       Write-Host "Print Variables End"
+
+- task: PowerShell@2
+  displayName: 'Print Java Version'
+  inputs:
+    targetType: 'inline'
+    script: |
+      java -version
+
