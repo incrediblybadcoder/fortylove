@@ -59,6 +59,15 @@ steps:
         java -jar "$(Pipeline.Workspace)/PlantUML.jar" %%F -tpng -o
       )
 
+- task: CmdLine@2
+  displayName: 'Push generated PNGs to current branch'
+  inputs:
+    script: |
+      git config --global user.email "jonas.cahenzli@gmail.com"
+      git config --global user.name "Azure Windows Agent"
+      git add .
+      git commit -m "Adding generated UML diagrams as PNG [skip ci]"
+      git push origin $(Build.SourceBranchName)
 
 
 
