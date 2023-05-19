@@ -1,6 +1,6 @@
 @startuml
 
-actor :User:
+actor :Member:
 actor :Admin:
 actor :App-Developer:
 actor :Guest:

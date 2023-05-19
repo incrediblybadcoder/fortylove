@@ -3,8 +3,8 @@ left to right direction
 actor "Guest" as Actor
 rectangle fortylove {
     Actor --> (Tennisplatz reservieren)
-    Actor --> (Reservierung löschen)
-    Actor --> (Übersicht der Reservierungen anzeigen)
+    Actor --> (Reservierung loeschen)
+    Actor --> (Uebersicht der Reservierungen anzeigen)
     Actor --> (Platzbelegung anzeigen)
     Actor --> (Reservierung bearbeiten)
 }
