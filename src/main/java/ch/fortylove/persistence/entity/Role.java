@@ -10,6 +10,10 @@ import java.util.Collection;
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
 
+    public final static String ROLE_ADMIN = "ROLE_ADMIN";
+    public final static String ROLE_STAFF = "ROLE_STAFF";
+    public final static String ROLE_USER = "ROLE_USER";
+
     private String name;
 
     @ManyToMany(mappedBy = "roles")
@@ -18,7 +22,6 @@ public class Role extends AbstractEntity {
     @ManyToMany
     @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
-
 
     public Role() {
         super();

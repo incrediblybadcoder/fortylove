@@ -1,9 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fortylove-localDB" type="Application" factoryName="Application">
+  <configuration default="false" name="fortylove-develop" type="Application" factoryName="Application">
     <envs>
+      <env name="spring.profiles.active" value="develop" />
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
-      <env name="SPRING_DATASOURCE_URL" value="jdbc:sqlserver://localhost:1433;databaseName=fortylovedb;integratedSecurity=true;trustServerCertificate=true;" />
       <env name="SPRING_DATASOURCE_USERNAME" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedbdev" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
     <module name="fortylove.main" />
