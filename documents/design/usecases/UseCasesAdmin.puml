@@ -2,9 +2,9 @@
 left to right direction
 actor "Admin" as Actor
 rectangle fortylove {
-    Actor --> (Tennisplätze erstellen)
-    Actor --> (Tennisplätze löschen)
-    Actor --> (Tennisplätze konfigurieren)
+    Actor --> (Tennisplaetze erstellen)
+    Actor --> (Tennisplaetze loeschen)
+    Actor --> (Tennisplaetze konfigurieren)
     Actor --> (User verwalten)
 }
 
