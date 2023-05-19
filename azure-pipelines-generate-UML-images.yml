@@ -21,7 +21,7 @@ steps:
   
 - checkout: https://fortylove@dev.azure.com/fortylove/fortylove/_git/fortylove.wiki
   displayName: 'Checkout Wiki Repo'
-  extraGitArgs: '--username $(username) --password $(password)'
+  extraGitArgs: --username jonas.cahenzli --password f4m5npntm74ztfvl56yilc5ae3abzpbuyq34e2cjoqkzl523wj2q
   persistCredentials: true
   fetchDepth: 0
 
