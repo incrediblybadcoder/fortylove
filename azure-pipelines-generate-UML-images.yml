@@ -39,9 +39,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $basePath = "$(AGENT_BUILDDIRECTORY)"
+      $basePath = "$(AGENT.BUILDDIRECTORY)"
       Write-Host "agent builddirectory: $basePath"
-      Write-Host "Build Directory: $(AGENT_BUILDDIRECTORY)"
+      Write-Host "Build Directory: $(AGENT.BUILDDIRECTORY)"
       $folders = Get-ChildItem -Path D:\a\1\s -Directory -Recurse
       $folders | ForEach-Object {
         Write-Host "Folder: $($_.FullName)"
