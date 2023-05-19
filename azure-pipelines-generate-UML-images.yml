@@ -72,7 +72,7 @@ steps:
       Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
         Write-Host "PNG File: $($_.FullName)"
       }
-  displayName: 'Print PNG Files from Wiki'
+  displayName: 'PNG in Wiki Before'
 
 - task: CmdLine@2
   displayName: 'Download PlantUML JAR'
@@ -87,6 +87,32 @@ steps:
       for /R "$(Pipeline.Workspace)" %%F in (*.puml) do (
         java -jar "$(Pipeline.Workspace)/PlantUML.jar" %%F -tpng -o
       )
+
+- powershell: |
+    $sourcePath = "$(Build.SourcesDirectory)\fortylove\documents\design"
+    $destinationPath = "$(Build.SourcesDirectory)\fortylove.wiki\.attachments"
+
+    $pngFiles = Get-ChildItem -Path $sourcePath -Filter "*.png" -Recurse
+    foreach ($file in $pngFiles) {
+        $destinationFile = $file.FullName.Replace($sourcePath, $destinationPath)
+        $destinationFolder = Split-Path -Path $destinationFile -Parent
+        if (!(Test-Path -Path $destinationFolder)) {
+            New-Item -ItemType Directory -Path $destinationFolder -Force
+        }
+        Copy-Item -Path $file.FullName -Destination $destinationFile -Force
+    }
+  displayName: 'Copy PNG Files'
+
+  - task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "$(Build.Repository.LocalPath)/wiki"
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
+        Write-Host "PNG File: $($_.FullName)"
+      }
+  displayName: 'PNG in Wiki AFter'
+
 
 - task: PowerShell@2
   displayName: 'Push generated PNGs to current branch'
