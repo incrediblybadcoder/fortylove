@@ -39,10 +39,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Get-ChildItem -Path Env: | Where-Object { $_.Name -like "*_1" } | Sort-Object Name | ForEach-Object {
-        Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
-      }
-      Write-Host "Print Variables End"
+      Write-Host "$(AGENT.BUILDDIRECTORY)_1"
 
 
 - task: PowerShell@2
