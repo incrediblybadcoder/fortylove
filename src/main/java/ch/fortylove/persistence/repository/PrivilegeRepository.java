@@ -8,6 +8,5 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
-    @Nonnull
     Privilege findByName(@Nonnull final String name);
 }

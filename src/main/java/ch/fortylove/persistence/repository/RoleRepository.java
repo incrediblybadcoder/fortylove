@@ -8,6 +8,5 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Nonnull
     Role findByName(@Nonnull final String name);
 }
