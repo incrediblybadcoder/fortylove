@@ -1,7 +1,7 @@
 package ch.fortylove.views;
 
-import ch.fortylove.data.entity.User;
-import ch.fortylove.data.service.UserService;
+import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.service.UserService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -35,18 +35,18 @@ public class MainView extends VerticalLayout {
         final ListDataProvider<User> dataProvider = new ListDataProvider<>(usersDisplay);
         final Grid<User> grid = new Grid<>(User.class);
         grid.setDataProvider(dataProvider);
-        grid.setColumns("name");
-        grid.getColumnByKey("name").setHeader("Wer war hier?");
+        grid.setColumns("email");
+        grid.getColumnByKey("email").setHeader("Wer war hier?");
         grid.setHeight("300px");
 
-        final TextField visitor = new TextField("Your name");
+        final TextField visitor = new TextField("Your email");
 
         final Button addVisitor = new Button("Ich war hier!", e -> {
-            usersDisplay.clear();
-            User user = new User(visitor.getValue());
-            userService.create(user);
-            usersDisplay.addAll(userService.findAll());
-            dataProvider.refreshAll();
+//            usersDisplay.clear();
+//            User user = new User(visitor.getValue());
+//            userService.create(user);
+//            usersDisplay.addAll(userService.findAll());
+//            dataProvider.refreshAll();
         });
 
         addVisitor.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
