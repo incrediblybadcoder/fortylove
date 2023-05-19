@@ -61,7 +61,9 @@ steps:
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
     env:
-      SPRING_PROFILES_ACTIVE: "h2"
+      SPRING_DATASOURCE_URL: "$(SPRING_DATASOURCE_URL)"
+      SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
+      SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
     displayName: "Gradle Build"
 
   - task: PublishBuildArtifacts@1

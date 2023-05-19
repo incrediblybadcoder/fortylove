@@ -2,6 +2,9 @@
   <configuration default="false" name="fortylove-h2" type="Application" factoryName="Application">
     <envs>
       <env name="spring.profiles.active" value="h2" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="jdbc:h2:mem:fortylove;DB_CLOSE_DELAY=-1;" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="sa" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
     <module name="fortylove.main" />
