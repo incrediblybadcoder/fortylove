@@ -29,8 +29,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $path = "$(AGENT_BUILDDIRECTORY)"
-      $folders = Get-ChildItem -Path $path -Directory -Recurse
+      $folders = Get-ChildItem -Path $(AGENT_BUILDDIRECTORY) -Directory -Recurse
       $folders | ForEach-Object {
         Write-Host "Folder: $($_.FullName)"
       }
