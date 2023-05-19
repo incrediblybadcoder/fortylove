@@ -126,7 +126,7 @@ steps:
             Set-Location -Path $repoPath
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            git push origin HEAD
+            git push origin HEAD:refs/heads/wikiMaster
 
 
 
