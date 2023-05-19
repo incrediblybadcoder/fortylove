@@ -29,8 +29,16 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $path = "$(Agent.BuildDirectory)"
-      $folders = Get-ChildItem -Path $path -Directory
+      $paths = "$(Agent.BuildDirectory)\s"
+      $folders = Get-ChildItem -Path $paths -Directory
+      Write-Host "Subfolder from $paths "
+      $folders | ForEach-Object {
+        Write-Host "Folder: $($_.Name)"
+      }
+
+      $paths = "$(Agent.BuildDirectory)\b"
+      $folderb = Get-ChildItem -Path $pathb -Directory
+      Write-Host "Subfolder from $pathb "
       $folders | ForEach-Object {
         Write-Host "Folder: $($_.Name)"
       }
@@ -66,7 +74,7 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "$(Build.Repository.LocalPath)/wiki"
-      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/wiki" -Filter '*.png' -Recurse | ForEach-Object {
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
         Write-Host "PNG File: $($_.FullName)"
       }
   displayName: 'Print PNG Files from Wiki'
