@@ -20,8 +20,7 @@ steps:
   fetchDepth: 0
   
 - script: |
-    $wikiRepoUrl = "$(BUILD_REPOSITORY_URI).wiki"
-    git clone --depth 1 $wikiRepoUrl wiki
+    git clone --depth 1 "$(BUILD_REPOSITORY_URI).wiki" wiki
   displayName: 'Checkout Project Wiki'
 
 - task: PowerShell@2
