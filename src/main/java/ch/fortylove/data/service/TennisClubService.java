@@ -1,10 +1,9 @@
-package ch.fortylove.service;
+package ch.fortylove.data.service;
 
-import ch.fortylove.model.TennisClub;
-import ch.fortylove.repository.TennisClubRepository;
+import ch.fortylove.data.entity.TennisClub;
+import ch.fortylove.data.repository.TennisClubRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -22,17 +21,15 @@ public class TennisClubService {
 
     @Nonnull
     public List<TennisClub> findAll() {
-        List<TennisClub> tennisClubs = tennisClubRepository.findAll();
-        if (tennisClubs.isEmpty()) {
-            return (List<TennisClub>) ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(tennisClubs).getBody();
+        return tennisClubRepository.findAll();
     }
 
+    @Nonnull
     public TennisClub find(final Long id) {
         return tennisClubRepository.getReferenceById(id);
     }
 
+    @Nonnull
     public TennisClub create(final TennisClub tennisClub) {
         return tennisClubRepository.saveAndFlush(tennisClub);
     }
@@ -41,6 +38,7 @@ public class TennisClubService {
         tennisClubRepository.deleteById(id);
     }
 
+    @Nonnull
     public TennisClub update(final Long id, final TennisClub tennisClub) {
         final TennisClub existingTennisClub = tennisClubRepository.getReferenceById(id);
         BeanUtils.copyProperties(tennisClub, existingTennisClub, "tennisClub_id");

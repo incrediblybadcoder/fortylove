@@ -1,6 +1,6 @@
-package ch.fortylove.repository;
+package ch.fortylove.data.repository;
 
-import ch.fortylove.model.User;
+import ch.fortylove.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
