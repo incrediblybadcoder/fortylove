@@ -61,7 +61,7 @@ steps:
       testResultsFiles: "**/TEST-*.xml"
       tasks: "build"
     env:
-      spring.profiles.active: "h2"
+      SPRING_PROFILES_ACTIVE: "h2"
     displayName: "Gradle Build"
 
   - task: PublishBuildArtifacts@1
