@@ -111,24 +111,22 @@ steps:
       Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
         Write-Host "PNG File: $($_.FullName)"
       }
-  displayName: 'PNG in Wiki AFter'
+  displayName: 'PNG in Wiki After'
 
 
 - task: PowerShell@2
-  displayName: 'Push generated PNGs to current branch'
+  displayName: 'Push generated PNG to Wiki'
   inputs:
     targetType: 'inline'
     script: |
             git config --global user.email "jonas.cahenzli@gmail.com"
             git config --global user.name "Azure Windows Agent"
-            Write-Host "current source branch: $Env:BUILD_SOURCEBRANCH"
-            $branchName = $Env:BUILD_SOURCEBRANCH.Replace("refs/heads/", "")
-            Write-Host "Branch name without prefix: $branchName"
-            git checkout "$branchName"
-            git status
+            Write-Host "Basepath: $Env:BUILD_REPOSITORY_LOCALPAT"
+            $repoPath = "$(Build.Repository.LocalPath)\fortylove.wiki"
+            Set-Location -Path $repoPath
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            git push origin
+            git push origin HEAD
 
 
 
