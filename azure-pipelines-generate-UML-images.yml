@@ -20,7 +20,7 @@ steps:
   fetchDepth: 0
   
 - script: |
-    git clone --depth 1 "$(BUILD_REPOSITORY_URI).wiki" wiki
+    git clone --depth 1 https://fortylove@dev.azure.com/fortylove/fortylove/_git/fortylove.wiki wiki
   displayName: 'Checkout Project Wiki'
 
 - task: PowerShell@2
