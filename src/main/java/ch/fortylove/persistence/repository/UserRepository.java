@@ -1,9 +1,13 @@
-package ch.fortylove.data.repository;
+package ch.fortylove.persistence.repository;
 
-import ch.fortylove.data.entity.User;
+import ch.fortylove.persistence.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Nonnull;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Nonnull
+    User findByEmail(String email);
 }

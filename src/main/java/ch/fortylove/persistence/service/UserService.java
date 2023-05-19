@@ -1,7 +1,7 @@
-package ch.fortylove.data.service;
+package ch.fortylove.persistence.service;
 
-import ch.fortylove.data.entity.User;
-import ch.fortylove.data.repository.UserRepository;
+import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

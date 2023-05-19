@@ -1,4 +1,4 @@
-package ch.fortylove.data.entity;
+package ch.fortylove.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
@@ -37,13 +37,5 @@ public class TennisClub extends AbstractEntity {
 
     public void setAddress(final String address) {
         this.address = address;
-    }
-
-    @Override
-    public String toString() {
-        return "TennisClub{" +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
     }
 }

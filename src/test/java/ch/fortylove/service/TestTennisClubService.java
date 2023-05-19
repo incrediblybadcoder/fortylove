@@ -1,8 +1,8 @@
 package ch.fortylove.service;
 
-import ch.fortylove.data.entity.TennisClub;
-import ch.fortylove.data.repository.TennisClubRepository;
-import ch.fortylove.data.service.TennisClubService;
+import ch.fortylove.persistence.entity.TennisClub;
+import ch.fortylove.persistence.repository.TennisClubRepository;
+import ch.fortylove.persistence.service.TennisClubService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

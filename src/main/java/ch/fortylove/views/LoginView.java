@@ -2,6 +2,7 @@ package ch.fortylove.views;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -16,7 +17,7 @@ import javax.annotation.Nonnull;
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
-    @Nonnull private final LoginForm login = new LoginForm();
+    @Nonnull private final LoginForm loginForm;
 
     public LoginView(){
         addClassName("login-view");
@@ -24,9 +25,15 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        login.setAction("login");
+        loginForm = new LoginForm();
+        final LoginI18n loginFormInternational = LoginI18n.createDefault();
+        final LoginI18n.Form form = loginFormInternational.getForm();
+        form.setUsername("Email");
 
-        add(new H1("fortylove"), login);
+        loginForm.setI18n(loginFormInternational);
+        loginForm.setAction("login");
+
+        add(new H1("fortylove"), loginForm);
     }
 
     @Override
@@ -36,7 +43,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                 .getQueryParameters()
                 .getParameters()
                 .containsKey("error")) {
-            login.setError(true);
+            loginForm.setError(true);
         }
     }
 }

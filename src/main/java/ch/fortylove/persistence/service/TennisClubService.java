@@ -1,7 +1,7 @@
-package ch.fortylove.data.service;
+package ch.fortylove.persistence.service;
 
-import ch.fortylove.data.entity.TennisClub;
-import ch.fortylove.data.repository.TennisClubRepository;
+import ch.fortylove.persistence.entity.TennisClub;
+import ch.fortylove.persistence.repository.TennisClubRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
