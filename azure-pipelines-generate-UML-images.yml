@@ -25,16 +25,6 @@ steps:
   fetchDepth: 0
 
 - task: PowerShell@2
-  displayName: 'Display Folders at AGENT_BUILDDIRECTORY'
-  inputs:
-    targetType: 'inline'
-    script: |
-      $folders = Get-ChildItem -Path "$(AGENT_BUILDDIRECTORY)" -Directory -Recurse
-      $folders | ForEach-Object {
-        Write-Host "Folder: $($_.FullName)"
-      }
-
-- task: PowerShell@2
   displayName: 'Print Variables'
   inputs:
     targetType: 'inline'
@@ -43,6 +33,17 @@ steps:
         Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
       }
       Write-Host "Print Variables End"
+
+- task: PowerShell@2
+  displayName: 'Display Folders at AGENT_BUILDDIRECTORY'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $folders = Get-ChildItem -Path D:\a\1\s -Directory -Recurse
+      $folders | ForEach-Object {
+        Write-Host "Folder: $($_.FullName)"
+      }
+
 
 - task: PowerShell@2
   displayName: 'Print Java Version'
