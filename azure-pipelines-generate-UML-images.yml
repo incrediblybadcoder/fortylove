@@ -34,15 +34,6 @@ steps:
       }
       Write-Host "Print Variables End"
 
-- task: PowerShell@2
-  displayName: 'Print Wiki Repo Variables'
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "agent buildriectory: $(AGENT.BUILDDIRECTORY)_1"
-      Write-Host "build repository name: $(BUILD.REPOSITORY.NAME)_1"
-      Write-Host "build sourcebranch: $(BUILD.SOURCEBRANCH)_1"
-
 
 - task: PowerShell@2
   displayName: 'Display Folders at AGENT_BUILDDIRECTORY'
@@ -136,7 +127,7 @@ steps:
             Set-Location -Path $repoPath
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            git push origin HEAD:$(BUILD.SOURCEBRANCH)_1
+            git push origin HEAD:refs/heads/wikiMaster
 
 
 
