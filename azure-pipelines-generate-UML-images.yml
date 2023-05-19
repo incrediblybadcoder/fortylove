@@ -29,18 +29,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $paths = "$(Agent.BuildDirectory)\s"
-      $folders = Get-ChildItem -Path $paths -Directory
-      Write-Host "Subfolder from $paths "
+      $path = "$(AGENT_BUILDDIRECTORY)"
+      $folders = Get-ChildItem -Path $path -Directory -Recurse
       $folders | ForEach-Object {
-        Write-Host "Folder: $($_.Name)"
-      }
-
-      $paths = "$(Agent.BuildDirectory)\b"
-      $folderb = Get-ChildItem -Path $pathb -Directory
-      Write-Host "Subfolder from $pathb "
-      $folders | ForEach-Object {
-        Write-Host "Folder: $($_.Name)"
+        Write-Host "Folder: $($_.FullName)"
       }
 
 - task: PowerShell@2
