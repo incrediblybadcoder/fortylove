@@ -1,6 +1,6 @@
 @startuml
 left to right direction
-actor "User" as Actor
+actor "Member" as Actor
 rectangle fortylove {
     Actor --> (UC_1\nTennisplatz reservieren)
     Actor --> (UC_2\nPlatzbelegung anzeigen)
