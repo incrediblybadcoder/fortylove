@@ -29,7 +29,7 @@ dependencies {
 	implementation("com.vaadin:vaadin-spring-boot-starter:24.0.0")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
 
-	runtimeOnly("com.h2database:h2-mvstore:2.1.214")
+	runtimeOnly("com.h2database:h2:2.1.214")
 	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre11")
 
 	developmentOnly("com.microsoft.sqlserver:mssql-jdbc_auth:12.2.0.x64")

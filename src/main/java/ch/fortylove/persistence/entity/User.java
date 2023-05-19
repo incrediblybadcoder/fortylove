@@ -13,10 +13,14 @@ import java.util.Collection;
 public class User extends AbstractEntity {
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     @Column(length = 60)
     private String password;
+
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)

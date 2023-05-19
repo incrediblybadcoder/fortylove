@@ -8,6 +8,10 @@ import java.util.Collection;
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
+    public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
+    public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
+    public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
+
     private String name;
 
     @ManyToMany(mappedBy = "privileges")

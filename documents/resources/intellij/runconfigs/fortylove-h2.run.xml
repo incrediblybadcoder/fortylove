@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fortylove-h2" type="Application" factoryName="Application">
+    <envs>
+      <env name="spring.profiles.active" value="h2" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
+    <module name="fortylove.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.fortylove.views.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
