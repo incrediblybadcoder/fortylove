@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fortylove-develop" type="Application" factoryName="Application">
+    <envs>
+      <env name="spring.profiles.active" value="develop" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedbdev" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
+    <module name="fortylove.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.fortylove.views.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,99 @@
+# Azure Pipelines YAML file
+# Check for more info https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema-reference
+trigger:
+  branches:
+    include:
+    - feature/*
+  paths:
+    include:
+    - documents/design/*
+
+pool:
+  vmImage: windows-latest
+
+workspace:
+  clean: all
+
+steps:
+- checkout: self
+  persistCredentials: true
+  fetchDepth: 0
+
+- task: PowerShell@2
+  displayName: 'Print Variables'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Get-ChildItem -Path Env: | Sort-Object Name | ForEach-Object {
+        Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
+      }
+      Write-Host "Print Variables End"
+
+- task: PowerShell@2
+  displayName: 'Print Java Version'
+  inputs:
+    targetType: 'inline'
+    script: |
+      java -version
+
+- task: PowerShell@2
+  displayName: 'Print .puml Files'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s" -Filter "*.puml" -Recurse | ForEach-Object {
+        Write-Host $_.FullName
+      }
+
+- task: CmdLine@2
+  displayName: 'Download PlantUML JAR'
+  inputs:
+    script: |
+      curl -L -o "$(Pipeline.Workspace)/PlantUML.jar" "https://sourceforge.net/projects/plantuml/files/1.2023.7/plantuml.1.2023.7.jar/download"
+
+- task: CmdLine@2
+  displayName: 'Generate PlantUML diagrams as PNG'
+  inputs:
+    script: |
+      for /R "$(Pipeline.Workspace)" %%F in (*.puml) do (
+        java -jar "$(Pipeline.Workspace)/PlantUML.jar" %%F -tpng -o
+      )
+
+- task: PowerShell@2
+  displayName: 'Push generated PNGs to current branch'
+  inputs:
+    targetType: 'inline'
+    script: |
+            git config --global user.email "jonas.cahenzli@gmail.com"
+            git config --global user.name "Azure Windows Agent"
+            Write-Host "current source branch: $Env:BUILD_SOURCEBRANCH"
+            $branchName = $Env:BUILD_SOURCEBRANCH.Replace("refs/heads/", "")
+            Write-Host "Branch name without prefix: $branchName"
+            git checkout "$branchName"
+            git status
+            git add --all
+            git commit -m "Adding generated UML diagrams as PNG [skip ci]"
+            git push origin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

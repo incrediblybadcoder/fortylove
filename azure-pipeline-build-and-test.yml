@@ -4,6 +4,9 @@ trigger:
   branches:
     include:
       - feature/*
+  paths:
+    exclude:
+      - documents/*
 
 pool:
   vmImage: "ubuntu-latest"

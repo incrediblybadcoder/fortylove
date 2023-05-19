@@ -11,7 +11,3 @@
 * Server name: fortylove.database.windows.net
 * User: fortylove
 * Password: non-standard
-
-[Heroku](https://dashboard.heroku.com/apps)
-* User: m.solombrino@hotmail.ch
-* Password: standard
