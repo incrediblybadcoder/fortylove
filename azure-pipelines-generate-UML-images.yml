@@ -18,6 +18,11 @@ steps:
 - checkout: self
   persistCredentials: true
   fetchDepth: 0
+  
+- script: |
+    $wikiRepoUrl = "$(BUILD_REPOSITORY_URI).wiki"
+    git clone --depth 1 $wikiRepoUrl wiki
+  displayName: 'Checkout Project Wiki'
 
 - task: PowerShell@2
   displayName: 'Print Variables'
@@ -44,6 +49,16 @@ steps:
       Get-ChildItem -Path "$(Agent.BuildDirectory)/s" -Filter "*.puml" -Recurse | ForEach-Object {
         Write-Host $_.FullName
       }
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "$(Build.Repository.LocalPath)/wiki"
+      Get-ChildItem -Path "$(Build.Repository.LocalPath)/wiki" -Filter '*.png' -Recurse | ForEach-Object {
+        Write-Host "PNG File: $($_.FullName)"
+      }
+  displayName: 'Print PNG Files from Wiki'
 
 - task: CmdLine@2
   displayName: 'Download PlantUML JAR'
