@@ -39,7 +39,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host "$(AGENT.BUILDDIRECTORY)_1"
+      Write-Host "agent buildriectory: $(AGENT.BUILDDIRECTORY)_1"
+      Write-Host "build repository name: $(BUILD_REPOSITORY_NAME)_1"
+      Write-Host "build sourcebranch: $(BUILD_SOURCEBRANCH )_1"
 
 
 - task: PowerShell@2
@@ -134,7 +136,7 @@ steps:
             Set-Location -Path $repoPath
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            git push origin HEAD:refs/heads/wikiMaster
+            git push origin HEAD:$(BUILD_SOURCEBRANCH )_1
 
 
 
