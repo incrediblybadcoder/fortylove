@@ -22,7 +22,7 @@ steps:
 - script: |
     git config --global user.email "jonas.cahenzli@gmail.com"
     git config --global user.name "Azure Windows Agent"
-    git clone --depth 1 https://fortylove@dev.azure.com/fortylove/fortylove/_git/fortylove.wiki wiki
+    git clone --depth 1 https://fortylove@dev.azure.com/fortylove/fortylove/_git/fortylove wiki
   displayName: 'Checkout Project Wiki'
 
 - task: PowerShell@2
