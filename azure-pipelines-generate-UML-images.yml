@@ -25,6 +25,17 @@ steps:
   fetchDepth: 0
 
 - task: PowerShell@2
+  displayName: 'Display Folders at AGENT_BUILDDIRECTORY'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $path = "$(Agent.BuildDirectory)"
+      $folders = Get-ChildItem -Path $path -Directory
+      $folders | ForEach-Object {
+        Write-Host "Folder: $($_.Name)"
+      }
+
+- task: PowerShell@2
   displayName: 'Print Variables'
   inputs:
     targetType: 'inline'
@@ -55,7 +66,7 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "$(Build.Repository.LocalPath)/wiki"
-      Get-ChildItem -Path "$(Build.Repository.LocalPath)/wiki" -Filter '*.png' -Recurse | ForEach-Object {
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/wiki" -Filter '*.png' -Recurse | ForEach-Object {
         Write-Host "PNG File: $($_.FullName)"
       }
   displayName: 'Print PNG Files from Wiki'
