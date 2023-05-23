@@ -1,0 +1,8 @@
+@startuml
+object Projekt_Risikoanalyse {
+<#orange>|= Risiko |= <#orange> Schaden \n 1-10 |= <#orange> Eintretens-\n wahrscheinlichkeit \n 1-10 |= <#orange> Risikoindex \n 1-100 |= <#orange> Begründung |= <#orange> Checkpoints |= <#orange> Massnahmen  |
+| Keine Akzeptanz der Endbenutzer | 7 |  3 | 21 | 1. Endbenutzer sehen keinen Vorteil dem Konkurenzapp gegenüber \n 2. Platzbuchnungsprozess zu umständlich\n 3. App zu langsam   | 1. keine - Endbentzer darf keinen Nachteil wahrnehmen \n 2a. Weniger oder gleich viele Klicks bis zur Platzbuchung wie bestehende Lösung \n 2b. Zeitaufwand <= bestehende Lösung  \n 3. Appbenutzung muss flüssig laufen | - 10 Powerusers einbeziehen \n - früh Userfeedbacks einholen mit UI Prototyp / MVP |
+| Keine Akzeptanz der Vereinsführung | 10 | 3 | 30 | 1. Lösung unterscheidet sich preislich zu wenig von den Konkurenzlösungen \n 2. Transfer auf neue Lösung ist zu umständlich \n 3. Wartung / Betrieb zu umständlich\n 4. Lösung nicht zuverlässig  | 1. Lösung kostet im Unterhalt < 1/10\n 2. < 4- Mann-Stunden Aufwand\n 3. Managbar durch eine im Verein ehrenamtlich arbeitetende Person \n 4. Downtime während buchbaren Zeiten < 1%  | - Vorstand einbeziehen\n - früh Feedback einholen anhand Prozessabläufn\n - transparente Kostenauflistung |
+}
+
+@enduml
