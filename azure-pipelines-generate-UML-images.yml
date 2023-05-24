@@ -6,7 +6,7 @@ trigger:
     - feature/*
   paths:
     include:
-    - documents/design/*
+    - documents/*
 
 pool:
   vmImage: windows-latest
@@ -18,9 +18,14 @@ steps:
 - checkout: self
   persistCredentials: true
   fetchDepth: 0
+  
+- checkout: git://fortylove/fortylove.wiki
+  displayName: 'Checkout Wiki Repo'
+  persistCredentials: true
+  fetchDepth: 0
 
 - task: PowerShell@2
-  displayName: 'Print Variables'
+  displayName: 'Print Self Repo Variables'
   inputs:
     targetType: 'inline'
     script: |
@@ -28,6 +33,21 @@ steps:
         Write-Host ("{0} = {1}" -f $_.Name, $_.Value)
       }
       Write-Host "Print Variables End"
+
+
+- task: PowerShell@2
+  displayName: 'Display Folders at AGENT_BUILDDIRECTORY'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $basePath = "$(AGENT.BUILDDIRECTORY)"
+      Write-Host "agent builddirectory: $basePath"
+      Write-Host "Build Directory: $(AGENT.BUILDDIRECTORY)"
+      $folders = Get-ChildItem -Path D:\a\1\s -Directory -Recurse
+      $folders | ForEach-Object {
+        Write-Host "Folder: $($_.FullName)"
+      }
+
 
 - task: PowerShell@2
   displayName: 'Print Java Version'
@@ -45,6 +65,16 @@ steps:
         Write-Host $_.FullName
       }
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "$(Build.Repository.LocalPath)/wiki"
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
+        Write-Host "PNG File: $($_.FullName)"
+      }
+  displayName: 'PNG in Wiki Before'
+
 - task: CmdLine@2
   displayName: 'Download PlantUML JAR'
   inputs:
@@ -59,21 +89,45 @@ steps:
         java -jar "$(Pipeline.Workspace)/PlantUML.jar" %%F -tpng -o
       )
 
+- powershell: |
+    $sourcePath = "$(Build.SourcesDirectory)\fortylove\documents\design"
+    $destinationPath = "$(Build.SourcesDirectory)\fortylove.wiki\.attachments"
+
+    $pngFiles = Get-ChildItem -Path $sourcePath -Filter "*.png" -Recurse
+    foreach ($file in $pngFiles) {
+        $destinationFile = $file.FullName.Replace($sourcePath, $destinationPath)
+        $destinationFolder = Split-Path -Path $destinationFile -Parent
+        if (!(Test-Path -Path $destinationFolder)) {
+            New-Item -ItemType Directory -Path $destinationFolder -Force
+        }
+        Copy-Item -Path $file.FullName -Destination $destinationFile -Force
+    }
+  displayName: 'Copy PNG Files'
+
 - task: PowerShell@2
-  displayName: 'Push generated PNGs to current branch'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "$(Build.Repository.LocalPath)/wiki"
+      Get-ChildItem -Path "$(Agent.BuildDirectory)/s/fortylove.wiki" -Filter '*.png' -Recurse | ForEach-Object {
+        Write-Host "PNG File: $($_.FullName)"
+      }
+  displayName: 'PNG in Wiki After'
+
+
+- task: PowerShell@2
+  displayName: 'Push generated PNG to Wiki'
   inputs:
     targetType: 'inline'
     script: |
             git config --global user.email "jonas.cahenzli@gmail.com"
             git config --global user.name "Azure Windows Agent"
-            Write-Host "current source branch: $Env:BUILD_SOURCEBRANCH"
-            $branchName = $Env:BUILD_SOURCEBRANCH.Replace("refs/heads/", "")
-            Write-Host "Branch name without prefix: $branchName"
-            git checkout "$branchName"
-            git status
+            Write-Host "Basepath: $Env:BUILD_REPOSITORY_LOCALPAT"
+            $repoPath = "$(Build.Repository.LocalPath)\fortylove.wiki"
+            Set-Location -Path $repoPath
             git add --all
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
-            git push origin
+            git push origin HEAD:refs/heads/wikiMaster
 
 
 
