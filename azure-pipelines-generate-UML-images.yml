@@ -6,7 +6,7 @@ trigger:
     - feature/*
   paths:
     include:
-    - documents/design/*
+    - documents/*
 
 pool:
   vmImage: windows-latest
