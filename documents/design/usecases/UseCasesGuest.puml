@@ -6,7 +6,7 @@ rectangle fortylove {
     Actor --> (Reservierung loeschen)
     Actor --> (Uebersicht der Reservierungen anzeigen)
     Actor --> (Platzbelegung anzeigen)
-    Actor --> (Reservierung bearbeiten)
+    Actor --> (Reservierungen bearbeiten)
 }
 
 @enduml
