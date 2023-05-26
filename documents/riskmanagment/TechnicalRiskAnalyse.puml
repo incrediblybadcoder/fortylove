@@ -1,11 +1,11 @@
 @startuml
 object Technische_Risiken {
-<#orange>|= Risiko |= <#orange> Schaden \n 1-10 |= <#orange> Eintretens-\n wahrscheinlichkeit \n 1-10 |= <#orange> Risikoindex \n 1-100 |= <#orange> Begründung  |= <#orange> Massnahmen  |
-| Datenbankverlust / \n Korruption | 10 | 3 | 30 | Hardwaredefekte oder Bugs in der Datenbank-Software \n bzw. unserer eigenen App | Hosting auf professionellem Cloud-Anbieter \n sowie eigene regelmässige Backup-Tasks |
-| Diebstahl der\n User-Logins | 6 | 2 | 12 | Hackerangriff | Behandlung der User-Credentials als sensitive Daten \n im ganzen App mit kryptographiescher Verschlüsselung |
-| Skalierbarkeit /\n Performance | 3 | 1 | 3 | Mehr Vereine und User erhöhen die Performance-Anforderungen \n an die App und den Server | Keine Massnahmen. \n Risiko niedriger Priorität da Funktionen nicht sehr rechenintensiv |
-| Kompatabilität mit\n Anwendungsgeräten | 7 | 4 | 28 | Neuere Versionen der Betriebssysteme von \n Mobiltelephonen / Browser | - Benutzung der Spring-Boot\Vaadin-Frameworks, welche dieses Risiko durch Updates bedient \n - App als PWA auf Mobiltelephonen, welche keine nativen Apps sind (keine Android/iOS-Apps) |
+<#orange>|= Risiko |= <#orange> Schaden \n 1-10 |= <#orange> Eintretens-\n wahrscheinlichkeit \n 1-10 |= <#orange> Risikoindex \n 1-100 |= <#orange> Begruendung  |= <#orange> Massnahmen  |
+| Datenbankverlust / \n Korruption | 10 | 3 | 30 | Hardwaredefekte oder Bugs in der Datenbank-Software \n bzw. unserer eigenen App | Hosting auf professionellem Cloud-Anbieter \n sowie eigene regelmaessige Backup-Tasks |
+| Diebstahl der\n User-Logins | 6 | 2 | 12 | Hackerangriff | Behandlung der User-Credentials als sensitive Daten \n im ganzen App mit kryptographiescher Verschluesselung |
+| Skalierbarkeit /\n Performance | 3 | 1 | 3 | Mehr Vereine und User erhoehen die Performance-Anforderungen \n an die App und den Server | Keine Massnahmen. \n Risiko niedriger Prioritaet da Funktionen nicht sehr rechenintensiv |
+| Kompatabilitaet mit\n Anwendungsgeraeten | 7 | 4 | 28 | Neuere Versionen der Betriebssysteme von \n Mobiltelephonen / Browser | - Benutzung der Spring-Boot\Vaadin-Frameworks, welche dieses Risiko durch Updates bedient \n - App als PWA auf Mobiltelephonen, welche keine nativen Apps sind (keine Android/iOS-Apps) |
 | Aufschaltung\n schwerwiegender Bugs | 7 | 5 | 35 | Schwere Bugs kommen unentdeckt in die Produktionsumgebung \n und richten grossen Schaden (z.B. an der Datenbank) an | - Zwei Instanzen der Website (Produktion und Dev) zum ausgiebigen Testen neuer Features \n - Gute Testabdeckung mit automatisierten Unit-Tests und Frontend-Tests |
-| Erreichbarkeit\n der App | 4 | 6 | 24 | Ausfall der Hostingplatform, welches die App betreibt | Hosting auf professionellem Cloud-Anbieter ermöglicht automatischen Zuzug von Ressourcen im Ausfallszenario |
+| Erreichbarkeit\n der App | 4 | 6 | 24 | Ausfall der Hostingplatform, welches die App betreibt | Hosting auf professionellem Cloud-Anbieter ermoeglicht automatischen Zuzug von Ressourcen im Ausfallszenario |
 }
 @enduml
