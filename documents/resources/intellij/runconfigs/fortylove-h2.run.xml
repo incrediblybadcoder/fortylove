@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fortylove-h2" type="Application" factoryName="Application">
+  <configuration default="false" name="fortylove-h2" type="Application" factoryName="Application" folderName="fortylove-templates">
     <envs>
       <env name="SPRING_PROFILE" value="h2" />
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
