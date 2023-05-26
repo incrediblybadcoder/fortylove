@@ -126,6 +126,7 @@ steps:
             $repoPath = "$(Build.Repository.LocalPath)\fortylove.wiki"
             Set-Location -Path $repoPath
             git add --all
+            git pull
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
             git push origin HEAD:refs/heads/wikiMaster
 
