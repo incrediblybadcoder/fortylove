@@ -124,9 +124,10 @@ steps:
             git config --global user.name "Azure Windows Agent"
             Write-Host "Basepath: $Env:BUILD_REPOSITORY_LOCALPAT"
             $repoPath = "$(Build.Repository.LocalPath)\fortylove.wiki"
+            Write-Host "repoPath $repoPath"
             Set-Location -Path $repoPath
             git add --all
-            git pull origin
+            git pull origin wikiMaster
             git commit -m "Adding generated UML diagrams as PNG [skip ci]"
             git push origin HEAD:refs/heads/wikiMaster
 
