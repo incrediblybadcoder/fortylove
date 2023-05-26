@@ -24,7 +24,7 @@ In den WebApps des Azure App Services müssen folgende Environment Variablen fü
 * Name: jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedbdev
 * User: fortylove
 * Password: nonstandard
-* 
+
 #### h2
 * Name: jdbc:h2:mem:fortylove;DB_CLOSE_DELAY=-1
 * User: sa
