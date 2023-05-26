@@ -90,7 +90,7 @@ steps:
       )
 
 - powershell: |
-    $sourcePath = "$(Build.SourcesDirectory)\fortylove\documents\design"
+    $sourcePath = "$(Build.SourcesDirectory)\fortylove\documents"
     $destinationPath = "$(Build.SourcesDirectory)\fortylove.wiki\.attachments"
 
     $pngFiles = Get-ChildItem -Path $sourcePath -Filter "*.png" -Recurse
