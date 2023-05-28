@@ -17,8 +17,9 @@ public class MainLayout extends AppLayout {
 
     @Nonnull private final SecurityService securityService;
 
-    public MainLayout(@Nonnull final SecurityService securityServiceImpl) {
-        this.securityService = securityServiceImpl;
+    public MainLayout(@Nonnull final SecurityService securityService) {
+        this.securityService = securityService;
+
         createHeader();
         createDrawer();
     }
