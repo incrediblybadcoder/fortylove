@@ -41,6 +41,19 @@ public class User extends AbstractEntity {
         this.enabled = false;
     }
 
+    public User(@Nonnull final String firstName,
+                @Nonnull final String lastName,
+                @Nonnull final String password,
+                @Nonnull final String email,
+                @Nonnull final Collection<Role> roles) {
+        this();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
+
     @Nonnull
     public String getFirstName() {
         return firstName;

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,18 +24,18 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testCreate() {
-        final String name = "name";
+        final Privilege privilege = new Privilege("name");
 
-        final Privilege privilege = createPrivilege(name);
+        final Privilege createdPrivilege = testee.create(privilege);
 
-        Assertions.assertEquals(name, privilege.getName());
+        Assertions.assertEquals(createdPrivilege, privilege);
     }
 
     @Test
     public void testFindAll() {
-        final Privilege privilege1 = createPrivilege("name1");
-        final Privilege privilege2 = createPrivilege("name2");
-        final Privilege privilege3 = createPrivilege("name3");
+        final Privilege privilege1 = testee.create(new Privilege("name1"));
+        final Privilege privilege2 = testee.create(new Privilege("name2"));
+        final Privilege privilege3 = testee.create(new Privilege("name3"));
 
         final List<Privilege> privileges = testee.findAll();
 
@@ -50,8 +49,8 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testFindByName_notExists() {
-        createPrivilege("name1");
-        createPrivilege("name3");
+        testee.create(new Privilege("name1"));
+        testee.create(new Privilege("name3"));
 
         final Optional<Privilege> privilege = testee.findByName("name2");
 
@@ -61,9 +60,9 @@ class TestPrivilegeServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String name2 = "name2";
-        createPrivilege("name1");
-        final Privilege privilege2 = createPrivilege(name2);
-        createPrivilege("name3");
+        testee.create(new Privilege("name1"));
+        final Privilege privilege2 = testee.create(new Privilege(name2));;
+        testee.create(new Privilege("name3"));
 
         final Optional<Privilege> privilege = testee.findByName(name2);
 
@@ -73,9 +72,9 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testDeleteById() {
-        createPrivilege("name1");
-        final Privilege privilege2 = createPrivilege("name2");
-        createPrivilege("name3");
+        testee.create(new Privilege("name1"));
+        final Privilege privilege2 = testee.create(new Privilege("name2"));;
+        testee.create(new Privilege("name3"));
 
         testee.deleteById(privilege2.getId());
 
@@ -87,7 +86,7 @@ class TestPrivilegeServiceImpl {
     @Test
     public void testUpdate() {
         final String name2 = "name2";
-        final long privilegeId = createPrivilege("name1").getId();
+        final long privilegeId = testee.create(new Privilege("name1")).getId();
 
         testee.update(privilegeId, new Privilege(name2));
 
@@ -95,11 +94,5 @@ class TestPrivilegeServiceImpl {
         Assertions.assertEquals(1, privileges.size());
         Assertions.assertEquals(privilegeId, privileges.get(0).getId());
         Assertions.assertEquals(name2, privileges.get(0).getName());
-    }
-
-    @Nonnull
-    private Privilege createPrivilege(@Nonnull final String name) {
-        final Privilege privilege = new Privilege(name);
-        return testee.create(privilege);
     }
 }

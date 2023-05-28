@@ -3,6 +3,7 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -12,11 +13,12 @@ public class Court extends AbstractEntity {
     @OneToMany(mappedBy = "court")
     private Collection<Booking> bookings;
 
+    @Nonnull
     public Collection<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(final Collection<Booking> bookings) {
+    public void setBookings(@Nonnull final Collection<Booking> bookings) {
         this.bookings = bookings;
     }
 

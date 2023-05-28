@@ -1,7 +1,7 @@
 package ch.fortylove.views;
 
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.persistence.service.UserServiceImpl;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -28,7 +28,7 @@ import java.util.List;
 @PermitAll
 public class MainView extends VerticalLayout {
 
-    @Autowired private UserService userService;
+    @Autowired private UserServiceImpl userService;
 
     public MainView() {
         final List<User> usersDisplay = new ArrayList<>();

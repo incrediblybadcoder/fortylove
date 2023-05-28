@@ -2,8 +2,8 @@ package ch.fortylove.spring.setupdata;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.repository.UserRepository;
 import ch.fortylove.persistence.service.RoleService;
+import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,15 +20,15 @@ import java.util.Optional;
 @Profile({"h2", "develop", "local"})
 public class UserSetupData {
 
-    @Nonnull private final UserRepository userRepository;
+    @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserSetupData(@Nonnull final UserRepository userRepository,
+    public UserSetupData(@Nonnull final UserService userService,
                          @Nonnull final RoleService roleService,
                          @Nonnull final PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -75,16 +75,10 @@ public class UserSetupData {
                               @Nonnull final String lastName,
                               @Nonnull final String password,
                               @Nonnull final Collection<Role> roles) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setPassword(passwordEncoder.encode(password));
-            user.setEmail(email);
-            user.setEnabled(true);
-            user.setRoles(roles);
-            userRepository.save(user);
+        final Optional<User> user = userService.findByEmail(email);
+
+        if (user.isEmpty()) {
+            userService.create(new User(firstName, lastName, passwordEncoder.encode(password), email, roles));
         }
     }
 }
