@@ -3,7 +3,7 @@ package ch.fortylove.security;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.repository.UserRepository;
+import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,20 +22,19 @@ import java.util.List;
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Nonnull private final UserRepository userRepository;
+    @Nonnull private final UserService userService;
 
     @Autowired
-    public UserDetailsServiceImpl(@Nonnull final UserRepository userRepository) {
+    public UserDetailsServiceImpl(@Nonnull final UserService userService) {
         super();
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("No user found with username: " + email);
-        }
+        final User user = userService.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + email));
+
         boolean enabled = true;
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
