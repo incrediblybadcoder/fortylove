@@ -32,12 +32,7 @@ public class User extends AbstractEntity {
     )
     private Collection<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_bookings",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "booking_id")
-    )
+    @ManyToMany(mappedBy = "users")
     private Collection<Booking> bookings;
 
     public User() {

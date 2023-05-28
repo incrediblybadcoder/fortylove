@@ -3,6 +3,7 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
@@ -16,7 +17,12 @@ public class Booking extends AbstractEntity {
     @JoinColumn(name = "court_id")
     private Court court;
 
-    @ManyToMany(mappedBy = "bookings")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "bookings_users",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Collection<User> users;
 
     private int timeslot;

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 @Component
@@ -28,7 +28,6 @@ public class BookingSetupData {
     public BookingSetupData(@Nonnull final CourtRepository courtRepository,
                             @Nonnull final BookingRepository bookingRepository,
                             @Nonnull final UserRepository userRepository) {
-
         this.courtRepository = courtRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
@@ -36,43 +35,42 @@ public class BookingSetupData {
 
     public void createBookings() {
         createBookingIfNotFound(getCourt(1L), getUsers("marco", "daniel"), 1);
-//        createBookingIfNotFound(getCourt(1L), getUsers("daniel", "marco"), 4);
-//        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 5);
-//        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 9);
-//        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 12);
-//
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 1);
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 2);
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 3);
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 5);
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 13);
-//        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 15);
-//
-//        createBookingIfNotFound(getCourt(3L), getUsers("jonas", "daniel"), 6);
-//        createBookingIfNotFound(getCourt(3L), getUsers("jonas", "daniel"), 8);
-//
-//        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 11);
-//        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 13);
-//        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 14);
-//
-//        createBookingIfNotFound(getCourt(5L), getUsers("daniel", "marco"), 5);
-//        createBookingIfNotFound(getCourt(5L), getUsers("daniel", "marco"), 6);
-//
-//        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 3);
-//        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 7);
-//        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 14);
-//        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 15);
+        createBookingIfNotFound(getCourt(1L), getUsers("daniel", "marco"), 4);
+        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 5);
+        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 9);
+        createBookingIfNotFound(getCourt(1L), getUsers("jonas", "marco"), 12);
+
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 1);
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 2);
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 3);
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 5);
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 13);
+        createBookingIfNotFound(getCourt(2L), getUsers("daniel", "marco"), 15);
+
+        createBookingIfNotFound(getCourt(3L), getUsers("jonas", "daniel"), 6);
+        createBookingIfNotFound(getCourt(3L), getUsers("jonas", "daniel"), 8);
+
+        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 11);
+        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 13);
+        createBookingIfNotFound(getCourt(4L), getUsers("marco", "jonas"), 14);
+
+        createBookingIfNotFound(getCourt(5L), getUsers("daniel", "marco"), 5);
+        createBookingIfNotFound(getCourt(5L), getUsers("daniel", "marco"), 6);
+
+        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 3);
+        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 7);
+        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 14);
+        createBookingIfNotFound(getCourt(6L), getUsers("jonas", "daniel"), 15);
     }
 
     @Nonnull
     @Transactional
     private Collection<User> getUsers(@Nonnull final String user1,
                                       @Nonnull final String user2) {
-        final ArrayList<User> users = new ArrayList<>();
-        users.add(userRepository.findByEmail(user1));
-        users.add(userRepository.findByEmail(user2));
-
-        return users;
+        return Arrays.asList(
+                userRepository.findByEmail(user1),
+                userRepository.findByEmail(user2)
+        );
     }
 
     @Nullable
@@ -92,7 +90,7 @@ public class BookingSetupData {
                 booking.setTimeslot(timeslot);
                 booking.setCourt(court);
                 booking.setUsers(users);
-                bookingRepository.saveAndFlush(booking);
+                bookingRepository.save(booking);
             }
         }
     }
