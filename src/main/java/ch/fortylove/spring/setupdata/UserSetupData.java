@@ -2,8 +2,8 @@ package ch.fortylove.spring.setupdata;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.repository.RoleRepository;
 import ch.fortylove.persistence.repository.UserRepository;
+import ch.fortylove.persistence.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,23 +11,25 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Component
-@Profile("!production")
+@Profile({"h2", "develop", "local"})
 public class UserSetupData {
 
     @Nonnull private final UserRepository userRepository;
-    @Nonnull private final RoleRepository roleRepository;
+    @Nonnull private final RoleService roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserSetupData(@Nonnull final UserRepository userRepository,
-                         @Nonnull final RoleRepository roleRepository,
+                         @Nonnull final RoleService roleService,
                          @Nonnull final PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -42,17 +44,29 @@ public class UserSetupData {
 
     @Nonnull
     private Collection<Role> getAdminRole() {
-        return Collections.singletonList(roleRepository.findByName(Role.ROLE_ADMIN));
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(Role.ROLE_ADMIN);
+        role.ifPresent(roles::add);
+
+        return roles;
     }
 
     @Nonnull
     private Collection<Role> getStaffRole() {
-        return Collections.singletonList(roleRepository.findByName(Role.ROLE_STAFF));
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(Role.ROLE_STAFF);
+        role.ifPresent(roles::add);
+
+        return roles;
     }
 
     @Nonnull
     private Collection<Role> getUserRole() {
-        return Collections.singletonList(roleRepository.findByName(Role.ROLE_USER));
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
+        role.ifPresent(roles::add);
+
+        return roles;
     }
 
     @Transactional

@@ -37,7 +37,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Nonnull
     public Privilege create(@Nonnull final Privilege privilege) {
-        return privilegeRepository.saveAndFlush(privilege);
+        return privilegeRepository.save(privilege);
     }
 
     public void deleteById(final long id) {
@@ -48,11 +48,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     public Optional<Privilege> update(final long id,
                                       @Nonnull final Privilege privilege) {
         final Optional<Privilege> existingPrivilegeOptional = findById(id);
+
         if (existingPrivilegeOptional.isPresent()) {
             final Privilege existingPrivilege = existingPrivilegeOptional.get();
             BeanUtils.copyProperties(privilege, existingPrivilege, "id");
             return Optional.of(create(existingPrivilege));
-
         } else {
             return Optional.empty();
         }

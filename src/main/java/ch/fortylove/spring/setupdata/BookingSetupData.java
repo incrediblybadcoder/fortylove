@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Component
-@Profile("!production")
+@Profile({"h2", "develop", "local"})
 public class BookingSetupData {
 
     @Nonnull private final CourtRepository courtRepository;

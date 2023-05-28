@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity(name = "users")
 public class User extends AbstractEntity {
@@ -100,5 +101,24 @@ public class User extends AbstractEntity {
 
     public void setBookings(@Nonnull final Collection<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final User user = (User) o;
+        return enabled == user.enabled &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(roles, user.roles) &&
+                Objects.equals(bookings, user.bookings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, email, password, enabled, roles, bookings);
     }
 }

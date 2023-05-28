@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Component
-@Profile("!production")
+@Profile({"h2", "develop", "local"})
 public class PrivilegeSetupData {
 
     @Nonnull private final PrivilegeService privilegeService;
@@ -29,8 +29,8 @@ public class PrivilegeSetupData {
 
     @Transactional
     void createPrivilegeIfNotFound(@Nonnull final String name) {
-        final Optional<Privilege> privilegeOptional = privilegeService.findByName(name);
-        if (privilegeOptional.isEmpty()) {
+        final Optional<Privilege> privilege = privilegeService.findByName(name);
+        if (privilege.isEmpty()) {
             privilegeService.create(new Privilege(name));
         }
     }
