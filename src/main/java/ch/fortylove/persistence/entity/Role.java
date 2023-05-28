@@ -27,11 +27,6 @@ public class Role extends AbstractEntity {
         super();
     }
 
-    public Role(final String name) {
-        super();
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }

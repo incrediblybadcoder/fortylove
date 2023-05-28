@@ -13,19 +13,22 @@ import javax.annotation.Nonnull;
 @Profile("!production")
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final UserSetupData userSetupData;
-    private final RoleSetupData roleSetupData;
-    private final PrivilegeSetupData privilegeSetupData;
+    @Nonnull private final UserSetupData userSetupData;
+    @Nonnull private final RoleSetupData roleSetupData;
+    @Nonnull private final PrivilegeSetupData privilegeSetupData;
+    @Nonnull private final CourtSetupData courtSetupData;
 
     private boolean alreadySetup = false;
 
     @Autowired
     public SetupDataLoader(@Nonnull final UserSetupData userSetupData,
                            @Nonnull final RoleSetupData roleSetupData,
-                           @Nonnull final PrivilegeSetupData privilegeSetupData) {
+                           @Nonnull final PrivilegeSetupData privilegeSetupData,
+                           @Nonnull final CourtSetupData courtSetupData) {
         this.userSetupData = userSetupData;
         this.roleSetupData = roleSetupData;
         this.privilegeSetupData = privilegeSetupData;
+        this.courtSetupData = courtSetupData;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegeSetupData.createPrivileges();
         roleSetupData.createRoles();
         userSetupData.createUsers();
+        courtSetupData.createCourts();
 
         alreadySetup = true;
     }
