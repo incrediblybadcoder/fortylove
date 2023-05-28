@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 @Component
 @Profile("!production")
@@ -31,9 +32,9 @@ public class CourtSetupData {
 
     @Transactional
     void createCourtIfNotFound(final long id) {
-        Court court = courtRepository.findById(id);
-        if (court == null) {
-            court = new Court();
+        final Optional<Court> courtOptional = courtRepository.findById(id);
+        if (courtOptional.isEmpty()) {
+            final Court court = new Court();
             courtRepository.save(court);
         }
     }
