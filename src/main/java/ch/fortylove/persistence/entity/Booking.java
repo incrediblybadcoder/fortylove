@@ -2,25 +2,30 @@ package ch.fortylove.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity {
 
     @ManyToOne
-    @JoinTable(name = "bookings_court", joinColumns = @JoinColumn(name = "booking_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "court_id", referencedColumnName = "id"))
+    @JoinColumn(name = "court_id")
     private Court court;
+
+    @ManyToMany(mappedBy = "bookings")
+    private Collection<User> users;
 
     private int timeslot;
 
-//    private List<User> player;
-
+    @Nonnull
     public Court getCourt() {
         return court;
     }
 
-    public void setCourt(final Court court) {
+    public void setCourt(@Nonnull final Court court) {
         this.court = court;
     }
 
@@ -32,11 +37,12 @@ public class Booking extends AbstractEntity {
         this.timeslot = timeslot;
     }
 
-//    public List<User> getPlayer() {
-//        return player;
-//    }
-//
-//    public void setPlayer(final List<User> player) {
-//        this.player = player;
-//    }
+    @Nonnull
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(@Nonnull final Collection<User> users) {
+        this.users = users;
+    }
 }

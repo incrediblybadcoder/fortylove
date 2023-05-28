@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @Entity(name = "users")
@@ -27,48 +28,57 @@ public class User extends AbstractEntity {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_bookings", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "booking_id", referencedColumnName = "id"))
+    private Collection<Booking> bookings;
+
     public User() {
         super();
         this.enabled = false;
     }
 
+    @Nonnull
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(final String firstName) {
+    public void setFirstName(@Nonnull final String firstName) {
         this.firstName = firstName;
     }
 
+    @Nonnull
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
+    public void setLastName(@Nonnull final String lastName) {
         this.lastName = lastName;
     }
 
+    @Nonnull
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(final String username) {
+    public void setEmail(@Nonnull final String username) {
         this.email = username;
     }
 
+    @Nonnull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(@Nonnull final String password) {
         this.password = password;
     }
 
+    @Nonnull
     public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(final Collection<Role> roles) {
+    public void setRoles(@Nonnull final Collection<Role> roles) {
         this.roles = roles;
     }
 
@@ -78,5 +88,14 @@ public class User extends AbstractEntity {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Nonnull
+    public Collection<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(@Nonnull final Collection<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

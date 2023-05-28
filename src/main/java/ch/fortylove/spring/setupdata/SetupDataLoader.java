@@ -17,6 +17,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Nonnull private final RoleSetupData roleSetupData;
     @Nonnull private final PrivilegeSetupData privilegeSetupData;
     @Nonnull private final CourtSetupData courtSetupData;
+    @Nonnull private final BookingSetupData bookingSetupData;
 
     private boolean alreadySetup = false;
 
@@ -24,11 +25,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public SetupDataLoader(@Nonnull final UserSetupData userSetupData,
                            @Nonnull final RoleSetupData roleSetupData,
                            @Nonnull final PrivilegeSetupData privilegeSetupData,
-                           @Nonnull final CourtSetupData courtSetupData) {
+                           @Nonnull final CourtSetupData courtSetupData,
+                           @Nonnull final BookingSetupData bookingSetupData) {
         this.userSetupData = userSetupData;
         this.roleSetupData = roleSetupData;
         this.privilegeSetupData = privilegeSetupData;
         this.courtSetupData = courtSetupData;
+        this.bookingSetupData = bookingSetupData;
     }
 
     @Override
@@ -42,6 +45,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         roleSetupData.createRoles();
         userSetupData.createUsers();
         courtSetupData.createCourts();
+        bookingSetupData.createBookings();
 
         alreadySetup = true;
     }

@@ -3,19 +3,19 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
-import java.util.List;
+import java.util.Collection;
 
 @Entity(name = "courts")
 public class Court extends AbstractEntity {
 
     @OneToMany(mappedBy = "court")
-    private List<Booking> bookings;
+    private Collection<Booking> bookings;
 
-    public List<Booking> getBookings() {
+    public Collection<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(final List<Booking> bookings) {
+    public void setBookings(final Collection<Booking> bookings) {
         this.bookings = bookings;
     }
 }
