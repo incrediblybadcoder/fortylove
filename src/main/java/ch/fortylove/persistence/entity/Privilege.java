@@ -3,6 +3,7 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @Entity(name = "privileges")
@@ -21,24 +22,21 @@ public class Privilege extends AbstractEntity {
         super();
     }
 
-    public Privilege(final String name) {
-        super();
-        this.name = name;
-    }
-
-   public String getName() {
+    @Nonnull
+    public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@Nonnull final String name) {
         this.name = name;
     }
 
+    @Nonnull
     public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(final Collection<Role> roles) {
+    public void setRoles(@Nonnull final Collection<Role> roles) {
         this.roles = roles;
     }
 }

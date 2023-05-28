@@ -33,7 +33,7 @@ public class MainView extends VerticalLayout {
     public MainView() {
         final List<User> usersDisplay = new ArrayList<>();
         final ListDataProvider<User> dataProvider = new ListDataProvider<>(usersDisplay);
-        final Grid<User> grid = new Grid<>(User.class);
+        final Grid<User> grid = new Grid<>(User.class, false);
         grid.setDataProvider(dataProvider);
         grid.setColumns("email");
         grid.getColumnByKey("email").setHeader("Wer war hier?");

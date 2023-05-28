@@ -30,7 +30,8 @@ public class PrivilegeSetupData {
     void createPrivilegeIfNotFound(@Nonnull final String name) {
         Privilege privilege = privilegeRepository.findByName(name);
         if (privilege == null) {
-            privilege = new Privilege(name);
+            privilege = new Privilege();
+            privilege.setName(name);
             privilegeRepository.save(privilege);
         }
     }

@@ -1,14 +1,13 @@
 package ch.fortylove.persistence.repository;
 
-import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.Court;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @Repository
-public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
+public interface CourtRepository extends JpaRepository<Court, Long> {
     @Nullable
-    Privilege findByName(@Nonnull final String name);
+    Court findById(final long id);
 }
