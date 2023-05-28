@@ -9,6 +9,7 @@ import java.util.Collection;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+
     @Nonnull
     Collection<Booking> findAllByCourtId(final long courtId);
 }
