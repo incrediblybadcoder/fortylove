@@ -62,8 +62,8 @@ public class RoleSetupData {
         if (role == null) {
             role = new Role();
             role.setName(name);
+            role.setPrivileges(privileges);
+            roleRepository.save(role);
         }
-        role.setPrivileges(privileges);
-        roleRepository.save(role);
     }
 }

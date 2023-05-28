@@ -69,8 +69,8 @@ public class UserSetupData {
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
             user.setEnabled(true);
+            user.setRoles(roles);
+            userRepository.save(user);
         }
-        user.setRoles(roles);
-        userRepository.save(user);
     }
 }

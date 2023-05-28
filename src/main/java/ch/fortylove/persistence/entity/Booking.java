@@ -1,6 +1,7 @@
 package ch.fortylove.persistence.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -11,7 +12,7 @@ import java.util.Collection;
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "court_id")
     private Court court;
 
