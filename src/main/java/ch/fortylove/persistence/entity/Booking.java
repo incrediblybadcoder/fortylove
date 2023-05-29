@@ -28,6 +28,15 @@ public class Booking extends AbstractEntity {
 
     private int timeslot;
 
+    public Booking() {
+        super();
+    }
+
+    public Booking(@Nonnull final Collection<User> users) {
+        this();
+        this.users = users;
+    }
+
     @Nonnull
     public Court getCourt() {
         return court;

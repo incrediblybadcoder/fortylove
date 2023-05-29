@@ -12,8 +12,7 @@ import java.util.Optional;
 @SpringTest
 class TestPrivilegeServiceImpl {
 
-    @Autowired
-    PrivilegeService testee;
+    @Autowired PrivilegeService testee;
 
     @Test
     public void testFindAll_emptyRepository() {
