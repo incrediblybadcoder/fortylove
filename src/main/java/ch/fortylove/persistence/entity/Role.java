@@ -6,7 +6,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
@@ -32,6 +34,13 @@ public class Role extends AbstractEntity {
         super();
     }
 
+    public Role(@Nonnull final String name,
+                @Nonnull final Collection<Privilege> privileges) {
+        this();
+        this.name = name;
+        this.privileges = privileges;
+    }
+
     public String getName() {
         return name;
     }
@@ -54,5 +63,20 @@ public class Role extends AbstractEntity {
 
     public void setPrivileges(final Collection<Privilege> privileges) {
         this.privileges = privileges;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Role role = (Role) o;
+        return Objects.equals(name, role.name) &&
+                Objects.equals(users, role.users) &&
+                Objects.equals(privileges, role.privileges);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, users, privileges);
     }
 }

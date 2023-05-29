@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 @Repository
 public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
+
     @Nullable
     Privilege findByName(@Nonnull final String name);
 }

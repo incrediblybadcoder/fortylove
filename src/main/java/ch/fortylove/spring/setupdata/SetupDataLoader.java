@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nonnull;
 
 @Component
-@Profile("!production")
+@Profile({"h2", "develop", "local"})
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Nonnull private final UserSetupData userSetupData;

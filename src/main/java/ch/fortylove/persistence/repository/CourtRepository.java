@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 @Repository
 public interface CourtRepository extends JpaRepository<Court, Long> {
+
     @Nullable
     Court findById(final long id);
 }

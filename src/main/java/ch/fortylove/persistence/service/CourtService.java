@@ -1,17 +1,17 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.Court;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Service
-public interface UserService {
+public interface CourtService {
 
     @Nonnull
-    User create(@Nonnull final User user);
+    Court create(@Nonnull final Court court);
 
     @Nonnull
-    Optional<User> findByEmail(@Nonnull final String email);
+    Optional<Court> findById(final long id);
 }
