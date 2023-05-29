@@ -38,6 +38,7 @@ public class MainView extends VerticalLayout {
     private void configureGrid() {
         grid = new Grid<>(Court.class, false);
         grid.addColumn(Court::getId).setHeader("Court ID");
+        grid.addColumn(Court::getVersion).setHeader("Version");
         grid.setHeight("300px");
         add(grid);
     }
