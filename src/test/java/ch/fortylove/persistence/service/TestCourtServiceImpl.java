@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringTest
@@ -40,5 +41,26 @@ class TestCourtServiceImpl {
 
         Assertions.assertTrue(court.isPresent());
         Assertions.assertEquals(court2, court.get());
+    }
+
+    @Test
+    public void testFindAll_emptyRepository() {
+        final List<Court> courts = testee.findAll();
+
+        Assertions.assertTrue(courts.isEmpty());
+    }
+
+    @Test
+    public void testFindAll_exists() {
+        final Court court1 = testee.create(new Court());
+        final Court court2 = testee.create(new Court());
+
+        final List<Court> courts = testee.findAll();
+
+        Assertions.assertEquals(2, courts.size());
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(courts.contains(court1)),
+                () -> Assertions.assertTrue(courts.contains(court2))
+        );
     }
 }

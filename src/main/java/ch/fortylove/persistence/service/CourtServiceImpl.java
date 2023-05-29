@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,11 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public Optional<Court> findById(final long id) {
         return Optional.ofNullable(courtRepository.findById(id));
+    }
+
+    @Nonnull
+    @Override
+    public List<Court> findAll() {
+        return courtRepository.findAll();
     }
 }
