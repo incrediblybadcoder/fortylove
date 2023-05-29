@@ -5,7 +5,7 @@ rectangle fortylove {
     Actor --> (Tennisplaetze erstellen)
     Actor --> (Tennisplaetze loeschen)
     Actor --> (Tennisplaetze konfigurieren)
-    Actor --> (User verwalten)
+    Actor --> (Member verwalten)
 }
 
 @enduml

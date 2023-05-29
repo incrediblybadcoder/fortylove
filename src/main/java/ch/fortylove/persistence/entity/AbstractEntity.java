@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 
+import javax.annotation.Nonnull;
+
 @MappedSuperclass
 public abstract class AbstractEntity {
 
@@ -18,35 +20,16 @@ public abstract class AbstractEntity {
     @Version
     private int version;
 
+    @Nonnull
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(@Nonnull final Long id) {
         this.id = id;
     }
 
     public int getVersion() {
         return version;
-    }
-
-    @Override
-    public int hashCode() {
-        if (getId() != null) {
-            return getId().hashCode();
-        }
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof AbstractEntity other)) {
-            return false; // null or other class
-        }
-
-        if (getId() != null) {
-            return getId().equals(other.getId());
-        }
-        return super.equals(other);
     }
 }

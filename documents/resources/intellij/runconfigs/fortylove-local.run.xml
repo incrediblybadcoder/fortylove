@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fortylove-develop" type="Application" factoryName="Application" folderName="fortylove-templates">
+  <configuration default="false" name="fortylove-local" type="Application" factoryName="Application" folderName="fortylove-templates">
     <envs>
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
       <env name="SPRING_DATASOURCE_USERNAME" value="" />
-      <env name="SPRING_PROFILE" value="develop" />
+      <env name="SPRING_PROFILE" value="local" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
     <module name="fortylove.main" />

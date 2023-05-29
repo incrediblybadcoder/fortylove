@@ -5,13 +5,13 @@ rectangle fortylove {
     Actor --> (UC_1\nTennisplatz reservieren)
     Actor --> (UC_2\nPlatzbelegung anzeigen)
     Actor --> (Reservierung loeschen)
-    Actor --> (oebersicht der Reservierungen anzeigen)
+    Actor --> (Uebersicht der Reservierungen anzeigen)
     Actor --> (Reservierung bearbeiten)
     Actor --> (Statistik anzeigen)
-    Actor --> (Buchungsontingent anzeigen)
+    Actor --> (Buchungskontingent anzeigen)
     Actor --> (Eigenes Profil anzeigen)
     Actor --> (Favoriten erstellen)
-    Actor --> (Anfrage foer Clubbeitritt stellen)
+    Actor --> (Anfrage fuer Clubbeitritt stellen)
 }
 
 @enduml

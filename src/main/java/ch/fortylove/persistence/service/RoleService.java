@@ -1,17 +1,17 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.Role;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Service
-public interface UserService {
+public interface RoleService {
 
     @Nonnull
-    User create(@Nonnull final User user);
+    Role create(@Nonnull final Role role);
 
     @Nonnull
-    Optional<User> findByEmail(@Nonnull final String email);
+    Optional<Role> findByName(@Nonnull final String name);
 }
