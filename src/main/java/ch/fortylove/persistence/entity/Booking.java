@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity {
@@ -26,6 +27,15 @@ public class Booking extends AbstractEntity {
     private Collection<User> users;
 
     private int timeslot;
+
+    public Booking() {
+        super();
+    }
+
+    public Booking(@Nonnull final Collection<User> users) {
+        this();
+        this.users = users;
+    }
 
     @Nonnull
     public Court getCourt() {
@@ -51,5 +61,20 @@ public class Booking extends AbstractEntity {
 
     public void setUsers(@Nonnull final Collection<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Booking booking = (Booking) o;
+        return timeslot == booking.timeslot &&
+                Objects.equals(court, booking.court) &&
+                Objects.equals(users, booking.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(court, users, timeslot);
     }
 }

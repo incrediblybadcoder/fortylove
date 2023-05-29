@@ -3,35 +3,34 @@ package ch.fortylove.spring.setupdata;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.repository.BookingRepository;
-import ch.fortylove.persistence.repository.CourtRepository;
-import ch.fortylove.persistence.repository.UserRepository;
+import ch.fortylove.persistence.service.BookingService;
+import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 @Component
-@Profile("!production")
+@Profile({"h2", "develop", "local"})
 public class BookingSetupData {
 
-    @Nonnull private final CourtRepository courtRepository;
-    @Nonnull private final BookingRepository bookingRepository;
-    @Nonnull private final UserRepository userRepository;
+    @Nonnull private final CourtService courtService;
+    @Nonnull private final BookingService bookingService;
+    @Nonnull private final UserService userService;
 
     @Autowired
-    public BookingSetupData(@Nonnull final CourtRepository courtRepository,
-                            @Nonnull final BookingRepository bookingRepository,
-                            @Nonnull final UserRepository userRepository) {
-        this.courtRepository = courtRepository;
-        this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
+    public BookingSetupData(@Nonnull final CourtService courtService,
+                            @Nonnull final BookingService bookingService,
+                            @Nonnull final UserService userService) {
+        this.courtService = courtService;
+        this.bookingService = bookingService;
+        this.userService = userService;
     }
 
     public void createBookings() {
@@ -68,35 +67,35 @@ public class BookingSetupData {
     @Transactional
     private Collection<User> getUsers(@Nonnull final String user1,
                                       @Nonnull final String user2) {
-        return Arrays.asList(
-                userRepository.findByEmail(user1),
-                userRepository.findByEmail(user2)
-        );
+        final ArrayList<User> users = new ArrayList<>();
+        userService.findByEmail(user1).ifPresent(users::add);
+        userService.findByEmail(user2).ifPresent(users::add);
+
+        return users;
     }
 
     @Nonnull
     @Transactional
     private Optional<Court> getCourt(final long id) {
-        return courtRepository.findById(id);
+        return courtService.findById(id);
     }
 
     @Transactional
-    void createBookingIfNotFound(@Nullable final Court court,
+    void createBookingIfNotFound(@Nonnull final Court court,
                                  @Nonnull final Collection<User> users,
                                  final int timeslot) {
-        if (court != null) {
-            final Collection<Booking> bookings = bookingRepository.findAllByCourtId(court.getId());
-            if (isNewBooking(bookings, timeslot)) {
-                final Booking booking = new Booking();
-                booking.setTimeslot(timeslot);
-                booking.setCourt(court);
-                booking.setUsers(users);
-                bookingRepository.save(booking);
-            }
+        final Collection<Booking> bookings = bookingService.findAllByCourtId(court.getId());
+
+        if (isNewBooking(bookings, timeslot)) {
+            final Booking booking = new Booking();
+            booking.setTimeslot(timeslot);
+            booking.setCourt(court);
+            booking.setUsers(users);
+            bookingService.create(booking);
         }
     }
 
-    private boolean isNewBooking(final Collection<Booking> bookings,
+    private boolean isNewBooking(@Nonnull final Collection<Booking> bookings,
                                  final int timeslot) {
         for (final Booking booking : bookings) {
             if (booking.getTimeslot() == timeslot) {
