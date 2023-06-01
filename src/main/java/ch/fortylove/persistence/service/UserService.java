@@ -18,4 +18,7 @@ public interface UserService {
 
     @Nonnull
     List<User> findAll();
+
+    @Nonnull
+    List<User> findAll(String filterText);
 }

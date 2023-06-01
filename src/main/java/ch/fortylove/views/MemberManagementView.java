@@ -5,6 +5,8 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.UserService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
@@ -13,6 +15,7 @@ import jakarta.annotation.security.RolesAllowed;
 public class MemberManagementView extends VerticalLayout {
 
     Grid<User> grid = new Grid<>(User.class);
+    TextField filterText = new TextField();
     private final UserService userService;
 
     public MemberManagementView(UserService userService) {
@@ -20,13 +23,21 @@ public class MemberManagementView extends VerticalLayout {
         addClassName("member-management-view");
         setSizeFull();
         configureGrid();
-        add(grid);
+        configureFilter();
+        add(filterText, grid);
         updateUserList();
 
     }
 
+    private void configureFilter() {
+        filterText.setPlaceholder("Filter by name...");
+        filterText.setClearButtonVisible(true);
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(e -> updateUserList());
+    }
+
     private void updateUserList() {
-        grid.setItems(userService.findAll());
+        grid.setItems(userService.findAll(filterText.getValue()));
     }
 
     private void configureGrid() {

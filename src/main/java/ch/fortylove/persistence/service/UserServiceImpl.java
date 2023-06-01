@@ -35,4 +35,14 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    @Nonnull
+    @Override
+    public List<User> findAll(final String filterText) {
+        if (filterText == null || filterText.isEmpty()) {
+            return userRepository.findAll();
+        } else {
+            return userRepository.search(filterText);
+        }
+    }
 }
