@@ -21,4 +21,8 @@ public interface UserService {
 
     @Nonnull
     List<User> findAll(String filterText);
+
+    void save(User user);
+
+    void delete(User user);
 }

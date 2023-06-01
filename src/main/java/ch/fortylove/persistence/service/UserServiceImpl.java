@@ -45,4 +45,18 @@ public class UserServiceImpl implements UserService {
             return userRepository.search(filterText);
         }
     }
+
+    @Override
+    public void save(final User user) {
+        if (user == null) {
+            System.err.println("User is null. Are you sure you have connected your form to the application?");
+            return;
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void delete(final User user) {
+        userRepository.delete(user);
+    }
 }
