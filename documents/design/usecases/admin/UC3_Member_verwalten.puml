@@ -1,0 +1,14 @@
+@startuml
+object UC_3 {
+<#lightblue,#black>|= Name |<#white> Member verwalten |
+<#lightblue,#black>|= Ziel im Kontext |<#white> Ein Admin kann die Clubmitglieder verwalten |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein Admin kann neue Member erstellen, bestehende bearbeiten oder loeschen  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - Durchfuehrende Aktor (Admin) muss Admin auf einem Club sein|
+<#lightblue,#black>|= Akteure |<#white> - Admin |
+<#lightblue,#black>|= Trigger |<#white> - ein Member verlaest den Club  |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. Admin selectiert Member und kann editieren und speichern\n\t-> Reaktion des Systems: Speichert neue Daten in DB|
+<#lightblue,#black>|= Erweiterungen |<#white>|
+<#lightblue,#black>|= Nachbedingungen |<#white> - Neue Daten sind im System|
+<#lightblue,#black>|= Fragen, Kommentare |<#with> - Wie wird man zum Admin? |
+}
+@enduml
