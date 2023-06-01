@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +28,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(@Nonnull final String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
+    }
+
+    @Nonnull
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

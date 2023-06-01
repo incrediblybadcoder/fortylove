@@ -18,6 +18,7 @@ public class User extends AbstractEntity {
 
     private String lastName;
 
+    //@Email
     private String email;
 
     @Column(length = 60)
