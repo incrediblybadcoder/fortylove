@@ -1,0 +1,22 @@
+@startuml
+(*) --> "Login von Admin"
+--> "Navigation zu Benutzerverwaltung"
+--> "'Mitglied anlegen' auswählen"
+--> "Eingabe der Benutzerdaten"
+--> "Speichern der Benutzerdaten"
+note left: "Es wird ein Standardpasswort vergeben"
+
+
+if "Benutzer bereits vorhanden" then
+  -->[true] "Popup: Benutzer bereits vorhanden"
+  --> "Abbruch"
+  -right-> "Benutzerverwaltungsseite wird angezeigt"
+else
+  ->[false] "Benutzer wird angelegt"
+  note right: "Benutzer gehoert zum Verein des Admin"
+  --> "Email mit Passwort wird versendet"
+  --> "Benutzerverwaltungsseite wird angezeigt"
+endif
+note right: "Benutzer ist in der Liste ersichtlich falls er erfolgreich angelegt wurde"
+--> (*)
+@enduml
