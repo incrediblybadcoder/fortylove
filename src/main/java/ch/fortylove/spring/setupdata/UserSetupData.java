@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private Collection<Role> getAdminRole() {
+    private List<Role> getAdminRole() {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(Role.ROLE_ADMIN);
         role.ifPresent(roles::add);
@@ -52,7 +51,7 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private Collection<Role> getStaffRole() {
+    private List<Role> getStaffRole() {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(Role.ROLE_STAFF);
         role.ifPresent(roles::add);
@@ -61,7 +60,7 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private Collection<Role> getUserRole() {
+    private List<Role> getUserRole() {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
         role.ifPresent(roles::add);
@@ -74,7 +73,7 @@ public class UserSetupData {
                               @Nonnull final String firstName,
                               @Nonnull final String lastName,
                               @Nonnull final String password,
-                              @Nonnull final Collection<Role> roles) {
+                              @Nonnull final List<Role> roles) {
         final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {

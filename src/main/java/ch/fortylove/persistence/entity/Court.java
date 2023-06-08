@@ -1,24 +1,35 @@
 package ch.fortylove.persistence.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "courts")
 public class Court extends AbstractEntity {
 
-    @OneToMany(mappedBy = "court")
-    private Collection<Booking> bookings;
+    @OneToMany(
+            mappedBy = "court",
+            fetch = FetchType.EAGER
+    )
+    private List<Booking> bookings;
 
-    @Nonnull
-    public Collection<Booking> getBookings() {
-        return bookings;
+    public Court() {
+        super();
+        bookings = new ArrayList<>();
     }
 
-    public void setBookings(@Nonnull final Collection<Booking> bookings) {
+    @Nonnull
+    public List<Booking> getBookings() {
+        return Collections.unmodifiableList(bookings);
+    }
+
+    public void setBookings(@Nonnull final List<Booking> bookings) {
         this.bookings = bookings;
     }
 

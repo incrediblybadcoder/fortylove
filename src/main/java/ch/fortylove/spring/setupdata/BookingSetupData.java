@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -65,8 +65,8 @@ public class BookingSetupData {
 
     @Nonnull
     @Transactional
-    private Collection<User> getUsers(@Nonnull final String user1,
-                                      @Nonnull final String user2) {
+    private List<User> getUsers(@Nonnull final String user1,
+                                @Nonnull final String user2) {
         final ArrayList<User> users = new ArrayList<>();
         userService.findByEmail(user1).ifPresent(users::add);
         userService.findByEmail(user2).ifPresent(users::add);
@@ -82,9 +82,9 @@ public class BookingSetupData {
 
     @Transactional
     void createBookingIfNotFound(@Nonnull final Court court,
-                                 @Nonnull final Collection<User> users,
+                                 @Nonnull final List<User> users,
                                  final int timeslot) {
-        final Collection<Booking> bookings = bookingService.findAllByCourtId(court.getId());
+        final List<Booking> bookings = bookingService.findAllByCourtId(court.getId());
 
         if (isNewBooking(bookings, timeslot)) {
             final Booking booking = new Booking();
@@ -95,7 +95,7 @@ public class BookingSetupData {
         }
     }
 
-    private boolean isNewBooking(@Nonnull final Collection<Booking> bookings,
+    private boolean isNewBooking(@Nonnull final List<Booking> bookings,
                                  final int timeslot) {
         for (final Booking booking : bookings) {
             if (booking.getTimeslot() == timeslot) {
