@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +27,7 @@ public class User extends AbstractEntity {
 
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -34,7 +35,7 @@ public class User extends AbstractEntity {
     )
     private Collection<Role> roles;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Booking> bookings;
 
     public User() {

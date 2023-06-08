@@ -2,11 +2,13 @@ package ch.fortylove.views;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.service.UserManagmentService;
 import ch.fortylove.persistence.service.UserService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -23,9 +25,15 @@ public class MemberManagementView extends VerticalLayout {
     Grid<User> grid = new Grid<>(User.class);
     TextField filterText = new TextField();
     private final UserService userService;
+    private final UserManagmentService userManagmentService;
 
-    public MemberManagementView(UserService userService) {
+    Notification notification = new Notification(
+            "User konnte nicht gelöscht werden. Lösche zuerst seine Buchungen", 3000);
+
+
+    public MemberManagementView(UserService userService, final UserManagmentService userManagmentService) {
         this.userService = userService;
+        this.userManagmentService = userManagmentService;
         addClassName("member-management-view");
         setSizeFull();
         configureGrid();
@@ -48,6 +56,7 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void deleteUser(final UserForm.DeleteEvent deleteEvent) {
+        //userManagmentService.deleteUserAndAllItsBookings(deleteEvent.getUser());
         userService.delete(deleteEvent.getUser());
         updateUserList();
         closeEditor();
@@ -57,6 +66,7 @@ public class MemberManagementView extends VerticalLayout {
         userService.save(saveEvent.getUser());
         updateUserList();
         closeEditor();
+        notification.open();
     }
 
     private void closeEditor() {

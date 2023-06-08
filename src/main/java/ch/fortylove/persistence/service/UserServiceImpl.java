@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -55,8 +56,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    /*
+        * Delete given user from database.
+        * @param user to delete
+        * @return always true (for now)
+        * wirft folgende Exception (wenn z.B der User noch Buchungen hat), welche ich hier jedoch nicht catchen kann Caused by: org.hibernate.exception.ConstraintViolationException: could not execute statement [Referentielle Integrit�t verletzt: "FKG4ILJIMIUSMS42S25S87XPM9D: PUBLIC.BOOKINGS_USERS FOREIGN KEY(USER_ID) REFERENCES PUBLIC.USERS(ID) (CAST(4 AS BIGINT))"
+        *
+     */
     @Override
-    public void delete(final User user) {
+    @Transactional
+    public boolean delete(final User user) {
         userRepository.delete(user);
+        return true;
     }
 }

@@ -24,5 +24,5 @@ public interface UserService {
 
     void save(User user);
 
-    void delete(User user);
+    boolean delete(User user);
 }
