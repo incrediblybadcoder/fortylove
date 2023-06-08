@@ -2,7 +2,6 @@ package ch.fortylove.views;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.UserManagmentService;
 import ch.fortylove.persistence.service.UserService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -25,15 +24,13 @@ public class MemberManagementView extends VerticalLayout {
     Grid<User> grid = new Grid<>(User.class);
     TextField filterText = new TextField();
     private final UserService userService;
-    private final UserManagmentService userManagmentService;
 
     Notification notification = new Notification(
             "User konnte nicht gelöscht werden. Lösche zuerst seine Buchungen", 3000);
 
 
-    public MemberManagementView(UserService userService, final UserManagmentService userManagmentService) {
+    public MemberManagementView(UserService userService) {
         this.userService = userService;
-        this.userManagmentService = userManagmentService;
         addClassName("member-management-view");
         setSizeFull();
         configureGrid();
@@ -56,7 +53,6 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void deleteUser(final UserForm.DeleteEvent deleteEvent) {
-        //userManagmentService.deleteUserAndAllItsBookings(deleteEvent.getUser());
         userService.delete(deleteEvent.getUser());
         updateUserList();
         closeEditor();

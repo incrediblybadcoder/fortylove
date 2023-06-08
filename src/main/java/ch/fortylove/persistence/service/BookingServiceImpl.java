@@ -1,11 +1,9 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
-import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -30,15 +28,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> findAllByCourtId(final long courtId) {
         return bookingRepository.findAllByCourtId(courtId);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllBookingsForUser(final User user) {
-        for (Booking booking : user.getBookings()) {
-            bookingRepository.delete(booking);
-        }
-        bookingRepository.flush();
     }
 
 }

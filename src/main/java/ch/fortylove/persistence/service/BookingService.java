@@ -1,9 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
-import ch.fortylove.persistence.entity.User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -16,8 +14,4 @@ public interface BookingService {
 
     @Nonnull
     List<Booking> findAllByCourtId(final long courtId);
-
-    @Nonnull
-    @Transactional
-    void deleteAllBookingsForUser(User user);
 }
