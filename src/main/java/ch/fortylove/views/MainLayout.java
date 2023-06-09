@@ -1,6 +1,7 @@
 package ch.fortylove.views;
 
 import ch.fortylove.security.SecurityService;
+import ch.fortylove.views.bookingoverview.BookingOverviewView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -44,7 +45,7 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         addToDrawer(new VerticalLayout(
-                new RouterLink("Main", MainView.class),
+                new RouterLink("Platzübersicht", BookingOverviewView.class),
                 new RouterLink("Benutzerverwaltung", MemberManagementView.class)
         ));
     }

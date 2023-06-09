@@ -127,10 +127,11 @@
   "@vaadin/vaadin-usage-statistics": "2.1.2",
   "@vaadin/vertical-layout": "24.0.2",
   "@vaadin/virtual-list": "24.0.2",
+  "construct-style-sheets-polyfill": "3.1.0",
   "date-fns": "2.29.3",
-  "lit-element": "3.3.2",
-  "lit-html": "2.7.4",
-  "tslib": "2.5.2"
+  "lit-element": "3.3.1",
+  "lit-html": "2.7.2",
+  "tslib": "2.5.0"
  },
  "bundleImports": [
   "@vaadin/vaadin-themable-mixin",
@@ -238,9 +239,11 @@
   "vaadin-time-picker/timepickerConnector.js": "68889ce9748478f71bf1620d488abbbd588f8047618ac558315d9b0b689e75e8",
   "virtualListConnector.js": "e89f6bc6f5cd4765c863ae12721371ebff9079d163679e3989368fb7f74e5e61"
  },
- "themeJsonContents": {},
+ "themeJsonContents": {
+  "fortylove": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
+ },
  "entryScripts": [
-  "VAADIN/build/indexhtml-390d868d.js"
+  "VAADIN/build/indexhtml-44ab3891.js"
  ],
  "webComponents": [],
  "packageJsonHash": "91b9078d7f233b0da51d74dc4ed341f7ab4c00275214b4039d946e617a06632f"
