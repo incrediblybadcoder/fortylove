@@ -7,7 +7,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "roles")
@@ -19,23 +20,28 @@ public class Role extends AbstractEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    @ManyToMany(
+            mappedBy = "roles",
+            fetch = FetchType.EAGER
+    )
+    private List<User> users;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id")
     )
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges;
 
     public Role() {
         super();
+        users = new ArrayList<>();
+        privileges = new ArrayList<>();
     }
 
     public Role(@Nonnull final String name,
-                @Nonnull final Collection<Privilege> privileges) {
+                @Nonnull final List<Privilege> privileges) {
         this();
         this.name = name;
         this.privileges = privileges;
@@ -49,19 +55,19 @@ public class Role extends AbstractEntity {
         this.name = name;
     }
 
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(final Collection<User> users) {
+    public void setUsers(final List<User> users) {
         this.users = users;
     }
 
-    public Collection<Privilege> getPrivileges() {
+    public List<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(final Collection<Privilege> privileges) {
+    public void setPrivileges(final List<Privilege> privileges) {
         this.privileges = privileges;
     }
 

@@ -1,10 +1,12 @@
 package ch.fortylove.persistence.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "privileges")
@@ -16,11 +18,15 @@ public class Privilege extends AbstractEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
+    @ManyToMany(
+            mappedBy = "privileges",
+            fetch = FetchType.EAGER
+    )
+    private List<Role> roles;
 
     public Privilege() {
         super();
+        roles = new ArrayList<>();
     }
 
     public Privilege(@Nonnull final String name) {
@@ -38,11 +44,11 @@ public class Privilege extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final Collection<Role> roles) {
+    public void setRoles(@Nonnull final List<Role> roles) {
         this.roles = roles;
     }
 

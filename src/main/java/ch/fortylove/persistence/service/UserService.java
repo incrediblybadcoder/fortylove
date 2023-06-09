@@ -21,7 +21,7 @@ public interface UserService {
     List<User> findAll();
 
     @Nonnull
-    List<User> findAll(String filterText);
+    List<User> findAll(@Nonnull final String filterText);
 
     void save(User user);
 

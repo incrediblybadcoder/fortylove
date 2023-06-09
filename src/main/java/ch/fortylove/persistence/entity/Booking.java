@@ -8,31 +8,33 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookings")
-public class Booking extends AbstractEntity {
+public class Booking extends AbstractEntity implements Comparable<Booking>{
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
     private Court court;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "bookings_users",
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Collection<User> users;
+    private List<User> users;
 
     private int timeslot;
 
     public Booking() {
         super();
+        users = new ArrayList<>();
     }
 
-    public Booking(@Nonnull final Collection<User> users) {
+    public Booking(@Nonnull final List<User> users) {
         this();
         this.users = users;
     }
@@ -55,11 +57,11 @@ public class Booking extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final Collection<User> users) {
+    public void setUsers(@Nonnull final List<User> users) {
         this.users = users;
     }
 
@@ -76,5 +78,10 @@ public class Booking extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(court, users, timeslot);
+    }
+
+    @Override
+    public int compareTo(@Nonnull final Booking otherBooking) {
+        return Integer.compare(timeslot, otherBooking.getTimeslot());
     }
 }

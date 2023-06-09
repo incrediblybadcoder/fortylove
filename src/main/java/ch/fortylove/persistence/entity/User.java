@@ -9,7 +9,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "users")
@@ -19,7 +20,6 @@ public class User extends AbstractEntity {
 
     private String lastName;
 
-    //@Email
     private String email;
 
     @Column(length = 60)
@@ -33,13 +33,19 @@ public class User extends AbstractEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<Role> roles;
+    private List<Role> roles;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Collection<Booking> bookings;
+    @ManyToMany(
+            mappedBy = "users",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
+    )
+    private List<Booking> bookings;
 
     public User() {
         super();
+        roles = new ArrayList<>();
+        bookings = new ArrayList<>();
         this.enabled = false;
     }
 
@@ -47,7 +53,7 @@ public class User extends AbstractEntity {
                 @Nonnull final String lastName,
                 @Nonnull final String password,
                 @Nonnull final String email,
-                @Nonnull final Collection<Role> roles) {
+                @Nonnull final List<Role> roles) {
         this();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -93,11 +99,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final Collection<Role> roles) {
+    public void setRoles(@Nonnull final List<Role> roles) {
         this.roles = roles;
     }
 
@@ -110,11 +116,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<Booking> getBookings() {
+    public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final Collection<Booking> bookings) {
+    public void setBookings(@Nonnull final List<Booking> bookings) {
         this.bookings = bookings;
     }
 

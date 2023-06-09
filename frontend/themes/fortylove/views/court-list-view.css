@@ -1,0 +1,31 @@
+.court-list-view {
+  display: block;
+  height: 100%;
+}
+
+.court-list-view vaadin-grid {
+  height: 100%;
+  line-height: var(--lumo-line-height-m);
+}
+
+.court-list-view vaadin-grid,
+.court-list-view vaadin-grid-cell-content {
+  background-color: var(--lumo-contrast-10pct);
+}
+
+.court-list-view .booking {
+  background-color: var(--lumo-base-color);
+  box-shadow: var(--lumo-box-shadow-xs);
+  padding: var(--lumo-space-s);
+  width: 60px;
+  height: 60px;
+}
+
+.court-list-view .players {
+  font-size: var(--lumo-font-size-xxs);
+  font-weight: bold;
+}
+
+.court-list-view .infos {
+
+}

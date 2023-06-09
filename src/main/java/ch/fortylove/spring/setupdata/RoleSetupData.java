@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -35,7 +35,7 @@ public class RoleSetupData {
     }
 
     @Nonnull
-    private Collection<Privilege> getUserPrivileges() {
+    private List<Privilege> getUserPrivileges() {
         final ArrayList<Privilege> privileges = new ArrayList<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
@@ -47,12 +47,12 @@ public class RoleSetupData {
     }
 
     @Nonnull
-    private Collection<Privilege> getStaffPrivileges() {
+    private List<Privilege> getStaffPrivileges() {
         return getAdminPrivileges();
     }
 
     @Nonnull
-    private Collection<Privilege> getAdminPrivileges() {
+    private List<Privilege> getAdminPrivileges() {
         final ArrayList<Privilege> privileges = new ArrayList<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
@@ -67,7 +67,7 @@ public class RoleSetupData {
 
     @Transactional
     void createRoleIfNotFound(@Nonnull final String name,
-                              @Nonnull final Collection<Privilege> privileges) {
+                              @Nonnull final List<Privilege> privileges) {
         final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {
