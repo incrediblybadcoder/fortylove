@@ -6,7 +6,6 @@ import jakarta.persistence.OneToMany;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ public class Court extends AbstractEntity {
 
     @Nonnull
     public List<Booking> getBookings() {
-        return Collections.unmodifiableList(bookings);
+        return bookings;
     }
 
     public void setBookings(@Nonnull final List<Booking> bookings) {

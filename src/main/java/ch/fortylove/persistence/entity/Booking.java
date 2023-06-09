@@ -9,7 +9,6 @@ import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,7 +58,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
 
     @Nonnull
     public List<User> getUsers() {
-        return Collections.unmodifiableList(users);
+        return users;
     }
 
     public void setUsers(@Nonnull final List<User> users) {

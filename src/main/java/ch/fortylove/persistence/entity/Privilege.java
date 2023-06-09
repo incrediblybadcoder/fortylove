@@ -6,7 +6,6 @@ import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +45,7 @@ public class Privilege extends AbstractEntity {
 
     @Nonnull
     public List<Role> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
 
     public void setRoles(@Nonnull final List<Role> roles) {

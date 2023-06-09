@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -101,7 +100,7 @@ public class User extends AbstractEntity {
 
     @Nonnull
     public List<Role> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
 
     public void setRoles(@Nonnull final List<Role> roles) {
@@ -118,7 +117,7 @@ public class User extends AbstractEntity {
 
     @Nonnull
     public List<Booking> getBookings() {
-        return Collections.unmodifiableList(bookings);
+        return bookings;
     }
 
     public void setBookings(@Nonnull final List<Booking> bookings) {

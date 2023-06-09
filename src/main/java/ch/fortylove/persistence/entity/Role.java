@@ -8,7 +8,6 @@ import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +56,7 @@ public class Role extends AbstractEntity {
     }
 
     public List<User> getUsers() {
-        return Collections.unmodifiableList(users);
+        return users;
     }
 
     public void setUsers(final List<User> users) {
@@ -65,7 +64,7 @@ public class Role extends AbstractEntity {
     }
 
     public List<Privilege> getPrivileges() {
-        return Collections.unmodifiableList(privileges);
+        return privileges;
     }
 
     public void setPrivileges(final List<Privilege> privileges) {
