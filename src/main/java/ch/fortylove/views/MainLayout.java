@@ -2,6 +2,7 @@ package ch.fortylove.views;
 
 import ch.fortylove.security.SecurityService;
 import ch.fortylove.views.bookingoverview.BookingOverviewView;
+import ch.fortylove.views.membermanagementview.MemberManagementView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
