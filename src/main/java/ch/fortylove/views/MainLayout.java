@@ -11,8 +11,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class MainLayout extends AppLayout {
 
@@ -29,8 +31,11 @@ public class MainLayout extends AppLayout {
         final H1 logo = new H1("fortylove");
         logo.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.MEDIUM);
 
-        final String userName = securityService.getAuthenticatedUser().getUsername();
-        final Button logoutButton = new Button("Log out " + userName, e -> securityService.logout());
+        final Optional<UserDetails> authenticatedUser = securityService.getAuthenticatedUser();
+        final String userName = authenticatedUser.isPresent() ?
+                " "+authenticatedUser.get().getUsername() :
+                "";
+        final Button logoutButton = new Button("Log out" + userName, e -> securityService.logout());
 
         var header = new HorizontalLayout(new DrawerToggle(), logo, logoutButton);
 

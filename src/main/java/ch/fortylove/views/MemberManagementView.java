@@ -3,6 +3,7 @@ package ch.fortylove.views;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.RoleService;
+import ch.fortylove.persistence.service.SessionService;
 import ch.fortylove.persistence.service.UserService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -30,14 +31,16 @@ public class MemberManagementView extends VerticalLayout {
     TextField filterText = new TextField();
     private final UserService userService;
     private final RoleService roleService;
+    private final SessionService sessionService;
 
     Notification notification = new Notification(
             "Besten Dank", 5000);
 
 
-    public MemberManagementView(UserService userService, final RoleService roleService) {
+    public MemberManagementView(UserService userService, final RoleService roleService, final SessionService sessionService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.sessionService = sessionService;
         addClassName("member-management-view");
         setSizeFull();
         configureGrid();
@@ -83,6 +86,8 @@ public class MemberManagementView extends VerticalLayout {
     private void closeEditor() {
         form.setUser(null);
         form.setVisible(false);
+        final Optional<User> currentUser = sessionService.getCurrentUser();
+        System.out.println(currentUser.get().getEmail());
         removeClassName("editing");
     }
 
