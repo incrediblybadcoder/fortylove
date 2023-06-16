@@ -1,8 +1,9 @@
-package ch.fortylove.views;
+package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
