@@ -45,7 +45,8 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         addToDrawer(new VerticalLayout(
-                new RouterLink("Platzübersicht", BookingOverviewView.class),
+                new RouterLink("Platzübersicht-Ref", BookingOverviewView.class),
+                new RouterLink("Platzübersicht-Neu", ch.fortylove.views.newgrid.BookingOverviewView.class),
                 new RouterLink("Benutzerverwaltung", MemberManagementView.class)
         ));
     }
