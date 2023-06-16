@@ -60,7 +60,7 @@ public class BookingComponent extends HorizontalLayout {
         );
 
         final Span statusBadge = new Span("Einzel");
-        statusBadge.getElement().getThemeList().add("badge success primary");
+        statusBadge.getElement().getThemeList().add("badge small success primary");
 
         additionalInfoContainer.add(statusBadge);
         return additionalInfoContainer;
