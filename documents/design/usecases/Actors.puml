@@ -1,9 +1,10 @@
 @startuml
-
-actor :Member:
 actor :Admin:
 actor :App-Developer:
-actor :Guest:
 actor :Unregistered-User:
-
+note bottom: - Besitzt kein fortylove Konto\n- Kann keine Plaetze reservieren
+actor :Guest:
+note bottom: - Besitzt fortylove Konto\n- Vereinslos\n- Kann Plaetze reservieren
+actor :Member:
+note bottom: - Besitzt fortylove Konto\n- Gehoert Verein an\n- Kann Plaetze reservieren
 @enduml
