@@ -2,13 +2,11 @@ package ch.fortylove.views.newgrid;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.views.components.ShortenedLabel;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
@@ -17,54 +15,28 @@ import java.util.List;
 public class BookingComponent extends OverviewCellComponent {
 
     public BookingComponent(@Nonnull final Booking booking) {
-       super();
+        super();
+        addClassNames(
+                LumoUtility.Background.PRIMARY
+        );
+        setAlignItems(Alignment.CENTER);
 
         constructUI(booking);
     }
 
     private void constructUI(@Nonnull final Booking booking) {
-        final VerticalLayout playerInfoContainer = getPlayerInfoContainer(booking.getUsers());
-        final VerticalLayout bookingInfoContainer = getAdditionalInfoContainer();
+        final AvatarGroup avatarGroup = new AvatarGroup();
 
-        add(playerInfoContainer, bookingInfoContainer);
+        final List<User> users = booking.getUsers();
+        for (int i = 0; i < users.size(); i++) {
+            final AvatarGroup.AvatarGroupItem avatarGroupItem = new AvatarGroup.AvatarGroupItem(users.get(1).getFullName());
+            avatarGroupItem.setColorIndex(i);
+            avatarGroup.add(avatarGroupItem);
+        }
+
+        add(avatarGroup);
 
         addClickListener(getBookingClickListener(booking));
-    }
-
-    @Nonnull
-    private VerticalLayout getPlayerInfoContainer(@Nonnull final List<User> users) {
-        final VerticalLayout playerInfoContainer = new VerticalLayout();
-        playerInfoContainer.setAlignItems(Alignment.CENTER);
-        playerInfoContainer.setSpacing(false);
-        playerInfoContainer.setPadding(false);
-        playerInfoContainer.addClassNames(
-                LumoUtility.Background.BASE
-        );
-
-        users.forEach(user -> {
-            final ShortenedLabel playerLabel = new ShortenedLabel(user.getFirstName());
-            playerLabel.setAlignItems(Alignment.CENTER);
-            playerInfoContainer.add(playerLabel);
-        });
-
-        return playerInfoContainer;
-    }
-
-    @Nonnull
-    private VerticalLayout getAdditionalInfoContainer() {
-        final VerticalLayout additionalInfoContainer = new VerticalLayout();
-        additionalInfoContainer.setAlignItems(Alignment.CENTER);
-        additionalInfoContainer.setSpacing(false);
-        additionalInfoContainer.setPadding(false);
-        additionalInfoContainer.addClassNames(
-                LumoUtility.Background.CONTRAST_50
-        );
-
-        final Span statusBadge = new Span("Einzel");
-        statusBadge.getElement().getThemeList().add("badge small success primary");
-
-        additionalInfoContainer.add(statusBadge);
-        return additionalInfoContainer;
     }
 
     @Nonnull

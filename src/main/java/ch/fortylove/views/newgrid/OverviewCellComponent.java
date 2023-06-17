@@ -7,8 +7,9 @@ public abstract class OverviewCellComponent extends HorizontalLayout {
 
     public OverviewCellComponent() {
         addClassNames(
-                LumoUtility.Background.PRIMARY
+                LumoUtility.Border.ALL
         );
+
         setSpacing(false);
         setHeight("50px");
         setWidth("100px");

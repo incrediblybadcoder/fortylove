@@ -27,7 +27,8 @@ public class BookingOverviewView extends VerticalLayout implements AfterNavigati
 
         addClassNames(
                 LumoUtility.Background.SUCCESS,
-                LumoUtility.Padding.MEDIUM
+                LumoUtility.Padding.MEDIUM,
+                "booking-overview-view"
         );
         setSizeFull();
 

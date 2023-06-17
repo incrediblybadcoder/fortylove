@@ -2,6 +2,7 @@ package ch.fortylove.views.newgrid;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.views.components.ShortenedLabel;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 
@@ -9,6 +10,9 @@ public class CourtInfoComponent extends OverviewCellComponent {
 
     public CourtInfoComponent(@Nonnull final Court court) {
         super();
+        addClassNames(
+                LumoUtility.Background.BASE
+        );
         setAlignItems(Alignment.CENTER);
 
         constructUI(court);
