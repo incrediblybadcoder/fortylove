@@ -1,6 +1,5 @@
 package ch.fortylove.views.newgrid;
 
-import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.views.MainLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -20,13 +19,11 @@ import javax.annotation.Nonnull;
 @PermitAll
 public class BookingOverviewView extends VerticalLayout implements AfterNavigationObserver {
 
-    @Nonnull private final CourtService courtService;
-
-    private OverviewComponent overviewComponent;
+    @Nonnull private final OverviewComponent overviewComponent;
 
     @Autowired
-    public BookingOverviewView(@Nonnull final CourtService courtService) {
-        this.courtService = courtService;
+    public BookingOverviewView(@Nonnull final OverviewComponent overviewComponent) {
+        this.overviewComponent = overviewComponent;
 
         addClassNames(
                 LumoUtility.Background.SUCCESS,
@@ -34,16 +31,11 @@ public class BookingOverviewView extends VerticalLayout implements AfterNavigati
         );
         setSizeFull();
 
-        constructUI();
-    }
-
-    private void constructUI() {
-        overviewComponent = new OverviewComponent();
         add(overviewComponent);
     }
 
     @Override
     public void afterNavigation(@Nonnull final AfterNavigationEvent event) {
-        overviewComponent.build(courtService.findAll());
+        overviewComponent.build();
     }
 }

@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Nonnull
+    @Override
     public User create(@Nonnull final User user) {
         return userRepository.save(user);
     }

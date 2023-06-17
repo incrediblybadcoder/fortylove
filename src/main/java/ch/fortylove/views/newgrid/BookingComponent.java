@@ -14,15 +14,10 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BookingComponent extends HorizontalLayout {
+public class BookingComponent extends OverviewCellComponent {
 
     public BookingComponent(@Nonnull final Booking booking) {
-        addClassNames(
-                LumoUtility.Background.PRIMARY
-        );
-        setSpacing(false);
-        setHeight("50px");
-        setWidth("100px");
+       super();
 
         constructUI(booking);
     }
@@ -55,6 +50,7 @@ public class BookingComponent extends HorizontalLayout {
         return playerInfoContainer;
     }
 
+    @Nonnull
     private VerticalLayout getAdditionalInfoContainer() {
         final VerticalLayout additionalInfoContainer = new VerticalLayout();
         additionalInfoContainer.setAlignItems(Alignment.CENTER);
@@ -71,9 +67,8 @@ public class BookingComponent extends HorizontalLayout {
         return additionalInfoContainer;
     }
 
+    @Nonnull
     private ComponentEventListener<ClickEvent<HorizontalLayout>> getBookingClickListener(@Nonnull final Booking booking) {
-        return clickEvent -> {
-            Notification.show(String.valueOf(booking.getTimeslot()));
-        };
+        return clickEvent -> Notification.show(String.valueOf(booking.getTimeslot()));
     }
 }

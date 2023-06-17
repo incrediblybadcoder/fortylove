@@ -12,5 +12,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Nonnull
     List<Booking> findAllByCourtId(final long courtId);
-
 }
