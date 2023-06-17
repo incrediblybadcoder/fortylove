@@ -16,7 +16,7 @@ public class CourtComponent extends HorizontalLayout {
                 LumoUtility.Background.CONTRAST,
                 LumoUtility.Padding.MEDIUM
         );
-//        setSpacing(false);
+        setSpacing(false);
 
         constructUI(court);
     }

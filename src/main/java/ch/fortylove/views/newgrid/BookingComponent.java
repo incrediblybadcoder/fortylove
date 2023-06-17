@@ -21,6 +21,8 @@ public class BookingComponent extends HorizontalLayout {
                 LumoUtility.Background.PRIMARY
         );
         setSpacing(false);
+        setHeight("50px");
+        setWidth("100px");
 
         constructUI(booking);
     }
@@ -37,6 +39,7 @@ public class BookingComponent extends HorizontalLayout {
     @Nonnull
     private VerticalLayout getPlayerInfoContainer(@Nonnull final List<User> users) {
         final VerticalLayout playerInfoContainer = new VerticalLayout();
+        playerInfoContainer.setAlignItems(Alignment.CENTER);
         playerInfoContainer.setSpacing(false);
         playerInfoContainer.setPadding(false);
         playerInfoContainer.addClassNames(
@@ -45,6 +48,7 @@ public class BookingComponent extends HorizontalLayout {
 
         users.forEach(user -> {
             final ShortenedLabel playerLabel = new ShortenedLabel(user.getFirstName());
+            playerLabel.setAlignItems(Alignment.CENTER);
             playerInfoContainer.add(playerLabel);
         });
 
@@ -53,6 +57,7 @@ public class BookingComponent extends HorizontalLayout {
 
     private VerticalLayout getAdditionalInfoContainer() {
         final VerticalLayout additionalInfoContainer = new VerticalLayout();
+        additionalInfoContainer.setAlignItems(Alignment.CENTER);
         additionalInfoContainer.setSpacing(false);
         additionalInfoContainer.setPadding(false);
         additionalInfoContainer.addClassNames(
