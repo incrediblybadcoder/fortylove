@@ -1,8 +1,7 @@
-package ch.fortylove.persistence.service;
+package ch.fortylove.persistence.service.settings;
 
-import ch.fortylove.persistence.entity.BookingSettings;
-import ch.fortylove.persistence.repository.BookingSettingsRepository;
-import org.springframework.beans.BeanUtils;
+import ch.fortylove.persistence.entity.settings.BookingSettings;
+import ch.fortylove.persistence.repository.settings.BookingSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,19 +30,5 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
     public Optional<BookingSettings> getBookingSettings() {
         final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
         return bookingSettings.isEmpty() ? Optional.empty() : Optional.of(bookingSettings.get(0));
-    }
-
-    @Nonnull
-    @Override
-    public Optional<BookingSettings> update(@Nonnull final BookingSettings bookingSettings) {
-        final Optional<BookingSettings> existingBookingSettingsOptional = getBookingSettings();
-
-        if (existingBookingSettingsOptional.isPresent()) {
-            final BookingSettings existingBookingSettings = existingBookingSettingsOptional.get();
-            BeanUtils.copyProperties(bookingSettings, existingBookingSettings, "id");
-            return Optional.of(create(existingBookingSettings));
-        } else {
-            return Optional.empty();
-        }
     }
 }

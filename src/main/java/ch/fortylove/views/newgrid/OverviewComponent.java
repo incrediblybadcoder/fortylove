@@ -1,9 +1,9 @@
 package ch.fortylove.views.newgrid;
 
-import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.service.BookingSettingsService;
+import ch.fortylove.persistence.entity.settings.BookingSettings;
 import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.persistence.service.settings.BookingSettingsService;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.beans.factory.annotation.Autowired;

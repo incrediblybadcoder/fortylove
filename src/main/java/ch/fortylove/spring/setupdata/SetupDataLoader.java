@@ -1,5 +1,6 @@
 package ch.fortylove.spring.setupdata;
 
+import ch.fortylove.spring.setupdata.settings.BookingSettingsSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;

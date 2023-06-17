@@ -12,9 +12,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BookingComponent extends OverviewCellComponent {
+public class BookedBookingComponent extends OverviewCellComponent {
 
-    public BookingComponent(@Nonnull final Booking booking) {
+    public BookedBookingComponent(@Nonnull final Booking booking) {
         super();
         addClassNames(
                 LumoUtility.Background.PRIMARY
@@ -41,6 +41,6 @@ public class BookingComponent extends OverviewCellComponent {
 
     @Nonnull
     private ComponentEventListener<ClickEvent<HorizontalLayout>> getBookingClickListener(@Nonnull final Booking booking) {
-        return clickEvent -> Notification.show(String.valueOf(booking.getTimeslot()));
+        return clickEvent -> Notification.show(String.valueOf(booking.getDateTime()));
     }
 }

@@ -1,9 +1,9 @@
 package ch.fortylove.views.newgrid;
 
-import ch.fortylove.persistence.entity.BookingSettings;
+import ch.fortylove.persistence.entity.settings.BookingSettings;
+import ch.fortylove.persistence.entity.settings.TimeSlot;
 
 import javax.annotation.Nonnull;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,22 +27,15 @@ public class OverviewHeaderComponent extends OverviewRowComponent {
     @Nonnull
     private List<OverviewCellComponent> createTimeAxisCells() {
         final List<OverviewCellComponent> timeAxisCells = new ArrayList<>();
+        final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
 
-        for (int i = 0; i < bookingSettings.getNumberOfTimeslots(); i++) {
-            final String time = createTimeLabel(i);
-            final TimeSlotComponent timeSlotComponent = new TimeSlotComponent(time);
+        timeSlots.forEach(timeSlot -> {
+            final TimeSlotComponent timeSlotComponent = new TimeSlotComponent(timeSlot.getTime().toString());
             timeAxisCells.add(timeSlotComponent);
-        }
+
+        });
 
         return timeAxisCells;
-    }
-
-    @Nonnull
-    private String createTimeLabel(final int timeSlotIndex) {
-        final LocalTime startHour = bookingSettings.getStartHour();
-        final LocalTime timeSlotTime = startHour.plusHours(timeSlotIndex);
-
-        return timeSlotTime.toString();
     }
 
     @Nonnull

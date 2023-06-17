@@ -1,6 +1,6 @@
-package ch.fortylove.persistence.service;
+package ch.fortylove.persistence.service.settings;
 
-import ch.fortylove.persistence.entity.BookingSettings;
+import ch.fortylove.persistence.entity.settings.BookingSettings;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -12,7 +12,4 @@ public interface BookingSettingsService {
 
     @Nonnull
     Optional<BookingSettings> getBookingSettings();
-
-    @Nonnull
-    Optional<BookingSettings> update(@Nonnull final BookingSettings privilege);
 }

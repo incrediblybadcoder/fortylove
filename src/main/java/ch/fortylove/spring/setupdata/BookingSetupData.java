@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,33 +35,35 @@ public class BookingSetupData {
     }
 
     public void createBookings() {
-        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "daniel"), 1));
-        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 4));
-        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), 5));
-        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), 9));
-        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), 12));
+        final LocalDateTime now = LocalDateTime.now();
 
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 1));
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 2));
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 3));
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 5));
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 13));
-        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 15));
+        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 8, 0)));
+        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 9, 0)));
+        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 12, 0)));
+        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 14, 0)));
+        getCourt(1L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 15, 0)));
 
-        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 6));
-        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 8));
-        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), 11));
-        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), 13));
-        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), 14));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 8, 0)));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 10, 0)));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 12, 0)));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 13, 0)));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 14, 0)));
+        getCourt(2L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 15, 0)));
 
-        getCourt(4L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 5));
-        getCourt(4L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), 6));
+        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 9, 0)));
+        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 10, 0)));
+        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 11, 0)));
+        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 14, 0)));
+        getCourt(3L).ifPresent(court -> createBookingIfNotFound(court, getUsers("marco", "jonas"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 15, 0)));
 
-        getCourt(5L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 3));
-        getCourt(5L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 7));
+        getCourt(4L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 8, 0)));
+        getCourt(4L).ifPresent(court -> createBookingIfNotFound(court, getUsers("daniel", "marco"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 12, 0)));
 
-        getCourt(6L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 14));
-        getCourt(6L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), 15));
+        getCourt(5L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 10, 0)));
+        getCourt(5L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 14, 0)));
+
+        getCourt(6L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 9, 0)));
+        getCourt(6L).ifPresent(court -> createBookingIfNotFound(court, getUsers("jonas", "daniel"), LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 13, 0)));
     }
 
     @Nonnull
@@ -83,12 +86,12 @@ public class BookingSetupData {
     @Transactional
     void createBookingIfNotFound(@Nonnull final Court court,
                                  @Nonnull final List<User> users,
-                                 final int timeslot) {
+                                 @Nonnull final LocalDateTime dateTime) {
         final List<Booking> bookings = bookingService.findAllByCourtId(court.getId());
 
-        if (isNewBooking(bookings, timeslot)) {
+        if (isNewBooking(bookings, dateTime)) {
             final Booking booking = new Booking();
-            booking.setTimeslot(timeslot);
+            booking.setDateTime(dateTime);
             booking.setCourt(court);
             booking.setUsers(users);
             bookingService.create(booking);
@@ -96,9 +99,9 @@ public class BookingSetupData {
     }
 
     private boolean isNewBooking(@Nonnull final List<Booking> bookings,
-                                 final int timeslot) {
+                                 @Nonnull final LocalDateTime dateTime) {
         for (final Booking booking : bookings) {
-            if (booking.getTimeslot() == timeslot) {
+            if (booking.getDateTime().equals(dateTime)) {
                 return false;
             }
         }
