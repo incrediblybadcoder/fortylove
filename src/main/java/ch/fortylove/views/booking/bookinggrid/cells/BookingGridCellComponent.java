@@ -1,13 +1,13 @@
-package ch.fortylove.views.newgrid.cells;
+package ch.fortylove.views.booking.bookinggrid.cells;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
-public abstract class OverviewCellComponent extends HorizontalLayout {
+public abstract class BookingGridCellComponent extends HorizontalLayout {
 
     private final boolean isVisible;
 
-    public OverviewCellComponent(final boolean isVisible) {
+    public BookingGridCellComponent(final boolean isVisible) {
         this.isVisible = isVisible;
 
         addClassNames(

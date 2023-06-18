@@ -1,23 +1,23 @@
-package ch.fortylove.views.newgrid.rows;
+package ch.fortylove.views.booking.bookinggrid.rows;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.settings.BookingSettings;
 import ch.fortylove.persistence.entity.settings.TimeSlot;
-import ch.fortylove.views.newgrid.cells.BookedBookingComponent;
-import ch.fortylove.views.newgrid.cells.CourtInfoComponent;
-import ch.fortylove.views.newgrid.cells.FreeBookingComponent;
-import ch.fortylove.views.newgrid.cells.OverviewCellComponent;
+import ch.fortylove.views.booking.bookinggrid.cells.BookedCellComponent;
+import ch.fortylove.views.booking.bookinggrid.cells.BookingGridCellComponent;
+import ch.fortylove.views.booking.bookinggrid.cells.CourtInfoCellComponent;
+import ch.fortylove.views.booking.bookinggrid.cells.FreeCellComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CourtComponent extends OverviewRowComponent {
+public class CourtRowComponent extends BookingGridRowComponent {
 
-    public CourtComponent(@Nonnull final BookingSettings bookingSettings,
-                          @Nonnull final Court court) {
+    public CourtRowComponent(@Nonnull final BookingSettings bookingSettings,
+                             @Nonnull final Court court) {
         super();
 
         constructUI(bookingSettings, court);
@@ -25,22 +25,22 @@ public class CourtComponent extends OverviewRowComponent {
 
     private void constructUI(@Nonnull final BookingSettings bookingSettings,
                              @Nonnull final Court court) {
-        setFirstCell(new CourtInfoComponent(court));
+        setFirstCell(new CourtInfoCellComponent(court));
 
         final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
         final List<Booking> bookings = court.getBookings();
         Collections.sort(bookings);
 
-        final List<OverviewCellComponent> allCells = getAllCells(bookings, timeSlots);
-        final List<OverviewCellComponent> visibleCells = allCells.stream().filter(OverviewCellComponent::isVisible).toList();
+        final List<BookingGridCellComponent> allCells = getAllCells(bookings, timeSlots);
+        final List<BookingGridCellComponent> visibleCells = allCells.stream().filter(BookingGridCellComponent::isVisible).toList();
 
         addCells(visibleCells);
     }
 
     @Nonnull
-    private List<OverviewCellComponent> getAllCells(@Nonnull final List<Booking> bookings,
-                                                    @Nonnull final List<TimeSlot> timeSlots) {
-        final List<OverviewCellComponent> cells = new ArrayList<>();
+    private List<BookingGridCellComponent> getAllCells(@Nonnull final List<Booking> bookings,
+                                                       @Nonnull final List<TimeSlot> timeSlots) {
+        final List<BookingGridCellComponent> cells = new ArrayList<>();
 
         int counter = 0;
         for (final TimeSlot timeSlot : timeSlots) {
@@ -54,13 +54,13 @@ public class CourtComponent extends OverviewRowComponent {
                     if (!isBookable) {
                         throw new IllegalStateException(String.format("Not bookable timeslot (%s) with booking (%s)", timeSlot, booking));
                     }
-                    cells.add(new BookedBookingComponent(booking, true));
+                    cells.add(new BookedCellComponent(booking, true));
                     counter++;
                 } else {
-                    cells.add(new FreeBookingComponent(isBookable));
+                    cells.add(new FreeCellComponent(isBookable));
                 }
             } else {
-                cells.add(new FreeBookingComponent(isBookable));
+                cells.add(new FreeCellComponent(isBookable));
             }
         }
         return cells;

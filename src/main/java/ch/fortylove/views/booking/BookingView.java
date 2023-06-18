@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.booking;
 
 import ch.fortylove.views.MainLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,28 +15,28 @@ import javax.annotation.Nonnull;
 
 @Route(value = "/newbookings", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-@PageTitle("Platzübersicht neu")
+@PageTitle("Platzübersicht")
 @PermitAll
-public class BookingOverviewView extends VerticalLayout implements AfterNavigationObserver {
+public class BookingView extends VerticalLayout implements AfterNavigationObserver {
 
-    @Nonnull private final OverviewComponent overviewComponent;
+    @Nonnull private final BookingComponent bookingComponent;
 
     @Autowired
-    public BookingOverviewView(@Nonnull final OverviewComponent overviewComponent) {
-        this.overviewComponent = overviewComponent;
+    public BookingView(@Nonnull final BookingComponent bookingComponent) {
+        this.bookingComponent = bookingComponent;
 
         addClassNames(
                 LumoUtility.Background.SUCCESS,
                 LumoUtility.Padding.MEDIUM,
-                "booking-overview-view"
+                "booking-view"
         );
         setSizeFull();
 
-        add(overviewComponent);
+        add(bookingComponent);
     }
 
     @Override
     public void afterNavigation(@Nonnull final AfterNavigationEvent event) {
-        overviewComponent.build();
+        bookingComponent.build();
     }
 }

@@ -1,14 +1,14 @@
-package ch.fortylove.views.newgrid.cells;
+package ch.fortylove.views.booking.bookinggrid.cells;
 
 import ch.fortylove.views.components.ShortenedLabel;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 
-public class TimeSlotComponent extends OverviewCellComponent {
+public class TimeSlotCellComponent extends BookingGridCellComponent {
 
-    public TimeSlotComponent(@Nonnull final String time,
-                             final boolean isVisible) {
+    public TimeSlotCellComponent(@Nonnull final String time,
+                                 final boolean isVisible) {
         super(isVisible);
 
         addClassNames(

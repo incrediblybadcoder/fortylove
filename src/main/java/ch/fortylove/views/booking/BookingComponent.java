@@ -1,9 +1,10 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.booking;
 
-import ch.fortylove.views.newgrid.dateselection.DateSelectionBrowseBackEvent;
-import ch.fortylove.views.newgrid.dateselection.DateSelectionBrowseForwardEvent;
-import ch.fortylove.views.newgrid.dateselection.DateSelectionComponent;
-import ch.fortylove.views.newgrid.dateselection.DateSelectionPickerEvent;
+import ch.fortylove.views.booking.bookinggrid.BookingGridComponent;
+import ch.fortylove.views.booking.dateselection.DateSelectionBrowseBackEvent;
+import ch.fortylove.views.booking.dateselection.DateSelectionBrowseForwardEvent;
+import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
+import ch.fortylove.views.booking.dateselection.DateSelectionPickerEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,16 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 
 @Component
-public class OverviewComponent extends VerticalLayout {
+public class BookingComponent extends VerticalLayout {
 
-    @Nonnull final private OverviewGridComponent overviewGridComponent;
+    @Nonnull final private BookingGridComponent bookingGridComponent;
     private DateSelectionComponent dateSelectionComponent;
 
     @Nonnull private LocalDate date;
 
     @Autowired
-    public OverviewComponent(@Nonnull final OverviewGridComponent overviewGridComponent) {
-        this.overviewGridComponent = overviewGridComponent;
+    public BookingComponent(@Nonnull final BookingGridComponent bookingGridComponent) {
+        this.bookingGridComponent = bookingGridComponent;
         date = LocalDate.now();
 
         addClassNames(
@@ -36,7 +37,7 @@ public class OverviewComponent extends VerticalLayout {
     }
 
     private void constructUI() {
-        add(overviewGridComponent);
+        add(bookingGridComponent);
         add(createDateSelectionComponent());
     }
 
@@ -66,7 +67,7 @@ public class OverviewComponent extends VerticalLayout {
     }
 
     public void build() {
-        overviewGridComponent.build(date);
+        bookingGridComponent.build(date);
         dateSelectionComponent.setDate(date);
     }
 }

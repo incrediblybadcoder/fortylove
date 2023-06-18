@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid.cells;
+package ch.fortylove.views.booking.bookinggrid.cells;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.views.components.ShortenedLabel;
@@ -6,9 +6,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 
-public class CourtInfoComponent extends OverviewCellComponent {
+public class CourtInfoCellComponent extends BookingGridCellComponent {
 
-    public CourtInfoComponent(@Nonnull final Court court) {
+    public CourtInfoCellComponent(@Nonnull final Court court) {
         super(true);
         addClassNames(
                 LumoUtility.Background.BASE

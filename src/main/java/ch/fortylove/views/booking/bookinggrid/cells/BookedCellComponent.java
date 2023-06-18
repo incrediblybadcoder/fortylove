@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid.cells;
+package ch.fortylove.views.booking.bookinggrid.cells;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
@@ -12,10 +12,10 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BookedBookingComponent extends OverviewCellComponent {
+public class BookedCellComponent extends BookingGridCellComponent {
 
-    public BookedBookingComponent(@Nonnull final Booking booking,
-                                  final boolean isVisible) {
+    public BookedCellComponent(@Nonnull final Booking booking,
+                               final boolean isVisible) {
         super(isVisible);
 
         addClassNames(

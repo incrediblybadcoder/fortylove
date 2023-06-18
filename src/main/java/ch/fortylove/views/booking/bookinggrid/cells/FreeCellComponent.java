@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid.cells;
+package ch.fortylove.views.booking.bookinggrid.cells;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -8,9 +8,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 
-public class FreeBookingComponent extends OverviewCellComponent {
+public class FreeCellComponent extends BookingGridCellComponent {
 
-    public FreeBookingComponent(final boolean isVisible) {
+    public FreeCellComponent(final boolean isVisible) {
         super(isVisible);
 
         addClassNames(

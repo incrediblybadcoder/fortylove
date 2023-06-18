@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid.dateselection;
+package ch.fortylove.views.booking.dateselection;
 
 import com.vaadin.flow.component.ComponentEvent;
 
