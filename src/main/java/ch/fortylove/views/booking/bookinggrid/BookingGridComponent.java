@@ -44,7 +44,7 @@ public class BookingGridComponent extends VerticalLayout {
 
         // courts
         final List<Court> courts = courtService.findAll();
-        courts.forEach(court -> add(new CourtRowComponent(bookingSettings, court)));
+        courts.forEach(court -> add(new CourtRowComponent(bookingSettings, court, date)));
 
     }
 }

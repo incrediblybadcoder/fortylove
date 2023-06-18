@@ -10,28 +10,33 @@ import ch.fortylove.views.booking.bookinggrid.cells.CourtInfoCellComponent;
 import ch.fortylove.views.booking.bookinggrid.cells.FreeCellComponent;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CourtRowComponent extends BookingGridRowComponent {
 
     public CourtRowComponent(@Nonnull final BookingSettings bookingSettings,
-                             @Nonnull final Court court) {
+                             @Nonnull final Court court,
+                             @Nonnull final LocalDate date) {
         super();
 
-        constructUI(bookingSettings, court);
+        constructUI(bookingSettings, court, date);
     }
 
     private void constructUI(@Nonnull final BookingSettings bookingSettings,
-                             @Nonnull final Court court) {
+                             @Nonnull final Court court,
+                             @Nonnull final LocalDate date) {
         setFirstCell(new CourtInfoCellComponent(court));
 
         final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
         final List<Booking> bookings = court.getBookings();
-        Collections.sort(bookings);
+        final List<Booking> currentBookings = bookings.stream().filter(booking -> booking.getDateTime().toLocalDate().equals(date)).collect(Collectors.toList());;
+        Collections.sort(currentBookings);
 
-        final List<BookingGridCellComponent> allCells = getAllCells(bookings, timeSlots);
+        final List<BookingGridCellComponent> allCells = getAllCells(currentBookings, timeSlots);
         final List<BookingGridCellComponent> visibleCells = allCells.stream().filter(BookingGridCellComponent::isVisible).toList();
 
         addCells(visibleCells);
