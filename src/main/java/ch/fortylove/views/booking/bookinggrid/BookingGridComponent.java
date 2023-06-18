@@ -4,7 +4,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.settings.BookingSettings;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.settings.BookingSettingsService;
-import ch.fortylove.views.booking.bookinggrid.rows.BookingGridHeaderRowComponent;
+import ch.fortylove.views.booking.bookinggrid.rows.BookingGridHeaderComponent;
 import ch.fortylove.views.booking.bookinggrid.rows.CourtRowComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -40,7 +40,7 @@ public class BookingGridComponent extends VerticalLayout {
 
         // time axis
         final BookingSettings bookingSettings = bookingSettingsService.getBookingSettings();
-        add(new BookingGridHeaderRowComponent(bookingSettings));
+        add(new BookingGridHeaderComponent(bookingSettings));
 
         // courts
         final List<Court> courts = courtService.findAll();

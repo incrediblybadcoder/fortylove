@@ -9,25 +9,23 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingGridHeaderRowComponent extends BookingGridRowComponent {
+public class BookingGridHeaderComponent extends BookingGridRowComponent {
 
-    @Nonnull private final BookingSettings bookingSettings;
 
-    public BookingGridHeaderRowComponent(@Nonnull final BookingSettings bookingSettings) {
+    public BookingGridHeaderComponent(@Nonnull final BookingSettings bookingSettings) {
         super();
-        this.bookingSettings = bookingSettings;
 
-        constructUI();
+        constructUI(bookingSettings);
     }
 
-    private void constructUI() {
+    private void constructUI(@Nonnull final BookingSettings bookingSettings) {
         setFirstCell(createEmptyCell());
 
-        addCells(createTimeAxisCells());
+        addCells(createTimeAxisCells(bookingSettings));
     }
 
     @Nonnull
-    private List<BookingGridCellComponent> createTimeAxisCells() {
+    private List<BookingGridCellComponent> createTimeAxisCells(@Nonnull final BookingSettings bookingSettings) {
         final List<BookingGridCellComponent> timeAxisCells = new ArrayList<>();
         final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
 
