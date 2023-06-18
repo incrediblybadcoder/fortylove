@@ -1,4 +1,4 @@
-package ch.fortylove.spring.devsetupdata;
+package ch.fortylove.testsetupdata.data;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
@@ -6,9 +6,8 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.BookingService;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.testsetupdata.TestSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
@@ -17,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-@Profile({"h2", "develop", "local"})
+@TestSetupData
 public class BookingSetupData {
 
     @Nonnull private final CourtService courtService;
