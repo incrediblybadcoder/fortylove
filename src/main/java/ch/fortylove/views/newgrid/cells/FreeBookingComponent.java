@@ -10,8 +10,9 @@ import javax.annotation.Nonnull;
 
 public class FreeBookingComponent extends OverviewCellComponent {
 
-    public FreeBookingComponent() {
-        super();
+    public FreeBookingComponent(final boolean isVisible) {
+        super(isVisible);
+
         addClassNames(
                 LumoUtility.Background.ERROR
         );

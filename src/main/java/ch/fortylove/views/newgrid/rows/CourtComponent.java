@@ -31,34 +31,36 @@ public class CourtComponent extends OverviewRowComponent {
         final List<Booking> bookings = court.getBookings();
         Collections.sort(bookings);
 
-        final List<OverviewCellComponent> cells = getCells(bookings, timeSlots);
+        final List<OverviewCellComponent> allCells = getAllCells(bookings, timeSlots);
+        final List<OverviewCellComponent> visibleCells = allCells.stream().filter(OverviewCellComponent::isVisible).toList();
 
-        addCells(cells);
+        addCells(visibleCells);
     }
 
     @Nonnull
-    private static List<OverviewCellComponent> getCells(@Nonnull final List<Booking> bookings,
-                                                        @Nonnull final List<TimeSlot> timeSlots) {
+    private List<OverviewCellComponent> getAllCells(@Nonnull final List<Booking> bookings,
+                                                    @Nonnull final List<TimeSlot> timeSlots) {
         final List<OverviewCellComponent> cells = new ArrayList<>();
 
         int counter = 0;
         for (final TimeSlot timeSlot : timeSlots) {
-            if (bookings.size() > counter) {
+            final boolean isBookable = timeSlot.getBookable();
 
+            if (bookings.size() > counter) {
                 final Booking booking = bookings.get(counter);
                 final int bookingHour = booking.getDateTime().getHour();
 
                 if (bookingHour == timeSlot.getTime().getHour()) {
-                    if (!timeSlot.getBookable()) {
+                    if (!isBookable) {
                         throw new IllegalStateException(String.format("Not bookable timeslot (%s) with booking (%s)", timeSlot, booking));
                     }
-                    cells.add(new BookedBookingComponent(booking));
+                    cells.add(new BookedBookingComponent(booking, true));
                     counter++;
                 } else {
-                    cells.add(new FreeBookingComponent());
+                    cells.add(new FreeBookingComponent(isBookable));
                 }
             } else {
-                cells.add(new FreeBookingComponent());
+                cells.add(new FreeBookingComponent(isBookable));
             }
         }
         return cells;

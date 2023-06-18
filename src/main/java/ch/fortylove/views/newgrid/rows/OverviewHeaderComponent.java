@@ -32,9 +32,11 @@ public class OverviewHeaderComponent extends OverviewRowComponent {
         final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
 
         timeSlots.forEach(timeSlot -> {
-            final TimeSlotComponent timeSlotComponent = new TimeSlotComponent(timeSlot.getTime().toString());
-            timeAxisCells.add(timeSlotComponent);
-
+            final boolean isBookable = timeSlot.getBookable();
+            final TimeSlotComponent timeSlotComponent = new TimeSlotComponent(timeSlot.getTime().toString(), isBookable);
+            if (timeSlotComponent.isVisible()) {
+                timeAxisCells.add(timeSlotComponent);
+            }
         });
 
         return timeAxisCells;
@@ -42,7 +44,7 @@ public class OverviewHeaderComponent extends OverviewRowComponent {
 
     @Nonnull
     private OverviewCellComponent createEmptyCell() {
-        return new OverviewCellComponent() {
+        return new OverviewCellComponent(true) {
         };
     }
 }

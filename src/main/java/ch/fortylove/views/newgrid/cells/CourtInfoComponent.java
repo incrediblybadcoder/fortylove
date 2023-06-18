@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 public class CourtInfoComponent extends OverviewCellComponent {
 
     public CourtInfoComponent(@Nonnull final Court court) {
-        super();
+        super(true);
         addClassNames(
                 LumoUtility.Background.BASE
         );

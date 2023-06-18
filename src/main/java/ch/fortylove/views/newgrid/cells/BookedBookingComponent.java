@@ -14,8 +14,10 @@ import java.util.List;
 
 public class BookedBookingComponent extends OverviewCellComponent {
 
-    public BookedBookingComponent(@Nonnull final Booking booking) {
-        super();
+    public BookedBookingComponent(@Nonnull final Booking booking,
+                                  final boolean isVisible) {
+        super(isVisible);
+
         addClassNames(
                 LumoUtility.Background.PRIMARY
         );

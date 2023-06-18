@@ -7,8 +7,10 @@ import javax.annotation.Nonnull;
 
 public class TimeSlotComponent extends OverviewCellComponent {
 
-    public TimeSlotComponent(@Nonnull final String time) {
-        super();
+    public TimeSlotComponent(@Nonnull final String time,
+                             final boolean isVisible) {
+        super(isVisible);
+
         addClassNames(
                 LumoUtility.Background.SUCCESS
         );
