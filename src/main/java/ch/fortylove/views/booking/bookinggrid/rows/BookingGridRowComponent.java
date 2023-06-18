@@ -5,7 +5,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.Collection;
 
 public abstract class BookingGridRowComponent extends HorizontalLayout {
 
@@ -25,7 +25,7 @@ public abstract class BookingGridRowComponent extends HorizontalLayout {
         add(bookingGridCellComponent);
     }
 
-    public void addCells(@Nonnull final List<BookingGridCellComponent> bookingGridCellComponents) {
+    public void addCells(@Nonnull final Collection<BookingGridCellComponent> bookingGridCellComponents) {
         bookingGridCellComponents.forEach(this::add);
     }
 }

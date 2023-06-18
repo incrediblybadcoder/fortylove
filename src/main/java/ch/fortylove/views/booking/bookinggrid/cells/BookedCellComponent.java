@@ -31,7 +31,7 @@ public class BookedCellComponent extends BookingGridCellComponent {
 
         final List<User> users = booking.getUsers();
         for (int i = 0; i < users.size(); i++) {
-            final AvatarGroup.AvatarGroupItem avatarGroupItem = new AvatarGroup.AvatarGroupItem(users.get(1).getFullName());
+            final AvatarGroup.AvatarGroupItem avatarGroupItem = new AvatarGroup.AvatarGroupItem(users.get(i).getFullName());
             avatarGroupItem.setColorIndex(i);
             avatarGroup.add(avatarGroupItem);
         }
