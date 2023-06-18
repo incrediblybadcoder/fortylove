@@ -1,6 +1,5 @@
-package ch.fortylove.spring.setupdata;
+package ch.fortylove.spring.devsetupdata;
 
-import ch.fortylove.spring.setupdata.settings.BookingSettingsSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -12,30 +11,27 @@ import javax.annotation.Nonnull;
 
 @Component
 @Profile({"h2", "develop", "local"})
-public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class DevSetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Nonnull private final UserSetupData userSetupData;
     @Nonnull private final RoleSetupData roleSetupData;
     @Nonnull private final PrivilegeSetupData privilegeSetupData;
     @Nonnull private final CourtSetupData courtSetupData;
     @Nonnull private final BookingSetupData bookingSetupData;
-    @Nonnull private final BookingSettingsSetupData bookingSettingsSetupData;
 
     private boolean alreadySetup = false;
 
     @Autowired
-    public SetupDataLoader(@Nonnull final UserSetupData userSetupData,
-                           @Nonnull final RoleSetupData roleSetupData,
-                           @Nonnull final PrivilegeSetupData privilegeSetupData,
-                           @Nonnull final CourtSetupData courtSetupData,
-                           @Nonnull final BookingSetupData bookingSetupData,
-                           @Nonnull final BookingSettingsSetupData bookingSettingsSetupData) {
+    public DevSetupDataLoader(@Nonnull final UserSetupData userSetupData,
+                              @Nonnull final RoleSetupData roleSetupData,
+                              @Nonnull final PrivilegeSetupData privilegeSetupData,
+                              @Nonnull final CourtSetupData courtSetupData,
+                              @Nonnull final BookingSetupData bookingSetupData) {
         this.userSetupData = userSetupData;
         this.roleSetupData = roleSetupData;
         this.privilegeSetupData = privilegeSetupData;
         this.courtSetupData = courtSetupData;
         this.bookingSetupData = bookingSetupData;
-        this.bookingSettingsSetupData = bookingSettingsSetupData;
     }
 
     @Override
@@ -50,7 +46,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         userSetupData.createUsers();
         courtSetupData.createCourts();
         bookingSetupData.createBookings();
-        bookingSettingsSetupData.createBookingSettings();
 
         alreadySetup = true;
     }

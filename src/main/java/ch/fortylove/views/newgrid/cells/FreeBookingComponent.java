@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.newgrid.cells;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;

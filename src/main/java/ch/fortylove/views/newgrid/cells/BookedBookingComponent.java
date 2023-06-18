@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.newgrid.cells;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;

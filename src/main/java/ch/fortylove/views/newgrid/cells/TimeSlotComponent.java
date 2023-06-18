@@ -1,4 +1,4 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.newgrid.cells;
 
 import ch.fortylove.views.components.ShortenedLabel;
 import com.vaadin.flow.theme.lumo.LumoUtility;

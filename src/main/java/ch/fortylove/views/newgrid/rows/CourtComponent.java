@@ -1,9 +1,13 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.newgrid.rows;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.settings.BookingSettings;
 import ch.fortylove.persistence.entity.settings.TimeSlot;
+import ch.fortylove.views.newgrid.cells.BookedBookingComponent;
+import ch.fortylove.views.newgrid.cells.CourtInfoComponent;
+import ch.fortylove.views.newgrid.cells.FreeBookingComponent;
+import ch.fortylove.views.newgrid.cells.OverviewCellComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

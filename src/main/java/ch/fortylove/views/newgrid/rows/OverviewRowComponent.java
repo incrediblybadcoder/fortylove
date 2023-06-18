@@ -1,5 +1,6 @@
-package ch.fortylove.views.newgrid;
+package ch.fortylove.views.newgrid.rows;
 
+import ch.fortylove.views.newgrid.cells.OverviewCellComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookingSettingsServiceImpl implements BookingSettingsService {
@@ -22,13 +21,24 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
     @Nonnull
     @Override
     public BookingSettings create(@Nonnull final BookingSettings bookingSettings) {
-        return getBookingSettings().orElse(bookingSettingsRepository.save(bookingSettings));
+        final List<BookingSettings> existingBookingSettings = bookingSettingsRepository.findAll();
+        if (existingBookingSettings.isEmpty()) {
+            return bookingSettingsRepository.save(bookingSettings);
+        }
+
+        return existingBookingSettings.get(0);
     }
 
     @Nonnull
     @Override
-    public Optional<BookingSettings> getBookingSettings() {
+    public BookingSettings getBookingSettings() {
         final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
-        return bookingSettings.isEmpty() ? Optional.empty() : Optional.of(bookingSettings.get(0));
+        if (bookingSettings.isEmpty()) {
+            throw new IllegalStateException("No booking settings.");
+        } else if (bookingSettings.size() > 1) {
+            throw new IllegalStateException("More than one booking settings.");
+        }
+
+        return bookingSettings.get(0);
     }
 }

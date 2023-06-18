@@ -18,7 +18,7 @@ class TestBookingSettingsServiceImpl {
     @Autowired BookingSettingsService testee;
 
     @Test
-    public void testCreate_nonExistent() {
+    public void testCreate_nonExisting() {
         final BookingSettings bookingSettings = new BookingSettings(getTimeSlotsVersionA());
 
         final BookingSettings createdBookingSettings = testee.create(bookingSettings);
@@ -27,7 +27,7 @@ class TestBookingSettingsServiceImpl {
     }
 
     @Test
-    public void testCreate_existent() {
+    public void testCreate_existing() {
         final BookingSettings existingBookingSettings = new BookingSettings(getTimeSlotsVersionA());
         final BookingSettings newBookingSettings = new BookingSettings(getTimeSlotsVersionB());
         testee.create(existingBookingSettings);

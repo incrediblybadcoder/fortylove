@@ -1,4 +1,4 @@
-package ch.fortylove.spring.setupdata;
+package ch.fortylove.spring.devsetupdata;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
