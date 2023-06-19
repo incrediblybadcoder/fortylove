@@ -24,7 +24,7 @@ public class CourtRowComponent extends BookingGridRowComponent {
                              @Nonnull final LocalDate date) {
         super();
 
-        addClassNames(LumoUtility.Border.LEFT, LumoUtility.Border.TOP, LumoUtility.Border.BOTTOM, LumoUtility.Margin.Bottom.MEDIUM);
+        addClassNames(LumoUtility.Border.LEFT, LumoUtility.Border.TOP, LumoUtility.Border.BOTTOM, LumoUtility.Margin.Bottom.SMALL);
 
         constructUI(bookingSettings, court, date);
     }

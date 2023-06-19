@@ -220,7 +220,7 @@
   "Frontend/generated/jar-resources/virtualListConnector.js"
  ],
  "frontendHashes": {
-  "themes/fortylove/components/vaadin-app-layout.css": "47b8350efa59d5341a407b6df085b65961491728fb5f179f92e778d44b26c51d",
+  "themes/fortylove/components/vaadin-app-layout.css": "e228d669d064e39e3652cefcea8b91816fb3166b3bf7b82fa7b6fd5fd5d0ba79",
   "styles/shared-styles.css": "4948396a05c4679e04990bc295ff216b68862b92304315c810fa1ec038d53fc8",
   "comboBoxConnector.js": "1d004c3dae9c76f8bcc68678abe1b8f7bdc8b456f5c9c4c7f190df8ed25d66cd",
   "contextMenuConnector.js": "25a200f8086461635ddd92316ebeb5a868294c8650a190efbae120edb1088f4f",
@@ -244,7 +244,7 @@
   "fortylove": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
  },
  "entryScripts": [
-  "VAADIN/build/indexhtml-7a30b7a0.js"
+  "VAADIN/build/indexhtml-8c2ea511.js"
  ],
  "webComponents": [],
  "packageJsonHash": "91b9078d7f233b0da51d74dc4ed341f7ab4c00275214b4039d946e617a06632f"
