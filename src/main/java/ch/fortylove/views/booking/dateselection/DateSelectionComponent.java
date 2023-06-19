@@ -1,5 +1,8 @@
 package ch.fortylove.views.booking.dateselection;
 
+import ch.fortylove.views.booking.dateselection.events.DateSelectionBrowseBackEvent;
+import ch.fortylove.views.booking.dateselection.events.DateSelectionBrowseForwardEvent;
+import ch.fortylove.views.booking.dateselection.events.DateSelectionPickerEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -8,7 +11,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
@@ -20,9 +22,6 @@ public class DateSelectionComponent extends VerticalLayout {
 
     public DateSelectionComponent(@Nonnull final LocalDate date) {
         super();
-        addClassNames(
-                LumoUtility.Background.BASE
-        );
 
         constructUI(date);
     }

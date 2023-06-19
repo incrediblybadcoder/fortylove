@@ -3,10 +3,10 @@ package ch.fortylove.views.booking;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.settings.BookingSettingsService;
 import ch.fortylove.views.booking.bookinggrid.BookingGridComponent;
-import ch.fortylove.views.booking.dateselection.DateSelectionBrowseBackEvent;
-import ch.fortylove.views.booking.dateselection.DateSelectionBrowseForwardEvent;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
-import ch.fortylove.views.booking.dateselection.DateSelectionPickerEvent;
+import ch.fortylove.views.booking.dateselection.events.DateSelectionBrowseBackEvent;
+import ch.fortylove.views.booking.dateselection.events.DateSelectionBrowseForwardEvent;
+import ch.fortylove.views.booking.dateselection.events.DateSelectionPickerEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import javax.annotation.Nonnull;

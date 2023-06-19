@@ -1,12 +1,13 @@
-package ch.fortylove.views.booking.dateselection;
+package ch.fortylove.views.booking.dateselection.events;
 
+import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import com.vaadin.flow.component.ComponentEvent;
 
 import javax.annotation.Nonnull;
 
 public abstract class DateSelectionEvent extends ComponentEvent<DateSelectionComponent> {
 
-    protected DateSelectionEvent(@Nonnull final DateSelectionComponent source) {
+    public DateSelectionEvent(@Nonnull final DateSelectionComponent source) {
         super(source, false);
     }
 }
