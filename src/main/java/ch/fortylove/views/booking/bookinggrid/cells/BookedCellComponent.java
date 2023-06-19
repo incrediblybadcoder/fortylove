@@ -18,10 +18,7 @@ public class BookedCellComponent extends BookingGridCellComponent {
                                final boolean isVisible) {
         super(isVisible);
 
-        addClassNames(
-                LumoUtility.Background.PRIMARY
-        );
-        setAlignItems(Alignment.CENTER);
+        addClassNames(LumoUtility.Border.RIGHT);
 
         constructUI(booking);
     }

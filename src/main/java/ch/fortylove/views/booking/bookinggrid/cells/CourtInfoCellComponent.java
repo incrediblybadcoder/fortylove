@@ -10,10 +10,8 @@ public class CourtInfoCellComponent extends BookingGridCellComponent {
 
     public CourtInfoCellComponent(@Nonnull final Court court) {
         super(true);
-        addClassNames(
-                LumoUtility.Background.BASE
-        );
-        setAlignItems(Alignment.CENTER);
+
+        addClassNames(LumoUtility.Border.RIGHT);
 
         constructUI(court);
     }

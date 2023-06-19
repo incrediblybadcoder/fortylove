@@ -67,7 +67,7 @@
   "lit": "2.6.1"
  },
  "npmModules": {
-  "@lit/reactive-element": "1.6.1",
+  "@lit/reactive-element": "1.6.2",
   "@polymer/polymer": "3.5.1",
   "@vaadin/accordion": "24.0.2",
   "@vaadin/app-layout": "24.0.2",
@@ -129,9 +129,9 @@
   "@vaadin/virtual-list": "24.0.2",
   "construct-style-sheets-polyfill": "3.1.0",
   "date-fns": "2.29.3",
-  "lit-element": "3.3.1",
-  "lit-html": "2.7.2",
-  "tslib": "2.5.0"
+  "lit-element": "3.3.2",
+  "lit-html": "2.7.4",
+  "tslib": "2.5.3"
  },
  "bundleImports": [
   "@vaadin/vaadin-themable-mixin",
@@ -220,6 +220,7 @@
   "Frontend/generated/jar-resources/virtualListConnector.js"
  ],
  "frontendHashes": {
+  "themes/fortylove/components/vaadin-app-layout.css": "adac5699422d10c58142eeb7ddceab842099d95418fc60e615647864d5231cf3",
   "styles/shared-styles.css": "4948396a05c4679e04990bc295ff216b68862b92304315c810fa1ec038d53fc8",
   "comboBoxConnector.js": "1d004c3dae9c76f8bcc68678abe1b8f7bdc8b456f5c9c4c7f190df8ed25d66cd",
   "contextMenuConnector.js": "25a200f8086461635ddd92316ebeb5a868294c8650a190efbae120edb1088f4f",
@@ -243,7 +244,7 @@
   "fortylove": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
  },
  "entryScripts": [
-  "VAADIN/build/indexhtml-44ab3891.js"
+  "VAADIN/build/indexhtml-ab197400.js"
  ],
  "webComponents": [],
  "packageJsonHash": "91b9078d7f233b0da51d74dc4ed341f7ab4c00275214b4039d946e617a06632f"

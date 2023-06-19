@@ -8,6 +8,7 @@ import ch.fortylove.views.booking.bookinggrid.cells.BookedCellComponent;
 import ch.fortylove.views.booking.bookinggrid.cells.BookingGridCellComponent;
 import ch.fortylove.views.booking.bookinggrid.cells.CourtInfoCellComponent;
 import ch.fortylove.views.booking.bookinggrid.cells.FreeCellComponent;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
@@ -22,6 +23,8 @@ public class CourtRowComponent extends BookingGridRowComponent {
                              @Nonnull final Court court,
                              @Nonnull final LocalDate date) {
         super();
+
+        addClassNames(LumoUtility.Border.LEFT, LumoUtility.Border.TOP, LumoUtility.Border.BOTTOM, LumoUtility.Margin.Bottom.MEDIUM);
 
         constructUI(bookingSettings, court, date);
     }

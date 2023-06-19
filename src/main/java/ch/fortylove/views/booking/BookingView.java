@@ -1,5 +1,7 @@
 package ch.fortylove.views.booking;
 
+import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.persistence.service.settings.BookingSettingsService;
 import ch.fortylove.views.MainLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -19,20 +21,32 @@ import javax.annotation.Nonnull;
 @PermitAll
 public class BookingView extends VerticalLayout implements AfterNavigationObserver {
 
-    @Nonnull private final BookingComponent bookingComponent;
+    @Nonnull private final CourtService courtService;
+    @Nonnull private final BookingSettingsService bookingSettingsService;
+
+    private BookingComponent bookingComponent;
 
     @Autowired
-    public BookingView(@Nonnull final BookingComponent bookingComponent) {
-        this.bookingComponent = bookingComponent;
+    public BookingView(@Nonnull final CourtService courtService,
+                       @Nonnull final BookingSettingsService bookingSettingsService) {
+        this.courtService = courtService;
+        this.bookingSettingsService = bookingSettingsService;
 
-        addClassNames(
-                LumoUtility.Background.SUCCESS,
-                LumoUtility.Padding.MEDIUM,
-                "booking-view"
-        );
+        addClassNames(LumoUtility.Padding.MEDIUM, "booking-view");
         setSizeFull();
 
-        add(bookingComponent);
+        constructUI();
+    }
+
+    private void constructUI() {
+        add(createBookingComponent());
+    }
+
+    @Nonnull
+    private BookingComponent createBookingComponent() {
+        bookingComponent = new BookingComponent(courtService, bookingSettingsService);
+
+        return bookingComponent;
     }
 
     @Override

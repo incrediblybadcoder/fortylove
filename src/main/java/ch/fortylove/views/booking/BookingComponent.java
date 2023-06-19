@@ -1,44 +1,48 @@
 package ch.fortylove.views.booking;
 
+import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.persistence.service.settings.BookingSettingsService;
 import ch.fortylove.views.booking.bookinggrid.BookingGridComponent;
 import ch.fortylove.views.booking.dateselection.DateSelectionBrowseBackEvent;
 import ch.fortylove.views.booking.dateselection.DateSelectionBrowseForwardEvent;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.DateSelectionPickerEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
 
-@Component
 public class BookingComponent extends VerticalLayout {
 
-    @Nonnull final private BookingGridComponent bookingGridComponent;
+    @Nonnull private final CourtService courtService;
+    @Nonnull private final BookingSettingsService bookingSettingsService;
+
+    private BookingGridComponent bookingGridComponent;
     private DateSelectionComponent dateSelectionComponent;
 
     @Nonnull private LocalDate date;
 
-    @Autowired
-    public BookingComponent(@Nonnull final BookingGridComponent bookingGridComponent) {
-        this.bookingGridComponent = bookingGridComponent;
+    public BookingComponent(@Nonnull final CourtService courtService,
+                            @Nonnull final BookingSettingsService bookingSettingsService) {
+        this.courtService = courtService;
+        this.bookingSettingsService = bookingSettingsService;
         date = LocalDate.now();
 
-        addClassNames(
-                LumoUtility.Background.ERROR
-        );
-        getStyle().set("overflow", "auto");
-
         constructUI();
-//        setSpacing(false);
-//        setPadding(false);
+        setSpacing(false);
+        setPadding(false);
     }
 
     private void constructUI() {
-        add(bookingGridComponent);
+        add(createBookingGridComponent());
         add(createDateSelectionComponent());
+    }
+
+    @Nonnull
+    private BookingGridComponent createBookingGridComponent() {
+        bookingGridComponent = new BookingGridComponent(courtService, bookingSettingsService);
+
+        return bookingGridComponent;
     }
 
     @Nonnull

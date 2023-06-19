@@ -13,10 +13,7 @@ public class FreeCellComponent extends BookingGridCellComponent {
     public FreeCellComponent(final boolean isVisible) {
         super(isVisible);
 
-        addClassNames(
-                LumoUtility.Background.ERROR
-        );
-        setAlignItems(Alignment.CENTER);
+        addClassNames(LumoUtility.Border.RIGHT);
 
         constructUI();
     }

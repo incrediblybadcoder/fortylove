@@ -2,7 +2,6 @@ package ch.fortylove.views.booking.bookinggrid.rows;
 
 import ch.fortylove.views.booking.bookinggrid.cells.BookingGridCellComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -10,10 +9,6 @@ import java.util.Collection;
 public abstract class BookingGridRowComponent extends HorizontalLayout {
 
     public BookingGridRowComponent() {
-        addClassNames(
-                LumoUtility.Background.CONTRAST,
-                LumoUtility.Padding.MEDIUM
-        );
         setSpacing(false);
     }
 
