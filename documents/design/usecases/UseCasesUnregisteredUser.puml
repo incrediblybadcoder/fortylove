@@ -2,7 +2,10 @@
 left to right direction
 actor "UnregisterdUser" as Actor
 rectangle fortylove {
-    Actor --> (Profil erstellen)
+    Actor --> (UC_4\nMember-Profil erstellen)
+    note right: "UnregisterdUser wird zu \neinem Member eines Clubs"
+        Actor --> (UC_X\nGuest-Profil erstellen)
+        note right: "UnregisterdUser wird zu einem \nfortylove Benutzer ohne Club (Guest)"
 }
 
 @enduml

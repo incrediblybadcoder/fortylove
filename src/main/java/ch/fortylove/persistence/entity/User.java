@@ -81,6 +81,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    @Nonnull
     public String getEmail() {
         return email;
     }

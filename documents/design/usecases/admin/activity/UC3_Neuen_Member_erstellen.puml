@@ -1,0 +1,32 @@
+@startuml
+(*) --> "Login von Admin"
+--> "Navigation zu Benutzerverwaltung"
+note right: "Admin darf Passwort der Benutzer nicht als Klartext sehen"
+--> "'Mitglied anlegen' auswaelen"
+--> "Eingabe der Benutzerdaten"
+note right: "Pflichtangaben: Vorname, Nachname, Email, Rolle, Status"
+--> "Speichern der Benutzerdaten"
+note left: "Es wird ein Standardpasswort vergeben"
+
+
+if "Benutzer bereits vorhanden" then
+  -->[true] "Popup: Benutzer bereits vorhanden"
+  --> "Abbruch"
+  -right-> "Benutzerverwaltungsseite wird angezeigt"
+else
+  ->[false] "Benutzer wird angelegt"
+  note right: "Benutzer gehoert zum Verein des Admin"
+  --> === S1 ===
+  --> "Benutzerverwaltungsseite wird angezeigt"
+  note right: "Benutzer ist in der Liste ersichtlich"
+  --> (*)
+  endif
+
+  partition NeuerBenutzer #LightSkyBlue{
+  === S1 === -right->[Mitglied muss aktiv werden] erhaelt Bestaetigungsmail
+  --> "Benutzer klickt auf Link in Mail\nund muss Passwort aendern"
+  --> "Benutzer kann fortylove nutzen"
+  }
+
+
+@enduml

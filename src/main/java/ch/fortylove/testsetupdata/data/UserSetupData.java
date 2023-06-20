@@ -1,13 +1,12 @@
-package ch.fortylove.spring.setupdata;
+package ch.fortylove.testsetupdata.data;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.testsetupdata.TestSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
@@ -15,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-@Profile({"h2", "develop", "local"})
+@TestSetupData
 public class UserSetupData {
 
     @Nonnull private final UserService userService;

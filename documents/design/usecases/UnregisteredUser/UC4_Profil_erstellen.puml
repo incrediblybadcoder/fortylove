@@ -1,0 +1,14 @@
+@startuml
+object UC_4 {
+<#lightblue,#black>|= Name |<#white> Member-Profil erstellen |
+<#lightblue,#black>|= Ziel im Kontext |<#white> Ein neues Benutzerprofil, welches einem Verein angehoert, ist im System angelegt |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Eine beliebige Person kann sich ein Profil auf fortylove erstellen |
+<#lightblue,#black>|= Vorbedingungen |<#white> - Man muss eine E-Mail Adresse besitzen\n - Es muss mindest ein Verein auf fortylove existieren|
+<#lightblue,#black>|= Akteure |<#white> - Unregisterd User\n - Club Admin |
+<#lightblue,#black>|= Trigger |<#white> - jemand moechte einem Tennisclub beitreten, \n   welcher die Platzreservation mit fortylove regelt|
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. Navigation auf fortylove App\n 2. "Profil anlegen" klicken\n 3. Ausfüllen (Verein angeben) und absenden\n\t-> Reaktion des Systems: Speichert neue Daten in DB\n 4. E-Mail bestaettigen\n 5. Auf Clubbeitrittsbestaetigung durch Clubadmin warten|
+<#lightblue,#black>|= Erweiterungen |<#white>|
+<#lightblue,#black>|= Nachbedingungen |<#white> |
+<#lightblue,#black>|= Fragen, Kommentare |<#with> |
+}
+@enduml

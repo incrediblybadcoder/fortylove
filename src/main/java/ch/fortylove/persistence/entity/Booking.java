@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +28,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     )
     private List<User> users;
 
-    private int timeslot;
+    private LocalDateTime dateTime;
 
     public Booking() {
         super();
@@ -48,12 +49,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         this.court = court;
     }
 
-    public int getTimeslot() {
-        return timeslot;
+    @Nonnull
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setTimeslot(final int timeslot) {
-        this.timeslot = timeslot;
+    public void setDateTime(@Nonnull final LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Nonnull
@@ -70,19 +72,19 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Booking booking = (Booking) o;
-        return timeslot == booking.timeslot &&
-                Objects.equals(court, booking.court) &&
-                Objects.equals(users, booking.users);
+        return Objects.equals(court, booking.court) &&
+                Objects.equals(users, booking.users) &&
+                Objects.equals(dateTime, booking.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, users, timeslot);
+        return Objects.hash(court, users, dateTime);
     }
 
     @Override
     public int compareTo(@Nonnull final Booking otherBooking) {
-        return Integer.compare(timeslot, otherBooking.getTimeslot());
+        return dateTime.compareTo(otherBooking.getDateTime());
     }
 
     @Override
