@@ -1,4 +1,4 @@
-package ch.fortylove.views;
+package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.persistence.entity.User;
 import com.vaadin.flow.component.Component;

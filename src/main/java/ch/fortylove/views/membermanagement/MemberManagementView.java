@@ -1,11 +1,11 @@
-package ch.fortylove.views;
+package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
-@CssImport("./styles/shared-styles.css")
 @RolesAllowed(Role.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 

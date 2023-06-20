@@ -1,4 +1,4 @@
-package ch.fortylove.views.bookingoverview;
+package ch.fortylove.views.booking.bookinggrid;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
@@ -9,11 +9,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingDialog extends Dialog {
@@ -54,7 +54,6 @@ public class BookingDialog extends Dialog {
 
     private ComponentEventListener<ClickEvent<Button>> getSaveButtonClickListener() {
         return clickEvent -> {
-            Notification.show("saved booking");
             fireEvent(new SaveEvent(this, createSaveBooking()));
             close();
         };
@@ -62,6 +61,15 @@ public class BookingDialog extends Dialog {
 
     private Booking createSaveBooking() {
         final Booking booking = new Booking();
+        List<User> bookingPlayers = new ArrayList<>();
+        bookingPlayers.add(bookingPlayer);
+        //bookingPlayers.add(userComboBox.getValue());
+        bookingPlayers.add(bookingPlayer);
+        booking.setUsers(bookingPlayers);
+        booking.setDateTime(this.booking.getDateTime());
+        booking.setCourt(this.booking.getCourt());
+        // Die Buchung welche gespeichert werden soll, wird hier erstellt
+        // evt mit Binder umsetzten
         return booking;
     }
 
@@ -73,11 +81,11 @@ public class BookingDialog extends Dialog {
         return addListener(CancelEvent.class, listener);
     }
 
-    public static abstract class BookingEvent extends ComponentEvent<BookingDialog> {
+    public static abstract class BookingDialogEvent extends ComponentEvent<BookingDialog> {
         @Nonnull private final Booking booking;
 
-        protected BookingEvent(@Nonnull final BookingDialog source,
-                               @Nonnull final Booking booking) {
+        protected BookingDialogEvent(@Nonnull final BookingDialog source,
+                                     @Nonnull final Booking booking) {
             super(source, false);
             this.booking = booking;
         }
@@ -88,14 +96,14 @@ public class BookingDialog extends Dialog {
         }
     }
 
-    public static class SaveEvent extends BookingEvent {
+    public static class SaveEvent extends BookingDialogEvent {
         SaveEvent(@Nonnull final BookingDialog source,
                   @Nonnull final Booking booking) {
             super(source, booking);
         }
     }
 
-    public static class CancelEvent extends BookingEvent {
+    public static class CancelEvent extends BookingDialogEvent {
         CancelEvent(@Nonnull final BookingDialog source,
                     @Nonnull final Booking booking) {
             super(source, booking);
