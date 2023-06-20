@@ -65,11 +65,11 @@ public class BookingDialog extends Dialog {
         return booking;
     }
 
-    public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+    public Registration addSaveButtonClickListener(@Nonnull final ComponentEventListener<SaveEvent> listener) {
         return addListener(SaveEvent.class, listener);
     }
 
-    public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+    public Registration addCancelButtonClickListener(@Nonnull final ComponentEventListener<CancelEvent> listener) {
         return addListener(CancelEvent.class, listener);
     }
 

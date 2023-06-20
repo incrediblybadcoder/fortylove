@@ -40,8 +40,7 @@ public class BookingComponent extends HorizontalLayout {
 
     private ComponentEventListener<ClickEvent<HorizontalLayout>> getBookingClickListener(@Nonnull final Booking booking) {
         return clickEvent -> {
-            Notification.show(String.valueOf(booking.getTimeslot()));
-//            dialog.open(booking);
+            Notification.show(String.valueOf(booking.getDateTime()));
         };
     }
 }

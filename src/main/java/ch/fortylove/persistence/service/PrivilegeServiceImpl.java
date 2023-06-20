@@ -21,30 +21,36 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Nonnull
+    @Override
     public List<Privilege> findAll() {
         return privilegeRepository.findAll();
     }
 
     @Nonnull
+    @Override
     public Optional<Privilege> findById(final long id) {
         return privilegeRepository.findById(id);
     }
 
     @Nonnull
+    @Override
     public Optional<Privilege> findByName(@Nonnull final String name) {
         return Optional.ofNullable(privilegeRepository.findByName(name));
     }
 
     @Nonnull
+    @Override
     public Privilege create(@Nonnull final Privilege privilege) {
         return privilegeRepository.save(privilege);
     }
 
+    @Override
     public void deleteById(final long id) {
         privilegeRepository.deleteById(id);
     }
 
     @Nonnull
+    @Override
     public Optional<Privilege> update(final long id,
                                       @Nonnull final Privilege privilege) {
         final Optional<Privilege> existingPrivilegeOptional = findById(id);

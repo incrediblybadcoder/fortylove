@@ -1,17 +1,15 @@
-package ch.fortylove.spring.setupdata;
+package ch.fortylove.testsetupdata.data;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.testsetupdata.TestSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-@Component
-@Profile({"h2", "develop", "local"})
+@TestSetupData
 public class CourtSetupData {
 
     @Nonnull private final CourtService courtService;

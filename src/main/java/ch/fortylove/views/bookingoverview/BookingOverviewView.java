@@ -9,14 +9,12 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 
 @Route(value = "/bookings", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Platzübersicht")
 @PermitAll
 public class BookingOverviewView extends VerticalLayout implements AfterNavigationObserver {
