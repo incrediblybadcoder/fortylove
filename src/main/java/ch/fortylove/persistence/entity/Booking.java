@@ -84,4 +84,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     public int compareTo(@Nonnull final Booking otherBooking) {
         return Integer.compare(timeslot, otherBooking.getTimeslot());
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "court=" + court +
+                ", users=" + users +
+                ", timeslot=" + timeslot +
+                '}';
+    }
 }
