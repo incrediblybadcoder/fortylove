@@ -1,4 +1,4 @@
-package ch.fortylove.views.bookingoverview;
+package ch.fortylove.views.booking.bookinggrid;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
@@ -66,7 +66,7 @@ public class BookingDialog extends Dialog {
         //bookingPlayers.add(userComboBox.getValue());
         bookingPlayers.add(bookingPlayer);
         booking.setUsers(bookingPlayers);
-        booking.setTimeslot(this.booking.getTimeslot());
+        booking.setDateTime(this.booking.getDateTime());
         booking.setCourt(this.booking.getCourt());
         // Die Buchung welche gespeichert werden soll, wird hier erstellt
         // evt mit Binder umsetzten

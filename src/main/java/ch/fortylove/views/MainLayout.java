@@ -2,7 +2,7 @@ package ch.fortylove.views;
 
 import ch.fortylove.security.SecurityService;
 import ch.fortylove.views.booking.BookingView;
-import ch.fortylove.views.bookingoverview.BookingOverviewView;
+import ch.fortylove.views.membermanagement.MemberManagementView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -48,7 +48,6 @@ public class MainLayout extends AppLayout {
 
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "booking ref", BookingOverviewView.class));
         tabs.add(createTab(VaadinIcon.CALENDAR, "booking neu", BookingView.class));
         tabs.add(createTab(VaadinIcon.USERS, "user management", MemberManagementView.class));
 
@@ -74,30 +73,4 @@ public class MainLayout extends AppLayout {
         link.add(title);
         return link;
     }
-
-//    private void createHeader() {
-//        final H1 logo = new H1("fortylove");
-//        logo.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.MEDIUM);
-//
-//        final String userName = securityService.getAuthenticatedUser().getUsername();
-//        final Button logoutButton = new Button("Log out " + userName, e -> securityService.logout());
-//
-//        var header = new HorizontalLayout(new DrawerToggle(), logo, logoutButton);
-//
-//        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-//        header.expand(logo);
-//        header.setWidthFull();
-//        header.addClassNames(LumoUtility.Padding.Vertical.NONE, LumoUtility.Padding.Horizontal.MEDIUM);
-//
-//        addToNavbar(header);
-//
-//    }
-//
-//    private void createDrawer() {
-//        addToDrawer(new VerticalLayout(
-//                new RouterLink("Platzübersicht-Ref", BookingOverviewView.class),
-//                new RouterLink("Platzübersicht", BookingView.class),
-//                new RouterLink("Benutzerverwaltung", MemberManagementView.class)
-//        ));
-//    }
 }
