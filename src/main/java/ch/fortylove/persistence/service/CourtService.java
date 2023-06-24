@@ -1,9 +1,11 @@
 package ch.fortylove.persistence.service;
 
+import ch.fortylove.persistence.dto.CourtDTO;
 import ch.fortylove.persistence.entity.Court;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +20,7 @@ public interface CourtService {
 
     @Nonnull
     List<Court> findAll();
+
+    @Nonnull
+    List<CourtDTO> findAllByDate(@Nonnull final LocalDate date);
 }

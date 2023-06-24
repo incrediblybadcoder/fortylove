@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +28,9 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     )
     private List<User> users;
 
-    private LocalDateTime dateTime;
+    private int timeSlotIndex;
+
+    private LocalDate date;
 
     public Booking() {
         super();
@@ -38,6 +40,14 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     public Booking(@Nonnull final List<User> users) {
         this();
         this.users = users;
+    }
+
+    public int getTimeSlotIndex() {
+        return timeSlotIndex;
+    }
+
+    public void setTimeSlotIndex(final int timeSlotIndex) {
+        this.timeSlotIndex = timeSlotIndex;
     }
 
     @Nonnull
@@ -50,12 +60,12 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     }
 
     @Nonnull
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(@Nonnull final LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(@Nonnull final LocalDate date) {
+        this.date = date;
     }
 
     @Nonnull
@@ -72,19 +82,19 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Booking booking = (Booking) o;
-        return Objects.equals(court, booking.court) &&
+        return timeSlotIndex == booking.timeSlotIndex &&
+                Objects.equals(court, booking.court) &&
                 Objects.equals(users, booking.users) &&
-                Objects.equals(dateTime, booking.dateTime);
+                Objects.equals(date, booking.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, users, dateTime);
+        return Objects.hash(court, users, timeSlotIndex, date);
     }
 
     @Override
     public int compareTo(@Nonnull final Booking otherBooking) {
-        return dateTime.compareTo(otherBooking.getDateTime());
+        return date.compareTo(otherBooking.getDate());
     }
-
 }

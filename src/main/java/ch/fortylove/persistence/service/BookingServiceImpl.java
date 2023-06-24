@@ -29,5 +29,4 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> findAllByCourtId(final long courtId) {
         return bookingRepository.findAllByCourtId(courtId);
     }
-
 }

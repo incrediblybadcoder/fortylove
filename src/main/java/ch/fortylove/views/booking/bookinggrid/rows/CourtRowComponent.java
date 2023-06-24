@@ -36,7 +36,7 @@ public class CourtRowComponent extends BookingGridRowComponent {
 
         final List<TimeSlot> timeSlots = bookingSettings.getTimeSlots();
         final List<Booking> bookings = court.getBookings();
-        final List<Booking> currentBookings = bookings.stream().filter(booking -> booking.getDateTime().toLocalDate().equals(date)).collect(Collectors.toList());;
+        final List<Booking> currentBookings = bookings.stream().filter(booking -> booking.getDate().equals(date)).collect(Collectors.toList());;
         Collections.sort(currentBookings);
 
         final List<BookingGridCellComponent> allCells = getAllCells(currentBookings, timeSlots);
@@ -56,9 +56,9 @@ public class CourtRowComponent extends BookingGridRowComponent {
 
             if (bookings.size() > counter) {
                 final Booking booking = bookings.get(counter);
-                final int bookingHour = booking.getDateTime().getHour();
+                final int bookingHour = 1;
 
-                if (bookingHour == timeSlot.getTime().getHour()) {
+                if (bookingHour == 1) {
                     if (!isBookable) {
                         throw new IllegalStateException(String.format("Not bookable timeslot (%s) with booking (%s)", timeSlot, booking));
                     }

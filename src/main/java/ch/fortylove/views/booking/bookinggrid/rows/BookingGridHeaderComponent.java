@@ -31,7 +31,7 @@ public class BookingGridHeaderComponent extends BookingGridRowComponent {
 
         timeSlots.forEach(timeSlot -> {
             final boolean isBookable = timeSlot.getBookable();
-            final TimeSlotCellComponent timeSlotCellComponent = new TimeSlotCellComponent(timeSlot.getTime().toString(), isBookable);
+            final TimeSlotCellComponent timeSlotCellComponent = new TimeSlotCellComponent("timeSlot.getTime().toString()", isBookable);
             if (timeSlotCellComponent.isVisible()) {
                 timeAxisCells.add(timeSlotCellComponent);
             }

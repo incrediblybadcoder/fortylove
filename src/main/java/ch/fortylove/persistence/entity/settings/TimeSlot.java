@@ -10,17 +10,25 @@ import java.util.Objects;
 @Entity(name = "timeslots")
 public class TimeSlot extends AbstractEntity {
 
+    public static final long MINUTES_PER_TIMESLOT = 60;
+    public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
+
     private boolean bookable;
-    private LocalTime time;
+    private int index;
 
     public TimeSlot() {
         super();
     }
 
     public TimeSlot(final boolean bookable,
-                    @Nonnull final LocalTime time) {
+                    final int index) {
         this.bookable = bookable;
-        this.time = time;
+        this.index = index;
+    }
+
+    public static int getTotalNumberOfTimeSlots() {
+        final int totalNumbersOfMinutes= 24 * 60;
+        return (int) (totalNumbersOfMinutes / MINUTES_PER_TIMESLOT);
     }
 
     public boolean getBookable() {
@@ -32,12 +40,20 @@ public class TimeSlot extends AbstractEntity {
     }
 
     @Nonnull
-    public LocalTime getTime() {
-        return time;
+    public LocalTime getStartTime() {
+        return BASE_TIME.plusMinutes(index * MINUTES_PER_TIMESLOT);
     }
 
-    public void setTime(@Nonnull final LocalTime time) {
-        this.time = time;
+    public LocalTime getEndTime() {
+        return BASE_TIME.plusMinutes((index + 1) * MINUTES_PER_TIMESLOT);
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(final int index) {
+        this.index = index;
     }
 
     @Override
@@ -45,12 +61,11 @@ public class TimeSlot extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final TimeSlot timeSlot = (TimeSlot) o;
-        return bookable == timeSlot.bookable &&
-                Objects.equals(time, timeSlot.time);
+        return bookable == timeSlot.bookable && index == timeSlot.index;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookable, time);
+        return Objects.hash(bookable, index);
     }
 }

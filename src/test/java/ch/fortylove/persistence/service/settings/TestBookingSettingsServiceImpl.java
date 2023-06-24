@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,60 +40,60 @@ class TestBookingSettingsServiceImpl {
     @Nonnull
     private List<TimeSlot> getTimeSlotsVersionA() {
         return Arrays.asList(
-                new TimeSlot(false, LocalTime.of(0, 0)),
-                new TimeSlot(false, LocalTime.of(1, 0)),
-                new TimeSlot(false, LocalTime.of(2, 0)),
-                new TimeSlot(false, LocalTime.of(3, 0)),
-                new TimeSlot(false, LocalTime.of(4, 0)),
-                new TimeSlot(false, LocalTime.of(5, 0)),
-                new TimeSlot(false, LocalTime.of(6, 0)),
-                new TimeSlot(false, LocalTime.of(7, 0)),
-                new TimeSlot(true, LocalTime.of(8, 0)),
-                new TimeSlot(true, LocalTime.of(9, 0)),
-                new TimeSlot(true, LocalTime.of(10, 0)),
-                new TimeSlot(true, LocalTime.of(12, 0)),
-                new TimeSlot(true, LocalTime.of(12, 0)),
-                new TimeSlot(true, LocalTime.of(13, 0)),
-                new TimeSlot(true, LocalTime.of(14, 0)),
-                new TimeSlot(true, LocalTime.of(15, 0)),
-                new TimeSlot(true, LocalTime.of(16, 0)),
-                new TimeSlot(true, LocalTime.of(17, 0)),
-                new TimeSlot(true, LocalTime.of(18, 0)),
-                new TimeSlot(false, LocalTime.of(19, 0)),
-                new TimeSlot(false, LocalTime.of(20, 0)),
-                new TimeSlot(false, LocalTime.of(21, 0)),
-                new TimeSlot(false, LocalTime.of(22, 0)),
-                new TimeSlot(false, LocalTime.of(23, 0))
+                new TimeSlot(false, 0),
+                new TimeSlot(false, 1),
+                new TimeSlot(false, 2),
+                new TimeSlot(false, 3),
+                new TimeSlot(false, 4),
+                new TimeSlot(false, 5),
+                new TimeSlot(false, 6),
+                new TimeSlot(false, 7),
+                new TimeSlot(true, 8),
+                new TimeSlot(true, 9),
+                new TimeSlot(true, 10),
+                new TimeSlot(true, 11),
+                new TimeSlot(true, 12),
+                new TimeSlot(true, 13),
+                new TimeSlot(true, 14),
+                new TimeSlot(true, 15),
+                new TimeSlot(true, 16),
+                new TimeSlot(true, 17),
+                new TimeSlot(true, 18),
+                new TimeSlot(true, 19),
+                new TimeSlot(true, 20),
+                new TimeSlot(false, 21),
+                new TimeSlot(false, 22),
+                new TimeSlot(false,23)
         );
     }
 
     @Nonnull
     private List<TimeSlot> getTimeSlotsVersionB() {
         return Arrays.asList(
-                new TimeSlot(false, LocalTime.of(0, 0)),
-                new TimeSlot(false, LocalTime.of(1, 0)),
-                new TimeSlot(false, LocalTime.of(2, 0)),
-                new TimeSlot(false, LocalTime.of(3, 0)),
-                new TimeSlot(false, LocalTime.of(4, 0)),
-                new TimeSlot(false, LocalTime.of(5, 0)),
-                new TimeSlot(false, LocalTime.of(6, 0)),
-                new TimeSlot(false, LocalTime.of(7, 0)),
-                new TimeSlot(false, LocalTime.of(8, 0)),
-                new TimeSlot(false, LocalTime.of(9, 0)),
-                new TimeSlot(false, LocalTime.of(10, 0)),
-                new TimeSlot(false, LocalTime.of(12, 0)),
-                new TimeSlot(false, LocalTime.of(12, 0)),
-                new TimeSlot(false, LocalTime.of(13, 0)),
-                new TimeSlot(true, LocalTime.of(14, 0)),
-                new TimeSlot(true, LocalTime.of(15, 0)),
-                new TimeSlot(true, LocalTime.of(16, 0)),
-                new TimeSlot(false, LocalTime.of(17, 0)),
-                new TimeSlot(false, LocalTime.of(18, 0)),
-                new TimeSlot(false, LocalTime.of(19, 0)),
-                new TimeSlot(false, LocalTime.of(20, 0)),
-                new TimeSlot(false, LocalTime.of(21, 0)),
-                new TimeSlot(false, LocalTime.of(22, 0)),
-                new TimeSlot(false, LocalTime.of(23, 0))
+                new TimeSlot(false, 0),
+                new TimeSlot(false, 1),
+                new TimeSlot(false, 2),
+                new TimeSlot(false, 3),
+                new TimeSlot(false, 4),
+                new TimeSlot(false, 5),
+                new TimeSlot(false, 6),
+                new TimeSlot(false, 7),
+                new TimeSlot(false, 8),
+                new TimeSlot(false, 9),
+                new TimeSlot(false, 10),
+                new TimeSlot(false, 11),
+                new TimeSlot(true, 12),
+                new TimeSlot(true, 13),
+                new TimeSlot(true, 14),
+                new TimeSlot(true, 15),
+                new TimeSlot(true, 16),
+                new TimeSlot(true, 17),
+                new TimeSlot(false, 18),
+                new TimeSlot(false, 19),
+                new TimeSlot(false, 20),
+                new TimeSlot(false, 21),
+                new TimeSlot(false, 22),
+                new TimeSlot(false, 23)
         );
     }
 }

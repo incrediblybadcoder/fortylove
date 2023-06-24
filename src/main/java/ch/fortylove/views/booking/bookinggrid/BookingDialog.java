@@ -66,7 +66,7 @@ public class BookingDialog extends Dialog {
         //bookingPlayers.add(userComboBox.getValue());
         bookingPlayers.add(bookingPlayer);
         booking.setUsers(bookingPlayers);
-        booking.setDateTime(this.booking.getDateTime());
+        booking.setDate(this.booking.getDate());
         booking.setCourt(this.booking.getCourt());
         // Die Buchung welche gespeichert werden soll, wird hier erstellt
         // evt mit Binder umsetzten

@@ -40,6 +40,6 @@ public class BookedCellComponent extends BookingGridCellComponent {
 
     @Nonnull
     private ComponentEventListener<ClickEvent<HorizontalLayout>> getBookingClickListener(@Nonnull final Booking booking) {
-        return clickEvent -> Notification.show(String.valueOf(booking.getDateTime()));
+        return clickEvent -> Notification.show(String.valueOf("booking.getDateTime()"));
     }
 }
