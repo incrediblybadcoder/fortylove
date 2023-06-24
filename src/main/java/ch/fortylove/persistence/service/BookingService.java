@@ -1,12 +1,10 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-@Service
 public interface BookingService {
 
     @Nonnull

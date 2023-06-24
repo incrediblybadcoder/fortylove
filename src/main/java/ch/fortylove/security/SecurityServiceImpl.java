@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 @Component
 public class SecurityServiceImpl implements SecurityService {
@@ -16,10 +17,12 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Nonnull
-    public UserDetails getAuthenticatedUser() {
-        return authenticationContext.getAuthenticatedUser(UserDetails.class).get();
+    @Override
+    public Optional<UserDetails> getAuthenticatedUser() {
+        return authenticationContext.getAuthenticatedUser(UserDetails.class);
     }
 
+    @Override
     public void logout() {
         authenticationContext.logout();
     }
