@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Nonnull
+    @Override
     public User create(@Nonnull final User user) {
         return userRepository.save(user);
     }
@@ -38,8 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Nonnull
     @Override
-    public List<User> findAll(final String filterText) {
-        if (filterText == null || filterText.isEmpty()) {
+    public List<User> findAll(@Nonnull final String filterText) {
+        if (filterText.isEmpty()) {
             return userRepository.findAll();
         } else {
             return userRepository.search(filterText);
@@ -47,11 +48,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(final User user) {
-        if (user == null) {
-            System.err.println("User is null. Are you sure you have connected your form to the application?");
-            return;
-        }
+
+    public void save(@Nonnull final User user) {
         userRepository.save(user);
     }
 
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
         * @param user to delete
      */
     @Override
-    public void delete(final User user) {
+    public void delete(@Nonnull final User user) {
         userRepository.delete(user);
     }
 }

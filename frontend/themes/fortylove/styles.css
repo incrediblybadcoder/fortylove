@@ -1,1 +1,3 @@
-@import url('./views/court-list-view.css');
+@import url('./views/booking-view.css');
+@import url('./views/membermanagement-view.css');
+@import url('./components/vaadin-app-layout.css');
