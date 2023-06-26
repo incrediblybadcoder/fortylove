@@ -2,8 +2,8 @@ package ch.fortylove.views.newbooking.dialog;
 
 import ch.fortylove.persistence.dto.BookingDTO;
 import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.entity.settings.TimeSlot;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.views.newbooking.dialog.events.DialogBookingEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -22,12 +22,12 @@ import java.util.List;
 public class BookingDialog extends Dialog {
 
     @Nonnull private final CourtDTO court;
-    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final TimeSlotDTO timeSlot;
     @Nonnull private final LocalDate date;
-    @Nonnull private final User bookingPlayer;
-    @Nonnull private final List<User> players;
+    @Nonnull private final UserDTO bookingPlayer;
+    @Nonnull private final List<UserDTO> players;
 
-    private ComboBox<User> opponentComboBox;
+    private ComboBox<UserDTO> opponentComboBox;
     private Button newButton;
     private Button modifyButton;
     private Button deleteButton;
@@ -36,15 +36,17 @@ public class BookingDialog extends Dialog {
     @Nullable private BookingDTO existingBooking;
 
     public BookingDialog(@Nonnull final CourtDTO court,
-                         @Nonnull final TimeSlot timeSlot,
+                         @Nonnull final TimeSlotDTO timeSlot,
                          @Nonnull final LocalDate date,
-                         @Nonnull final User bookingPlayer,
-                         @Nonnull final List<User> players) {
+                         @Nonnull final UserDTO bookingPlayer,
+                         @Nonnull final List<UserDTO> players) {
         this.court = court;
         this.timeSlot = timeSlot;
         this.date = date;
         this.bookingPlayer = bookingPlayer;
         this.players = players;
+
+        setModal(true);
 
         constructUI();
     }
@@ -56,7 +58,7 @@ public class BookingDialog extends Dialog {
 
         opponentComboBox = new ComboBox<>("Gegner");
         opponentComboBox.setItems(players);
-        opponentComboBox.setItemLabelGenerator(User::getFirstName);
+        opponentComboBox.setItemLabelGenerator(UserDTO::getFirstName);
 
         newButton = new Button("Buchen", newButtonClickListener());
         modifyButton = new Button("Modifizieren", modifyButtonClickListener());
@@ -87,8 +89,8 @@ public class BookingDialog extends Dialog {
 
     @Nonnull
     private BookingDTO createNewBooking() {
-        final List<User> users = Arrays.asList(bookingPlayer, opponentComboBox.getValue());
-        return new BookingDTO(court, users, timeSlot.getIndex(), date);
+        final List<UserDTO> users = Arrays.asList(bookingPlayer, opponentComboBox.getValue());
+        return new BookingDTO(0L, court, users, timeSlot.getIndex(), date);
     }
 
     @Nonnull
@@ -108,18 +110,18 @@ public class BookingDialog extends Dialog {
     }
 
     public void openFree() {
-        final String title = "Buchen - Platz " + court.id() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
+        final String title = "Buchen - Platz " + court.getId() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
         setHeaderTitle(title);
         addButtons(Arrays.asList(newButton, cancelButton));
 
         open();
     }
 
-    public void openExisting(@Nonnull final User opponent,
+    public void openExisting(@Nonnull final UserDTO opponent,
                              @Nonnull final BookingDTO existingBooking) {
         this.existingBooking = existingBooking;
 
-        final String title = "Modifizieren - Platz " + court.id() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
+        final String title = "Modifizieren - Platz " + court.getId() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
         setHeaderTitle(title);
 
         addButtons(Arrays.asList(modifyButton, deleteButton, cancelButton));

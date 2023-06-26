@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.security.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,13 +35,11 @@ public class TestSessionServiceImpl {
         UserDetails userDetails = mock(UserDetails.class);
         when(userDetails.getUsername()).thenReturn("testuser");
         when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(userDetails));
-        User expectedUser = new User();
-        expectedUser.setFirstName("firstname");
-        expectedUser.setLastName("lastname");
+        UserDTO expectedUser = new UserDTO(0L, "firstname", "lastname", "email", "password", true, null, null);
         when(userService.findByEmail("testuser")).thenReturn(Optional.of(expectedUser));
 
         // Act
-        Optional<User> result = sessionService.getCurrentUser();
+        Optional<UserDTO> result = sessionService.getCurrentUser();
 
         // Assert
         assertTrue(result.isPresent());
@@ -54,7 +52,7 @@ public class TestSessionServiceImpl {
         when(securityService.getAuthenticatedUser()).thenReturn(Optional.empty());
 
         // Act
-        Optional<User> result = sessionService.getCurrentUser();
+        Optional<UserDTO> result = sessionService.getCurrentUser();
 
         // Assert
         assertFalse(result.isPresent());

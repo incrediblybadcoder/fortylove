@@ -2,7 +2,7 @@ package ch.fortylove.views.newbooking.grid;
 
 import ch.fortylove.persistence.dto.BookingDTO;
 import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.entity.settings.TimeSlot;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
 import ch.fortylove.views.newbooking.grid.cells.BookedCellComponent;
 import ch.fortylove.views.newbooking.grid.cells.BookingCellComponent;
 import ch.fortylove.views.newbooking.grid.cells.CourtInfoComponent;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class BookingGridComponent extends Grid<CourtDTO> {
 
-    public BookingGridComponent(@Nonnull final List<TimeSlot> timeSlots) {
+    public BookingGridComponent(@Nonnull final List<TimeSlotDTO> timeSlots) {
         super(CourtDTO.class, false);
 
         addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -31,7 +31,7 @@ public class BookingGridComponent extends Grid<CourtDTO> {
         constructGrid(timeSlots);
     }
 
-    private void constructGrid(final List<TimeSlot> timeSlots) {
+    private void constructGrid(final List<TimeSlotDTO> timeSlots) {
         addComponentColumn(CourtInfoComponent::new).setFrozen(true);
 
         timeSlots.forEach(timeSlot ->
@@ -43,8 +43,8 @@ public class BookingGridComponent extends Grid<CourtDTO> {
 
     @Nonnull
     private BookingCellComponent createBookingComponent(@Nonnull final CourtDTO court,
-                                                        @Nonnull final TimeSlot timeSlot) {
-        final Optional<BookingDTO> booking = CourtUtil.getBookingForTimeSlot(court.bookings(), timeSlot);
+                                                        @Nonnull final TimeSlotDTO timeSlot) {
+        final Optional<BookingDTO> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeSlot);
 
         if (booking.isPresent()) {
             final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeSlot, booking.get()));

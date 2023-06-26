@@ -37,11 +37,6 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         users = new ArrayList<>();
     }
 
-    public Booking(@Nonnull final List<User> users) {
-        this();
-        this.users = users;
-    }
-
     public int getTimeSlotIndex() {
         return timeSlotIndex;
     }

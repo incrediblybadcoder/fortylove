@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.dto.RoleDTO;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface RoleService {
 
     @Nonnull
-    Role create(@Nonnull final Role role);
+    RoleDTO create(@Nonnull final RoleDTO role);
 
     @Nonnull
-    Optional<Role> findByName(@Nonnull final String name);
+    Optional<RoleDTO> findByName(@Nonnull final String name);
 }

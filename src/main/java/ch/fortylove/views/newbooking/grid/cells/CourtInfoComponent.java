@@ -15,7 +15,7 @@ public class CourtInfoComponent extends VerticalLayout {
     }
 
     private void constructUI(@Nonnull final CourtDTO court) {
-        final Span courtLabel = new Span("Platz: " + court.id());
+        final Span courtLabel = new Span("Platz: " + court.getId());
         add(courtLabel);
     }
 }

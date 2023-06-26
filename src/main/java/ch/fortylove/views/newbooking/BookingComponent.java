@@ -1,7 +1,7 @@
 package ch.fortylove.views.newbooking;
 
 import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.views.newbooking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.newbooking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.newbooking.dialog.BookingDialog;
@@ -23,7 +23,7 @@ public class BookingComponent extends VerticalLayout {
     private DateSelectionComponent dateSelectionComponent;
 
     private List<CourtDTO> courts;
-    private List<User> users;
+    private List<UserDTO> users;
 
     public BookingComponent( @Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
         setSpacing(false);
@@ -56,7 +56,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     public void refreshComponent(@Nonnull final List<CourtDTO> courts,
-                                 @Nonnull final List<User> users) {
+                                 @Nonnull final List<UserDTO> users) {
         this.courts = courts;
         this.users = users;
         refreshGrid();
@@ -73,8 +73,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClickedListener(@Nonnull final BookedCellClickEvent event) {
-        final User user = new User();
-        user.setFirstName("marco");
+        final UserDTO user = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
 
         final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), user, users);
         bookingDialog.addDialogBookingListener(this::dialogBooking);
@@ -82,8 +81,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void freeCellClickedListener(@Nonnull final FreeCellClickEvent event) {
-        final User user = new User();
-        user.setFirstName("marco");
+        final UserDTO user = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
 
         final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), user, users);
         bookingDialog.addDialogBookingListener(this::dialogBooking);

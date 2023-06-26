@@ -2,7 +2,7 @@ package ch.fortylove.views.newbooking.events;
 
 import ch.fortylove.persistence.dto.BookingDTO;
 import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.entity.settings.TimeSlot;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.views.newbooking.BookingComponent;
 import com.vaadin.flow.component.ComponentEvent;
 
