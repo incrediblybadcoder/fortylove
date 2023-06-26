@@ -1,15 +1,14 @@
 package ch.fortylove.persistence.setupdata.settings;
 
-import ch.fortylove.persistence.entity.settings.BookingSettings;
-import ch.fortylove.persistence.entity.settings.TimeSlot;
-import ch.fortylove.persistence.service.settings.BookingSettingsService;
+import ch.fortylove.persistence.dto.BookingSettingsDTO;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.service.BookingSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,39 +24,39 @@ public class BookingSettingsSetupData {
     }
 
     public void createBookingSettings() {
-        final List<TimeSlot> timeSlots = Arrays.asList(
-                new TimeSlot(false, LocalTime.of(0, 0)),
-                new TimeSlot(false, LocalTime.of(1, 0)),
-                new TimeSlot(false, LocalTime.of(2, 0)),
-                new TimeSlot(false, LocalTime.of(3, 0)),
-                new TimeSlot(false, LocalTime.of(4, 0)),
-                new TimeSlot(false, LocalTime.of(5, 0)),
-                new TimeSlot(false, LocalTime.of(6, 0)),
-                new TimeSlot(false, LocalTime.of(7, 0)),
-                new TimeSlot(true, LocalTime.of(8, 0)),
-                new TimeSlot(true, LocalTime.of(9, 0)),
-                new TimeSlot(true, LocalTime.of(10, 0)),
-                new TimeSlot(true, LocalTime.of(11, 0)),
-                new TimeSlot(true, LocalTime.of(12, 0)),
-                new TimeSlot(true, LocalTime.of(13, 0)),
-                new TimeSlot(true, LocalTime.of(14, 0)),
-                new TimeSlot(true, LocalTime.of(15, 0)),
-                new TimeSlot(true, LocalTime.of(16, 0)),
-                new TimeSlot(true, LocalTime.of(17, 0)),
-                new TimeSlot(true, LocalTime.of(18, 0)),
-                new TimeSlot(true, LocalTime.of(19, 0)),
-                new TimeSlot(true, LocalTime.of(20, 0)),
-                new TimeSlot(false, LocalTime.of(21, 0)),
-                new TimeSlot(false, LocalTime.of(22, 0)),
-                new TimeSlot(false, LocalTime.of(23, 0))
+        final List<TimeSlotDTO> timeSlots = Arrays.asList(
+                new TimeSlotDTO(0L, false, 0),
+                new TimeSlotDTO(0L, false, 1),
+                new TimeSlotDTO(0L, false, 2),
+                new TimeSlotDTO(0L, false, 3),
+                new TimeSlotDTO(0L, false, 4),
+                new TimeSlotDTO(0L, false, 5),
+                new TimeSlotDTO(0L, false, 6),
+                new TimeSlotDTO(0L, false, 7),
+                new TimeSlotDTO(0L, true, 8),
+                new TimeSlotDTO(0L, true, 9),
+                new TimeSlotDTO(0L, true, 10),
+                new TimeSlotDTO(0L, true, 11),
+                new TimeSlotDTO(0L, true, 12),
+                new TimeSlotDTO(0L, true, 13),
+                new TimeSlotDTO(0L, true, 14),
+                new TimeSlotDTO(0L, true, 15),
+                new TimeSlotDTO(0L, true, 16),
+                new TimeSlotDTO(0L, true, 17),
+                new TimeSlotDTO(0L, true, 18),
+                new TimeSlotDTO(0L, true, 19),
+                new TimeSlotDTO(0L, true, 20),
+                new TimeSlotDTO(0L, false, 21),
+                new TimeSlotDTO(0L, false, 22),
+                new TimeSlotDTO(0L, false, 23)
         );
 
         createBookingSettingsIfNotFound(timeSlots);
     }
 
     @Transactional
-    void createBookingSettingsIfNotFound(@Nonnull final List<TimeSlot> timeSlots) {
-        final BookingSettings bookingSettings = new BookingSettings(timeSlots);
+    void createBookingSettingsIfNotFound(@Nonnull final List<TimeSlotDTO> timeSlots) {
+        final BookingSettingsDTO bookingSettings = new BookingSettingsDTO(0L, timeSlots);
         bookingSettingsService.create(bookingSettings);
     }
 }

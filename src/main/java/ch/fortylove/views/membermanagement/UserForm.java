@@ -1,6 +1,6 @@
 package ch.fortylove.views.membermanagement;
 
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.dto.UserDTO;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,7 +24,7 @@ public class UserForm extends FormLayout {
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<User> binder = new BeanValidationBinder<>(User.class); //BeanValidationBider oder nur Binder?
+    Binder<UserDTO> binder = new BeanValidationBinder<>(UserDTO.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
@@ -41,7 +41,7 @@ public class UserForm extends FormLayout {
                 createButtonsLayout());
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         binder.setBean(user);
     }
 
@@ -70,26 +70,26 @@ public class UserForm extends FormLayout {
 
     //Events
     public static abstract class UserFormEvent extends ComponentEvent<UserForm> {
-        private User user;
+        private final UserDTO user;
 
-        protected UserFormEvent(UserForm source, User user) {
+        protected UserFormEvent(UserForm source, UserDTO user) {
             super(source, false);
             this.user = user;
         }
 
-        public User getUser() {
+        public UserDTO getUser() {
             return user;
         }
     }
 
         public static class SaveEvent extends UserFormEvent {
-            SaveEvent(UserForm source, User user) {
+            SaveEvent(UserForm source, UserDTO user) {
                 super(source, user);
             }
         }
 
         public static class DeleteEvent extends UserFormEvent {
-            DeleteEvent(UserForm source, User user) {
+            DeleteEvent(UserForm source, UserDTO user) {
                 super(source, user);
             }
         }
@@ -101,7 +101,7 @@ public class UserForm extends FormLayout {
         }
 
     public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-        return  addListener(DeleteEvent.class, listener);
+        return addListener(DeleteEvent.class, listener);
     }
 
     public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {

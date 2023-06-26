@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.dto.CourtDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +16,27 @@ class TestCourtServiceImpl {
 
     @Test
     public void testCreate() {
-        final Court court = new Court();
+        final CourtDTO createdCourt = testee.create(new CourtDTO(0L, null));
 
-        final Court createdCourt = testee.create(court);
-
-        Assertions.assertEquals(createdCourt, court);
+        Assertions.assertEquals(1, testee.findAll().size());
+        Assertions.assertEquals(createdCourt, testee.findAll().get(0));
     }
 
     @Test
     public void testFindById_notExists() {
-        final Court court1 = testee.create(new Court());
+        final CourtDTO court1 = testee.create(new CourtDTO(0L, null));
 
-        final Optional<Court> court = testee.findById(court1.getId() + 1L);
+        final Optional<CourtDTO> court = testee.findById(court1.getId() + 1L);
 
         Assertions.assertTrue(court.isEmpty());
     }
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court());
-        final Court court2 = testee.create(new Court());
+        testee.create(new CourtDTO(0L, null));
+        final CourtDTO court2 = testee.create(new CourtDTO(0L, null));
 
-        final Optional<Court> court = testee.findById(court2.getId());
+        final Optional<CourtDTO> court = testee.findById(court2.getId());
 
         Assertions.assertTrue(court.isPresent());
         Assertions.assertEquals(court2, court.get());
@@ -45,17 +44,17 @@ class TestCourtServiceImpl {
 
     @Test
     public void testFindAll_emptyRepository() {
-        final List<Court> courts = testee.findAll();
+        final List<CourtDTO> courts = testee.findAll();
 
         Assertions.assertTrue(courts.isEmpty());
     }
 
     @Test
     public void testFindAll_exists() {
-        final Court court1 = testee.create(new Court());
-        final Court court2 = testee.create(new Court());
+        final CourtDTO court1 = testee.create(new CourtDTO(0L, null));
+        final CourtDTO court2 = testee.create(new CourtDTO(0L, null));
 
-        final List<Court> courts = testee.findAll();
+        final List<CourtDTO> courts = testee.findAll();
 
         Assertions.assertEquals(2, courts.size());
         Assertions.assertAll(

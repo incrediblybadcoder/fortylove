@@ -1,7 +1,6 @@
 package ch.fortylove.views;
 
 import ch.fortylove.security.SecurityService;
-import ch.fortylove.views.booking.BookingView;
 import ch.fortylove.views.membermanagement.MemberManagementView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -22,8 +21,6 @@ public class MainLayout extends AppLayout {
 
     @Nonnull private final SecurityService securityService;
 
-    private Tabs menu;
-
     public MainLayout(@Nonnull final SecurityService securityService) {
         this.securityService = securityService;
 
@@ -33,12 +30,13 @@ public class MainLayout extends AppLayout {
         appName.addClassNames(LumoUtility.Margin.Left.MEDIUM, LumoUtility.Margin.Right.MEDIUM);
         appName.getStyle().set("left", "var(--lumo-space-l)");
 
-        menu = createMenuTabs();
+        final Tabs menu = createMenuTabs();
 
         addToNavbar(appName);
         addToNavbar(true, menu);
     }
 
+    @Nonnull
     private Tabs createMenuTabs() {
         final Tabs tabs = new Tabs();
         tabs.setOrientation(Tabs.Orientation.HORIZONTAL);
@@ -46,14 +44,16 @@ public class MainLayout extends AppLayout {
         return tabs;
     }
 
+    @Nonnull
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "booking neu", BookingView.class));
+        tabs.add(createTab(VaadinIcon.CALENDAR, "booking neu", ch.fortylove.views.newbooking.BookingView.class));
         tabs.add(createTab(VaadinIcon.USERS, "user management", MemberManagementView.class));
 
         return tabs;
     }
 
+    @Nonnull
     private static Tab createTab(@Nonnull final VaadinIcon icon,
                                  @Nonnull final String title,
                                  @Nonnull final Class<? extends Component> viewClass) {

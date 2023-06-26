@@ -1,8 +1,8 @@
 package ch.fortylove.security;
 
-import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.persistence.entity.Role;
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.dto.PrivilegeDTO;
+import ch.fortylove.persistence.dto.RoleDTO;
+import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final User user = userService.findByEmail(email)
+        final UserDTO user = userService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + email));
 
         boolean enabled = true;
@@ -45,24 +45,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
+    @Nonnull
+    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleDTO> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
-    private List<String> getPrivileges(final Collection<Role> roles) {
+    @Nonnull
+    private List<String> getPrivileges(final Collection<RoleDTO> roles) {
         final List<String> privileges = new ArrayList<>();
-        final List<Privilege> collection = new ArrayList<>();
-        for (final Role role : roles) {
+        final List<PrivilegeDTO> collection = new ArrayList<>();
+        for (final RoleDTO role : roles) {
             privileges.add(role.getName());
             collection.addAll(role.getPrivileges());
         }
-        for (final Privilege item : collection) {
+        for (final PrivilegeDTO item : collection) {
             privileges.add(item.getName());
         }
 
         return privileges;
     }
 
+    @Nonnull
     private List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
         for (final String privilege : privileges) {

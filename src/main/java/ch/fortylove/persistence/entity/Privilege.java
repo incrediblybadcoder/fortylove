@@ -29,11 +29,6 @@ public class Privilege extends AbstractEntity {
         roles = new ArrayList<>();
     }
 
-    public Privilege(@Nonnull final String name) {
-        this();
-        this.name = name;
-    }
-
     @Nonnull
     public String getName() {
         return name;

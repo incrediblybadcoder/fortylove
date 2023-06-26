@@ -1,5 +1,8 @@
 package ch.fortylove.persistence.service;
 
+import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
+import ch.fortylove.persistence.dto.mapper.UserMapper;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,44 +16,47 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Nonnull private final UserRepository userRepository;
+    @Nonnull private final UserMapper userMapper;
 
     @Autowired
-    public UserServiceImpl(@Nonnull final UserRepository userRepository) {
+    public UserServiceImpl(@Nonnull final UserRepository userRepository,
+                           @Nonnull final UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Nonnull
     @Override
-    public User create(@Nonnull final User user) {
-        return userRepository.save(user);
+    public UserDTO create(@Nonnull final UserDTO user) {
+        final User save = userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
+        return userMapper.convert(save, new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public Optional<User> findByEmail(@Nonnull final String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email));
+    public Optional<UserDTO> findByEmail(@Nonnull final String email) {
+        return Optional.ofNullable(userMapper.convert(userRepository.findByEmail(email), new CycleAvoidingMappingContext()));
     }
 
     @Nonnull
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        return userMapper.convert(userRepository.findAll(), new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public List<User> findAll(@Nonnull final String filterText) {
+    public List<UserDTO> findAll(@Nonnull final String filterText) {
         if (filterText.isEmpty()) {
-            return userRepository.findAll();
+            return userMapper.convert(userRepository.findAll(), new CycleAvoidingMappingContext());
         } else {
-            return userRepository.search(filterText);
+            return userMapper.convert(userRepository.search(filterText), new CycleAvoidingMappingContext());
         }
     }
 
     @Override
-
-    public void save(@Nonnull final User user) {
-        userRepository.save(user);
+    public void save(@Nonnull final UserDTO user) {
+        userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
     }
 
     /*
@@ -58,7 +64,7 @@ public class UserServiceImpl implements UserService {
         * @param user to delete
      */
     @Override
-    public void delete(@Nonnull final User user) {
-        userRepository.delete(user);
+    public void delete(@Nonnull final UserDTO user) {
+        userRepository.delete(userMapper.convert(user, new CycleAvoidingMappingContext()));
     }
 }

@@ -6,7 +6,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,13 +37,6 @@ public class Role extends AbstractEntity {
         super();
         users = new ArrayList<>();
         privileges = new ArrayList<>();
-    }
-
-    public Role(@Nonnull final String name,
-                @Nonnull final List<Privilege> privileges) {
-        this();
-        this.name = name;
-        this.privileges = privileges;
     }
 
     public String getName() {

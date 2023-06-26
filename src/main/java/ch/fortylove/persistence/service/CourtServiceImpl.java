@@ -1,11 +1,17 @@
 package ch.fortylove.persistence.service;
 
+import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.dto.mapper.CourtMapper;
+import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,27 +19,49 @@ import java.util.Optional;
 public class CourtServiceImpl implements CourtService {
 
     @Nonnull private final CourtRepository courtRepository;
+    @Nonnull private final CourtMapper courtMapper;
 
     @Autowired
-    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository) {
+    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository,
+                            @Nonnull final CourtMapper courtMapper) {
         this.courtRepository = courtRepository;
+        this.courtMapper = courtMapper;
     }
 
     @Nonnull
     @Override
-    public Court create(@Nonnull final Court court) {
-        return courtRepository.save(court);
+    public CourtDTO create(@Nonnull final CourtDTO court) {
+        final Court save = courtRepository.save(courtMapper.convert(court, new CycleAvoidingMappingContext()));
+        return courtMapper.convert(save, new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public Optional<Court> findById(final long id) {
-        return Optional.ofNullable(courtRepository.findById(id));
+    public Optional<CourtDTO> findById(final long id) {
+        return Optional.ofNullable(courtMapper.convert(courtRepository.findById(id), new CycleAvoidingMappingContext()));
     }
 
     @Nonnull
     @Override
-    public List<Court> findAll() {
-        return courtRepository.findAll();
+    public List<CourtDTO> findAll() {
+        return courtMapper.convert(courtRepository.findAll(), new CycleAvoidingMappingContext());
+    }
+
+    @Nonnull
+    @Override
+    public List<CourtDTO> findAllByDate(@Nonnull final LocalDate date) {
+        final List<CourtDTO> courts = new ArrayList<>();
+
+        final List<CourtDTO> allCourts = findAll();
+        allCourts.forEach(court -> courts.add(new CourtDTO(court.getId(), getBookingsByDate(court, date))));
+
+        return courts;
+    }
+
+    @Nonnull
+    private List<BookingDTO> getBookingsByDate(@Nonnull final CourtDTO court,
+                                               @Nonnull final LocalDate date) {
+        final List<BookingDTO> allBookings = court.getBookings();
+        return allBookings.stream().filter(booking -> booking.getDate().equals(date)).toList();
     }
 }
