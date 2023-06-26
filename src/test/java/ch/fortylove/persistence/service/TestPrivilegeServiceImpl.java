@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.PrivilegeDTO;
+import ch.fortylove.persistence.dto.Privilege;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,14 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testFindAll_emptyRepository() {
-        final List<PrivilegeDTO> privileges = testee.findAll();
+        final List<Privilege> privileges = testee.findAll();
 
         Assertions.assertTrue(privileges.isEmpty());
     }
 
     @Test
     public void testCreate() {
-        final PrivilegeDTO createdPrivilege = testee.create(new PrivilegeDTO(0L, "name", null));
+        final Privilege createdPrivilege = testee.create(new Privilege(0L, "name", null));
 
         Assertions.assertEquals(1, testee.findAll().size());
         Assertions.assertEquals(createdPrivilege, testee.findAll().get(0));
@@ -31,11 +31,11 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testFindAll() {
-        final PrivilegeDTO privilege1 = testee.create(new PrivilegeDTO(0L, "name1", null));
-        final PrivilegeDTO privilege2 = testee.create(new PrivilegeDTO(0L, "name2", null));
-        final PrivilegeDTO privilege3 = testee.create(new PrivilegeDTO(0L, "name3", null));
+        final Privilege privilege1 = testee.create(new Privilege(0L, "name1", null));
+        final Privilege privilege2 = testee.create(new Privilege(0L, "name2", null));
+        final Privilege privilege3 = testee.create(new Privilege(0L, "name3", null));
 
-        final List<PrivilegeDTO> privileges = testee.findAll();
+        final List<Privilege> privileges = testee.findAll();
 
         Assertions.assertEquals(3, privileges.size());
         Assertions.assertAll(
@@ -47,10 +47,10 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testFindByName_notExists() {
-        testee.create(new PrivilegeDTO(0L, "name1", null));
-        testee.create(new PrivilegeDTO(0L, "name3", null));
+        testee.create(new Privilege(0L, "name1", null));
+        testee.create(new Privilege(0L, "name3", null));
 
-        final Optional<PrivilegeDTO> privilege = testee.findByName("name2");
+        final Optional<Privilege> privilege = testee.findByName("name2");
 
         Assertions.assertTrue(privilege.isEmpty());
     }
@@ -58,11 +58,11 @@ class TestPrivilegeServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String name2 = "name2";
-        testee.create(new PrivilegeDTO(0L, "name1", null));
-        final PrivilegeDTO privilege2 = testee.create(new PrivilegeDTO(0L, name2, null));;
-        testee.create(new PrivilegeDTO(0L, "name3", null));
+        testee.create(new Privilege(0L, "name1", null));
+        final Privilege privilege2 = testee.create(new Privilege(0L, name2, null));;
+        testee.create(new Privilege(0L, "name3", null));
 
-        final Optional<PrivilegeDTO> privilege = testee.findByName(name2);
+        final Optional<Privilege> privilege = testee.findByName(name2);
 
         Assertions.assertTrue(privilege.isPresent());
         Assertions.assertEquals(privilege2, privilege.get());
@@ -70,13 +70,13 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testDeleteById() {
-        testee.create(new PrivilegeDTO(0L, "name1", null));
-        final PrivilegeDTO privilege2 = testee.create(new PrivilegeDTO(0L, "name2", null));;
-        testee.create(new PrivilegeDTO(0L, "name3", null));
+        testee.create(new Privilege(0L, "name1", null));
+        final Privilege privilege2 = testee.create(new Privilege(0L, "name2", null));;
+        testee.create(new Privilege(0L, "name3", null));
 
         testee.deleteById(privilege2.getId());
 
-        final List<PrivilegeDTO> privileges = testee.findAll();
+        final List<Privilege> privileges = testee.findAll();
         Assertions.assertEquals(2, privileges.size());
         Assertions.assertFalse(privileges.contains(privilege2));
     }

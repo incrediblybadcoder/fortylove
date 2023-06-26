@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.dto.Booking;
 import ch.fortylove.persistence.dto.mapper.BookingMapper;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.entity.BookingEntity;
@@ -25,20 +25,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Nonnull
     @Override
-    public BookingDTO create(@Nonnull final BookingDTO booking) {
+    public Booking create(@Nonnull final Booking booking) {
         final BookingEntity bookingEntity = bookingRepository.save(bookingMapper.convert(booking, new CycleAvoidingMappingContext()));
         return bookingMapper.convert(bookingEntity, new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public List<BookingDTO> findAllByCourtId(final long courtId) {
+    public List<Booking> findAllByCourtId(final long courtId) {
         return bookingMapper.convert(bookingRepository.findAllByCourtId(courtId), new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public List<BookingDTO> findAll() {
+    public List<Booking> findAll() {
         return bookingMapper.convert(bookingRepository.findAll(), new CycleAvoidingMappingContext());
     }
 }

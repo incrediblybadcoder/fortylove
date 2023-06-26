@@ -1,8 +1,8 @@
 package ch.fortylove.security;
 
-import ch.fortylove.persistence.dto.PrivilegeDTO;
-import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.dto.Privilege;
+import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.dto.User;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final UserDTO user = userService.findByEmail(email)
+        final User user = userService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + email));
 
         boolean enabled = true;
@@ -46,19 +46,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Nonnull
-    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleDTO> roles) {
+    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
     @Nonnull
-    private List<String> getPrivileges(final Collection<RoleDTO> roles) {
+    private List<String> getPrivileges(final Collection<Role> roles) {
         final List<String> privileges = new ArrayList<>();
-        final List<PrivilegeDTO> collection = new ArrayList<>();
-        for (final RoleDTO role : roles) {
+        final List<Privilege> collection = new ArrayList<>();
+        for (final Role role : roles) {
             privileges.add(role.getName());
             collection.addAll(role.getPrivileges());
         }
-        for (final PrivilegeDTO item : collection) {
+        for (final Privilege item : collection) {
             privileges.add(item.getName());
         }
 

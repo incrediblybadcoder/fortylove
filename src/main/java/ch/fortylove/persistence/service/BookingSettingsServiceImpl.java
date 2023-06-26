@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingSettingsDTO;
+import ch.fortylove.persistence.dto.BookingSettings;
 import ch.fortylove.persistence.dto.mapper.BookingSettingsMapper;
 import ch.fortylove.persistence.entity.BookingSettingsEntity;
 import ch.fortylove.persistence.repository.BookingSettingsRepository;
@@ -25,7 +25,7 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull
     @Override
-    public BookingSettingsDTO create(@Nonnull final BookingSettingsDTO bookingSettings) {
+    public BookingSettings create(@Nonnull final BookingSettings bookingSettings) {
         final List<BookingSettingsEntity> existingBookingSettings = bookingSettingsRepository.findAll();
         if (existingBookingSettings.isEmpty()) {
             final BookingSettingsEntity save = bookingSettingsRepository.save(bookingSettingsMapper.convert(bookingSettings));
@@ -37,7 +37,7 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull
     @Override
-    public BookingSettingsDTO getBookingSettings() {
+    public BookingSettings getBookingSettings() {
         final List<BookingSettingsEntity> bookingSettings = bookingSettingsRepository.findAll();
         if (bookingSettings.isEmpty()) {
             throw new IllegalStateException("No booking settings.");

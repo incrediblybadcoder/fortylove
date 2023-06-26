@@ -1,8 +1,8 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.dto.User;
 import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
@@ -41,27 +41,27 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private List<RoleDTO> getAdminRole() {
-        final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_ADMIN);
+    private List<Role> getAdminRole() {
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_ADMIN);
         role.ifPresent(roles::add);
 
         return roles;
     }
 
     @Nonnull
-    private List<RoleDTO> getStaffRole() {
-        final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_STAFF);
+    private List<Role> getStaffRole() {
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_STAFF);
         role.ifPresent(roles::add);
 
         return roles;
     }
 
     @Nonnull
-    private List<RoleDTO> getUserRole() {
-        final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_USER);
+    private List<Role> getUserRole() {
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
         role.ifPresent(roles::add);
 
         return roles;
@@ -72,11 +72,11 @@ public class UserSetupData {
                               @Nonnull final String firstName,
                               @Nonnull final String lastName,
                               @Nonnull final String password,
-                              @Nonnull final List<RoleDTO> roles) {
-        final Optional<UserDTO> user = userService.findByEmail(email);
+                              @Nonnull final List<Role> roles) {
+        final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {
-            userService.create(new UserDTO(0L, firstName, lastName, email, passwordEncoder.encode(password), true, roles, null));
+            userService.create(new User(0L, firstName, lastName, email, passwordEncoder.encode(password), true, roles, null));
         }
     }
 }
