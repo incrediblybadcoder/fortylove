@@ -4,12 +4,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 @Component
 public interface SecurityService {
 
     @Nonnull
-    UserDetails getAuthenticatedUser();
+    Optional<UserDetails> getAuthenticatedUser();
 
     void logout();
 }
