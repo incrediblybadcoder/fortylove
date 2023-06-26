@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
 import ch.fortylove.persistence.dto.BookingSettingsDTO;
-import ch.fortylove.persistence.entity.BookingSettings;
+import ch.fortylove.persistence.entity.BookingSettingsEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(
@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 )
 public interface BookingSettingsMapper {
 
-    BookingSettingsDTO convert(BookingSettings bookingSettingsEntity);
+    BookingSettingsDTO convert(BookingSettingsEntity bookingSettingsEntity);
 
-    BookingSettings convert(BookingSettingsDTO bookingSettings);
+    BookingSettingsEntity convert(BookingSettingsDTO bookingSettings);
 }

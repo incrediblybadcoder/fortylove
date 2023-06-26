@@ -9,16 +9,15 @@ import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookings")
-public class Booking extends AbstractEntity implements Comparable<Booking>{
+public class BookingEntity extends AbstractEntity implements Comparable<BookingEntity>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
-    private Court court;
+    private CourtEntity court;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -26,16 +25,11 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    private List<UserEntity> users;
 
     private int timeSlotIndex;
 
     private LocalDate date;
-
-    public Booking() {
-        super();
-        users = new ArrayList<>();
-    }
 
     public int getTimeSlotIndex() {
         return timeSlotIndex;
@@ -46,11 +40,11 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     }
 
     @Nonnull
-    public Court getCourt() {
+    public CourtEntity getCourt() {
         return court;
     }
 
-    public void setCourt(@Nonnull final Court court) {
+    public void setCourt(@Nonnull final CourtEntity court) {
         this.court = court;
     }
 
@@ -64,11 +58,11 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     }
 
     @Nonnull
-    public List<User> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<User> users) {
+    public void setUsers(@Nonnull final List<UserEntity> users) {
         this.users = users;
     }
 
@@ -76,7 +70,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Booking booking = (Booking) o;
+        final BookingEntity booking = (BookingEntity) o;
         return timeSlotIndex == booking.timeSlotIndex &&
                 Objects.equals(court, booking.court) &&
                 Objects.equals(users, booking.users) &&
@@ -89,7 +83,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     }
 
     @Override
-    public int compareTo(@Nonnull final Booking otherBooking) {
+    public int compareTo(@Nonnull final BookingEntity otherBooking) {
         return date.compareTo(otherBooking.getDate());
     }
 }

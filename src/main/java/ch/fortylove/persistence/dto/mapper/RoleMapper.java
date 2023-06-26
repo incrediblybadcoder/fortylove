@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
 import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.RoleEntity;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 )
 public interface RoleMapper {
 
-    RoleDTO convert(Role roleEntity, @Context CycleAvoidingMappingContext context);
+    RoleDTO convert(RoleEntity roleEntity, @Context CycleAvoidingMappingContext context);
 
-    Role convert(RoleDTO role, @Context CycleAvoidingMappingContext context);
+    RoleEntity convert(RoleDTO role, @Context CycleAvoidingMappingContext context);
 }

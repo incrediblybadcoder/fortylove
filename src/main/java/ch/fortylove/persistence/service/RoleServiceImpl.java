@@ -3,7 +3,7 @@ package ch.fortylove.persistence.service;
 import ch.fortylove.persistence.dto.RoleDTO;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.dto.mapper.RoleMapper;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,8 @@ public class RoleServiceImpl implements RoleService {
     @Nonnull
     @Override
     public RoleDTO create(@Nonnull final RoleDTO role) {
-        final Role saved = roleRepository.save(roleMapper.convert(role, new CycleAvoidingMappingContext()));
-        return roleMapper.convert(saved, new CycleAvoidingMappingContext());
+        final RoleEntity roleEntity = roleRepository.save(roleMapper.convert(role, new CycleAvoidingMappingContext()));
+        return roleMapper.convert(roleEntity, new CycleAvoidingMappingContext());
     }
 
     @Nonnull

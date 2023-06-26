@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
 import ch.fortylove.persistence.dto.PrivilegeDTO;
-import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.PrivilegeEntity;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
@@ -12,9 +12,9 @@ import java.util.List;
 )
 public interface PrivilegeMapper {
 
-    PrivilegeDTO convert(Privilege privilegeEntity, @Context CycleAvoidingMappingContext context);
+    PrivilegeDTO convert(PrivilegeEntity privilegeEntity, @Context CycleAvoidingMappingContext context);
 
-    Privilege convert(PrivilegeDTO privilege, @Context CycleAvoidingMappingContext context);
+    PrivilegeEntity convert(PrivilegeDTO privilege, @Context CycleAvoidingMappingContext context);
 
-    List<PrivilegeDTO> convert(List<Privilege> privilegeEntities, @Context CycleAvoidingMappingContext context);
+    List<PrivilegeDTO> convert(List<PrivilegeEntity> privilegeEntities, @Context CycleAvoidingMappingContext context);
 }

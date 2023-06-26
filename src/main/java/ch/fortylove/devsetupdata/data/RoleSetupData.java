@@ -3,8 +3,8 @@ package ch.fortylove.devsetupdata.data;
 import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.dto.PrivilegeDTO;
 import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.PrivilegeEntity;
+import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.PrivilegeService;
 import ch.fortylove.persistence.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +29,16 @@ public class RoleSetupData {
     }
 
     public void createRoles() {
-        createRoleIfNotFound(Role.ROLE_ADMIN, getAdminPrivileges());
-        createRoleIfNotFound(Role.ROLE_STAFF, getStaffPrivileges());
-        createRoleIfNotFound(Role.ROLE_USER, getUserPrivileges());
+        createRoleIfNotFound(RoleEntity.ROLE_ADMIN, getAdminPrivileges());
+        createRoleIfNotFound(RoleEntity.ROLE_STAFF, getStaffPrivileges());
+        createRoleIfNotFound(RoleEntity.ROLE_USER, getUserPrivileges());
     }
 
     @Nonnull
     private List<PrivilegeDTO> getUserPrivileges() {
         final ArrayList<PrivilegeDTO> privileges = new ArrayList<>();
-        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
+        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(PrivilegeEntity.READ_PRIVILEGE);
+        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(PrivilegeEntity.CHANGE_PASSWORD_PRIVILEGE);
 
         readPrivilege.ifPresent(privileges::add);
         changePasswordPrivilege.ifPresent(privileges::add);
@@ -54,9 +54,9 @@ public class RoleSetupData {
     @Nonnull
     private List<PrivilegeDTO> getAdminPrivileges() {
         final ArrayList<PrivilegeDTO> privileges = new ArrayList<>();
-        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
-        final Optional<PrivilegeDTO> writePrivilege = privilegeService.findByName(Privilege.WRITE_PRIVILEGE);
+        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(PrivilegeEntity.READ_PRIVILEGE);
+        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(PrivilegeEntity.CHANGE_PASSWORD_PRIVILEGE);
+        final Optional<PrivilegeDTO> writePrivilege = privilegeService.findByName(PrivilegeEntity.WRITE_PRIVILEGE);
 
         readPrivilege.ifPresent(privileges::add);
         writePrivilege.ifPresent(privileges::add);

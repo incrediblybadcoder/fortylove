@@ -5,14 +5,10 @@ import jakarta.persistence.Entity;
 import java.util.Objects;
 
 @Entity(name = "timeslots")
-public class TimeSlot extends AbstractEntity {
+public class TimeSlotEntity extends AbstractEntity {
 
     private boolean bookable;
     private int index;
-
-    public TimeSlot() {
-        super();
-    }
 
     public boolean getBookable() {
         return bookable;
@@ -34,7 +30,7 @@ public class TimeSlot extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TimeSlot timeSlot = (TimeSlot) o;
+        final TimeSlotEntity timeSlot = (TimeSlotEntity) o;
         return bookable == timeSlot.bookable && index == timeSlot.index;
     }
 

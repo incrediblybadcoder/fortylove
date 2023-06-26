@@ -3,46 +3,41 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "bookingsettings")
-public class BookingSettings extends AbstractEntity {
+@Entity(name = "courts")
+public class CourtEntity extends AbstractEntity {
 
     @OneToMany(
+            mappedBy = "court",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
-    @JoinColumn(name = "bookingsettings_id")
-    private List<TimeSlot> timeSlots;
-
-    public BookingSettings() {
-        super();
-    }
+    private List<BookingEntity> bookings;
 
     @Nonnull
-    public List<TimeSlot> getTimeSlots() {
-        return timeSlots;
+    public List<BookingEntity> getBookings() {
+        return bookings;
     }
 
-    public void setTimeSlots(@Nonnull final List<TimeSlot> timeSlots) {
-        this.timeSlots = timeSlots;
+    public void setBookings(@Nonnull final List<BookingEntity> bookings) {
+        this.bookings = bookings;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final BookingSettings that = (BookingSettings) o;
-        return Objects.equals(timeSlots, that.timeSlots);
+        final CourtEntity court = (CourtEntity) o;
+        return Objects.equals(bookings, court.bookings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(timeSlots);
+        return Objects.hash(bookings);
     }
 }

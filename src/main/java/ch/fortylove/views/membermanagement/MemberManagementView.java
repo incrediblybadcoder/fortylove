@@ -2,7 +2,7 @@ package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.persistence.dto.RoleDTO;
 import ch.fortylove.persistence.dto.UserDTO;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import ch.fortylove.views.MainLayout;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
-@RolesAllowed(Role.ROLE_ADMIN)
+@RolesAllowed(RoleEntity.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
     private final UserForm form;
@@ -68,7 +68,7 @@ public class MemberManagementView extends VerticalLayout {
     private void saveUser(final UserForm.SaveEvent saveEvent) {
         final UserDTO user = saveEvent.getUser();
         final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(Role.ROLE_USER);
+        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_USER);
         role.ifPresent(roles::add);
         final UserDTO saveUser = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), "newpassword", true, roles, null);
         userService.save(saveUser);

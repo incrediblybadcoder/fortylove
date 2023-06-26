@@ -4,7 +4,7 @@ import ch.fortylove.persistence.dto.BookingDTO;
 import ch.fortylove.persistence.dto.CourtDTO;
 import ch.fortylove.persistence.dto.mapper.CourtMapper;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
-import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.CourtEntity;
 import ch.fortylove.persistence.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,8 @@ public class CourtServiceImpl implements CourtService {
     @Nonnull
     @Override
     public CourtDTO create(@Nonnull final CourtDTO court) {
-        final Court save = courtRepository.save(courtMapper.convert(court, new CycleAvoidingMappingContext()));
-        return courtMapper.convert(save, new CycleAvoidingMappingContext());
+        final CourtEntity courtEntity = courtRepository.save(courtMapper.convert(court, new CycleAvoidingMappingContext()));
+        return courtMapper.convert(courtEntity, new CycleAvoidingMappingContext());
     }
 
     @Nonnull

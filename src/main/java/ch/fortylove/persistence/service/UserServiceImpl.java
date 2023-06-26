@@ -3,7 +3,7 @@ package ch.fortylove.persistence.service;
 import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.dto.mapper.UserMapper;
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserEntity;
 import ch.fortylove.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     @Nonnull
     @Override
     public UserDTO create(@Nonnull final UserDTO user) {
-        final User save = userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
-        return userMapper.convert(save, new CycleAvoidingMappingContext());
+        final UserEntity userEntity = userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
+        return userMapper.convert(userEntity, new CycleAvoidingMappingContext());
     }
 
     @Nonnull

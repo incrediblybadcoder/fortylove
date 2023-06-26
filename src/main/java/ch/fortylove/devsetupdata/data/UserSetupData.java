@@ -3,7 +3,7 @@ package ch.fortylove.devsetupdata.data;
 import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.dto.RoleDTO;
 import ch.fortylove.persistence.dto.UserDTO;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class UserSetupData {
     @Nonnull
     private List<RoleDTO> getAdminRole() {
         final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(Role.ROLE_ADMIN);
+        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_ADMIN);
         role.ifPresent(roles::add);
 
         return roles;
@@ -52,7 +52,7 @@ public class UserSetupData {
     @Nonnull
     private List<RoleDTO> getStaffRole() {
         final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(Role.ROLE_STAFF);
+        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_STAFF);
         role.ifPresent(roles::add);
 
         return roles;
@@ -61,7 +61,7 @@ public class UserSetupData {
     @Nonnull
     private List<RoleDTO> getUserRole() {
         final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(Role.ROLE_USER);
+        final Optional<RoleDTO> role = roleService.findByName(RoleEntity.ROLE_USER);
         role.ifPresent(roles::add);
 
         return roles;

@@ -9,12 +9,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "users")
-public class User extends AbstractEntity {
+public class UserEntity extends AbstractEntity {
 
     private String firstName;
 
@@ -33,21 +32,14 @@ public class User extends AbstractEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private List<RoleEntity> roles;
 
     @ManyToMany(
             mappedBy = "users",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
-    private List<Booking> bookings;
-
-    public User() {
-        super();
-        roles = new ArrayList<>();
-        bookings = new ArrayList<>();
-        this.enabled = false;
-    }
+    private List<BookingEntity> bookings;
 
     @Nonnull
     public String getFirstName() {
@@ -86,11 +78,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Role> getRoles() {
+    public List<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(@Nonnull final List<RoleEntity> roles) {
         this.roles = roles;
     }
 
@@ -103,11 +95,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Booking> getBookings() {
+    public List<BookingEntity> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<Booking> bookings) {
+    public void setBookings(@Nonnull final List<BookingEntity> bookings) {
         this.bookings = bookings;
     }
 
@@ -115,7 +107,7 @@ public class User extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final User user = (User) o;
+        final UserEntity user = (UserEntity) o;
         return enabled == user.enabled &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
