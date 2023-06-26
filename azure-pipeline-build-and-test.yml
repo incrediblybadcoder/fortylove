@@ -34,13 +34,6 @@ steps:
         Write-Host "========================================================================"
     displayName: "Print Variables"
 
-  - task: Cache@2
-    inputs:
-      key: "gradle | \"$(Agent.OS)\" | **/build/**"
-      restoreKeys: "gradle | \"$(Agent.OS)\""
-      path: ".gradle"
-    displayName: "Cache dependencies and build directory"
-
   - task: JavaToolInstaller@0
     inputs:
       versionSpec: "17"
