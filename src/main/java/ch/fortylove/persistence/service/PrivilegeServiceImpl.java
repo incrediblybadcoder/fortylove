@@ -1,9 +1,9 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.PrivilegeDTO;
+import ch.fortylove.persistence.dto.Privilege;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.dto.mapper.PrivilegeMapper;
-import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.PrivilegeEntity;
 import ch.fortylove.persistence.repository.PrivilegeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,14 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Nonnull
     @Override
-    public List<PrivilegeDTO> findAll() {
+    public List<Privilege> findAll() {
         return privilegeMapper.convert(privilegeRepository.findAll(), new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public Optional<PrivilegeDTO> findById(final long id) {
-        final Optional<Privilege> privilegeEntity = privilegeRepository.findById(id);
+    public Optional<Privilege> findById(final long id) {
+        final Optional<PrivilegeEntity> privilegeEntity = privilegeRepository.findById(id);
         //noinspection OptionalIsPresent
         return privilegeEntity.isPresent() ?
                 Optional.of(privilegeMapper.convert(privilegeEntity.get(), new CycleAvoidingMappingContext())) :
@@ -44,16 +44,16 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Nonnull
     @Override
-    public Optional<PrivilegeDTO> findByName(@Nonnull final String name) {
-        final Privilege privilegeEntity = privilegeRepository.findByName(name);
+    public Optional<Privilege> findByName(@Nonnull final String name) {
+        final PrivilegeEntity privilegeEntity = privilegeRepository.findByName(name);
         return Optional.ofNullable(privilegeMapper.convert(privilegeEntity, new CycleAvoidingMappingContext()));
     }
 
     @Nonnull
     @Override
-    public PrivilegeDTO create(@Nonnull final PrivilegeDTO privilege) {
-        final Privilege saved = privilegeRepository.save(privilegeMapper.convert(privilege, new CycleAvoidingMappingContext()));
-        return privilegeMapper.convert(saved, new CycleAvoidingMappingContext());
+    public Privilege create(@Nonnull final Privilege privilege) {
+        final PrivilegeEntity privilegeEntity = privilegeRepository.save(privilegeMapper.convert(privilege, new CycleAvoidingMappingContext()));
+        return privilegeMapper.convert(privilegeEntity, new CycleAvoidingMappingContext());
     }
 
     @Override
@@ -63,12 +63,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Nonnull
     @Override
-    public Optional<PrivilegeDTO> update(final long id,
-                                         @Nonnull final PrivilegeDTO privilege) {
-        final Optional<PrivilegeDTO> existingPrivilegeOptional = findById(id);
+    public Optional<Privilege> update(final long id,
+                                      @Nonnull final Privilege privilege) {
+        final Optional<Privilege> existingPrivilegeOptional = findById(id);
 
         if (existingPrivilegeOptional.isPresent()) {
-            final PrivilegeDTO existingPrivilege = existingPrivilegeOptional.get();
+            final Privilege existingPrivilege = existingPrivilegeOptional.get();
             BeanUtils.copyProperties(privilege, existingPrivilege, "id");
             return Optional.of(create(existingPrivilege));
         } else {

@@ -1,8 +1,8 @@
 package ch.fortylove.views.membermanagement;
 
-import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.dto.UserDTO;
-import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import ch.fortylove.views.MainLayout;
@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
-@RolesAllowed(Role.ROLE_ADMIN)
+@RolesAllowed(RoleEntity.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
     private final UserForm form;
-    Grid<UserDTO> grid = new Grid<>(UserDTO.class);
+    Grid<User> grid = new Grid<>(User.class);
     TextField filterText = new TextField();
     private final UserService userService;
     private final RoleService roleService;
@@ -66,11 +66,11 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void saveUser(final UserForm.SaveEvent saveEvent) {
-        final UserDTO user = saveEvent.getUser();
-        final List<RoleDTO> roles = new ArrayList<>();
-        final Optional<RoleDTO> role = roleService.findByName(Role.ROLE_USER);
+        final User user = saveEvent.getUser();
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
         role.ifPresent(roles::add);
-        final UserDTO saveUser = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), "newpassword", true, roles, null);
+        final User saveUser = new User(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), "newpassword", true, roles, null);
         userService.save(saveUser);
         updateUserList();
         closeEditor();
@@ -100,7 +100,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        editUser(new UserDTO(0L, "", "", "", "", false, null, null));
+        editUser(new User(0L, "", "", "", "", false, null, null));
     }
 
     private void updateUserList() {
@@ -117,7 +117,7 @@ public class MemberManagementView extends VerticalLayout {
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
     }
 
-    private void editUser(UserDTO user) {
+    private void editUser(User user) {
         if (user == null) {
             closeEditor();
         } else {

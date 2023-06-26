@@ -1,7 +1,7 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.dto.Court;
 import ch.fortylove.persistence.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +30,10 @@ public class CourtSetupData {
 
     @Transactional
     void createCourtIfNotFound(final long id) {
-        final Optional<CourtDTO> court = courtService.findById(id);
+        final Optional<Court> court = courtService.findById(id);
 
         if (court.isEmpty()) {
-            courtService.create(new CourtDTO(0L, null));
+            courtService.create(new Court(0L, null));
         }
     }
 }

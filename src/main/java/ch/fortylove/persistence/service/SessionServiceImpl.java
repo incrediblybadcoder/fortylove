@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.dto.User;
 import ch.fortylove.security.SecurityService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Nonnull
     @Override
-    public Optional<UserDTO> getCurrentUser() {
+    public Optional<User> getCurrentUser() {
         final Optional<UserDetails> authenticatedUser = securityService.getAuthenticatedUser();
         if (authenticatedUser.isEmpty()) {
             return Optional.empty();

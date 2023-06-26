@@ -47,7 +47,7 @@ public class MainLayout extends AppLayout {
     @Nonnull
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "booking neu", ch.fortylove.views.newbooking.BookingView.class));
+        tabs.add(createTab(VaadinIcon.CALENDAR, "booking neu", ch.fortylove.views.booking.BookingView.class));
         tabs.add(createTab(VaadinIcon.USERS, "user management", MemberManagementView.class));
 
         return tabs;
