@@ -76,7 +76,7 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     }
 
     private void refreshView(@Nonnull final LocalDate date) {
-        final List<Court> courts = courtService.findAllByDate(date);
+        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
         final List<User> users = userService.findAll();
 
         bookingComponent.refreshComponent(courts, users);
