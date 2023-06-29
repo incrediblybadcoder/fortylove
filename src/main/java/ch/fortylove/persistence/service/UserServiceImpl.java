@@ -1,10 +1,12 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.UserFormInformations;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.dto.mapper.UserMapper;
 import ch.fortylove.persistence.entity.UserEntity;
 import ch.fortylove.persistence.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +59,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(@Nonnull final User user) {
         userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
+    }
+
+    @Override
+    public User createUser(@Nonnull final User user) {
+        final UserEntity save = userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
+        return userMapper.convert(save, new CycleAvoidingMappingContext());
+    }
+
+    @Override
+    public User updateUser(@Nonnull final UserFormInformations user) {
+        final UserEntity byEmail = userRepository.findByEmail(user.getEmail());
+        if (byEmail == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+        else {
+            if(user.getFirstName() != null) {
+                byEmail.setFirstName(user.getFirstName());
+            }
+
+            if(user.getLastName() != null){
+                byEmail.setLastName(user.getLastName());
+            }
+
+        }
+        final UserEntity save = userRepository.save(byEmail);
+        return userMapper.convert(save, new CycleAvoidingMappingContext());
     }
 
     /*

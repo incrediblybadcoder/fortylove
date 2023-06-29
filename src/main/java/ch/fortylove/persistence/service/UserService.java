@@ -1,6 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.UserFormInformations;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
@@ -22,6 +23,10 @@ public interface UserService {
     List<User> findAll(@Nonnull final String filterText);
 
     void save(@Nonnull final User user);
+
+    User createUser(@Nonnull final User user);
+
+    User updateUser(@Nonnull final UserFormInformations user);
 
     @Transactional
     void delete(@Nonnull final User user);

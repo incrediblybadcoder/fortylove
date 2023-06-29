@@ -1,6 +1,8 @@
 package ch.fortylove.views.membermanagement;
 
+import ch.fortylove.persistence.backingbeans.UserFormBackingBean;
 import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.UserFormInformations;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,7 +26,7 @@ public class UserForm extends FormLayout {
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<User> binder = new BeanValidationBinder<>(User.class); //BeanValidationBider oder nur Binder?
+    Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
@@ -34,15 +36,20 @@ public class UserForm extends FormLayout {
         //Todo: add user state
 
 
-        add(
-                firstName,
+        add(    firstName,
                 lastName,
                 email,
                 createButtonsLayout());
     }
 
     public void setUser(User user) {
-        binder.setBean(user);
+        if (user != null) {
+            UserFormBackingBean backingBean = new UserFormBackingBean();
+            backingBean.setFirstName(user.getFirstName());
+            backingBean.setLastName(user.getLastName());
+            backingBean.setEmail(user.getEmail());
+            binder.setBean(backingBean);
+        }
     }
 
     private Component createButtonsLayout() {
@@ -54,7 +61,7 @@ public class UserForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
-        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
+        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean().toUserFormInfromations())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(evt -> save.setEnabled(binder.isValid()));
@@ -64,32 +71,32 @@ public class UserForm extends FormLayout {
 
     private void validateAndSave() {
         if(binder.isValid()){
-            fireEvent(new SaveEvent(this, binder.getBean()));
+            fireEvent(new SaveEvent(this, binder.getBean().toUserFormInfromations()));
         }
     }
 
     //Events
     public static abstract class UserFormEvent extends ComponentEvent<UserForm> {
-        private final User user;
+        private final UserFormInformations user;
 
-        protected UserFormEvent(UserForm source, User user) {
+        protected UserFormEvent(UserForm source, UserFormInformations user) {
             super(source, false);
             this.user = user;
         }
 
-        public User getUser() {
+        public UserFormInformations getUser() {
             return user;
         }
     }
 
         public static class SaveEvent extends UserFormEvent {
-            SaveEvent(UserForm source, User user) {
+            SaveEvent(UserForm source, UserFormInformations user) {
                 super(source, user);
             }
         }
 
         public static class DeleteEvent extends UserFormEvent {
-            DeleteEvent(UserForm source, User user) {
+            DeleteEvent(UserForm source, UserFormInformations user) {
                 super(source, user);
             }
         }

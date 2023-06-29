@@ -2,6 +2,7 @@ package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.persistence.dto.Role;
 import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.UserFormInformations;
 import ch.fortylove.persistence.entity.RoleEntity;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +33,16 @@ public class MemberManagementView extends VerticalLayout {
     private final UserService userService;
     private final RoleService roleService;
 
+    private final PasswordEncoder passwordEncoder;
+
     Notification notification = new Notification(
             "Besten Dank", 5000);
 
 
-    public MemberManagementView(UserService userService, final RoleService roleService) {
+    public MemberManagementView(UserService userService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
         addClassName("member-management-view");
         setSizeFull();
         configureGrid();
@@ -60,23 +65,34 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void deleteUser(final UserForm.DeleteEvent deleteEvent) {
-        userService.delete(deleteEvent.getUser());
+        //userService.delete(deleteEvent.getUser());
         updateUserList();
         closeEditor();
     }
 
     private void saveUser(final UserForm.SaveEvent saveEvent) {
-        final User user = saveEvent.getUser();
-        final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
-        role.ifPresent(roles::add);
-        final User saveUser = new User(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), "newpassword", true, roles, null);
-        userService.save(saveUser);
+        //final User user = saveEvent.getUser();
+        final UserFormInformations userFormInformations = saveEvent.getUser();
+        final String emailAliasPrimaryKey = userFormInformations.getEmail();
+        final Optional<User> user = userService.findByEmail(emailAliasPrimaryKey);
+        if (user.isPresent()){
+            userService.updateUser(saveEvent.getUser());
+            notification.setText("Mitglied update durchgeführt");
+            notification.setDuration(3000);
+            notification.open();
+        }
+        else {
+            final List<Role> roles = new ArrayList<>();
+            final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
+            role.ifPresent(roles::add);
+            final User saveUser = new User(99L, userFormInformations.getFirstName(), userFormInformations.getLastName(), userFormInformations.getEmail(), passwordEncoder.encode("newpassword"), true, roles, null);
+            userService.save(saveUser);
+            notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
+            notification.setDuration(60000);
+            notification.open();
+        }
         updateUserList();
         closeEditor();
-        notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = " + saveUser.getPassword());
-        notification.setDuration(60000);
-        notification.open();
     }
 
     private void closeEditor() {
