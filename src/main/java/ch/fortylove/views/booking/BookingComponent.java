@@ -2,6 +2,7 @@ package ch.fortylove.views.booking;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.service.SessionService;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.booking.dialog.BookingDialog;
@@ -78,7 +79,7 @@ public class BookingComponent extends VerticalLayout {
 
     private void bookedCellClickedListener(@Nonnull final BookedCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, userDTOs);
+            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, users);
             bookingDialog.addDialogBookingListener(this::dialogBooking);
             bookingDialog.openExisting(null, event.getBooking());
         });
@@ -86,7 +87,7 @@ public class BookingComponent extends VerticalLayout {
 
     private void freeCellClickedListener(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, userDTOs);
+            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, users);
             bookingDialog.addDialogBookingListener(this::dialogBooking);
             bookingDialog.openFree();
         });
