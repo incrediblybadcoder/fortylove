@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking.grid.cells;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.dto.UserDTO;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.avatar.AvatarGroup;
@@ -12,18 +12,18 @@ import java.util.List;
 
 public class BookedCellComponent extends BookingCellComponent {
 
-    public BookedCellComponent(@Nonnull final Booking booking,
+    public BookedCellComponent(@Nonnull final BookingDTO booking,
                                @Nonnull final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener) {
         super();
 
         constructUI(booking, clickListener);
     }
 
-    private void constructUI(@Nonnull final Booking booking,
+    private void constructUI(@Nonnull final BookingDTO booking,
                              @Nonnull final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener) {
         final AvatarGroup avatarGroup = new AvatarGroup();
-        final List<User> users = booking.getUsers();
-        users.forEach(user -> avatarGroup.add(new AvatarGroup.AvatarGroupItem(user.getFullName())));
+        final List<UserDTO> userDTOs = booking.getUsers();
+        userDTOs.forEach(user -> avatarGroup.add(new AvatarGroup.AvatarGroupItem(user.getFullName())));
 
         addClickListener(clickListener);
 

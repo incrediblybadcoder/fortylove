@@ -1,14 +1,14 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingSettings;
+import ch.fortylove.persistence.dto.BookingSettingsDTO;
 
 import javax.annotation.Nonnull;
 
 public interface BookingSettingsService {
 
     @Nonnull
-    BookingSettings create(@Nonnull final BookingSettings bookingSettings);
+    BookingSettingsDTO create(@Nonnull final BookingSettingsDTO bookingSettingsDTO);
 
     @Nonnull
-    BookingSettings getBookingSettings();
+    BookingSettingsDTO getBookingSettings();
 }

@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.entity.CourtEntity;
+import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.entity.Court;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
@@ -12,9 +12,9 @@ import java.util.List;
 )
 public interface CourtMapper {
 
-    Court convert(CourtEntity courtEntity, @Context CycleAvoidingMappingContext context);
+    CourtDTO convert(Court court, @Context CycleAvoidingMappingContext context);
 
-    CourtEntity convert(Court court, @Context CycleAvoidingMappingContext context);
+    Court convert(CourtDTO courtDTO, @Context CycleAvoidingMappingContext context);
 
-    List<Court> convert(List<CourtEntity> courtEntities, @Context CycleAvoidingMappingContext context);
+    List<CourtDTO> convert(List<Court> courts, @Context CycleAvoidingMappingContext context);
 }

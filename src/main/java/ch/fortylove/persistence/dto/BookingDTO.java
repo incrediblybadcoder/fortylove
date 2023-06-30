@@ -4,19 +4,19 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Booking {
+public class BookingDTO {
 
     private final long id;
-    private final Court court;
-    private final List<User> users;
+    private final CourtDTO court;
+    private final List<UserDTO> users;
     private final int timeSlotIndex;
     private final LocalDate date;
 
-    public Booking(final long id,
-                   final Court court,
-                   final List<User> users,
-                   final int timeSlotIndex,
-                   final LocalDate date) {
+    public BookingDTO(final long id,
+                      final CourtDTO court,
+                      final List<UserDTO> users,
+                      final int timeSlotIndex,
+                      final LocalDate date) {
         this.id = id;
         this.court = court;
         this.users = users;
@@ -28,11 +28,11 @@ public class Booking {
         return id;
     }
 
-    public Court getCourt() {
+    public CourtDTO getCourt() {
         return court;
     }
 
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return users;
     }
 
@@ -48,7 +48,7 @@ public class Booking {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Booking that = (Booking) o;
+        final BookingDTO that = (BookingDTO) o;
         return id == that.id;
     }
 

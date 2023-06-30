@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.Privilege;
+import ch.fortylove.persistence.dto.PrivilegeDTO;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -9,19 +9,19 @@ import java.util.Optional;
 public interface PrivilegeService {
 
     @Nonnull
-    List<Privilege> findAll();
+    List<PrivilegeDTO> findAll();
 
     @Nonnull
-    Optional<Privilege> findById(final long id);
+    Optional<PrivilegeDTO> findById(final long id);
 
     @Nonnull
-    Optional<Privilege> findByName(@Nonnull final String name);
+    Optional<PrivilegeDTO> findByName(@Nonnull final String name);
 
     @Nonnull
-    Privilege create(@Nonnull final Privilege privilege);
+    PrivilegeDTO create(@Nonnull final PrivilegeDTO privilegeDTO);
 
     void deleteById(final long id);
 
     @Nonnull
-    Optional<Privilege> update(final long id, @Nonnull final Privilege privilege);
+    Optional<PrivilegeDTO> update(final long id, @Nonnull final PrivilegeDTO privilegeDTO);
 }
