@@ -34,7 +34,7 @@ public class User extends AbstractEntity {
     private List<Role> roles;
 
     @ManyToMany(
-            mappedBy = "users",
+            mappedBy = "opponents",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
