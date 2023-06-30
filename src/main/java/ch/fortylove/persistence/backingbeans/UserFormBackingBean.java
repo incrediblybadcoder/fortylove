@@ -7,6 +7,7 @@ public class UserFormBackingBean {
     private String firstName;
     private String lastName;
     private String email;
+    private Long id;
 
     public UserFormBackingBean() {
     }
@@ -35,7 +36,15 @@ public class UserFormBackingBean {
         this.email = email;
     }
 
-    public UserFormInformations toUserFormInfromations() {
-        return new UserFormInformations(firstName, lastName, email);
+    public UserFormInformations toUserFormInformations() {
+        return new UserFormInformations(firstName, lastName, email, id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
     }
 }

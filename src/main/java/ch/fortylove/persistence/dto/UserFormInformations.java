@@ -6,12 +6,15 @@ public class UserFormInformations {
     private final String lastName;
     private final String email;
 
+    private final Long id;
+
     public UserFormInformations(final String firstName,
                                 final String lastName,
-                                final String email) {
+                                final String email, final Long id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -24,5 +27,9 @@ public class UserFormInformations {
 
     public String getEmail() {
         return email;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

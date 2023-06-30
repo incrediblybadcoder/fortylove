@@ -42,6 +42,18 @@ public class UserServiceImpl implements UserService {
 
     @Nonnull
     @Override
+    public Optional<User> findById(@Nonnull final Long id) {
+        final Optional<UserEntity> byId = userRepository.findById((id));
+        if (byId.isPresent()) {
+            return Optional.ofNullable(userMapper.convert(byId.get(), new CycleAvoidingMappingContext()));
+        }
+        else{
+            return Optional.empty();
+        }
+    }
+
+    @Nonnull
+    @Override
     public List<User> findAll() {
         return userMapper.convert(userRepository.findAll(), new CycleAvoidingMappingContext());
     }
@@ -57,34 +69,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(@Nonnull final User user) {
-        userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
-    }
-
-    @Override
-    public User createUser(@Nonnull final User user) {
-        final UserEntity save = userRepository.save(userMapper.convert(user, new CycleAvoidingMappingContext()));
-        return userMapper.convert(save, new CycleAvoidingMappingContext());
-    }
-
-    @Override
     public User updateUser(@Nonnull final UserFormInformations user) {
-        final UserEntity byEmail = userRepository.findByEmail(user.getEmail());
-        if (byEmail == null) {
-            throw new EntityNotFoundException("User not found");
-        }
-        else {
-            if(user.getFirstName() != null) {
-                byEmail.setFirstName(user.getFirstName());
-            }
+        final Optional<UserEntity> byId = userRepository.findById(user.getId());
+        if(byId.isPresent()) {
+            final UserEntity userToUpdate = byId.get();
+                if (user.getFirstName() != null) {
+                    userToUpdate.setFirstName(user.getFirstName());
+                }
 
-            if(user.getLastName() != null){
-                byEmail.setLastName(user.getLastName());
-            }
+                if (user.getLastName() != null) {
+                    userToUpdate.setLastName(user.getLastName());
+                }
 
+                if (user.getEmail() != null) {
+                    userToUpdate.setEmail(user.getEmail());
+                }
+            final UserEntity save = userRepository.save(userToUpdate);
+            return userMapper.convert(save, new CycleAvoidingMappingContext());
         }
-        final UserEntity save = userRepository.save(byEmail);
-        return userMapper.convert(save, new CycleAvoidingMappingContext());
+        else{
+            throw new EntityNotFoundException("User with id " + user.getId() + " not found");
+        }
     }
 
     /*

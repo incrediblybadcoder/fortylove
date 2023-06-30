@@ -17,14 +17,13 @@ public interface UserService {
     Optional<User> findByEmail(@Nonnull final String email);
 
     @Nonnull
+    Optional<User> findById(@Nonnull final Long id);
+
+    @Nonnull
     List<User> findAll();
 
     @Nonnull
     List<User> findAll(@Nonnull final String filterText);
-
-    void save(@Nonnull final User user);
-
-    User createUser(@Nonnull final User user);
 
     User updateUser(@Nonnull final UserFormInformations user);
 

@@ -32,7 +32,6 @@ public class MemberManagementView extends VerticalLayout {
     TextField filterText = new TextField();
     private final UserService userService;
     private final RoleService roleService;
-
     private final PasswordEncoder passwordEncoder;
 
     Notification notification = new Notification(
@@ -73,10 +72,10 @@ public class MemberManagementView extends VerticalLayout {
     private void saveUser(final UserForm.SaveEvent saveEvent) {
         //final User user = saveEvent.getUser();
         final UserFormInformations userFormInformations = saveEvent.getUser();
-        final String emailAliasPrimaryKey = userFormInformations.getEmail();
-        final Optional<User> user = userService.findByEmail(emailAliasPrimaryKey);
+        final Long idAliasPrimaryKey = userFormInformations.getId();
+        final Optional<User> user = userService.findById(idAliasPrimaryKey);
         if (user.isPresent()){
-            userService.updateUser(saveEvent.getUser());
+            userService.updateUser(userFormInformations);
             notification.setText("Mitglied update durchgeführt");
             notification.setDuration(3000);
             notification.open();
@@ -85,8 +84,8 @@ public class MemberManagementView extends VerticalLayout {
             final List<Role> roles = new ArrayList<>();
             final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
             role.ifPresent(roles::add);
-            final User saveUser = new User(99L, userFormInformations.getFirstName(), userFormInformations.getLastName(), userFormInformations.getEmail(), passwordEncoder.encode("newpassword"), true, roles, null);
-            userService.save(saveUser);
+            final User saveUser = new User(0L, userFormInformations.getFirstName(), userFormInformations.getLastName(), userFormInformations.getEmail(), passwordEncoder.encode("newpassword"), true, roles, null);
+            userService.create(saveUser);
             notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
             notification.setDuration(60000);
             notification.open();
@@ -96,7 +95,7 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void closeEditor() {
-        form.setUser(null);
+        //form.setUser(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -127,7 +126,7 @@ public class MemberManagementView extends VerticalLayout {
         grid.addClassName("member-grid");
         grid.setSizeFull();
         //ToDO: add role column
-        grid.setColumns("firstName", "lastName", "email");
+        grid.setColumns("id", "firstName", "lastName", "email");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));

@@ -1,5 +1,7 @@
 package ch.fortylove.persistence.dto;
 
+import jakarta.validation.constraints.Email;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ public class User {
     private final long id;
     private final String firstName;
     private final String lastName;
+    @Email
     private final String email;
     private final String password;
     private final boolean enabled;

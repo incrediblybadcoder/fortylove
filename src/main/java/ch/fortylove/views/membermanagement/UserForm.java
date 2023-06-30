@@ -14,22 +14,27 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.shared.Registration;
 
 public class UserForm extends FormLayout {
-    TextField firstName = new TextField("First name");
-    TextField lastName = new TextField("Last name");
+    TextField firstName = new TextField("Vorname");
+    TextField lastName = new TextField("Nachname");
     TextField email = new TextField("Email");
     //ToDo: add role selection
 
-    Button save = new Button("Save");
-    Button delete = new Button("Delete");
-    Button close = new Button("Cancel");
+    Button save = new Button("Speichern");
+    Button delete = new Button("Löschen");
+    Button close = new Button("Abbrechen");
 
     Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
+
+        binder.forField(email)
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .bind(UserFormBackingBean::getEmail, UserFormBackingBean::setEmail);
 
         binder.bindInstanceFields(this);
         //Todo: add role selection
@@ -48,6 +53,7 @@ public class UserForm extends FormLayout {
             backingBean.setFirstName(user.getFirstName());
             backingBean.setLastName(user.getLastName());
             backingBean.setEmail(user.getEmail());
+            backingBean.setId(user.getId());
             binder.setBean(backingBean);
         }
     }
@@ -61,7 +67,7 @@ public class UserForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
-        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean().toUserFormInfromations())));
+        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean().toUserFormInformations())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(evt -> save.setEnabled(binder.isValid()));
@@ -71,7 +77,7 @@ public class UserForm extends FormLayout {
 
     private void validateAndSave() {
         if(binder.isValid()){
-            fireEvent(new SaveEvent(this, binder.getBean().toUserFormInfromations()));
+            fireEvent(new SaveEvent(this, binder.getBean().toUserFormInformations()));
         }
     }
 
