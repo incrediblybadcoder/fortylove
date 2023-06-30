@@ -1,11 +1,10 @@
-package ch.fortylove.persistence.dto;
+package ch.fortylove.views.membermanagement.dto;
 
 public class UserFormInformations {
 
     private final String firstName;
     private final String lastName;
     private final String email;
-
     private final Long id;
 
     public UserFormInformations(final String firstName,

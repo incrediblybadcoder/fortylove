@@ -1,11 +1,7 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.User;
-import ch.fortylove.persistence.dto.UserFormInformations;
-import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
-import ch.fortylove.persistence.entity.UserEntity;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +27,15 @@ public class UserServiceImpl implements UserService {
 
     @Nonnull
     @Override
+    public User update(@Nonnull final User user) {
+        if (userRepository.findById(user.getId()).isPresent()) {
+            return userRepository.save(user);
+        }
+        throw new IllegalArgumentException("User id must not be null");
+    }
+
+    @Nonnull
+    @Override
     public Optional<User> findByEmail(@Nonnull final String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
     }
@@ -38,13 +43,7 @@ public class UserServiceImpl implements UserService {
     @Nonnull
     @Override
     public Optional<User> findById(@Nonnull final Long id) {
-        final Optional<UserEntity> byId = userRepository.findById((id));
-        if (byId.isPresent()) {
-            return Optional.ofNullable(userMapper.convert(byId.get(), new CycleAvoidingMappingContext()));
-        }
-        else{
-            return Optional.empty();
-        }
+        return userRepository.findById((id));
     }
 
     @Nonnull
@@ -60,29 +59,6 @@ public class UserServiceImpl implements UserService {
             return userRepository.findAll();
         } else {
             return userRepository.search(filterText);
-        }
-    }
-
-    @Override
-    public User updateUser(@Nonnull final UserFormInformations user) {
-        final Optional<UserEntity> byId = userRepository.findById(user.getId());
-        if(byId.isPresent()) {
-            final UserEntity userToUpdate = byId.get();
-                if (user.getFirstName() != null) {
-                    userToUpdate.setFirstName(user.getFirstName());
-                }
-
-                if (user.getLastName() != null) {
-                    userToUpdate.setLastName(user.getLastName());
-                }
-
-                if (user.getEmail() != null) {
-                    userToUpdate.setEmail(user.getEmail());
-                }
-            return userRepository.save(userToUpdate);
-        }
-        else{
-            throw new EntityNotFoundException("User with id " + user.getId() + " not found");
         }
     }
 

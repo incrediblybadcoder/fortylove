@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.backingbeans;
 
-import ch.fortylove.persistence.dto.UserFormInformations;
+import ch.fortylove.views.membermanagement.dto.UserFormInformations;
 
 public class UserFormBackingBean {
 

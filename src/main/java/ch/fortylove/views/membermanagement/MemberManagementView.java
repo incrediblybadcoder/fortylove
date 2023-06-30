@@ -1,16 +1,19 @@
 package ch.fortylove.views.membermanagement;
 
-import ch.fortylove.persistence.dto.Role;
-import ch.fortylove.persistence.dto.User;
-import ch.fortylove.persistence.dto.UserFormInformations;
-import ch.fortylove.persistence.entity.RoleEntity;
+import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import ch.fortylove.views.MainLayout;
+import ch.fortylove.views.membermanagement.dto.UserFormInformations;
+import ch.fortylove.views.membermanagement.events.DeleteEvent;
+import ch.fortylove.views.membermanagement.events.SaveEvent;
+import ch.fortylove.views.membermanagement.events.UpdateEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
-@RolesAllowed(RoleEntity.ROLE_ADMIN)
+@RolesAllowed(Role.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
     private final UserForm form;
@@ -48,50 +51,71 @@ public class MemberManagementView extends VerticalLayout {
 
         form = new UserForm();
         form.addSaveListener(this::saveUser);
+        form.addUpdateListener(this::updateUser);
         form.addDeleteListener(this::deleteUser);
         form.addCloseListener(e -> closeEditor());
-        
 
         Div content = new Div(grid, form);
         content.addClassName("content");
         content.setSizeFull();
 
-
         add(getToolBar(), content);
         updateUserList();
         closeEditor();
-
     }
 
-    private void deleteUser(final UserForm.DeleteEvent deleteEvent) {
-        //userService.delete(deleteEvent.getUser());
-        updateUserList();
-        closeEditor();
+    private void updateUser(final UpdateEvent updateEvent) {
+        UserFormInformations userFormInformations = updateEvent.getUser();
+        Optional<User> userToUpdate = userService.findById(userFormInformations.getId());
+        if (userToUpdate.isPresent()) {
+            User user = userToUpdate.get();
+            user.setFirstName(userFormInformations.getFirstName());
+            user.setLastName(userFormInformations.getLastName());
+            user.setEmail(userFormInformations.getEmail());
+            userService.update(user);
+            updateUserList();
+            closeEditor();
+        }
     }
 
-    private void saveUser(final UserForm.SaveEvent saveEvent) {
-        //final User user = saveEvent.getUser();
+    private void deleteUser(final DeleteEvent deleteEvent) {
+//        UserFormInformations userFormInformations = deleteEvent.getUser();
+//        Optional<User> userToDelete = userService.findById(userFormInformations.getId());
+//        if (userToDelete.isPresent()) {
+//            User user = userToDelete.get();
+//            userService.delete(user);
+//            updateUserList();
+//            closeEditor();
+//            notification.setText("Mitglied wurde erfolgreich gelöscht");
+//            notification.setDuration(10000);
+//            notification.open();
+//        }
+        notification.setText("Die Löschfunktion ist noch nicht implementiert");
+        notification.setDuration(2000);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        notification.open();
+    }
+
+    private void saveUser(final SaveEvent saveEvent) {
         final UserFormInformations userFormInformations = saveEvent.getUser();
-        final Long idAliasPrimaryKey = userFormInformations.getId();
-        final Optional<User> user = userService.findById(idAliasPrimaryKey);
-        if (user.isPresent()){
-            userService.updateUser(userFormInformations);
-            notification.setText("Mitglied update durchgeführt");
-            notification.setDuration(3000);
-            notification.open();
-        }
-        else {
-            final List<Role> roles = new ArrayList<>();
-            final Optional<Role> role = roleService.findByName(RoleEntity.ROLE_USER);
-            role.ifPresent(roles::add);
-            final User saveUser = new User(0L, userFormInformations.getFirstName(), userFormInformations.getLastName(), userFormInformations.getEmail(), passwordEncoder.encode("newpassword"), true, roles, null);
-            userService.create(saveUser);
-            notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
-            notification.setDuration(60000);
-            notification.open();
-        }
+        final List<Role> roles = new ArrayList<>();
+        final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
+        role.ifPresent(roles::add);
+        final User saveUser = new User(0L,
+                userFormInformations.getFirstName(),
+                userFormInformations.getLastName(),
+                userFormInformations.getEmail(),
+                passwordEncoder.encode("newpassword"),
+                true, roles,
+                null);
+        userService.create(saveUser);
         updateUserList();
         closeEditor();
+        notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
+        notification.setDuration(5000);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
     }
 
     private void closeEditor() {
@@ -115,7 +139,18 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        editUser(new User(0L, "", "", "", "", false, null, null));
+        createNewUser(new User(0L, "", "", "", "", false, null, null));
+    }
+
+    private void createNewUser(final User user) {
+        if (user == null) {
+            closeEditor();
+        } else {
+            form.createUserForm();
+            form.setUser(user);
+            form.setVisible(true);
+            addClassName("editing");
+        }
     }
 
     private void updateUserList() {
@@ -136,6 +171,7 @@ public class MemberManagementView extends VerticalLayout {
         if (user == null) {
             closeEditor();
         } else {
+            form.updateUserForm();
             form.setUser(user);
             form.setVisible(true);
             addClassName("editing");
