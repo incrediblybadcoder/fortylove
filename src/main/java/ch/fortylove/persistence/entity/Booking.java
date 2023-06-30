@@ -12,24 +12,27 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookings")
-public class Booking extends AbstractEntity implements Comparable<Booking>{
+public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
     private Court court;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_owner_id")
+    private User owner;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "bookings_users",
+            name = "bookings_opponents",
             joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "user_opponent_id")
     )
-    private List<User> users;
+    private List<User> opponents;
 
     private int timeSlotIndex;
 
     private LocalDate date;
-
 
     public Booking() {
         super();
@@ -37,12 +40,14 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
 
     public Booking(final long id,
                    final Court court,
-                    final List<User> users,
+                   final User owner,
+                   final List<User> opponents,
                    final int timeSlotIndex,
-                    final LocalDate date) {
+                   final LocalDate date) {
         super(id, 0);
         this.court = court;
-        this.users = users;
+        this.owner = owner;
+        this.opponents = opponents;
         this.timeSlotIndex = timeSlotIndex;
         this.date = date;
     }
@@ -67,16 +72,24 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         return date;
     }
 
-    public void setDate( final LocalDate date) {
+    public void setDate(final LocalDate date) {
         this.date = date;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUsers( final List<User> users) {
-        this.users = users;
+    public void setOwner(final User owner) {
+        this.owner = owner;
+    }
+
+    public List<User> getOpponents() {
+        return opponents;
+    }
+
+    public void setOpponents(final List<User> opponents) {
+        this.opponents = opponents;
     }
 
     @Override
@@ -86,13 +99,14 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         final Booking booking = (Booking) o;
         return timeSlotIndex == booking.timeSlotIndex &&
                 Objects.equals(court, booking.court) &&
-                Objects.equals(users, booking.users) &&
+                Objects.equals(owner, booking.owner) &&
+                Objects.equals(opponents, booking.opponents) &&
                 Objects.equals(date, booking.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, users, timeSlotIndex, date);
+        return Objects.hash(court, owner, opponents, timeSlotIndex, date);
     }
 
     @Override

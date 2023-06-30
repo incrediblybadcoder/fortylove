@@ -38,7 +38,7 @@ class TestBookingServiceImpl {
         final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
         final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null));
         final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null));
-        final Booking booking = new Booking(0L, null, Arrays.asList(user1, user2), 0, null);
+        final Booking booking = new Booking(0L, null, user1, List.of(user2), 0, null);
 
         final Booking createdBooking = testee.create(booking);
 
@@ -56,9 +56,9 @@ class TestBookingServiceImpl {
         final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null));
         final Court court1 = courtService.create(new Court(0L, null));
         final Court court2 = courtService.create(new Court(0L, null));
-        final Booking booking1 = testee.create(new Booking(0L, court1, Arrays.asList(user1, user2), 0, null));
-        final Booking booking2 = testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 1, null));
-        final Booking booking3 = testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 2, null));
+        final Booking booking1 = testee.create(new Booking(0L, court1, user1, List.of(user2), 0, null));
+        final Booking booking2 = testee.create(new Booking(0L, court2, user1, List.of(user2), 1, null));
+        final Booking booking3 = testee.create(new Booking(0L, court2, user1, List.of(user2), 2, null));
 
         final List<Booking> bookings = testee.findAllByCourtId(court2.getId());
 
@@ -80,9 +80,9 @@ class TestBookingServiceImpl {
         final Court court1 = courtService.create(new Court(0L, null));
         final Court court2 = courtService.create(new Court(0L, null));
         final Court court3 = courtService.create(new Court(0L, null));
-        testee.create(new Booking(0L, court1, Arrays.asList(user1, user2), 0, null));
-        testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 1, null));
-        testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 2, null));
+        testee.create(new Booking(0L, court1, user1, List.of(user2), 0, null));
+        testee.create(new Booking(0L, court2, user1, List.of(user2), 1, null));
+        testee.create(new Booking(0L, court2, user1, List.of(user2), 2, null));
 
         final List<Booking> bookings = testee.findAllByCourtId(court3.getId());
 
