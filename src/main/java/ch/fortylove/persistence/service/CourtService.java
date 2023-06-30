@@ -19,5 +19,5 @@ public interface CourtService {
     List<Court> findAll();
 
     @Nonnull
-    List<Court> findAllByDate(@Nonnull final LocalDate date);
+    List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date);
 }

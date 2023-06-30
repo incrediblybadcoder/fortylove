@@ -42,19 +42,7 @@ public class CourtServiceImpl implements CourtService {
 
     @Nonnull
     @Override
-    public List<Court> findAllByDate(@Nonnull final LocalDate date) {
-        final List<Court> courts = new ArrayList<>();
-
-        final List<Court> allCourts = findAll();
-        allCourts.forEach(court -> courts.add(new Court(court.getId(), getBookingsByDate(court, date))));
-
-        return courts;
-    }
-
-    @Nonnull
-    private List<Booking> getBookingsByDate(@Nonnull final Court court,
-                                            @Nonnull final LocalDate date) {
-        final List<Booking> allBookings = court.getBookings();
-        return allBookings.stream().filter(booking -> booking.getDate().equals(date)).toList();
+    public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
+        return courtRepository.findAllWithBookingsByDate(date);
     }
 }

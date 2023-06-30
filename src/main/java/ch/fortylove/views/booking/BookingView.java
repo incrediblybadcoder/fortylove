@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.BookingSettingsService;
 import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.persistence.service.SessionService;
 import ch.fortylove.persistence.service.UserService;
 import ch.fortylove.views.MainLayout;
 import ch.fortylove.views.booking.events.BookingEvent;
@@ -31,16 +32,19 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     @Nonnull private final CourtService courtService;
     @Nonnull private final BookingSettingsService bookingSettingsService;
     @Nonnull private final UserService userService;
+    @Nonnull private final SessionService sessionService;
 
     private BookingComponent bookingComponent;
 
     @Autowired
     public BookingView(@Nonnull final CourtService courtService,
                        @Nonnull final BookingSettingsService bookingSettingsService,
-                       @Nonnull final UserService userService) {
+                       @Nonnull final UserService userService,
+                       @Nonnull final SessionService sessionService) {
         this.courtService = courtService;
         this.bookingSettingsService = bookingSettingsService;
         this.userService = userService;
+        this.sessionService = sessionService;
 
         addClassNames(LumoUtility.Padding.MEDIUM, "booking-view");
         setSizeFull();
@@ -55,7 +59,7 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     @Nonnull
     private BookingComponent createBookingComponent() {
         final BookingComponentConfiguration bookingComponentConfiguration = new BookingComponentConfiguration(bookingSettingsService.getBookingSettings().getTimeSlots());
-        bookingComponent = new BookingComponent(bookingComponentConfiguration);
+        bookingComponent = new BookingComponent(sessionService, bookingComponentConfiguration);
         bookingComponent.addGridRefreshListener(this::gridRefreshListener);
         bookingComponent.addBookingListener(this::bookingListener);
 
@@ -76,7 +80,7 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     }
 
     private void refreshView(@Nonnull final LocalDate date) {
-        final List<Court> courts = courtService.findAllByDate(date);
+        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
         final List<User> users = userService.findAll();
 
         bookingComponent.refreshComponent(courts, users);
