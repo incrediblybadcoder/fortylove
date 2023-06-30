@@ -1,7 +1,5 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingSettingsDTO;
-import ch.fortylove.persistence.dto.mapper.BookingSettingsMapper;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.repository.BookingSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,30 +12,26 @@ import java.util.List;
 public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull private final BookingSettingsRepository bookingSettingsRepository;
-    @Nonnull private final BookingSettingsMapper bookingSettingsMapper;
 
     @Autowired
-    public BookingSettingsServiceImpl(@Nonnull final BookingSettingsRepository bookingSettingsRepository,
-                                      @Nonnull final BookingSettingsMapper bookingSettingsMapper) {
+    public BookingSettingsServiceImpl(@Nonnull final BookingSettingsRepository bookingSettingsRepository) {
         this.bookingSettingsRepository = bookingSettingsRepository;
-        this.bookingSettingsMapper = bookingSettingsMapper;
     }
 
     @Nonnull
     @Override
-    public BookingSettingsDTO create(@Nonnull final BookingSettingsDTO bookingSettingsDTO) {
+    public BookingSettings create(@Nonnull final BookingSettings bookingSettings) {
         final List<BookingSettings> existingBookingSettings = bookingSettingsRepository.findAll();
         if (existingBookingSettings.isEmpty()) {
-            final BookingSettings save = bookingSettingsRepository.save(bookingSettingsMapper.convert(bookingSettingsDTO));
-            return bookingSettingsMapper.convert(save);
+            return bookingSettingsRepository.save(bookingSettings);
         }
 
-        return bookingSettingsMapper.convert(existingBookingSettings.get(0));
+        return existingBookingSettings.get(0);
     }
 
     @Nonnull
     @Override
-    public BookingSettingsDTO getBookingSettings() {
+    public BookingSettings getBookingSettings() {
         final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
         if (bookingSettings.isEmpty()) {
             throw new IllegalStateException("No booking settings.");
@@ -45,6 +39,6 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
             throw new IllegalStateException("More than one booking settings.");
         }
 
-        return bookingSettingsMapper.convert(bookingSettings.get(0));
+        return bookingSettings.get(0);
     }
 }

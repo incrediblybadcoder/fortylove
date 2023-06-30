@@ -6,7 +6,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,12 +19,21 @@ public class BookingSettings extends AbstractEntity {
     @JoinColumn(name = "bookingsettings_id")
     private List<TimeSlot> timeSlots;
 
-    @Nonnull
+    public BookingSettings() {
+        super();
+    }
+
+    public BookingSettings(final long id,
+                           final List<TimeSlot> timeSlots) {
+        super(id, 0);
+        this.timeSlots = timeSlots;
+    }
+
     public List<TimeSlot> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(@Nonnull final List<TimeSlot> timeSlots) {
+    public void setTimeSlots(final List<TimeSlot> timeSlots) {
         this.timeSlots = timeSlots;
     }
 

@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.User;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface SessionService {
 
     @Nonnull
-    Optional<UserDTO> getCurrentUser();
+    Optional<User> getCurrentUser();
 }

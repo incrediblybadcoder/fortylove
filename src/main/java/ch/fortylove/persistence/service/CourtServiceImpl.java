@@ -1,9 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.mapper.CourtMapper;
-import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
+import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,37 +16,33 @@ import java.util.Optional;
 public class CourtServiceImpl implements CourtService {
 
     @Nonnull private final CourtRepository courtRepository;
-    @Nonnull private final CourtMapper courtMapper;
 
     @Autowired
-    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository,
-                            @Nonnull final CourtMapper courtMapper) {
+    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository) {
         this.courtRepository = courtRepository;
-        this.courtMapper = courtMapper;
     }
 
     @Nonnull
     @Override
-    public CourtDTO create(@Nonnull final CourtDTO courtDTO) {
-        final Court court = courtRepository.save(courtMapper.convert(courtDTO, new CycleAvoidingMappingContext()));
-        return courtMapper.convert(court, new CycleAvoidingMappingContext());
+    public Court create(@Nonnull final Court court) {
+        return courtRepository.save(court);
     }
 
     @Nonnull
     @Override
-    public Optional<CourtDTO> findById(final long id) {
-        return Optional.ofNullable(courtMapper.convert(courtRepository.findById(id), new CycleAvoidingMappingContext()));
+    public Optional<Court> findById(final long id) {
+        return Optional.ofNullable(courtRepository.findById(id));
     }
 
     @Nonnull
     @Override
-    public List<CourtDTO> findAll() {
-        return courtMapper.convert(courtRepository.findAll(), new CycleAvoidingMappingContext());
+    public List<Court> findAll() {
+        return courtRepository.findAll();
     }
 
     @Nonnull
     @Override
-    public List<CourtDTO> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
-        return courtMapper.convert(courtRepository.findAllWithBookingsByDate(date), new CycleAvoidingMappingContext());
+    public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
+        return courtRepository.findAllWithBookingsByDate(date);
     }
 }

@@ -1,8 +1,7 @@
 package ch.fortylove.views.booking;
 
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.UserDTO;
-import ch.fortylove.persistence.service.SessionService;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.booking.dialog.BookingDialog;
@@ -25,8 +24,8 @@ public class BookingComponent extends VerticalLayout {
     private BookingGridComponent bookingGridComponent;
     private DateSelectionComponent dateSelectionComponent;
 
-    private List<CourtDTO> courtDTOs;
-    private List<UserDTO> userDTOs;
+    private List<Court> courts;
+    private List<User> users;
 
     public BookingComponent(@Nonnull final SessionService sessionService,
                             @Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
@@ -53,23 +52,23 @@ public class BookingComponent extends VerticalLayout {
 
     @Nonnull
     private BookingGridComponent createBookingGridComponent(@Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
-        bookingGridComponent = new BookingGridComponent(bookingComponentConfiguration.timeSlotDTOs());
+        bookingGridComponent = new BookingGridComponent(bookingComponentConfiguration.timeSlots());
         bookingGridComponent.addBookedCellClickListener(this::bookedCellClickedListener);
         bookingGridComponent.addFreeCellClickListener(this::freeCellClickedListener);
 
         return bookingGridComponent;
     }
 
-    public void refreshComponent(@Nonnull final List<CourtDTO> courtDTOs,
-                                 @Nonnull final List<UserDTO> userDTOs) {
-        this.courtDTOs = courtDTOs;
-        this.userDTOs = userDTOs;
+    public void refreshComponent(@Nonnull final List<Court> courts,
+                                 @Nonnull final List<User> users) {
+        this.courts = courts;
+        this.users = users;
         refreshGrid();
     }
 
     private void refreshGrid() {
-        if (courtDTOs != null) {
-            bookingGridComponent.setItems(courtDTOs);
+        if (courts != null) {
+            bookingGridComponent.setItems(courts);
         }
     }
 

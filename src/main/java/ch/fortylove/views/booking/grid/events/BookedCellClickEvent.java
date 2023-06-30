@@ -1,40 +1,40 @@
 package ch.fortylove.views.booking.grid.events;
 
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.views.booking.grid.BookingGridComponent;
 
 import javax.annotation.Nonnull;
 
 public class BookedCellClickEvent extends BookingGridEvent {
 
-    @Nonnull private final CourtDTO courtDTO;
-    @Nonnull private final TimeSlotDTO timeSlotDTO;
-    @Nonnull private final BookingDTO booking;
+    @Nonnull private final Court court;
+    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final Booking booking;
 
     public BookedCellClickEvent(@Nonnull final BookingGridComponent source,
-                                @Nonnull final CourtDTO courtDTO,
-                                @Nonnull final TimeSlotDTO timeSlotDTO,
-                                @Nonnull final BookingDTO booking) {
+                                @Nonnull final Court court,
+                                @Nonnull final TimeSlot timeSlot,
+                                @Nonnull final Booking booking) {
         super(source);
-        this.courtDTO = courtDTO;
-        this.timeSlotDTO = timeSlotDTO;
+        this.court = court;
+        this.timeSlot = timeSlot;
         this.booking = booking;
     }
 
     @Nonnull
-    public CourtDTO getCourt() {
-        return courtDTO;
+    public Court getCourt() {
+        return court;
     }
 
     @Nonnull
-    public TimeSlotDTO getTimeSlot() {
-        return timeSlotDTO;
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 
     @Nonnull
-    public BookingDTO getBooking() {
+    public Booking getBooking() {
         return booking;
     }
 }

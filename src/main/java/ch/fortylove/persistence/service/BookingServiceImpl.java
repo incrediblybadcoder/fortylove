@@ -1,8 +1,5 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.mapper.BookingMapper;
-import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,31 +11,27 @@ import java.util.List;
 public class BookingServiceImpl implements BookingService {
 
     @Nonnull private final BookingRepository bookingRepository;
-    @Nonnull private final BookingMapper bookingMapper;
 
     @Autowired
-    public BookingServiceImpl(@Nonnull final BookingRepository bookingRepository,
-                              @Nonnull final BookingMapper bookingMapper) {
+    public BookingServiceImpl(@Nonnull final BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
-        this.bookingMapper = bookingMapper;
     }
 
     @Nonnull
     @Override
-    public BookingDTO create(@Nonnull final BookingDTO bookingDTO) {
-        final Booking booking = bookingRepository.save(bookingMapper.convert(bookingDTO, new CycleAvoidingMappingContext()));
-        return bookingMapper.convert(booking, new CycleAvoidingMappingContext());
+    public Booking create(@Nonnull final Booking booking) {
+        return bookingRepository.save(booking);
     }
 
     @Nonnull
     @Override
-    public List<BookingDTO> findAllByCourtId(final long courtId) {
-        return bookingMapper.convert(bookingRepository.findAllByCourtId(courtId), new CycleAvoidingMappingContext());
+    public List<Booking> findAllByCourtId(final long id) {
+        return bookingRepository.findAllByCourtId(id);
     }
 
     @Nonnull
     @Override
-    public List<BookingDTO> findAll() {
-        return bookingMapper.convert(bookingRepository.findAll(), new CycleAvoidingMappingContext());
+    public List<Booking> findAll() {
+        return bookingRepository.findAll();
     }
 }

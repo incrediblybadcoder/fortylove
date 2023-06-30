@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking;
 
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.BookingSettingsService;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.SessionService;
@@ -80,9 +80,9 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     }
 
     private void refreshView(@Nonnull final LocalDate date) {
-        final List<CourtDTO> courtDTOs = courtService.findAllWithBookingsByDate(date);
-        final List<UserDTO> userDTOs = userService.findAll();
+        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
+        final List<User> users = userService.findAll();
 
-        bookingComponent.refreshComponent(courtDTOs, userDTOs);
+        bookingComponent.refreshComponent(courts, users);
     }
 }
