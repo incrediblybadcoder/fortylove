@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
@@ -10,19 +10,19 @@ import java.util.Optional;
 public interface UserService {
 
     @Nonnull
-    UserDTO create(@Nonnull final UserDTO userDTO);
+    User create(@Nonnull final User user);
 
     @Nonnull
-    Optional<UserDTO> findByEmail(@Nonnull final String email);
+    Optional<User> findByEmail(@Nonnull final String email);
 
     @Nonnull
-    List<UserDTO> findAll();
+    List<User> findAll();
 
     @Nonnull
-    List<UserDTO> findAll(@Nonnull final String filterText);
+    List<User> findAll(@Nonnull final String filterText);
 
-    void save(@Nonnull final UserDTO userDTO);
+    void save(@Nonnull final User user);
 
     @Transactional
-    void delete(@Nonnull final UserDTO userDTO);
+    void delete(@Nonnull final User user);
 }

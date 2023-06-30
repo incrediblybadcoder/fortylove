@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +18,21 @@ public class Court extends AbstractEntity {
     )
     private List<Booking> bookings;
 
-    @Nonnull
+    public Court() {
+        super();
+    }
+
+    public Court(final long id,
+                 final List<Booking> bookings) {
+        super(id, 0);
+        this.bookings = bookings;
+    }
+
     public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<Booking> bookings) {
+    public void setBookings(final List<Booking> bookings) {
         this.bookings = bookings;
     }
 

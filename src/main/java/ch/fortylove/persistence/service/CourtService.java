@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.entity.Court;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
@@ -10,14 +10,14 @@ import java.util.Optional;
 public interface CourtService {
 
     @Nonnull
-    CourtDTO create(@Nonnull final CourtDTO courtDTO);
+    Court create(@Nonnull final Court court);
 
     @Nonnull
-    Optional<CourtDTO> findById(final long id);
+    Optional<Court> findById(final long id);
 
     @Nonnull
-    List<CourtDTO> findAll();
+    List<Court> findAll();
 
     @Nonnull
-    List<CourtDTO> findAllByDate(@Nonnull final LocalDate date);
+    List<Court> findAllByDate(@Nonnull final LocalDate date);
 }

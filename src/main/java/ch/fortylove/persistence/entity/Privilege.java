@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,21 +22,31 @@ public class Privilege extends AbstractEntity {
     )
     private List<Role> roles;
 
-    @Nonnull
+    public Privilege() {
+        super();
+    }
+
+    public Privilege(final long id,
+                     final String name,
+                     final List<Role> roles) {
+        super(id, 0);
+        this.name = name;
+        this.roles = roles;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(@Nonnull final String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Nonnull
     public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(final List<Role> roles) {
         this.roles = roles;
     }
 

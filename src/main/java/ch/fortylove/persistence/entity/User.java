@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,48 +40,69 @@ public class User extends AbstractEntity {
     )
     private List<Booking> bookings;
 
-    @Nonnull
+    public User() {
+        super();
+    }
+
+    public User(final long id,
+                final String firstName,
+                final String lastName,
+                final String email,
+                final String password,
+                final boolean enabled,
+                final List<Role> roles,
+                final List<Booking> bookings) {
+        super(id, 0);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
+        this.roles = roles;
+        this.bookings = bookings;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@Nonnull final String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
-    @Nonnull
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@Nonnull final String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
-    @Nonnull
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(@Nonnull final String username) {
+    public void setEmail(final String username) {
         this.email = username;
     }
 
-    @Nonnull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(@Nonnull final String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
-    @Nonnull
     public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(final List<Role> roles) {
         this.roles = roles;
     }
 
@@ -94,12 +114,11 @@ public class User extends AbstractEntity {
         this.enabled = enabled;
     }
 
-    @Nonnull
     public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<Booking> bookings) {
+    public void setBookings(final List<Booking> bookings) {
         this.bookings = bookings;
     }
 

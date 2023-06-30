@@ -32,6 +32,20 @@ public class Role extends AbstractEntity {
     )
     private List<Privilege> privileges;
 
+    public Role() {
+        super();
+    }
+
+    public Role(final long id,
+                final String name,
+                final List<User> users,
+                final List<Privilege> privileges) {
+        super(id, 0);
+        this.name = name;
+        this.users = users;
+        this.privileges = privileges;
+    }
+
     public String getName() {
         return name;
     }

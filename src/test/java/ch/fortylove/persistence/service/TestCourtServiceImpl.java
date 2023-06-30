@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.entity.Court;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,50 +16,50 @@ class TestCourtServiceImpl {
 
     @Test
     public void testCreate() {
-        final CourtDTO createdCourtDTO = testee.create(new CourtDTO(0L, null));
+        final Court createdCourt = testee.create(new Court(0L, null));
 
         Assertions.assertEquals(1, testee.findAll().size());
-        Assertions.assertEquals(createdCourtDTO, testee.findAll().get(0));
+        Assertions.assertEquals(createdCourt, testee.findAll().get(0));
     }
 
     @Test
     public void testFindById_notExists() {
-        final CourtDTO courtDTO1 = testee.create(new CourtDTO(0L, null));
+        final Court court1 = testee.create(new Court(0L, null));
 
-        final Optional<CourtDTO> court = testee.findById(courtDTO1.getId() + 1L);
+        final Optional<Court> court = testee.findById(court1.getId() + 1L);
 
         Assertions.assertTrue(court.isEmpty());
     }
 
     @Test
     public void testFindById_exists() {
-        testee.create(new CourtDTO(0L, null));
-        final CourtDTO courtDTO2 = testee.create(new CourtDTO(0L, null));
+        testee.create(new Court(0L, null));
+        final Court court2 = testee.create(new Court(0L, null));
 
-        final Optional<CourtDTO> court = testee.findById(courtDTO2.getId());
+        final Optional<Court> court = testee.findById(court2.getId());
 
         Assertions.assertTrue(court.isPresent());
-        Assertions.assertEquals(courtDTO2, court.get());
+        Assertions.assertEquals(court2, court.get());
     }
 
     @Test
     public void testFindAll_emptyRepository() {
-        final List<CourtDTO> courtDTOs = testee.findAll();
+        final List<Court> courts = testee.findAll();
 
-        Assertions.assertTrue(courtDTOs.isEmpty());
+        Assertions.assertTrue(courts.isEmpty());
     }
 
     @Test
     public void testFindAll_exists() {
-        final CourtDTO courtDTO1 = testee.create(new CourtDTO(0L, null));
-        final CourtDTO courtDTO2 = testee.create(new CourtDTO(0L, null));
+        final Court court1 = testee.create(new Court(0L, null));
+        final Court court2 = testee.create(new Court(0L, null));
 
-        final List<CourtDTO> courtDTOs = testee.findAll();
+        final List<Court> courts = testee.findAll();
 
-        Assertions.assertEquals(2, courtDTOs.size());
+        Assertions.assertEquals(2, courts.size());
         Assertions.assertAll(
-                () -> Assertions.assertTrue(courtDTOs.contains(courtDTO1)),
-                () -> Assertions.assertTrue(courtDTOs.contains(courtDTO2))
+                () -> Assertions.assertTrue(courts.contains(court1)),
+                () -> Assertions.assertTrue(courts.contains(court2))
         );
     }
 }

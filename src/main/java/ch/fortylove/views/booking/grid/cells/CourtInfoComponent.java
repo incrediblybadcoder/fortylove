@@ -1,6 +1,6 @@
 package ch.fortylove.views.booking.grid.cells;
 
-import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.entity.Court;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -8,14 +8,14 @@ import javax.annotation.Nonnull;
 
 public class CourtInfoComponent extends VerticalLayout {
 
-    public CourtInfoComponent(@Nonnull final CourtDTO courtDTO) {
+    public CourtInfoComponent(@Nonnull final Court court) {
         super();
 
-        constructUI(courtDTO);
+        constructUI(court);
     }
 
-    private void constructUI(@Nonnull final CourtDTO courtDTO) {
-        final Span courtLabel = new Span("Platz: " + courtDTO.getId());
+    private void constructUI(@Nonnull final Court court) {
+        final Span courtLabel = new Span("Platz: " + court.getId());
         add(courtLabel);
     }
 }

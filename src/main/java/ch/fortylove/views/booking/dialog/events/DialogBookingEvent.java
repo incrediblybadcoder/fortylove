@@ -1,8 +1,8 @@
 package ch.fortylove.views.booking.dialog.events;
 
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.views.booking.dialog.BookingDialog;
 import com.vaadin.flow.component.ComponentEvent;
 
@@ -10,9 +10,9 @@ import javax.annotation.Nonnull;
 
 public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
 
-    @Nonnull private final CourtDTO courtDTO;
-    @Nonnull private final TimeSlotDTO timeSlotDTO;
-    @Nonnull private final BookingDTO booking;
+    @Nonnull private final Court court;
+    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final Booking booking;
     @Nonnull private final Type type;
 
     public enum Type {
@@ -22,50 +22,50 @@ public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
     }
 
     protected DialogBookingEvent(@Nonnull final BookingDialog source,
-                                 @Nonnull final CourtDTO courtDTO,
-                                 @Nonnull final TimeSlotDTO timeSlotDTO,
-                                 @Nonnull final BookingDTO booking,
+                                 @Nonnull final Court court,
+                                 @Nonnull final TimeSlot timeSlot,
+                                 @Nonnull final Booking booking,
                                  @Nonnull final Type type) {
         super(source, false);
-        this.courtDTO = courtDTO;
+        this.court = court;
         this.booking = booking;
-        this.timeSlotDTO = timeSlotDTO;
+        this.timeSlot = timeSlot;
         this.type = type;
     }
 
     public static DialogBookingEvent newBooking(@Nonnull final BookingDialog source,
-                                                @Nonnull final CourtDTO courtDTO,
-                                                @Nonnull final TimeSlotDTO timeSlotDTO,
-                                                @Nonnull final BookingDTO booking) {
-        return new DialogBookingEvent(source, courtDTO, timeSlotDTO, booking, Type.NEW);
+                                                @Nonnull final Court court,
+                                                @Nonnull final TimeSlot timeSlot,
+                                                @Nonnull final Booking booking) {
+        return new DialogBookingEvent(source, court, timeSlot, booking, Type.NEW);
     }
 
     public static DialogBookingEvent modifyBooking(@Nonnull final BookingDialog source,
-                                                   @Nonnull final CourtDTO courtDTO,
-                                                   @Nonnull final TimeSlotDTO timeSlotDTO,
-                                                   @Nonnull final BookingDTO booking) {
-        return new DialogBookingEvent(source, courtDTO, timeSlotDTO, booking, Type.MODIFY);
+                                                   @Nonnull final Court court,
+                                                   @Nonnull final TimeSlot timeSlot,
+                                                   @Nonnull final Booking booking) {
+        return new DialogBookingEvent(source, court, timeSlot, booking, Type.MODIFY);
     }
 
     public static DialogBookingEvent deleteBooking(@Nonnull final BookingDialog source,
-                                                   @Nonnull final CourtDTO courtDTO,
-                                                   @Nonnull final TimeSlotDTO timeSlotDTO,
-                                                   @Nonnull final BookingDTO booking) {
-        return new DialogBookingEvent(source, courtDTO, timeSlotDTO, booking, Type.DELETE);
+                                                   @Nonnull final Court court,
+                                                   @Nonnull final TimeSlot timeSlot,
+                                                   @Nonnull final Booking booking) {
+        return new DialogBookingEvent(source, court, timeSlot, booking, Type.DELETE);
     }
 
     @Nonnull
-    public CourtDTO getCourt() {
-        return courtDTO;
+    public Court getCourt() {
+        return court;
     }
 
     @Nonnull
-    public TimeSlotDTO getTimeSlot() {
-        return timeSlotDTO;
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 
     @Nonnull
-    public BookingDTO getBooking() {
+    public Booking getBooking() {
         return booking;
     }
 
