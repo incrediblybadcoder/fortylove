@@ -2,6 +2,7 @@ package ch.fortylove.views.booking;
 
 import ch.fortylove.persistence.dto.CourtDTO;
 import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.service.SessionService;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.booking.dialog.BookingDialog;
@@ -19,13 +20,17 @@ import java.util.List;
 
 public class BookingComponent extends VerticalLayout {
 
+    @Nonnull private final SessionService sessionService;
+
     private BookingGridComponent bookingGridComponent;
     private DateSelectionComponent dateSelectionComponent;
 
     private List<CourtDTO> courtDTOs;
     private List<UserDTO> userDTOs;
 
-    public BookingComponent( @Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
+    public BookingComponent(@Nonnull final SessionService sessionService,
+                            @Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
+        this.sessionService = sessionService;
         setSpacing(false);
         setPadding(false);
         setHeightFull();
@@ -73,19 +78,19 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClickedListener(@Nonnull final BookedCellClickEvent event) {
-        final UserDTO userDTO = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
-
-        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), userDTO, userDTOs);
-        bookingDialog.addDialogBookingListener(this::dialogBooking);
-        bookingDialog.openExisting(null, event.getBooking());
+        sessionService.getCurrentUser().ifPresent(currentUser -> {
+            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, userDTOs);
+            bookingDialog.addDialogBookingListener(this::dialogBooking);
+            bookingDialog.openExisting(null, event.getBooking());
+        });
     }
 
     private void freeCellClickedListener(@Nonnull final FreeCellClickEvent event) {
-        final UserDTO userDTO = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
-
-        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), userDTO, userDTOs);
-        bookingDialog.addDialogBookingListener(this::dialogBooking);
-        bookingDialog.openFree();
+        sessionService.getCurrentUser().ifPresent(currentUser -> {
+            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, userDTOs);
+            bookingDialog.addDialogBookingListener(this::dialogBooking);
+            bookingDialog.openFree();
+        });
     }
 
     private void dialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
