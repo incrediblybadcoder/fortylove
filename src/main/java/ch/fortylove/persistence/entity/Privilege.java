@@ -4,12 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "privileges")
-public class PrivilegeEntity extends AbstractEntity {
+public class Privilege extends AbstractEntity {
 
     public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
     public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
@@ -21,23 +20,33 @@ public class PrivilegeEntity extends AbstractEntity {
             mappedBy = "privileges",
             fetch = FetchType.EAGER
     )
-    private List<RoleEntity> roles;
+    private List<Role> roles;
 
-    @Nonnull
+    public Privilege() {
+        super();
+    }
+
+    public Privilege(final long id,
+                     final String name,
+                     final List<Role> roles) {
+        super(id, 0);
+        this.name = name;
+        this.roles = roles;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(@Nonnull final String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Nonnull
-    public List<RoleEntity> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<RoleEntity> roles) {
+    public void setRoles(final List<Role> roles) {
         this.roles = roles;
     }
 
@@ -45,7 +54,7 @@ public class PrivilegeEntity extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final PrivilegeEntity privilege = (PrivilegeEntity) o;
+        final Privilege privilege = (Privilege) o;
         return Objects.equals(name, privilege.name) &&
                 Objects.equals(roles, privilege.roles);
     }

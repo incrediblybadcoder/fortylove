@@ -1,6 +1,6 @@
 package ch.fortylove.views.booking.grid.cells;
 
-import ch.fortylove.persistence.dto.Court;
+import ch.fortylove.persistence.entity.Court;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

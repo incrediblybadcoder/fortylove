@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking.grid.util;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.TimeSlot;
 
 import javax.annotation.Nonnull;
 import java.util.List;

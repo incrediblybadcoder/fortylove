@@ -1,8 +1,8 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.BookingSettings;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.entity.BookingSettings;
+import ch.fortylove.persistence.entity.TimeSlot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

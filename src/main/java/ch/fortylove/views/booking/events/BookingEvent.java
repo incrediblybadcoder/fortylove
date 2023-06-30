@@ -1,8 +1,8 @@
 package ch.fortylove.views.booking.events;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.views.booking.BookingComponent;
 import com.vaadin.flow.component.ComponentEvent;
 

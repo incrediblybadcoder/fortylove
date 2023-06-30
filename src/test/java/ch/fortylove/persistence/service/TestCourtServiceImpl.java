@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.Court;
+import ch.fortylove.persistence.entity.Court;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

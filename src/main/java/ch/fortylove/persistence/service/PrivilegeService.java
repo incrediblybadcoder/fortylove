@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.Privilege;
+import ch.fortylove.persistence.entity.Privilege;
 
 import javax.annotation.Nonnull;
 import java.util.List;

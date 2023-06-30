@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.Privilege;
+import ch.fortylove.persistence.entity.Privilege;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,17 +80,4 @@ class TestPrivilegeServiceImpl {
         Assertions.assertEquals(2, privileges.size());
         Assertions.assertFalse(privileges.contains(privilege2));
     }
-
-//    @Test
-//    public void testUpdate() {
-//        final String name2 = "name2";
-//        final long privilegeId = testee.create(new PrivilegeDTO(0L, "name1", null)).getId();
-//
-//        testee.update(privilegeId, new PrivilegeDTO(0L, name2, null));
-//
-//        final List<PrivilegeDTO> privileges = testee.findAll();
-//        Assertions.assertEquals(1, privileges.size());
-//        Assertions.assertEquals(privilegeId, privileges.get(0).getId());
-//        Assertions.assertEquals(name2, privileges.get(0).getName());
-//    }
 }

@@ -1,8 +1,8 @@
 package ch.fortylove.security;
 
-import ch.fortylove.persistence.dto.Privilege;
-import ch.fortylove.persistence.dto.Role;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

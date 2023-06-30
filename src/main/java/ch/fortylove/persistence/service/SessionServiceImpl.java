@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.security.SecurityService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

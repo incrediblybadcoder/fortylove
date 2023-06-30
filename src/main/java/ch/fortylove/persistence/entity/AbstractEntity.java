@@ -20,6 +20,15 @@ public abstract class AbstractEntity {
     @Version
     private int version;
 
+    public AbstractEntity() {
+    }
+
+    public AbstractEntity(@Nonnull final Long id,
+                          final int version) {
+        this.id = id;
+        this.version = version;
+    }
+
     @Nonnull
     public Long getId() {
         return id;

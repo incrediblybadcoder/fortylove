@@ -1,36 +1,46 @@
-package ch.fortylove.persistence.dto;
+package ch.fortylove.persistence.entity;
+
+import jakarta.persistence.Entity;
 
 import javax.annotation.Nonnull;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class TimeSlot {
+@Entity(name = "timeslots")
+public class TimeSlot extends AbstractEntity {
 
     public static final long MINUTES_PER_TIMESLOT = 60;
     public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
 
-    private final long id;
-    private final int index;
-    private final boolean bookable;
+    private boolean bookable;
+    private int index;
+
+    public TimeSlot() {
+        super();
+    }
 
     public TimeSlot(final long id,
                     final boolean bookable,
                     final int index) {
-        this.id = id;
+        super(id, 0);
         this.bookable = bookable;
         this.index = index;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public boolean getBookable() {
         return bookable;
     }
 
+    public void setBookable(final boolean bookable) {
+        this.bookable = bookable;
+    }
+
     public int getIndex() {
         return index;
+    }
+
+    public void setIndex(final int index) {
+        this.index = index;
     }
 
     public static int getTotalNumberOfTimeSlots() {
@@ -51,14 +61,12 @@ public class TimeSlot {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TimeSlot that = (TimeSlot) o;
-        return id == that.id &&
-                index == that.index &&
-                bookable == that.bookable;
+        final TimeSlot timeSlot = (TimeSlot) o;
+        return bookable == timeSlot.bookable && index == timeSlot.index;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, index, bookable);
+        return Objects.hash(bookable, index);
     }
 }

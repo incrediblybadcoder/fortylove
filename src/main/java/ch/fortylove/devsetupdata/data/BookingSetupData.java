@@ -1,9 +1,9 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.BookingService;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.UserService;

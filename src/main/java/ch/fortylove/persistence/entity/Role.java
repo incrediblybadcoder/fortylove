@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "roles")
-public class RoleEntity extends AbstractEntity {
+public class Role extends AbstractEntity {
 
     public final static String ROLE_ADMIN = "ROLE_ADMIN";
     public final static String ROLE_STAFF = "ROLE_STAFF";
@@ -22,7 +22,7 @@ public class RoleEntity extends AbstractEntity {
             mappedBy = "roles",
             fetch = FetchType.EAGER
     )
-    private List<UserEntity> users;
+    private List<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -30,7 +30,21 @@ public class RoleEntity extends AbstractEntity {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id")
     )
-    private List<PrivilegeEntity> privileges;
+    private List<Privilege> privileges;
+
+    public Role() {
+        super();
+    }
+
+    public Role(final long id,
+                final String name,
+                final List<User> users,
+                final List<Privilege> privileges) {
+        super(id, 0);
+        this.name = name;
+        this.users = users;
+        this.privileges = privileges;
+    }
 
     public String getName() {
         return name;
@@ -40,19 +54,19 @@ public class RoleEntity extends AbstractEntity {
         this.name = name;
     }
 
-    public List<UserEntity> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(final List<UserEntity> users) {
+    public void setUsers(final List<User> users) {
         this.users = users;
     }
 
-    public List<PrivilegeEntity> getPrivileges() {
+    public List<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(final List<PrivilegeEntity> privileges) {
+    public void setPrivileges(final List<Privilege> privileges) {
         this.privileges = privileges;
     }
 
@@ -60,7 +74,7 @@ public class RoleEntity extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final RoleEntity role = (RoleEntity) o;
+        final Role role = (Role) o;
         return Objects.equals(name, role.name) &&
                 Objects.equals(users, role.users) &&
                 Objects.equals(privileges, role.privileges);

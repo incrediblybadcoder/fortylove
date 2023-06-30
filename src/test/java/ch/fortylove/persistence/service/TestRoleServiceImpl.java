@@ -1,8 +1,8 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.Privilege;
-import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

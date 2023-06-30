@@ -1,7 +1,7 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.Court;
+import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

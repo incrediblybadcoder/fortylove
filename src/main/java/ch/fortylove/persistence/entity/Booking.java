@@ -7,17 +7,16 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookings")
-public class BookingEntity extends AbstractEntity implements Comparable<BookingEntity>{
+public class Booking extends AbstractEntity implements Comparable<Booking>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
-    private CourtEntity court;
+    private Court court;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -25,11 +24,28 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<UserEntity> users;
+    private List<User> users;
 
     private int timeSlotIndex;
 
     private LocalDate date;
+
+
+    public Booking() {
+        super();
+    }
+
+    public Booking(final long id,
+                   final Court court,
+                    final List<User> users,
+                   final int timeSlotIndex,
+                    final LocalDate date) {
+        super(id, 0);
+        this.court = court;
+        this.users = users;
+        this.timeSlotIndex = timeSlotIndex;
+        this.date = date;
+    }
 
     public int getTimeSlotIndex() {
         return timeSlotIndex;
@@ -39,30 +55,27 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
         this.timeSlotIndex = timeSlotIndex;
     }
 
-    @Nonnull
-    public CourtEntity getCourt() {
+    public Court getCourt() {
         return court;
     }
 
-    public void setCourt(@Nonnull final CourtEntity court) {
+    public void setCourt( final Court court) {
         this.court = court;
     }
 
-    @Nonnull
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@Nonnull final LocalDate date) {
+    public void setDate( final LocalDate date) {
         this.date = date;
     }
 
-    @Nonnull
-    public List<UserEntity> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<UserEntity> users) {
+    public void setUsers( final List<User> users) {
         this.users = users;
     }
 
@@ -70,7 +83,7 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final BookingEntity booking = (BookingEntity) o;
+        final Booking booking = (Booking) o;
         return timeSlotIndex == booking.timeSlotIndex &&
                 Objects.equals(court, booking.court) &&
                 Objects.equals(users, booking.users) &&
@@ -83,7 +96,7 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     }
 
     @Override
-    public int compareTo(@Nonnull final BookingEntity otherBooking) {
+    public int compareTo( final Booking otherBooking) {
         return date.compareTo(otherBooking.getDate());
     }
 }

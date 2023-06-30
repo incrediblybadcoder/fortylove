@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingSettings;
+import ch.fortylove.persistence.entity.BookingSettings;
 
 import javax.annotation.Nonnull;
 

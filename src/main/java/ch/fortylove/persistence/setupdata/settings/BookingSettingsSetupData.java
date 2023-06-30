@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.setupdata.settings;
 
-import ch.fortylove.persistence.dto.BookingSettings;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.entity.BookingSettings;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.persistence.service.BookingSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -24,7 +24,7 @@ public class BookingSettingsSetupData {
     }
 
     public void createBookingSettings() {
-        final List<TimeSlot> timeSlots = Arrays.asList(
+        final List<TimeSlot> TimeSlots = Arrays.asList(
                 new TimeSlot(0L, false, 0),
                 new TimeSlot(0L, false, 1),
                 new TimeSlot(0L, false, 2),
@@ -51,12 +51,12 @@ public class BookingSettingsSetupData {
                 new TimeSlot(0L, false, 23)
         );
 
-        createBookingSettingsIfNotFound(timeSlots);
+        createBookingSettingsIfNotFound(TimeSlots);
     }
 
     @Transactional
-    void createBookingSettingsIfNotFound(@Nonnull final List<TimeSlot> timeSlots) {
-        final BookingSettings bookingSettings = new BookingSettings(0L, timeSlots);
+    void createBookingSettingsIfNotFound(@Nonnull final List<TimeSlot> TimeSlots) {
+        final BookingSettings bookingSettings = new BookingSettings(0L, TimeSlots);
         bookingSettingsService.create(bookingSettings);
     }
 }

@@ -5,26 +5,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "courts")
-public class CourtEntity extends AbstractEntity {
+public class Court extends AbstractEntity {
 
     @OneToMany(
             mappedBy = "court",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
-    private List<BookingEntity> bookings;
+    private List<Booking> bookings;
 
-    @Nonnull
-    public List<BookingEntity> getBookings() {
+    public Court() {
+        super();
+    }
+
+    public Court(final long id,
+                 final List<Booking> bookings) {
+        super(id, 0);
+        this.bookings = bookings;
+    }
+
+    public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<BookingEntity> bookings) {
+    public void setBookings(final List<Booking> bookings) {
         this.bookings = bookings;
     }
 
@@ -32,7 +40,7 @@ public class CourtEntity extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final CourtEntity court = (CourtEntity) o;
+        final Court court = (Court) o;
         return Objects.equals(bookings, court.bookings);
     }
 

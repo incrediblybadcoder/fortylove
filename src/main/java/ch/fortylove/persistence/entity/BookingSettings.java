@@ -6,26 +6,34 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookingsettings")
-public class BookingSettingsEntity extends AbstractEntity {
+public class BookingSettings extends AbstractEntity {
 
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     @JoinColumn(name = "bookingsettings_id")
-    private List<TimeSlotEntity> timeSlots;
+    private List<TimeSlot> timeSlots;
 
-    @Nonnull
-    public List<TimeSlotEntity> getTimeSlots() {
+    public BookingSettings() {
+        super();
+    }
+
+    public BookingSettings(final long id,
+                           final List<TimeSlot> timeSlots) {
+        super(id, 0);
+        this.timeSlots = timeSlots;
+    }
+
+    public List<TimeSlot> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(@Nonnull final List<TimeSlotEntity> timeSlots) {
+    public void setTimeSlots(final List<TimeSlot> timeSlots) {
         this.timeSlots = timeSlots;
     }
 
@@ -33,7 +41,7 @@ public class BookingSettingsEntity extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final BookingSettingsEntity that = (BookingSettingsEntity) o;
+        final BookingSettings that = (BookingSettings) o;
         return Objects.equals(timeSlots, that.timeSlots);
     }
 

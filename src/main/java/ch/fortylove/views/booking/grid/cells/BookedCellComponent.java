@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking.grid.cells;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.User;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.avatar.AvatarGroup;

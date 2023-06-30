@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.entity.Role;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.User;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;

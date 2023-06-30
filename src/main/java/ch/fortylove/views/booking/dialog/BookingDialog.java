@@ -1,9 +1,9 @@
 package ch.fortylove.views.booking.dialog;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.TimeSlot;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.TimeSlot;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.views.booking.dialog.events.DialogBookingEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
