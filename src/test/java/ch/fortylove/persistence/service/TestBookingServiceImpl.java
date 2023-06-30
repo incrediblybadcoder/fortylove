@@ -1,11 +1,11 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.PrivilegeDTO;
-import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,22 +25,22 @@ class TestBookingServiceImpl {
 
     @Test
     public void testFindAllByCourtId_emptyRepository() {
-        final List<BookingDTO> bookingDTOs = testee.findAllByCourtId(1L);
+        final List<Booking> bookings = testee.findAllByCourtId(1L);
 
-        Assertions.assertTrue(bookingDTOs.isEmpty());
+        Assertions.assertTrue(bookings.isEmpty());
     }
 
     @Test
     public void testCreate() {
-        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
-        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
-        final RoleDTO roleDTO1 = roleService.create(new RoleDTO(0L, "roleName1", null, List.of(privilegeDTO1)));
-        final RoleDTO roleDTO2 = roleService.create(new RoleDTO(0L, "roleName2", null, List.of(privilegeDTO2)));
-        final UserDTO userDTO1 = userService.create(new UserDTO(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final UserDTO userDTO2 = userService.create(new UserDTO(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final BookingDTO booking = new BookingDTO(0L, null, Arrays.asList(userDTO1, userDTO2), 0, null);
+        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
+        final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(role1, role2), null));
+        final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(role1, role2), null));
+        final Booking booking = new Booking(0L, null, Arrays.asList(user1, user2), 0, null);
 
-        final BookingDTO createdBooking = testee.create(booking);
+        final Booking createdBooking = testee.create(booking);
 
         Assertions.assertEquals(1, testee.findAll().size());
         Assertions.assertEquals(createdBooking, testee.findAll().get(0));
@@ -48,44 +48,44 @@ class TestBookingServiceImpl {
 
     @Test
     public void testFindAllByCourtId_exists() {
-        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
-        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
-        final RoleDTO roleDTO1 = roleService.create(new RoleDTO(0L, "roleName1", null, List.of(privilegeDTO1)));
-        final RoleDTO roleDTO2 = roleService.create(new RoleDTO(0L, "roleName2", null, List.of(privilegeDTO2)));
-        final UserDTO userDTO1 = userService.create(new UserDTO(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final UserDTO userDTO2 = userService.create(new UserDTO(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final CourtDTO courtDTO1 = courtService.create(new CourtDTO(0L, null));
-        final CourtDTO courtDTO2 = courtService.create(new CourtDTO(0L, null));
-        final BookingDTO booking1 = testee.create(new BookingDTO(0L, courtDTO1, Arrays.asList(userDTO1, userDTO2), 0, null));
-        final BookingDTO booking2 = testee.create(new BookingDTO(0L, courtDTO2, Arrays.asList(userDTO1, userDTO2), 1, null));
-        final BookingDTO booking3 = testee.create(new BookingDTO(0L, courtDTO2, Arrays.asList(userDTO1, userDTO2), 2, null));
+        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
+        final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(role1, role2), null));
+        final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(role1, role2), null));
+        final Court court1 = courtService.create(new Court(0L, null));
+        final Court court2 = courtService.create(new Court(0L, null));
+        final Booking booking1 = testee.create(new Booking(0L, court1, Arrays.asList(user1, user2), 0, null));
+        final Booking booking2 = testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 1, null));
+        final Booking booking3 = testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 2, null));
 
-        final List<BookingDTO> bookingDTOs = testee.findAllByCourtId(courtDTO2.getId());
+        final List<Booking> bookings = testee.findAllByCourtId(court2.getId());
 
         Assertions.assertAll(
-                () -> Assertions.assertFalse(bookingDTOs.contains(booking1)),
-                () -> Assertions.assertTrue(bookingDTOs.contains(booking2)),
-                () -> Assertions.assertTrue(bookingDTOs.contains(booking3))
+                () -> Assertions.assertFalse(bookings.contains(booking1)),
+                () -> Assertions.assertTrue(bookings.contains(booking2)),
+                () -> Assertions.assertTrue(bookings.contains(booking3))
         );
     }
 
     @Test
     public void testFindAllByCourtId_notExist() {
-        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
-        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
-        final RoleDTO roleDTO1 = roleService.create(new RoleDTO(0L, "roleName1", null, List.of(privilegeDTO1)));
-        final RoleDTO roleDTO2 = roleService.create(new RoleDTO(0L, "roleName2", null, List.of(privilegeDTO2)));
-        final UserDTO userDTO1 = userService.create(new UserDTO(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final UserDTO userDTO2 = userService.create(new UserDTO(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(roleDTO1, roleDTO2), null));
-        final CourtDTO courtDTO1 = courtService.create(new CourtDTO(0L, null));
-        final CourtDTO courtDTO2 = courtService.create(new CourtDTO(0L, null));
-        final CourtDTO courtDTO3 = courtService.create(new CourtDTO(0L, null));
-        testee.create(new BookingDTO(0L, courtDTO1, Arrays.asList(userDTO1, userDTO2), 0, null));
-        testee.create(new BookingDTO(0L, courtDTO2, Arrays.asList(userDTO1, userDTO2), 1, null));
-        testee.create(new BookingDTO(0L, courtDTO2, Arrays.asList(userDTO1, userDTO2), 2, null));
+        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
+        final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1", "password1", true, Arrays.asList(role1, role2), null));
+        final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2", "password2", true, Arrays.asList(role1, role2), null));
+        final Court court1 = courtService.create(new Court(0L, null));
+        final Court court2 = courtService.create(new Court(0L, null));
+        final Court court3 = courtService.create(new Court(0L, null));
+        testee.create(new Booking(0L, court1, Arrays.asList(user1, user2), 0, null));
+        testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 1, null));
+        testee.create(new Booking(0L, court2, Arrays.asList(user1, user2), 2, null));
 
-        final List<BookingDTO> bookingDTOs = testee.findAllByCourtId(courtDTO3.getId());
+        final List<Booking> bookings = testee.findAllByCourtId(court3.getId());
 
-        Assertions.assertTrue(bookingDTOs.isEmpty());
+        Assertions.assertTrue(bookings.isEmpty());
     }
 }

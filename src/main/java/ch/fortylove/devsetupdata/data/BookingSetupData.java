@@ -1,9 +1,9 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.BookingService;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.UserService;
@@ -111,38 +111,38 @@ public class BookingSetupData {
 
     @Nonnull
     @Transactional
-    private List<UserDTO> getUsers(@Nonnull final String user1,
-                                   @Nonnull final String user2) {
-        final ArrayList<UserDTO> userDTOs = new ArrayList<>();
-        userService.findByEmail(user1).ifPresent(userDTOs::add);
-        userService.findByEmail(user2).ifPresent(userDTOs::add);
+    private List<User> getUsers(@Nonnull final String user1,
+                                @Nonnull final String user2) {
+        final ArrayList<User> users = new ArrayList<>();
+        userService.findByEmail(user1).ifPresent(users::add);
+        userService.findByEmail(user2).ifPresent(users::add);
 
-        return userDTOs;
+        return users;
     }
 
     @Nonnull
     @Transactional
-    private Optional<CourtDTO> getCourt(final long id) {
+    private Optional<Court> getCourt(final long id) {
         return courtService.findById(id);
     }
 
     @Transactional
-    void createBookingIfNotFound(@Nonnull final CourtDTO courtDTO,
-                                 @Nonnull final List<UserDTO> userDTOs,
+    void createBookingIfNotFound(@Nonnull final Court court,
+                                 @Nonnull final List<User> users,
                                  @Nonnull final LocalDate date,
                                  final int timeSlotIndex) {
-        final List<BookingDTO> bookingDTOs = bookingService.findAllByCourtId(courtDTO.getId());
+        final List<Booking> bookings = bookingService.findAllByCourtId(court.getId());
 
-        if (isNewBooking(bookingDTOs, date, timeSlotIndex)) {
-            final BookingDTO booking = new BookingDTO(0L, courtDTO, userDTOs, timeSlotIndex, date);
+        if (isNewBooking(bookings, date, timeSlotIndex)) {
+            final Booking booking = new Booking(0L, court, users, timeSlotIndex, date);
             bookingService.create(booking);
         }
     }
 
-    private boolean isNewBooking(@Nonnull final List<BookingDTO> bookingDTOs,
+    private boolean isNewBooking(@Nonnull final List<Booking> bookings,
                                  @Nonnull final LocalDate date,
                                  final int timeSlotIndex) {
-        for (final BookingDTO booking : bookingDTOs) {
+        for (final Booking booking : bookings) {
             if (booking.getDate().equals(date) && booking.getTimeSlotIndex() == timeSlotIndex) {
                 return false;
             }

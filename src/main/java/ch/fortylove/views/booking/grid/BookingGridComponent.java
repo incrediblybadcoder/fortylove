@@ -1,8 +1,8 @@
 package ch.fortylove.views.booking.grid;
 
-import ch.fortylove.persistence.dto.BookingDTO;
-import ch.fortylove.persistence.dto.CourtDTO;
-import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.TimeSlot;
 import ch.fortylove.views.booking.grid.cells.BookedCellComponent;
 import ch.fortylove.views.booking.grid.cells.BookingCellComponent;
 import ch.fortylove.views.booking.grid.cells.CourtInfoComponent;
@@ -20,21 +20,21 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public class BookingGridComponent extends Grid<CourtDTO> {
+public class BookingGridComponent extends Grid<Court> {
 
-    public BookingGridComponent(@Nonnull final List<TimeSlotDTO> timeSlotDTOs) {
-        super(CourtDTO.class, false);
+    public BookingGridComponent(@Nonnull final List<TimeSlot> timeSlots) {
+        super(Court.class, false);
 
         addThemeVariants(GridVariant.LUMO_NO_BORDER);
         setSelectionMode(SelectionMode.NONE);
 
-        constructGrid(timeSlotDTOs);
+        constructGrid(timeSlots);
     }
 
-    private void constructGrid(final List<TimeSlotDTO> timeSlotDTOs) {
+    private void constructGrid(final List<TimeSlot> timeSlots) {
         addComponentColumn(CourtInfoComponent::new).setFrozen(true);
 
-        timeSlotDTOs.forEach(timeSlot ->
+        timeSlots.forEach(timeSlot ->
                 addComponentColumn(court -> createBookingComponent(court, timeSlot))
                         .setHeader(timeSlot.getStartTime().toString())
                         .setVisible(timeSlot.getBookable())
@@ -42,15 +42,15 @@ public class BookingGridComponent extends Grid<CourtDTO> {
     }
 
     @Nonnull
-    private BookingCellComponent createBookingComponent(@Nonnull final CourtDTO courtDTO,
-                                                        @Nonnull final TimeSlotDTO timeSlotDTO) {
-        final Optional<BookingDTO> booking = CourtUtil.getBookingForTimeSlot(courtDTO.getBookings(), timeSlotDTO);
+    private BookingCellComponent createBookingComponent(@Nonnull final Court court,
+                                                        @Nonnull final TimeSlot timeSlot) {
+        final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeSlot);
 
         if (booking.isPresent()) {
-            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, courtDTO, timeSlotDTO, booking.get()));
+            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeSlot, booking.get()));
             return new BookedCellComponent(booking.get(), clickListener);
         } else {
-            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new FreeCellClickEvent(this, courtDTO, timeSlotDTO));
+            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new FreeCellClickEvent(this, court, timeSlot));
             return new FreeCellComponent(clickListener);
         }
     }

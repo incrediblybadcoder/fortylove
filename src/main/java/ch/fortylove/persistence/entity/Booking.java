@@ -7,7 +7,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +30,23 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
 
     private LocalDate date;
 
+
+    public Booking() {
+        super();
+    }
+
+    public Booking(final long id,
+                   final Court court,
+                    final List<User> users,
+                   final int timeSlotIndex,
+                    final LocalDate date) {
+        super(id, 0);
+        this.court = court;
+        this.users = users;
+        this.timeSlotIndex = timeSlotIndex;
+        this.date = date;
+    }
+
     public int getTimeSlotIndex() {
         return timeSlotIndex;
     }
@@ -39,30 +55,27 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
         this.timeSlotIndex = timeSlotIndex;
     }
 
-    @Nonnull
     public Court getCourt() {
         return court;
     }
 
-    public void setCourt(@Nonnull final Court court) {
+    public void setCourt( final Court court) {
         this.court = court;
     }
 
-    @Nonnull
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@Nonnull final LocalDate date) {
+    public void setDate( final LocalDate date) {
         this.date = date;
     }
 
-    @Nonnull
     public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<User> users) {
+    public void setUsers( final List<User> users) {
         this.users = users;
     }
 
@@ -83,7 +96,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking>{
     }
 
     @Override
-    public int compareTo(@Nonnull final Booking otherBooking) {
+    public int compareTo( final Booking otherBooking) {
         return date.compareTo(otherBooking.getDate());
     }
 }

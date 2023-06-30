@@ -1,8 +1,8 @@
 package ch.fortylove.security;
 
-import ch.fortylove.persistence.dto.PrivilegeDTO;
-import ch.fortylove.persistence.dto.RoleDTO;
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.Privilege;
+import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final UserDTO userDTO = userService.findByEmail(email)
+        final User user = userService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + email));
 
         boolean enabled = true;
@@ -41,24 +41,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         boolean accountNonLocked = true;
 
         return new org.springframework.security.core.userdetails.User(
-                userDTO.getEmail(), userDTO.getPassword(), enabled, accountNonExpired,
-                credentialsNonExpired, accountNonLocked, getAuthorities(userDTO.getRoles()));
+                user.getEmail(), user.getPassword(), enabled, accountNonExpired,
+                credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
     @Nonnull
-    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<RoleDTO> roleDTOs) {
-        return getGrantedAuthorities(getPrivileges(roleDTOs));
+    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
+        return getGrantedAuthorities(getPrivileges(roles));
     }
 
     @Nonnull
-    private List<String> getPrivileges(final Collection<RoleDTO> roleDTOs) {
+    private List<String> getPrivileges(final Collection<Role> roles) {
         final List<String> privileges = new ArrayList<>();
-        final List<PrivilegeDTO> collection = new ArrayList<>();
-        for (final RoleDTO roleDTO : roleDTOs) {
-            privileges.add(roleDTO.getName());
-            collection.addAll(roleDTO.getPrivileges());
+        final List<Privilege> collection = new ArrayList<>();
+        for (final Role role : roles) {
+            privileges.add(role.getName());
+            collection.addAll(role.getPrivileges());
         }
-        for (final PrivilegeDTO item : collection) {
+        for (final Privilege item : collection) {
             privileges.add(item.getName());
         }
 

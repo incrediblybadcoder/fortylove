@@ -1,6 +1,6 @@
 package ch.fortylove.views.membermanagement;
 
-import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.User;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,7 +24,7 @@ public class UserForm extends FormLayout {
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<UserDTO> binder = new BeanValidationBinder<>(UserDTO.class); //BeanValidationBider oder nur Binder?
+    Binder<User> binder = new BeanValidationBinder<>(User.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
@@ -41,8 +41,8 @@ public class UserForm extends FormLayout {
                 createButtonsLayout());
     }
 
-    public void setUser(UserDTO userDTO) {
-        binder.setBean(userDTO);
+    public void setUser(User user) {
+        binder.setBean(user);
     }
 
     private Component createButtonsLayout() {
@@ -70,27 +70,27 @@ public class UserForm extends FormLayout {
 
     //Events
     public static abstract class UserFormEvent extends ComponentEvent<UserForm> {
-        private final UserDTO userDTO;
+        private final User user;
 
-        protected UserFormEvent(UserForm source, UserDTO userDTO) {
+        protected UserFormEvent(UserForm source, User user) {
             super(source, false);
-            this.userDTO = userDTO;
+            this.user = user;
         }
 
-        public UserDTO getUser() {
-            return userDTO;
+        public User getUser() {
+            return user;
         }
     }
 
         public static class SaveEvent extends UserFormEvent {
-            SaveEvent(UserForm source, UserDTO userDTO) {
-                super(source, userDTO);
+            SaveEvent(UserForm source, User user) {
+                super(source, user);
             }
         }
 
         public static class DeleteEvent extends UserFormEvent {
-            DeleteEvent(UserForm source, UserDTO userDTO) {
-                super(source, userDTO);
+            DeleteEvent(UserForm source, User user) {
+                super(source, user);
             }
         }
 

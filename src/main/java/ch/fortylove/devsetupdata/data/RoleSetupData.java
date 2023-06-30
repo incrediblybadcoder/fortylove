@@ -1,8 +1,6 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.PrivilegeDTO;
-import ch.fortylove.persistence.dto.RoleDTO;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.service.PrivilegeService;
@@ -35,43 +33,43 @@ public class RoleSetupData {
     }
 
     @Nonnull
-    private List<PrivilegeDTO> getUserPrivileges() {
-        final ArrayList<PrivilegeDTO> privilegeDTOs = new ArrayList<>();
-        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
+    private List<Privilege> getUserPrivileges() {
+        final ArrayList<Privilege> Privileges = new ArrayList<>();
+        final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
+        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
 
-        readPrivilege.ifPresent(privilegeDTOs::add);
-        changePasswordPrivilege.ifPresent(privilegeDTOs::add);
+        readPrivilege.ifPresent(Privileges::add);
+        changePasswordPrivilege.ifPresent(Privileges::add);
 
-        return privilegeDTOs;
+        return Privileges;
     }
 
     @Nonnull
-    private List<PrivilegeDTO> getStaffPrivileges() {
+    private List<Privilege> getStaffPrivileges() {
         return getAdminPrivileges();
     }
 
     @Nonnull
-    private List<PrivilegeDTO> getAdminPrivileges() {
-        final ArrayList<PrivilegeDTO> privilegeDTOs = new ArrayList<>();
-        final Optional<PrivilegeDTO> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<PrivilegeDTO> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
-        final Optional<PrivilegeDTO> writePrivilege = privilegeService.findByName(Privilege.WRITE_PRIVILEGE);
+    private List<Privilege> getAdminPrivileges() {
+        final ArrayList<Privilege> Privileges = new ArrayList<>();
+        final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
+        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
+        final Optional<Privilege> writePrivilege = privilegeService.findByName(Privilege.WRITE_PRIVILEGE);
 
-        readPrivilege.ifPresent(privilegeDTOs::add);
-        writePrivilege.ifPresent(privilegeDTOs::add);
-        changePasswordPrivilege.ifPresent(privilegeDTOs::add);
+        readPrivilege.ifPresent(Privileges::add);
+        writePrivilege.ifPresent(Privileges::add);
+        changePasswordPrivilege.ifPresent(Privileges::add);
 
-        return privilegeDTOs;
+        return Privileges;
     }
 
     @Transactional
     void createRoleIfNotFound(@Nonnull final String name,
-                              @Nonnull final List<PrivilegeDTO> privilegeDTOs) {
-        final Optional<RoleDTO> role = roleService.findByName(name);
+                              @Nonnull final List<Privilege> Privileges) {
+        final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {
-            roleService.create(new RoleDTO(0L, name, null, privilegeDTOs));
+            roleService.create(new Role(0L, name, null, Privileges));
         }
     }
 }

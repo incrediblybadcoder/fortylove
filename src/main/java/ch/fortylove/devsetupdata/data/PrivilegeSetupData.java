@@ -1,7 +1,6 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
-import ch.fortylove.persistence.dto.PrivilegeDTO;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,9 @@ public class PrivilegeSetupData {
 
     @Transactional
     void createPrivilegeIfNotFound(@Nonnull final String name) {
-        final Optional<PrivilegeDTO> privilege = privilegeService.findByName(name);
+        final Optional<Privilege> privilege = privilegeService.findByName(name);
         if (privilege.isEmpty()) {
-            privilegeService.create(new PrivilegeDTO(0L, name, null));
+            privilegeService.create(new Privilege(0L, name, null));
         }
     }
 }
