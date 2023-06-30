@@ -3,12 +3,12 @@ package ch.fortylove.persistence.dto;
 import java.util.List;
 import java.util.Objects;
 
-public class Court {
+public class CourtDTO {
 
     private final long id;
-    private final List<Booking> bookings;
+    private final List<BookingDTO> bookings;
 
-    public Court(final long id, final List<Booking> bookings) {
+    public CourtDTO(final long id, final List<BookingDTO> bookings) {
         this.id = id;
         this.bookings = bookings;
     }
@@ -17,7 +17,7 @@ public class Court {
         return id;
     }
 
-    public List<Booking> getBookings() {
+    public List<BookingDTO> getBookings() {
         return bookings;
     }
 
@@ -25,8 +25,8 @@ public class Court {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Court court = (Court) o;
-        return id == court.id;
+        final CourtDTO courtDTO = (CourtDTO) o;
+        return id == courtDTO.id;
     }
 
     @Override

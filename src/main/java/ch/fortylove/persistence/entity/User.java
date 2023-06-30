@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "users")
-public class UserEntity extends AbstractEntity {
+public class User extends AbstractEntity {
 
     private String firstName;
 
@@ -32,14 +32,14 @@ public class UserEntity extends AbstractEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<RoleEntity> roles;
+    private List<Role> roles;
 
     @ManyToMany(
             mappedBy = "users",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
-    private List<BookingEntity> bookings;
+    private List<Booking> bookings;
 
     @Nonnull
     public String getFirstName() {
@@ -78,11 +78,11 @@ public class UserEntity extends AbstractEntity {
     }
 
     @Nonnull
-    public List<RoleEntity> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<RoleEntity> roles) {
+    public void setRoles(@Nonnull final List<Role> roles) {
         this.roles = roles;
     }
 
@@ -95,11 +95,11 @@ public class UserEntity extends AbstractEntity {
     }
 
     @Nonnull
-    public List<BookingEntity> getBookings() {
+    public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<BookingEntity> bookings) {
+    public void setBookings(@Nonnull final List<Booking> bookings) {
         this.bookings = bookings;
     }
 
@@ -107,7 +107,7 @@ public class UserEntity extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final UserEntity user = (UserEntity) o;
+        final User user = (User) o;
         return enabled == user.enabled &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&

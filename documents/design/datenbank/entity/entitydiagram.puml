@@ -10,7 +10,7 @@ entity "Member" as member {
   sex
   age
   status
-  role
+  roleDTO
 }
 json Member {
    "Attribute":"status",
@@ -18,7 +18,7 @@ json Member {
    "color": ["Aktiv", "Passiv", "Inaktiv", "Junior", "Vorstand", "Ehrenmitglied"]
 }
 json Member1 {
-   "Attribute":"role",
+   "Attribute":"roleDTO",
    "type":"Enum",
    "color": ["Admin", "Stuff", "User"]
 }
@@ -37,7 +37,7 @@ json Booking {
    "color": ["gebucht", "frei"]
 }
 
-entity "Court" as court {
+entity "Court" as courtDTO {
   + Id (PK)
   --
   unterlage
@@ -52,9 +52,9 @@ entity "Club" as club {
 }
 note top: Ein Club hat immer mindestens\nein Member, da ein Club von einem\nBenutzer erstellt wird und dadurch\nautomatisch zum Club gehört und\nAdmin ist.
 
-court "1"-left-"\t16" booking
+courtDTO "1"-left-"\t16" booking
 booking "0..*"-up-"2" member
-club "1"-down-"0..*" court
+club "1"-down-"0..*" courtDTO
 member "1..*"-right-"1..*" club
 
 

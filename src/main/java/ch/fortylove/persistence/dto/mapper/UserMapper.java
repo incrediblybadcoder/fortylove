@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
-import ch.fortylove.persistence.dto.User;
-import ch.fortylove.persistence.entity.UserEntity;
+import ch.fortylove.persistence.dto.UserDTO;
+import ch.fortylove.persistence.entity.User;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
@@ -12,9 +12,9 @@ import java.util.List;
 )
 public interface UserMapper {
 
-    User convert(UserEntity userEntity, @Context CycleAvoidingMappingContext context);
+    UserDTO convert(User user, @Context CycleAvoidingMappingContext context);
 
-    UserEntity convert(User user, @Context CycleAvoidingMappingContext context);
+    User convert(UserDTO userDTO, @Context CycleAvoidingMappingContext context);
 
-    List<User> convert(List<UserEntity> userEntities, @Context CycleAvoidingMappingContext context);
+    List<UserDTO> convert(List<User> users, @Context CycleAvoidingMappingContext context);
 }

@@ -1,31 +1,31 @@
 package ch.fortylove.views.booking.grid.events;
 
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
 import ch.fortylove.views.booking.grid.BookingGridComponent;
 
 import javax.annotation.Nonnull;
 
 public class FreeCellClickEvent extends BookingGridEvent {
 
-    @Nonnull private final Court court;
-    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final CourtDTO courtDTO;
+    @Nonnull private final TimeSlotDTO timeSlotDTO;
 
     public FreeCellClickEvent(@Nonnull final BookingGridComponent source,
-                              @Nonnull final Court court,
-                              @Nonnull final TimeSlot timeSlot) {
+                              @Nonnull final CourtDTO courtDTO,
+                              @Nonnull final TimeSlotDTO timeSlotDTO) {
         super(source);
-        this.court = court;
-        this.timeSlot = timeSlot;
+        this.courtDTO = courtDTO;
+        this.timeSlotDTO = timeSlotDTO;
     }
 
     @Nonnull
-    public Court getCourt() {
-        return court;
+    public CourtDTO getCourt() {
+        return courtDTO;
     }
 
     @Nonnull
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public TimeSlotDTO getTimeSlot() {
+        return timeSlotDTO;
     }
 }

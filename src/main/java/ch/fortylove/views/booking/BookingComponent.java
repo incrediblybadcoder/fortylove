@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking;
 
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.User;
+import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.dto.UserDTO;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.booking.dialog.BookingDialog;
@@ -22,8 +22,8 @@ public class BookingComponent extends VerticalLayout {
     private BookingGridComponent bookingGridComponent;
     private DateSelectionComponent dateSelectionComponent;
 
-    private List<Court> courts;
-    private List<User> users;
+    private List<CourtDTO> courtDTOs;
+    private List<UserDTO> userDTOs;
 
     public BookingComponent( @Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
         setSpacing(false);
@@ -48,23 +48,23 @@ public class BookingComponent extends VerticalLayout {
 
     @Nonnull
     private BookingGridComponent createBookingGridComponent(@Nonnull final BookingComponentConfiguration bookingComponentConfiguration) {
-        bookingGridComponent = new BookingGridComponent(bookingComponentConfiguration.timeSlots());
+        bookingGridComponent = new BookingGridComponent(bookingComponentConfiguration.timeSlotDTOs());
         bookingGridComponent.addBookedCellClickListener(this::bookedCellClickedListener);
         bookingGridComponent.addFreeCellClickListener(this::freeCellClickedListener);
 
         return bookingGridComponent;
     }
 
-    public void refreshComponent(@Nonnull final List<Court> courts,
-                                 @Nonnull final List<User> users) {
-        this.courts = courts;
-        this.users = users;
+    public void refreshComponent(@Nonnull final List<CourtDTO> courtDTOs,
+                                 @Nonnull final List<UserDTO> userDTOs) {
+        this.courtDTOs = courtDTOs;
+        this.userDTOs = userDTOs;
         refreshGrid();
     }
 
     private void refreshGrid() {
-        if (courts != null) {
-            bookingGridComponent.setItems(courts);
+        if (courtDTOs != null) {
+            bookingGridComponent.setItems(courtDTOs);
         }
     }
 
@@ -73,17 +73,17 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClickedListener(@Nonnull final BookedCellClickEvent event) {
-        final User user = new User(0L, "marco", "solombrino", "email", "password", true, null, null);
+        final UserDTO userDTO = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
 
-        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), user, users);
+        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), userDTO, userDTOs);
         bookingDialog.addDialogBookingListener(this::dialogBooking);
         bookingDialog.openExisting(null, event.getBooking());
     }
 
     private void freeCellClickedListener(@Nonnull final FreeCellClickEvent event) {
-        final User user = new User(0L, "marco", "solombrino", "email", "password", true, null, null);
+        final UserDTO userDTO = new UserDTO(0L, "marco", "solombrino", "email", "password", true, null, null);
 
-        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), user, users);
+        final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), userDTO, userDTOs);
         bookingDialog.addDialogBookingListener(this::dialogBooking);
         bookingDialog.openFree();
     }

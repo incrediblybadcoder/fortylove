@@ -1,8 +1,8 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.persistence.dto.Privilege;
-import ch.fortylove.persistence.dto.Role;
+import ch.fortylove.persistence.dto.PrivilegeDTO;
+import ch.fortylove.persistence.dto.RoleDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +20,25 @@ class TestRoleServiceImpl {
     @Test
     public void testCreate() {
         final String roleName = "roleName";
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
+        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
 
-        final Role createdRole = testee.create(new Role(0L, roleName, null, Arrays.asList(privilege1, privilege2)));
+        final RoleDTO createdRoleDTO = testee.create(new RoleDTO(0L, roleName, null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
 
         Assertions.assertTrue(testee.findByName(roleName).isPresent());
-        Assertions.assertEquals(createdRole, testee.findByName(roleName).get());
-        Assertions.assertTrue(createdRole.getPrivileges().contains(privilege1));
-        Assertions.assertTrue(createdRole.getPrivileges().contains(privilege2));
+        Assertions.assertEquals(createdRoleDTO, testee.findByName(roleName).get());
+        Assertions.assertTrue(createdRoleDTO.getPrivileges().contains(privilegeDTO1));
+        Assertions.assertTrue(createdRoleDTO.getPrivileges().contains(privilegeDTO2));
     }
 
     @Test
     public void testFindByName_notExists() {
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        testee.create(new Role(0L, "roleName1", null, Arrays.asList(privilege1, privilege2)));
-        testee.create(new Role(0L, "roleName3", null, Arrays.asList(privilege1, privilege2)));
+        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
+        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
+        testee.create(new RoleDTO(0L, "roleName1", null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
+        testee.create(new RoleDTO(0L, "roleName3", null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
 
-        final Optional<Role> role = testee.findByName("roleName2");
+        final Optional<RoleDTO> role = testee.findByName("roleName2");
 
         Assertions.assertTrue(role.isEmpty());
     }
@@ -46,15 +46,15 @@ class TestRoleServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String roleName2 = "roleName2";
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        testee.create(new Role(0L, "roleName1", null, Arrays.asList(privilege1, privilege2)));
-        final Role role2 = testee.create(new Role(0L, roleName2, null, Arrays.asList(privilege1, privilege2)));
-        testee.create(new Role(0L, "roleName3", null, Arrays.asList(privilege1, privilege2)));
+        final PrivilegeDTO privilegeDTO1 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName1", null));
+        final PrivilegeDTO privilegeDTO2 = privilegeService.create(new PrivilegeDTO(0L, "privilegeName2", null));
+        testee.create(new RoleDTO(0L, "roleName1", null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
+        final RoleDTO roleDTO2 = testee.create(new RoleDTO(0L, roleName2, null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
+        testee.create(new RoleDTO(0L, "roleName3", null, Arrays.asList(privilegeDTO1, privilegeDTO2)));
 
-        final Optional<Role> role = testee.findByName(roleName2);
+        final Optional<RoleDTO> role = testee.findByName(roleName2);
 
         Assertions.assertTrue(role.isPresent());
-        Assertions.assertEquals(role2, role.get());
+        Assertions.assertEquals(roleDTO2, role.get());
     }
 }

@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "bookings")
-public class BookingEntity extends AbstractEntity implements Comparable<BookingEntity>{
+public class Booking extends AbstractEntity implements Comparable<Booking>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
-    private CourtEntity court;
+    private Court court;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -25,7 +25,7 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<UserEntity> users;
+    private List<User> users;
 
     private int timeSlotIndex;
 
@@ -40,11 +40,11 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     }
 
     @Nonnull
-    public CourtEntity getCourt() {
+    public Court getCourt() {
         return court;
     }
 
-    public void setCourt(@Nonnull final CourtEntity court) {
+    public void setCourt(@Nonnull final Court court) {
         this.court = court;
     }
 
@@ -58,11 +58,11 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     }
 
     @Nonnull
-    public List<UserEntity> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<UserEntity> users) {
+    public void setUsers(@Nonnull final List<User> users) {
         this.users = users;
     }
 
@@ -70,7 +70,7 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final BookingEntity booking = (BookingEntity) o;
+        final Booking booking = (Booking) o;
         return timeSlotIndex == booking.timeSlotIndex &&
                 Objects.equals(court, booking.court) &&
                 Objects.equals(users, booking.users) &&
@@ -83,7 +83,7 @@ public class BookingEntity extends AbstractEntity implements Comparable<BookingE
     }
 
     @Override
-    public int compareTo(@Nonnull final BookingEntity otherBooking) {
+    public int compareTo(@Nonnull final Booking otherBooking) {
         return date.compareTo(otherBooking.getDate());
     }
 }

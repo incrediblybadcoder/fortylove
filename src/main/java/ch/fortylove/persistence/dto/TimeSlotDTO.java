@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class TimeSlot {
+public class TimeSlotDTO {
 
     public static final long MINUTES_PER_TIMESLOT = 60;
     public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
@@ -13,9 +13,9 @@ public class TimeSlot {
     private final int index;
     private final boolean bookable;
 
-    public TimeSlot(final long id,
-                    final boolean bookable,
-                    final int index) {
+    public TimeSlotDTO(final long id,
+                       final boolean bookable,
+                       final int index) {
         this.id = id;
         this.bookable = bookable;
         this.index = index;
@@ -51,7 +51,7 @@ public class TimeSlot {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TimeSlot that = (TimeSlot) o;
+        final TimeSlotDTO that = (TimeSlotDTO) o;
         return id == that.id &&
                 index == that.index &&
                 bookable == that.bookable;
