@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.Email;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class User extends AbstractEntity {
 
     private String lastName;
 
+    @Email
     private String email;
 
     @Column(length = 60)

@@ -31,12 +31,12 @@ public class UserSetupData {
     }
 
     public void createUsers() {
-        createUserIfNotFound("admin", "admin", "admin", "password", getAdminRole());
-        createUserIfNotFound("staff", "staff", "staff", "password", getStaffRole());
+        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole());
+        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole());
 
-        createUserIfNotFound("marco", "Marco", "Solombrino", "password", getUserRole());
-        createUserIfNotFound("jonas", "Jonas", "Cahenzli", "password", getUserRole());
-        createUserIfNotFound("daniel", "Daniel", "Tobler", "password", getUserRole());
+        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole());
+        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole());
+        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole());
     }
 
     @Nonnull

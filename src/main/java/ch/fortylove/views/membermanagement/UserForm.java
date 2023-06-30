@@ -1,114 +1,129 @@
 package ch.fortylove.views.membermanagement;
 
+import ch.fortylove.persistence.backingbeans.UserFormBackingBean;
 import ch.fortylove.persistence.entity.User;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
+import ch.fortylove.views.membermanagement.events.CloseEvent;
+import ch.fortylove.views.membermanagement.events.DeleteEvent;
+import ch.fortylove.views.membermanagement.events.SaveEvent;
+import ch.fortylove.views.membermanagement.events.UpdateEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.data.validator.EmailValidator;
 
 public class UserForm extends FormLayout {
-    TextField firstName = new TextField("First name");
-    TextField lastName = new TextField("Last name");
+    TextField firstName = new TextField("Vorname");
+    TextField lastName = new TextField("Nachname");
     TextField email = new TextField("Email");
-    //ToDo: add role selection
 
-    Button save = new Button("Save");
-    Button delete = new Button("Delete");
-    Button close = new Button("Cancel");
-
-    Binder<User> binder = new BeanValidationBinder<>(User.class); //BeanValidationBider oder nur Binder?
+    private Button save;
+    private Button update;
+    private Button delete;
+    private Button close;
+    Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
+
+        binder.forField(email)
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .bind(UserFormBackingBean::getEmail, UserFormBackingBean::setEmail);
 
         binder.bindInstanceFields(this);
         //Todo: add role selection
         //Todo: add user state
 
-
-        add(
-                firstName,
-                lastName,
-                email,
-                createButtonsLayout());
+        constructUI();
     }
 
-    public void setUser(User user) {
-        binder.setBean(user);
+    private void constructUI() {
+        add(createInputFieldsLayout());
+        initializeButtons();
+        createButtonsLayout();
     }
 
-    private Component createButtonsLayout() {
+    private void initializeButtons() {
+        save = new Button("Speichern");
+        update = new Button("Aktualisieren");
+        delete = new Button("Löschen");
+        close = new Button("Abbrechen");
+    }
+
+    private VerticalLayout createInputFieldsLayout() {
+        VerticalLayout inputFieldsLayout = new VerticalLayout();
+        inputFieldsLayout.add(firstName, lastName, email);
+        return inputFieldsLayout;
+    }
+
+    private void createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         save.addClickShortcut(Key.ENTER);
+        update.addClickShortcut(Key.ENTER);
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
-        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
+        update.addClickListener(click -> validateAndUpdate());
+        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean().toUserFormInformations())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(evt -> save.setEnabled(binder.isValid()));
+    }
 
-        return new HorizontalLayout(save, delete, close);
+    public void createUserForm(){
+        removeAll();
+        add(createInputFieldsLayout(), save, close);
+    }
+
+    public void updateUserForm(){
+        removeAll();
+        add(createInputFieldsLayout(), update, delete, close);
+    }
+
+    public void setUser(User user) {
+        if (user != null) {
+            UserFormBackingBean backingBean = new UserFormBackingBean();
+            backingBean.setFirstName(user.getFirstName());
+            backingBean.setLastName(user.getLastName());
+            backingBean.setEmail(user.getEmail());
+            backingBean.setId(user.getId());
+            binder.setBean(backingBean);
+        }
+    }
+
+    private void validateAndUpdate() {
+        if(binder.isValid()){
+            fireEvent(new UpdateEvent(this, binder.getBean().toUserFormInformations()));
+        }
     }
 
     private void validateAndSave() {
         if(binder.isValid()){
-            fireEvent(new SaveEvent(this, binder.getBean()));
+            fireEvent(new SaveEvent(this, binder.getBean().toUserFormInformations()));
         }
     }
-
-    //Events
-    public static abstract class UserFormEvent extends ComponentEvent<UserForm> {
-        private final User user;
-
-        protected UserFormEvent(UserForm source, User user) {
-            super(source, false);
-            this.user = user;
-        }
-
-        public User getUser() {
-            return user;
-        }
+    public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+        addListener(DeleteEvent.class, listener);
     }
 
-        public static class SaveEvent extends UserFormEvent {
-            SaveEvent(UserForm source, User user) {
-                super(source, user);
-            }
-        }
-
-        public static class DeleteEvent extends UserFormEvent {
-            DeleteEvent(UserForm source, User user) {
-                super(source, user);
-            }
-        }
-
-        public static class CloseEvent extends UserFormEvent {
-            CloseEvent(UserForm source) {
-                super(source, null);
-            }
-        }
-
-    public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-        return addListener(DeleteEvent.class, listener);
+    public void addSaveListener(ComponentEventListener<SaveEvent> listener) {
+        addListener(SaveEvent.class, listener);
     }
 
-    public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-        return addListener(SaveEvent.class, listener);
+    public void addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
+        addListener(UpdateEvent.class, listener);
     }
-    public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
-        return addListener(CloseEvent.class, listener);
+    public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
+        addListener(CloseEvent.class, listener);
     }
 }
 

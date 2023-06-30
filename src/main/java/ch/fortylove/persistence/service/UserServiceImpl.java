@@ -27,8 +27,23 @@ public class UserServiceImpl implements UserService {
 
     @Nonnull
     @Override
+    public User update(@Nonnull final User user) {
+        if (userRepository.findById(user.getId()).isPresent()) {
+            return userRepository.save(user);
+        }
+        throw new IllegalArgumentException("User id must not be null");
+    }
+
+    @Nonnull
+    @Override
     public Optional<User> findByEmail(@Nonnull final String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
+    }
+
+    @Nonnull
+    @Override
+    public Optional<User> findById(@Nonnull final Long id) {
+        return userRepository.findById((id));
     }
 
     @Nonnull
@@ -45,11 +60,6 @@ public class UserServiceImpl implements UserService {
         } else {
             return userRepository.search(filterText);
         }
-    }
-
-    @Override
-    public void save(@Nonnull final User user) {
-        userRepository.save(user);
     }
 
     /*
