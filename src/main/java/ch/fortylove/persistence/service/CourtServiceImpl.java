@@ -1,10 +1,10 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.Court;
+import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.dto.CourtDTO;
 import ch.fortylove.persistence.dto.mapper.CourtMapper;
 import ch.fortylove.persistence.dto.mapper.CycleAvoidingMappingContext;
-import ch.fortylove.persistence.entity.CourtEntity;
+import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,38 +30,38 @@ public class CourtServiceImpl implements CourtService {
 
     @Nonnull
     @Override
-    public Court create(@Nonnull final Court court) {
-        final CourtEntity courtEntity = courtRepository.save(courtMapper.convert(court, new CycleAvoidingMappingContext()));
-        return courtMapper.convert(courtEntity, new CycleAvoidingMappingContext());
+    public CourtDTO create(@Nonnull final CourtDTO courtDTO) {
+        final Court court = courtRepository.save(courtMapper.convert(courtDTO, new CycleAvoidingMappingContext()));
+        return courtMapper.convert(court, new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public Optional<Court> findById(final long id) {
+    public Optional<CourtDTO> findById(final long id) {
         return Optional.ofNullable(courtMapper.convert(courtRepository.findById(id), new CycleAvoidingMappingContext()));
     }
 
     @Nonnull
     @Override
-    public List<Court> findAll() {
+    public List<CourtDTO> findAll() {
         return courtMapper.convert(courtRepository.findAll(), new CycleAvoidingMappingContext());
     }
 
     @Nonnull
     @Override
-    public List<Court> findAllByDate(@Nonnull final LocalDate date) {
-        final List<Court> courts = new ArrayList<>();
+    public List<CourtDTO> findAllByDate(@Nonnull final LocalDate date) {
+        final List<CourtDTO> courtDTOs = new ArrayList<>();
 
-        final List<Court> allCourts = findAll();
-        allCourts.forEach(court -> courts.add(new Court(court.getId(), getBookingsByDate(court, date))));
+        final List<CourtDTO> allCourtDTOs = findAll();
+        allCourtDTOs.forEach(court -> courtDTOs.add(new CourtDTO(court.getId(), getBookingsByDate(court, date))));
 
-        return courts;
+        return courtDTOs;
     }
 
     @Nonnull
-    private List<Booking> getBookingsByDate(@Nonnull final Court court,
-                                            @Nonnull final LocalDate date) {
-        final List<Booking> allBookings = court.getBookings();
+    private List<BookingDTO> getBookingsByDate(@Nonnull final CourtDTO courtDTO,
+                                               @Nonnull final LocalDate date) {
+        final List<BookingDTO> allBookings = courtDTO.getBookings();
         return allBookings.stream().filter(booking -> booking.getDate().equals(date)).toList();
     }
 }

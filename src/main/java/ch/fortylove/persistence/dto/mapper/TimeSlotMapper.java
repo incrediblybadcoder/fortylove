@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
-import ch.fortylove.persistence.dto.TimeSlot;
-import ch.fortylove.persistence.entity.TimeSlotEntity;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
+import ch.fortylove.persistence.entity.TimeSlot;
 import org.mapstruct.Mapper;
 
 @Mapper(
@@ -9,8 +9,7 @@ import org.mapstruct.Mapper;
 )
 public interface TimeSlotMapper {
 
-    TimeSlot convert(TimeSlotEntity timeSlotEntity);
+    TimeSlotDTO convert(TimeSlot timeSlot);
 
-    TimeSlotEntity convert(TimeSlot timeSlot);
-
+    TimeSlot convert(TimeSlotDTO timeSlotDTO);
 }

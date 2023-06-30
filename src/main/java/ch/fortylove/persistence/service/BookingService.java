@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.Booking;
+import ch.fortylove.persistence.dto.BookingDTO;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public interface BookingService {
 
     @Nonnull
-    Booking create(@Nonnull final Booking booking);
+    BookingDTO create(@Nonnull final BookingDTO bookingDTO);
 
     @Nonnull
-    List<Booking> findAllByCourtId(final long courtId);
+    List<BookingDTO> findAllByCourtId(final long courtId);
 
     @Nonnull
-    List<Booking> findAll();
+    List<BookingDTO> findAll();
 }

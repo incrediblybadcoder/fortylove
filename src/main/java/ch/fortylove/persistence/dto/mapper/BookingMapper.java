@@ -1,7 +1,7 @@
 package ch.fortylove.persistence.dto.mapper;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.entity.BookingEntity;
+import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.entity.Booking;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
@@ -12,9 +12,9 @@ import java.util.List;
 )
 public interface BookingMapper {
 
-    Booking convert(BookingEntity bookingEntity, @Context CycleAvoidingMappingContext context);
+    BookingDTO convert(Booking booking, @Context CycleAvoidingMappingContext context);
 
-    BookingEntity convert(Booking booking, @Context CycleAvoidingMappingContext context);
+    Booking convert(BookingDTO bookingDTO, @Context CycleAvoidingMappingContext context);
 
-    List<Booking> convert(List<BookingEntity> bookingEntities, @Context CycleAvoidingMappingContext context);
+    List<BookingDTO> convert(List<Booking> bookings, @Context CycleAvoidingMappingContext context);
 }

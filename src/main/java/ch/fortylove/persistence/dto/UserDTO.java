@@ -3,7 +3,7 @@ package ch.fortylove.persistence.dto;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+public class UserDTO {
 
     private final long id;
     private final String firstName;
@@ -11,17 +11,17 @@ public class User {
     private final String email;
     private final String password;
     private final boolean enabled;
-    private final List<Role> roles;
-    private final List<Booking> bookings;
+    private final List<RoleDTO> roles;
+    private final List<BookingDTO> bookings;
 
-    public User(final long id,
-                final String firstName,
-                final String lastName,
-                final String email,
-                final String password,
-                final boolean enabled,
-                final List<Role> roles,
-                final List<Booking> bookings) {
+    public UserDTO(final long id,
+                   final String firstName,
+                   final String lastName,
+                   final String email,
+                   final String password,
+                   final boolean enabled,
+                   final List<RoleDTO> roles,
+                   final List<BookingDTO> bookings) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,11 +60,11 @@ public class User {
         return enabled;
     }
 
-    public List<Role> getRoles() {
+    public List<RoleDTO> getRoles() {
         return roles;
     }
 
-    public List<Booking> getBookings() {
+    public List<BookingDTO> getBookings() {
         return bookings;
     }
 
@@ -72,8 +72,8 @@ public class User {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final User user = (User) o;
-        return id == user.id;
+        final UserDTO userDTO = (UserDTO) o;
+        return id == userDTO.id;
     }
 
     @Override

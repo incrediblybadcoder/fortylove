@@ -1,8 +1,8 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.dto.BookingSettings;
+import ch.fortylove.persistence.dto.BookingSettingsDTO;
 import ch.fortylove.persistence.dto.mapper.BookingSettingsMapper;
-import ch.fortylove.persistence.entity.BookingSettingsEntity;
+import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.repository.BookingSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +25,10 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull
     @Override
-    public BookingSettings create(@Nonnull final BookingSettings bookingSettings) {
-        final List<BookingSettingsEntity> existingBookingSettings = bookingSettingsRepository.findAll();
+    public BookingSettingsDTO create(@Nonnull final BookingSettingsDTO bookingSettingsDTO) {
+        final List<BookingSettings> existingBookingSettings = bookingSettingsRepository.findAll();
         if (existingBookingSettings.isEmpty()) {
-            final BookingSettingsEntity save = bookingSettingsRepository.save(bookingSettingsMapper.convert(bookingSettings));
+            final BookingSettings save = bookingSettingsRepository.save(bookingSettingsMapper.convert(bookingSettingsDTO));
             return bookingSettingsMapper.convert(save);
         }
 
@@ -37,8 +37,8 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull
     @Override
-    public BookingSettings getBookingSettings() {
-        final List<BookingSettingsEntity> bookingSettings = bookingSettingsRepository.findAll();
+    public BookingSettingsDTO getBookingSettings() {
+        final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
         if (bookingSettings.isEmpty()) {
             throw new IllegalStateException("No booking settings.");
         } else if (bookingSettings.size() > 1) {

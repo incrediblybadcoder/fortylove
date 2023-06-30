@@ -1,8 +1,8 @@
 package ch.fortylove.views.booking.events;
 
-import ch.fortylove.persistence.dto.Booking;
-import ch.fortylove.persistence.dto.Court;
-import ch.fortylove.persistence.dto.TimeSlot;
+import ch.fortylove.persistence.dto.BookingDTO;
+import ch.fortylove.persistence.dto.CourtDTO;
+import ch.fortylove.persistence.dto.TimeSlotDTO;
 import ch.fortylove.views.booking.BookingComponent;
 import com.vaadin.flow.component.ComponentEvent;
 
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 public class BookingEvent extends ComponentEvent<BookingComponent> {
 
-    @Nonnull private final Court court;
+    @Nonnull private final CourtDTO courtDTO;
     @Nonnull private final LocalDate date;
-    @Nonnull private final TimeSlot timeSlot;
-    @Nullable private final Booking booking;
+    @Nonnull private final TimeSlotDTO timeSlotDTO;
+    @Nullable private final BookingDTO booking;
     @Nonnull private final Type type;
 
     public enum Type {
@@ -25,46 +25,46 @@ public class BookingEvent extends ComponentEvent<BookingComponent> {
     }
 
     protected BookingEvent(@Nonnull final BookingComponent source,
-                           @Nonnull final Court court,
+                           @Nonnull final CourtDTO courtDTO,
                            @Nonnull final LocalDate date,
-                           @Nonnull final TimeSlot timeSlot,
-                           @Nullable final Booking booking,
+                           @Nonnull final TimeSlotDTO timeSlotDTO,
+                           @Nullable final BookingDTO booking,
                            @Nonnull final Type type) {
         super(source, false);
-        this.court = court;
+        this.courtDTO = courtDTO;
         this.date = date;
         this.booking = booking;
-        this.timeSlot = timeSlot;
+        this.timeSlotDTO = timeSlotDTO;
         this.type = type;
     }
 
     public static BookingEvent freeBooking(@Nonnull final BookingComponent source,
-                                           @Nonnull final Court court,
+                                           @Nonnull final CourtDTO courtDTO,
                                            @Nonnull final LocalDate date,
-                                           @Nonnull final TimeSlot timeSlot) {
-        return new BookingEvent(source, court, date, timeSlot, null, Type.FREE);
+                                           @Nonnull final TimeSlotDTO timeSlotDTO) {
+        return new BookingEvent(source, courtDTO, date, timeSlotDTO, null, Type.FREE);
     }
 
     public static BookingEvent existingBooking(@Nonnull final BookingComponent source,
-                                               @Nonnull final Court court,
+                                               @Nonnull final CourtDTO courtDTO,
                                                @Nonnull final LocalDate date,
-                                               @Nonnull final TimeSlot timeSlot,
-                                               @Nonnull final Booking booking) {
-        return new BookingEvent(source, court, date, timeSlot, booking, Type.EXISTING);
+                                               @Nonnull final TimeSlotDTO timeSlotDTO,
+                                               @Nonnull final BookingDTO booking) {
+        return new BookingEvent(source, courtDTO, date, timeSlotDTO, booking, Type.EXISTING);
     }
 
     @Nonnull
-    public Court getCourt() {
-        return court;
+    public CourtDTO getCourt() {
+        return courtDTO;
     }
 
     @Nonnull
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public TimeSlotDTO getTimeSlot() {
+        return timeSlotDTO;
     }
 
     @Nullable
-    public Optional<Booking> getBooking() {
+    public Optional<BookingDTO> getBooking() {
         return Optional.ofNullable(booking);
     }
 
