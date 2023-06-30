@@ -56,7 +56,7 @@ public class BookingDialog extends Dialog {
 
         final Span bookingPlayerName = new Span(bookingPlayer.getFirstName());
 
-        opponentComboBox = new ComboBox<>("Gegner");
+        opponentComboBox = new ComboBox<>("Gegenspieler");
         opponentComboBox.setItems(players);
         opponentComboBox.setItemLabelGenerator(User::getFirstName);
 
@@ -89,8 +89,8 @@ public class BookingDialog extends Dialog {
 
     @Nonnull
     private Booking createNewBooking() {
-        final List<User> users = Arrays.asList(bookingPlayer, opponentComboBox.getValue());
-        return new Booking(0L, court, users, timeSlot.getIndex(), date);
+        final List<User> partners = Arrays.asList(opponentComboBox.getValue());
+        return new Booking(0L, court, bookingPlayer, partners, timeSlot.getIndex(), date);
     }
 
     @Nonnull
