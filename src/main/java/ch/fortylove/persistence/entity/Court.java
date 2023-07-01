@@ -11,11 +11,7 @@ import java.util.Objects;
 @Entity(name = "courts")
 public class Court extends AbstractEntity {
 
-    @OneToMany(
-            mappedBy = "court",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
     public Court() {

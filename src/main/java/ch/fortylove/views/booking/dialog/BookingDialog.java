@@ -2,16 +2,20 @@ package ch.fortylove.views.booking.dialog;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.TimeSlot;
+import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.views.booking.dialog.events.DialogBookingEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,29 +26,29 @@ import java.util.List;
 public class BookingDialog extends Dialog {
 
     @Nonnull private final Court court;
-    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final Timeslot timeslot;
     @Nonnull private final LocalDate date;
-    @Nonnull private final User bookingPlayer;
-    @Nonnull private final List<User> players;
+    @Nonnull private final User owner;
+    @Nonnull private final List<User> possibleOpponents;
 
     private ComboBox<User> opponentComboBox;
     private Button newButton;
     private Button modifyButton;
     private Button deleteButton;
-    private Button cancelButton;
 
     @Nullable private Booking existingBooking;
+    private HorizontalLayout buttonContainer;
 
     public BookingDialog(@Nonnull final Court court,
-                         @Nonnull final TimeSlot timeSlot,
+                         @Nonnull final Timeslot timeslot,
                          @Nonnull final LocalDate date,
-                         @Nonnull final User bookingPlayer,
-                         @Nonnull final List<User> players) {
+                         @Nonnull final User owner,
+                         @Nonnull final List<User> possibleOpponents) {
         this.court = court;
-        this.timeSlot = timeSlot;
+        this.timeslot = timeslot;
         this.date = date;
-        this.bookingPlayer = bookingPlayer;
-        this.players = players;
+        this.owner = owner;
+        this.possibleOpponents = possibleOpponents;
 
         setModal(true);
 
@@ -54,43 +58,69 @@ public class BookingDialog extends Dialog {
     private void constructUI() {
         final VerticalLayout dialogLayout = new VerticalLayout();
 
-        final Span bookingPlayerName = new Span(bookingPlayer.getFirstName());
+        final TextField courtField = new TextField("Platz");
+        courtField.setValue(String.valueOf(court.getId()));
+        courtField.setReadOnly(true);
+
+        final TextField dateField = new TextField("Zeit / Datum");
+        dateField.setValue(timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + date);
+        dateField.setReadOnly(true);
+
+        final TextField ownerField = new TextField("Spieler");
+        ownerField.setValue(owner.getFirstName());
+        ownerField.setReadOnly(true);
 
         opponentComboBox = new ComboBox<>("Gegenspieler");
-        opponentComboBox.setItems(players);
+        opponentComboBox.setItems(possibleOpponents);
         opponentComboBox.setItemLabelGenerator(User::getFirstName);
 
-        newButton = new Button("Buchen", newButtonClickListener());
-        modifyButton = new Button("Modifizieren", modifyButtonClickListener());
-        deleteButton = new Button("Löschen", deleteButtonClickListener());
-        cancelButton = new Button("Abbrechen", event -> close());
+        Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        getHeader().add(closeButton);
 
-        dialogLayout.add(bookingPlayerName, opponentComboBox);
+        newButton = new Button("Buchen", newButtonClickListener());
+        modifyButton = new Button("Bearbeiten", modifyButtonClickListener());
+        deleteButton = new Button("Löschen", deleteButtonClickListener());
+        buttonContainer = new HorizontalLayout();
+        buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        getFooter().add(buttonContainer);
+
+        dialogLayout.add(courtField, dateField, ownerField, opponentComboBox);
         add(dialogLayout);
     }
 
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> newButtonClickListener() {
-        close();
-        return event -> fireEvent(DialogBookingEvent.newBooking(this, court, timeSlot, createNewBooking()));
+        return event -> {
+            fireEvent(DialogBookingEvent.newBooking(this, court, timeslot, createNewBooking()));
+            close();
+        };
     }
 
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> modifyButtonClickListener() {
-        close();
-        return event -> fireEvent(DialogBookingEvent.modifyBooking(this, court, timeSlot, getModifyBooking()));
+        return event -> {
+            fireEvent(DialogBookingEvent.modifyBooking(this, court, timeslot, getModifyBooking()));
+            close();
+        };
     }
 
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> deleteButtonClickListener() {
-        close();
-        return event -> fireEvent(DialogBookingEvent.deleteBooking(this, court, timeSlot, getDeleteBooking()));
+        return event -> {
+            fireEvent(DialogBookingEvent.deleteBooking(this, court, timeslot, getDeleteBooking()));
+            close();
+        };
     }
 
     @Nonnull
     private Booking createNewBooking() {
-        final List<User> partners = Arrays.asList(opponentComboBox.getValue());
-        return new Booking(0L, court, bookingPlayer, partners, timeSlot.getIndex(), date);
+        return new Booking(0L, court, owner, getOpponents(), timeslot.getIndex(), date);
+    }
+
+    @Nonnull
+    private List<User> getOpponents() {
+        return Arrays.asList(opponentComboBox.getValue());
     }
 
     @Nonnull
@@ -110,9 +140,8 @@ public class BookingDialog extends Dialog {
     }
 
     public void openFree() {
-        final String title = "Buchen - Platz " + court.getId() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
-        setHeaderTitle(title);
-        addButtons(Arrays.asList(newButton, cancelButton));
+        setHeaderTitle("Buchen");
+        addButtons(newButton);
 
         open();
     }
@@ -121,18 +150,18 @@ public class BookingDialog extends Dialog {
                              @Nonnull final Booking existingBooking) {
         this.existingBooking = existingBooking;
 
-        final String title = "Modifizieren - Platz " + court.getId() + " - " + date + " - " + timeSlot.getStartTime() + " - " + timeSlot.getEndTime();
+        final String title = "Bearbeiten";
         setHeaderTitle(title);
 
-        addButtons(Arrays.asList(modifyButton, deleteButton, cancelButton));
+        addButtons(deleteButton, modifyButton);
         opponentComboBox.setValue(opponent);
 
         open();
     }
 
-    private void addButtons(@Nonnull final List<Button> buttons) {
-        getFooter().removeAll();
-        buttons.forEach(this::add);
+    private void addButtons(@Nonnull final Button... buttons) {
+        buttonContainer.removeAll();
+        buttonContainer.add(buttons);
     }
 
     public void addDialogBookingListener(@Nonnull final ComponentEventListener<DialogBookingEvent> listener) {

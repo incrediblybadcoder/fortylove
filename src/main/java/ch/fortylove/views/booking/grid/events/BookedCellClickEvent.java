@@ -2,7 +2,7 @@ package ch.fortylove.views.booking.grid.events;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.TimeSlot;
+import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.views.booking.grid.BookingGridComponent;
 
 import javax.annotation.Nonnull;
@@ -10,16 +10,16 @@ import javax.annotation.Nonnull;
 public class BookedCellClickEvent extends BookingGridEvent {
 
     @Nonnull private final Court court;
-    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final Timeslot timeslot;
     @Nonnull private final Booking booking;
 
     public BookedCellClickEvent(@Nonnull final BookingGridComponent source,
                                 @Nonnull final Court court,
-                                @Nonnull final TimeSlot timeSlot,
+                                @Nonnull final Timeslot timeslot,
                                 @Nonnull final Booking booking) {
         super(source);
         this.court = court;
-        this.timeSlot = timeSlot;
+        this.timeslot = timeslot;
         this.booking = booking;
     }
 
@@ -29,8 +29,8 @@ public class BookedCellClickEvent extends BookingGridEvent {
     }
 
     @Nonnull
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public Timeslot getTimeSlot() {
+        return timeslot;
     }
 
     @Nonnull

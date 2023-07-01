@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -16,20 +17,14 @@ public class Role extends AbstractEntity {
     public final static String ROLE_STAFF = "ROLE_STAFF";
     public final static String ROLE_USER = "ROLE_USER";
 
+    @Column(name = "name")
     private String name;
 
-    @ManyToMany(
-            mappedBy = "roles",
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private List<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "roles_privileges",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "privilege_id")
-    )
+    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "privilege_id"))
     private List<Privilege> privileges;
 
     public Role() {

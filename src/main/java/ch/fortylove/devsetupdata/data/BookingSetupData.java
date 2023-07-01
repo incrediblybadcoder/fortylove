@@ -147,7 +147,7 @@ public class BookingSetupData {
                                  @Nonnull final LocalDate date,
                                  final int timeSlotIndex) {
         for (final Booking booking : bookings) {
-            if (booking.getDate().equals(date) && booking.getTimeSlotIndex() == timeSlotIndex) {
+            if (booking.getDate().equals(date) && booking.getTimeslotIndex() == timeSlotIndex) {
                 return false;
             }
         }

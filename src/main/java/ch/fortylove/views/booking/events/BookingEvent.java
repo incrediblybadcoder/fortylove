@@ -2,7 +2,7 @@ package ch.fortylove.views.booking.events;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.TimeSlot;
+import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.views.booking.BookingComponent;
 import com.vaadin.flow.component.ComponentEvent;
 
@@ -15,7 +15,7 @@ public class BookingEvent extends ComponentEvent<BookingComponent> {
 
     @Nonnull private final Court court;
     @Nonnull private final LocalDate date;
-    @Nonnull private final TimeSlot timeSlot;
+    @Nonnull private final Timeslot timeslot;
     @Nullable private final Booking booking;
     @Nonnull private final Type type;
 
@@ -27,30 +27,30 @@ public class BookingEvent extends ComponentEvent<BookingComponent> {
     protected BookingEvent(@Nonnull final BookingComponent source,
                            @Nonnull final Court court,
                            @Nonnull final LocalDate date,
-                           @Nonnull final TimeSlot timeSlot,
+                           @Nonnull final Timeslot timeslot,
                            @Nullable final Booking booking,
                            @Nonnull final Type type) {
         super(source, false);
         this.court = court;
         this.date = date;
         this.booking = booking;
-        this.timeSlot = timeSlot;
+        this.timeslot = timeslot;
         this.type = type;
     }
 
     public static BookingEvent freeBooking(@Nonnull final BookingComponent source,
                                            @Nonnull final Court court,
                                            @Nonnull final LocalDate date,
-                                           @Nonnull final TimeSlot timeSlot) {
-        return new BookingEvent(source, court, date, timeSlot, null, Type.FREE);
+                                           @Nonnull final Timeslot timeslot) {
+        return new BookingEvent(source, court, date, timeslot, null, Type.FREE);
     }
 
     public static BookingEvent existingBooking(@Nonnull final BookingComponent source,
                                                @Nonnull final Court court,
                                                @Nonnull final LocalDate date,
-                                               @Nonnull final TimeSlot timeSlot,
+                                               @Nonnull final Timeslot timeslot,
                                                @Nonnull final Booking booking) {
-        return new BookingEvent(source, court, date, timeSlot, booking, Type.EXISTING);
+        return new BookingEvent(source, court, date, timeslot, booking, Type.EXISTING);
     }
 
     @Nonnull
@@ -59,8 +59,8 @@ public class BookingEvent extends ComponentEvent<BookingComponent> {
     }
 
     @Nonnull
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public Timeslot getTimeSlot() {
+        return timeslot;
     }
 
     @Nullable

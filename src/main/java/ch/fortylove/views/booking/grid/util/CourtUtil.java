@@ -1,7 +1,7 @@
 package ch.fortylove.views.booking.grid.util;
 
 import ch.fortylove.persistence.entity.Booking;
-import ch.fortylove.persistence.entity.TimeSlot;
+import ch.fortylove.persistence.entity.Timeslot;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -11,10 +11,10 @@ public class CourtUtil {
 
     @Nonnull
     public static Optional<Booking> getBookingForTimeSlot(@Nonnull final List<Booking> bookings,
-                                                          @Nonnull final TimeSlot timeSlot) {
-        final List<Booking> filteredBookings = bookings.stream().filter(booking -> booking.getTimeSlotIndex() == timeSlot.getIndex()).toList();
+                                                          @Nonnull final Timeslot timeslot) {
+        final List<Booking> filteredBookings = bookings.stream().filter(booking -> booking.getTimeslotIndex() == timeslot.getIndex()).toList();
         if (filteredBookings.size() > 1) {
-            throw new IllegalStateException("Duplicate Booking for timeslot: " + timeSlot.getIndex());
+            throw new IllegalStateException("Duplicate Booking for timeslot: " + timeslot.getIndex());
         }
 
         return filteredBookings.size() == 1 ? Optional.of(filteredBookings.get(0)) : Optional.empty();

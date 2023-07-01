@@ -12,29 +12,26 @@ import java.util.Objects;
 @Entity(name = "bookingsettings")
 public class BookingSettings extends AbstractEntity {
 
-    @OneToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "bookingsettings_id")
-    private List<TimeSlot> timeSlots;
+    private List<Timeslot> timeslots;
 
     public BookingSettings() {
         super();
     }
 
     public BookingSettings(final long id,
-                           final List<TimeSlot> timeSlots) {
+                           final List<Timeslot> timeslots) {
         super(id, 0);
-        this.timeSlots = timeSlots;
+        this.timeslots = timeslots;
     }
 
-    public List<TimeSlot> getTimeSlots() {
-        return timeSlots;
+    public List<Timeslot> getTimeSlots() {
+        return timeslots;
     }
 
-    public void setTimeSlots(final List<TimeSlot> timeSlots) {
-        this.timeSlots = timeSlots;
+    public void setTimeSlots(final List<Timeslot> timeslots) {
+        this.timeslots = timeslots;
     }
 
     @Override
@@ -42,11 +39,11 @@ public class BookingSettings extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final BookingSettings that = (BookingSettings) o;
-        return Objects.equals(timeSlots, that.timeSlots);
+        return Objects.equals(timeslots, that.timeslots);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(timeSlots);
+        return Objects.hash(timeslots);
     }
 }

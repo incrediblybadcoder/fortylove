@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import javax.annotation.Nonnull;
@@ -7,19 +8,22 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity(name = "timeslots")
-public class TimeSlot extends AbstractEntity {
+public class Timeslot extends AbstractEntity {
 
     public static final long MINUTES_PER_TIMESLOT = 60;
     public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
 
+    @Column(name = "bookable")
     private boolean bookable;
+
+    @Column(name = "index")
     private int index;
 
-    public TimeSlot() {
+    public Timeslot() {
         super();
     }
 
-    public TimeSlot(final long id,
+    public Timeslot(final long id,
                     final boolean bookable,
                     final int index) {
         super(id, 0);
@@ -61,8 +65,8 @@ public class TimeSlot extends AbstractEntity {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TimeSlot timeSlot = (TimeSlot) o;
-        return bookable == timeSlot.bookable && index == timeSlot.index;
+        final Timeslot timeslot = (Timeslot) o;
+        return bookable == timeslot.bookable && index == timeslot.index;
     }
 
     @Override
