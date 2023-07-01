@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -23,15 +24,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     private User owner;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "bookings_opponents",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_opponent_id")
-    )
+    @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
     private List<User> opponents;
 
-    private int timeSlotIndex;
+    @Column(name = "timeslot_index")
+    private int timeslotIndex;
 
+    @Column(name = "date")
     private LocalDate date;
 
     public Booking() {
@@ -42,29 +41,29 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
                    final Court court,
                    final User owner,
                    final List<User> opponents,
-                   final int timeSlotIndex,
+                   final int timeslotIndex,
                    final LocalDate date) {
         super(id, 0);
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;
-        this.timeSlotIndex = timeSlotIndex;
+        this.timeslotIndex = timeslotIndex;
         this.date = date;
     }
 
-    public int getTimeSlotIndex() {
-        return timeSlotIndex;
+    public int getTimeslotIndex() {
+        return timeslotIndex;
     }
 
-    public void setTimeSlotIndex(final int timeSlotIndex) {
-        this.timeSlotIndex = timeSlotIndex;
+    public void setTimeslotIndex(final int timeslotIndex) {
+        this.timeslotIndex = timeslotIndex;
     }
 
     public Court getCourt() {
         return court;
     }
 
-    public void setCourt( final Court court) {
+    public void setCourt(final Court court) {
         this.court = court;
     }
 
@@ -97,7 +96,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Booking booking = (Booking) o;
-        return timeSlotIndex == booking.timeSlotIndex &&
+        return timeslotIndex == booking.timeslotIndex &&
                 Objects.equals(court, booking.court) &&
                 Objects.equals(owner, booking.owner) &&
                 Objects.equals(opponents, booking.opponents) &&
@@ -106,11 +105,11 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, owner, opponents, timeSlotIndex, date);
+        return Objects.hash(court, owner, opponents, timeslotIndex, date);
     }
 
     @Override
-    public int compareTo( final Booking otherBooking) {
+    public int compareTo(final Booking otherBooking) {
         return date.compareTo(otherBooking.getDate());
     }
 }

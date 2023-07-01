@@ -1,13 +1,13 @@
 package ch.fortylove.security;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-@Component
+@SpringComponent
 public class SecurityServiceImpl implements SecurityService {
 
     @Nonnull private final AuthenticationContext authenticationContext;

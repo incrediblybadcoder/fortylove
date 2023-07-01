@@ -1,17 +1,16 @@
 package ch.fortylove.devsetupdata;
 
-import jakarta.transaction.Transactional;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 
-@Component
+@SpringComponent
 @Profile({"h2", "develop", "local"})
-public class DevSetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class DevSetupDataLoader implements InitializingBean {
 
     @Nonnull private final DevSetupDataLoaderService devSetupDataLoaderService;
 
@@ -24,7 +23,7 @@ public class DevSetupDataLoader implements ApplicationListener<ContextRefreshedE
 
     @Override
     @Transactional
-    public void onApplicationEvent(@Nonnull final ContextRefreshedEvent event) {
+    public void afterPropertiesSet() throws Exception {
         if (alreadySetup) {
             return;
         }

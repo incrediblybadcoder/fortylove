@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
@@ -14,12 +15,10 @@ public class Privilege extends AbstractEntity {
     public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
     public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
+    @Column(name = "name")
     private String name;
 
-    @ManyToMany(
-            mappedBy = "privileges",
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
     private List<Role> roles;
 
     public Privilege() {

@@ -1,6 +1,5 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,13 +29,7 @@ public class CourtServiceImpl implements CourtService {
     @Nonnull
     @Override
     public Optional<Court> findById(final long id) {
-        return Optional.ofNullable(courtRepository.findById(id));
-    }
-
-    @Nonnull
-    @Override
-    public List<Court> findAll() {
-        return courtRepository.findAll();
+        return courtRepository.findById(id);
     }
 
     @Nonnull

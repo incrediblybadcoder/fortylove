@@ -6,6 +6,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.error.DuplicateRecordException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,28 @@ class TestBookingServiceImpl {
         final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
         final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null));
         final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null));
-        final Booking booking = new Booking(0L, null, user1, List.of(user2), 0, null);
+        final Court court = courtService.create(new Court(0L, null));
+        final Booking booking = new Booking(0L, court, user1, List.of(user2), 0, null);
 
         final Booking createdBooking = testee.create(booking);
 
-        Assertions.assertEquals(1, testee.findAll().size());
-        Assertions.assertEquals(createdBooking, testee.findAll().get(0));
+        Assertions.assertFalse(testee.findById(createdBooking.getId()).isEmpty());
+        Assertions.assertEquals(createdBooking, testee.findById(createdBooking.getId()).get());
+    }
+
+    @Test
+    public void testCreate_duplicateRecordException() {
+        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
+        final User user1 = userService.create(new User(0L, "firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null));
+        final User user2 = userService.create(new User(0L, "firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null));
+        final Court court = courtService.create(new Court(0L, null));
+        final Booking booking = new Booking(0L, court, user1, List.of(user2), 0, null);
+        testee.create(booking);
+
+        Assertions.assertThrows(DuplicateRecordException.class, () -> testee.create(booking));
     }
 
     @Test

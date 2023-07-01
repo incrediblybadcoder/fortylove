@@ -13,11 +13,12 @@ import javax.annotation.Nonnull;
 public abstract class AbstractEntity {
 
     @Id
-    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Version
+    @Column(name = "version")
     private int version;
 
     public AbstractEntity() {
