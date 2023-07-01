@@ -1,4 +1,4 @@
-package ch.fortylove.persistence.backingbeans;
+package ch.fortylove.views.membermanagement;
 
 import ch.fortylove.views.membermanagement.dto.UserFormInformations;
 

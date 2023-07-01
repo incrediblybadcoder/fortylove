@@ -9,11 +9,15 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.Locale;
 
+@SpringComponent
+@UIScope
 public class DateSelectionComponent extends VerticalLayout {
 
     private LocalDate date;

@@ -26,11 +26,11 @@ public class BookingSettings extends AbstractEntity {
         this.timeslots = timeslots;
     }
 
-    public List<Timeslot> getTimeSlots() {
+    public List<Timeslot> getTimeslots() {
         return timeslots;
     }
 
-    public void setTimeSlots(final List<Timeslot> timeslots) {
+    public void setTimeslots(final List<Timeslot> timeslots) {
         this.timeslots = timeslots;
     }
 

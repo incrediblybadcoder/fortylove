@@ -1,6 +1,5 @@
 package ch.fortylove.views.membermanagement;
 
-import ch.fortylove.persistence.backingbeans.UserFormBackingBean;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.views.membermanagement.events.CloseEvent;
 import ch.fortylove.views.membermanagement.events.DeleteEvent;

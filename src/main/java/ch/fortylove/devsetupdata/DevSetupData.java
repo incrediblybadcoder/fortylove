@@ -1,7 +1,7 @@
 package ch.fortylove.devsetupdata;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Component
+@SpringComponent
 @Profile({"!production"})
 public @interface DevSetupData {
 }
