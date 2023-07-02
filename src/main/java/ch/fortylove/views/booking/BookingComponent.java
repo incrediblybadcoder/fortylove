@@ -61,8 +61,8 @@ public class BookingComponent extends VerticalLayout {
 
     @Nonnull
     private BookingGridComponent getBookingGridComponent() {
-        bookingGridComponent.addBookedCellClickListener(this::bookedCellClickedListener);
-        bookingGridComponent.addFreeCellClickListener(this::freeCellClickedListener);
+        bookingGridComponent.addBookedCellClickListener(this::bookedCellClicked);
+        bookingGridComponent.addFreeCellClickListener(this::freeCellClicked);
         return bookingGridComponent;
     }
 
@@ -81,26 +81,28 @@ public class BookingComponent extends VerticalLayout {
         refresh();
     }
 
-    private void bookedCellClickedListener(@Nonnull final BookedCellClickEvent event) {
+    private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            final Booking booking = event.getBooking();
-            final List<User> possibleOpponents = userService.findAll();
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), booking.getOwner(), possibleOpponents);
-            bookingDialog.addDialogBookingListener(this::dialogBooking);
-            bookingDialog.openExisting(booking.getOpponents().get(0), booking);
+            if (currentUser.equals(event.getBooking().getOwner())) {
+                final Booking booking = event.getBooking();
+                final List<User> possibleOpponents = userService.findAll();
+                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), booking.getOwner(), possibleOpponents);
+                bookingDialog.addDialogBookingListener(this::handleDialogBooking);
+                bookingDialog.openExisting(booking.getOpponents().get(0), booking);
+            }
         });
     }
 
-    private void freeCellClickedListener(@Nonnull final FreeCellClickEvent event) {
+    private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
             final List<User> possibleOpponents = userService.findAll();
             final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, possibleOpponents);
-            bookingDialog.addDialogBookingListener(this::dialogBooking);
+            bookingDialog.addDialogBookingListener(this::handleDialogBooking);
             bookingDialog.openFree();
         });
     }
 
-    private void dialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
+    private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
         switch (dialogBookingEvent.getType()) {
             case NEW -> bookingService.create(dialogBookingEvent.getBooking());
             case MODIFY -> bookingService.update(dialogBookingEvent.getBooking());
