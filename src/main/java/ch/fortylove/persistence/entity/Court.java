@@ -4,14 +4,20 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "courts")
+@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "date = :date")
 public class Court extends AbstractEntity {
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Filter(name = "bookingDateFilter")
     private List<Booking> bookings;
 
     public Court() {
