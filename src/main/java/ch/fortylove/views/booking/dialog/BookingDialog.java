@@ -57,6 +57,8 @@ public class BookingDialog extends Dialog {
 
     private void constructUI() {
         final VerticalLayout dialogLayout = new VerticalLayout();
+        dialogLayout.setSpacing(false);
+        dialogLayout.setPadding(false);
 
         final TextField courtField = new TextField("Platz");
         courtField.setValue(String.valueOf(court.getId()));
@@ -136,7 +138,8 @@ public class BookingDialog extends Dialog {
         if (existingBooking == null) {
             throw new IllegalStateException("Booking dialog in existing mode without existing booking.");
         }
-        return null;
+        existingBooking.setOpponents(getOpponents());
+        return existingBooking;
     }
 
     public void openFree() {

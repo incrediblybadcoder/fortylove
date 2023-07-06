@@ -37,10 +37,6 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
 
     @Override
     public void afterNavigation(@Nonnull final AfterNavigationEvent event) {
-        refreshView();
-    }
-
-    private void refreshView() {
         bookingComponent.refresh();
     }
 }
