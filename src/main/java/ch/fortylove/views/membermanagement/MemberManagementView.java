@@ -79,22 +79,25 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void deleteUser(final DeleteEvent deleteEvent) {
-//        UserFormInformations userFormInformations = deleteEvent.getUser();
-//        Optional<User> userToDelete = userService.findById(userFormInformations.getId());
-//        if (userToDelete.isPresent()) {
-//            User user = userToDelete.get();
-//            userService.delete(user);
-//            updateUserList();
-//            closeEditor();
-//            notification.setText("Mitglied wurde erfolgreich gelöscht");
-//            notification.setDuration(10000);
-//            notification.open();
-//        }
-        notification.setText("Die Löschfunktion ist noch nicht implementiert");
-        notification.setDuration(2000);
-        notification.setPosition(Notification.Position.MIDDLE);
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        notification.open();
+        UserFormInformations userFormInformations = deleteEvent.getUser();
+        Optional<User> userToDelete = userService.findById(userFormInformations.getId());
+        if (userToDelete.isPresent()) {
+            User user = userToDelete.get();
+            if (user.getBookings().size() == 0) {
+                userService.delete(user);
+                updateUserList();
+                closeEditor();
+                notification.setText("Mitglied wurde erfolgreich gelöscht");
+                notification.setDuration(10000);
+                notification.open();
+            } else {
+                notification.setText("Mitglied kann nicht gelöscht werden, da es noch Buchungen hat");
+                notification.setDuration(10000);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.open();
+            }
+        }
     }
 
     private void saveUser(final SaveEvent saveEvent) {
