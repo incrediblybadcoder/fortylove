@@ -2,6 +2,10 @@ package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.repository.CourtRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +17,14 @@ import java.util.Optional;
 @Service
 public class CourtServiceImpl implements CourtService {
 
+    @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
 
     @Autowired
-    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository) {
+    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository,
+                            @Nonnull final EntityManager entityManager) {
         this.courtRepository = courtRepository;
+        this.entityManager = entityManager;
     }
 
     @Nonnull
@@ -34,7 +41,14 @@ public class CourtServiceImpl implements CourtService {
 
     @Nonnull
     @Override
+    @Transactional
     public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
-        return courtRepository.findAllWithBookingsByDate(date);
+        final Session session = entityManager.unwrap(Session.class);
+        final Filter filter = session.enableFilter("bookingDateFilter");
+        filter.setParameter("date", date);
+        final List<Court> courts = courtRepository.findAll();
+        session.disableFilter("bookingDateFilter");
+
+        return courts;
     }
 }
