@@ -18,7 +18,6 @@ public class DevSetupDataLoaderService {
     @Nonnull private final PrivilegeSetupData privilegeSetupData;
     @Nonnull private final CourtSetupData courtSetupData;
     @Nonnull private final BookingSetupData bookingSetupData;
-
     @Nonnull private final PlayerStatusSetupData playerStatusSetupData;
 
     @Autowired

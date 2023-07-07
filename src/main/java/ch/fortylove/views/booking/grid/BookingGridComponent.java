@@ -57,6 +57,7 @@ public class BookingGridComponent extends Grid<Court> {
                                                         @Nonnull final Timeslot timeslot) {
         final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeslot);
 
+
         if (booking.isPresent()) {
             final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeslot, booking.get()));
             return new BookedCellComponent(booking.get(), clickListener);

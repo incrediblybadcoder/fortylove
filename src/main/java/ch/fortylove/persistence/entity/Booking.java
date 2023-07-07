@@ -25,12 +25,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     @JoinColumn(name = "user_owner_id")
     private User owner;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
     private List<User> opponents;
 
-    @Column(name = "timeslot_index")
-    private int timeslotIndex;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "timeslot_id")
+    private Timeslot timeslot;
 
     @Column(name = "date")
     private LocalDate date;
@@ -43,22 +44,22 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
                    final Court court,
                    final User owner,
                    final List<User> opponents,
-                   final int timeslotIndex,
+                   final Timeslot timeslot,
                    final LocalDate date) {
         super(id, 0);
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;
-        this.timeslotIndex = timeslotIndex;
+        this.timeslot = timeslot;
         this.date = date;
     }
 
-    public int getTimeslotIndex() {
-        return timeslotIndex;
+    public Timeslot getTimeslot() {
+        return timeslot;
     }
 
-    public void setTimeslotIndex(final int timeslotIndex) {
-        this.timeslotIndex = timeslotIndex;
+    public void setTimeslot(final Timeslot timeslot) {
+        this.timeslot = timeslot;
     }
 
     public Court getCourt() {
@@ -116,7 +117,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Booking booking = (Booking) o;
-        return timeslotIndex == booking.timeslotIndex &&
+        return Objects.equals(timeslot, booking.timeslot) &&
                 Objects.equals(court, booking.court) &&
                 Objects.equals(owner, booking.owner) &&
                 Objects.equals(opponents, booking.opponents) &&
@@ -125,7 +126,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, owner, opponents, timeslotIndex, date);
+        return Objects.hash(court, owner, opponents, timeslot, date);
     }
 
     @Override

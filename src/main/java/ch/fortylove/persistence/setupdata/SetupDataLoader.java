@@ -1,35 +1,34 @@
 package ch.fortylove.persistence.setupdata;
 
-import ch.fortylove.persistence.setupdata.settings.BookingSettingsSetupData;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 
-@Component
-@Profile({"h2", "develop", "local", "production"})
+@SpringComponent
+@Profile({"production"})
 public class SetupDataLoader implements InitializingBean {
 
-    @Nonnull private final BookingSettingsSetupData bookingSettingsSetupData;
+    @Nonnull private final SetupDataLoaderService setupDataLoaderService;
 
     private boolean alreadySetup = false;
 
     @Autowired
-    public SetupDataLoader(@Nonnull final BookingSettingsSetupData bookingSettingsSetupData) {
-        this.bookingSettingsSetupData = bookingSettingsSetupData;
+    public SetupDataLoader(@Nonnull final SetupDataLoaderService setupDataLoaderService) {
+        this.setupDataLoaderService = setupDataLoaderService;
     }
 
     @Override
     @Transactional
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         if (alreadySetup) {
             return;
         }
 
-        bookingSettingsSetupData.createBookingSettings();
+        setupDataLoaderService.initData();
 
         alreadySetup = true;
     }
