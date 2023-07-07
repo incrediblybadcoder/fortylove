@@ -5,8 +5,12 @@ import ch.fortylove.views.membermanagement.MemberManagementView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -31,9 +35,24 @@ public class MainLayout extends AppLayout {
         appName.getStyle().set("left", "var(--lumo-space-l)");
 
         final Tabs menu = createMenuTabs();
+        final Button logoutButton = createLogoutButton();
+        final HorizontalLayout headerLayout = new HorizontalLayout();
+        headerLayout.setWidthFull();
+        headerLayout.add(appName, menu, logoutButton);
+        headerLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        headerLayout.setWidthFull();
 
         addToNavbar(appName);
-        addToNavbar(true, menu);
+        addToNavbar(true, headerLayout);
+    }
+
+    @Nonnull
+    private Button createLogoutButton() {
+        final Button logoutButton = new Button("Logout", new Icon(VaadinIcon.SIGN_OUT));
+        logoutButton.addClickListener(event -> {
+            securityService.logout();
+        });
+        return logoutButton;
     }
 
     @Nonnull
