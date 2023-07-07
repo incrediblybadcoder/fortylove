@@ -1,16 +1,19 @@
 package ch.fortylove;
 
-import ch.fortylove.devsetupdata.DevSetupDataLoaderService;
+import ch.fortylove.persistence.setupdata.SetupDataLoaderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Adds required application data to the database
+ */
 @SpringTest
-public class BaseDataTest {
+public abstract class BaseDataTest {
 
-    @Autowired DevSetupDataLoaderService devSetupDataLoaderService;
+    @Autowired SetupDataLoaderService setupDataLoaderService;
 
     @BeforeEach
     void initTestData() {
-        devSetupDataLoaderService.initData();
+        setupDataLoaderService.initData();
     }
 }
