@@ -1,6 +1,7 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.repository.CourtRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -15,21 +16,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CourtServiceImpl implements CourtService {
 
     @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
 
     @Autowired
-    public CourtServiceImpl(@Nonnull final CourtRepository courtRepository,
-                            @Nonnull final EntityManager entityManager) {
-        this.courtRepository = courtRepository;
+    public CourtServiceImpl(@Nonnull final EntityManager entityManager,
+                            @Nonnull final CourtRepository courtRepository) {
         this.entityManager = entityManager;
+        this.courtRepository = courtRepository;
     }
 
     @Nonnull
     @Override
     public Court create(@Nonnull final Court court) {
+        if (courtRepository.findById(court.getId()).isPresent()) {
+            throw new DuplicateRecordException(court);
+        }
         return courtRepository.save(court);
     }
 
@@ -41,7 +46,6 @@ public class CourtServiceImpl implements CourtService {
 
     @Nonnull
     @Override
-    @Transactional
     public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
         final Session session = entityManager.unwrap(Session.class);
         final Filter filter = session.enableFilter("bookingDateFilter");

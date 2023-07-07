@@ -16,5 +16,5 @@ public interface PrivilegeService {
     @Nonnull
     Privilege create(@Nonnull final Privilege privilege);
 
-    void deleteById(final long id);
+    void delete(@Nonnull final Privilege privilege);
 }
