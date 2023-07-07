@@ -38,17 +38,16 @@ public class MainLayout extends AppLayout {
         final Button logoutButton = createLogoutButton();
         final HorizontalLayout headerLayout = new HorizontalLayout();
         headerLayout.setWidthFull();
-        headerLayout.add(appName, menu, logoutButton);
+        headerLayout.add(menu, logoutButton);
         headerLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         headerLayout.setWidthFull();
-
-        addToNavbar(appName);
-        addToNavbar(true, headerLayout);
+        addToNavbar(appName, headerLayout);
     }
 
     @Nonnull
     private Button createLogoutButton() {
         final Button logoutButton = new Button("Logout", new Icon(VaadinIcon.SIGN_OUT));
+        logoutButton.getStyle().set("margin-right", "var(--lumo-space-m)");
         logoutButton.addClickListener(event -> {
             securityService.logout();
         });
