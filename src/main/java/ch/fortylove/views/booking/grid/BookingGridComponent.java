@@ -18,6 +18,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -29,6 +30,7 @@ public class BookingGridComponent extends Grid<Court> {
 
     @Nonnull private final BookingSettingsService bookingSettingsService;
 
+    @Autowired
     public BookingGridComponent(@Nonnull final BookingSettingsService bookingSettingsService) {
         super(Court.class, false);
         this.bookingSettingsService = bookingSettingsService;

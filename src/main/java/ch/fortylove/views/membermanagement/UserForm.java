@@ -16,16 +16,19 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 
+import javax.annotation.Nonnull;
+
 public class UserForm extends FormLayout {
-    TextField firstName = new TextField("Vorname");
-    TextField lastName = new TextField("Nachname");
-    TextField email = new TextField("Email");
+    @Nonnull private final TextField firstName = new TextField("Vorname");
+    @Nonnull private final TextField lastName = new TextField("Nachname");
+    @Nonnull private final TextField email = new TextField("Email");
+
+    @Nonnull private final Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
     private Button save;
     private Button update;
     private Button delete;
     private Button close;
-    Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
     public UserForm() {
         addClassName("user-form");
