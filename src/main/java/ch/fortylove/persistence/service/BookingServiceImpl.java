@@ -55,10 +55,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void delete(@Nonnull final Booking booking) {
-        if (bookingRepository.findById(booking.getId()).isEmpty()) {
-            throw new RecordNotFoundException(booking);
-        }
+    public void delete(final long id) {
+        final Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+
+        booking.getOwner().getOwnerBookings().remove(booking);
+        booking.removeOpponents();
+
         bookingRepository.delete(booking);
     }
 }

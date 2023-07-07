@@ -26,5 +26,5 @@ public interface UserService {
     @Nonnull
     List<User> findAll(@Nonnull final String filterText);
 
-    void delete(@Nonnull final User user);
+    void delete(final long id);
 }

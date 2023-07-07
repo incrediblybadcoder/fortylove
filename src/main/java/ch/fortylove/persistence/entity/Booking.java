@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +9,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +25,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     @JoinColumn(name = "user_owner_id")
     private User owner;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
     private List<User> opponents;
 
@@ -89,6 +91,24 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     public void setOpponents(final List<User> opponents) {
         this.opponents = opponents;
+    }
+
+    public void addOpponent(@Nonnull final User user) {
+        opponents.add(user);
+        user.getOpponentBookings().add(this);
+    }
+
+    public void removeOpponent(@Nonnull final User user) {
+        opponents.remove(user);
+        user.getOpponentBookings().remove(this);
+    }
+
+    public void removeOpponents() {
+        //noinspection ForLoopReplaceableByForEach
+        for (int i = 0; i < opponents.size(); i++) {
+            opponents.get(i).removeOpponentBooking(this);
+        }
+        opponents.clear();
     }
 
     @Override

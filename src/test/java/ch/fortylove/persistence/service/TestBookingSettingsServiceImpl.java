@@ -14,7 +14,7 @@ import java.util.List;
 @SpringTest
 class TestBookingSettingsServiceImpl {
 
-    @Autowired BookingSettingsService testee;
+    @Autowired private BookingSettingsService testee;
 
     @Test
     public void testCreate_nonExisting() {
