@@ -20,5 +20,5 @@ public interface BookingService {
     @Nonnull
     List<Booking> findAllByCourtId(final long id);
 
-    void delete(@Nonnull final Booking booking);
+    void delete(final long id);
 }

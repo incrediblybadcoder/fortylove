@@ -44,10 +44,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
-    public void delete(@Nonnull final Privilege privilege) {
-        if (privilegeRepository.findById(privilege.getId()).isEmpty()) {
-            throw new RecordNotFoundException(privilege);
-        }
+    public void delete(final long id) {
+        final Privilege privilege = privilegeRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
         privilegeRepository.delete(privilege);
     }
 }

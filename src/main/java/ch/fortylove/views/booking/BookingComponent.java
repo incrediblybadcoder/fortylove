@@ -106,7 +106,7 @@ public class BookingComponent extends VerticalLayout {
         switch (dialogBookingEvent.getType()) {
             case NEW -> bookingService.create(dialogBookingEvent.getBooking());
             case MODIFY -> bookingService.update(dialogBookingEvent.getBooking());
-            case DELETE -> bookingService.delete(dialogBookingEvent.getBooking());
+            case DELETE -> bookingService.delete(dialogBookingEvent.getBooking().getId());
         }
         refresh();
     }

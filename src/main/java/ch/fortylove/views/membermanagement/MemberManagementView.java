@@ -90,7 +90,7 @@ public class MemberManagementView extends VerticalLayout {
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
             if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
-                userService.delete(user);
+                userService.delete(user.getId());
                 updateUserList();
                 closeEditor();
                 notification.setText("Mitglied wurde erfolgreich gelöscht");

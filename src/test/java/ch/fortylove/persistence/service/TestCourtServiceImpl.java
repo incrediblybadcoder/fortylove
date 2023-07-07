@@ -11,7 +11,7 @@ import java.util.Optional;
 @SpringTest
 class TestCourtServiceImpl {
 
-    @Autowired CourtService testee;
+    @Autowired private CourtService testee;
 
     @Test
     public void testCreate() {

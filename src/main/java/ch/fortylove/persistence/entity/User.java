@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,13 +38,11 @@ public class User extends AbstractEntity {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> ownerBookings;
 
-    @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Booking> opponentBookings;
-
-
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "player_status_id")
@@ -149,6 +148,16 @@ public class User extends AbstractEntity {
 
     public void setPlayerStatus(final PlayerStatus playerStatus) {
         this.playerStatus = playerStatus;
+    }
+
+    public void addOpponentBooking(@Nonnull final Booking booking) {
+        opponentBookings.add(booking);
+        booking.getOpponents().add(this);
+    }
+
+    public void removeOpponentBooking(@Nonnull final Booking booking) {
+        opponentBookings.remove(booking);
+        booking.getOpponents().remove(this);
     }
 
     @Override
