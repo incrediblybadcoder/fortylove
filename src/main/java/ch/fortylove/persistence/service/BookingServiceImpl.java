@@ -27,7 +27,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking create(@Nonnull final Booking booking){
         if (bookingRepository.findById(booking.getId()).isPresent() ||
-                !bookingRepository.findAllByCourtAndTimeslotIndexAndDate(booking.getCourt(), booking.getTimeslotIndex(), booking.getDate()).isEmpty()) {
+                !bookingRepository.findAllByCourtAndTimeslotAndDate(booking.getCourt(), booking.getTimeslot(), booking.getDate()).isEmpty()) {
             throw new DuplicateRecordException(booking);
         }
         return bookingRepository.save(booking);

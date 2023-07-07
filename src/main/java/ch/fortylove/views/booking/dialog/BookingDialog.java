@@ -117,7 +117,7 @@ public class BookingDialog extends Dialog {
 
     @Nonnull
     private Booking createNewBooking() {
-        return new Booking(0L, court, owner, getOpponents(), timeslot.getIndex(), date);
+        return new Booking(0L, court, owner, getOpponents(), timeslot, date);
     }
 
     @Nonnull

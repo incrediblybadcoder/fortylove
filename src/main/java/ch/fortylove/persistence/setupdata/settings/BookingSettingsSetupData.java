@@ -3,17 +3,15 @@ package ch.fortylove.persistence.setupdata.settings;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.service.BookingSettingsService;
+import ch.fortylove.persistence.setupdata.SetupData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
-@Profile({"h2", "develop", "local", "production"})
+@SetupData
 public class BookingSettingsSetupData {
 
     @Nonnull private final BookingSettingsService bookingSettingsService;
