@@ -1,8 +1,11 @@
 package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.error.RecordNotFoundException;
+import ch.fortylove.persistence.service.PlayerStatusService;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +22,40 @@ public class UserSetupData {
 
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
+    @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserSetupData(@Nonnull final UserService userService,
                          @Nonnull final RoleService roleService,
-                         @Nonnull final PasswordEncoder passwordEncoder) {
+                         @Nonnull final PlayerStatusService playerStatus, @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.playerStatusService = playerStatus;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void createUsers() {
-        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole());
-        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole());
+        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole(), getPlayerStatus("aktiv"));
+        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole(), getPlayerStatus("aktiv"));
 
-        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole());
-        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole());
-        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole());
+        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus("aktiv"));
+        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus("aktiv"));
+        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus("aktiv"));
+
+        createUserIfNotFound("passivPlayer@fortylove.ch", "Passiv", "Player", "password", getUserRole(), getPlayerStatus("passiv"));
+        createUserIfNotFound("turnierspielerPlayerr@fortylove.ch", "Turnier Spieler", "Player", "password", getUserRole(), getPlayerStatus("turnier spieler"));
+        createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus("inaktiv"));
     }
+
+    private PlayerStatus getPlayerStatus(String name) {
+        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
+        if(playerStatus.isPresent()) {
+            return playerStatus.get();
+        }
+        throw new RecordNotFoundException("PlayerStatus "+name+" not found");
+    }
+
 
     @Nonnull
     private List<Role> getAdminRole() {
@@ -71,11 +89,12 @@ public class UserSetupData {
                               @Nonnull final String firstName,
                               @Nonnull final String lastName,
                               @Nonnull final String password,
-                              @Nonnull final List<Role> Roles) {
+                              @Nonnull final List<Role> Roles,
+                              @Nonnull final PlayerStatus playerStatus) {
         final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {
-            userService.create(new User(0L, firstName, lastName, email, passwordEncoder.encode(password), true, Roles, null, null));
+            userService.create(new User(0L, firstName, lastName, email, passwordEncoder.encode(password), true, Roles, null, null, playerStatus));
         }
     }
 }
