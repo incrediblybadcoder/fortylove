@@ -1,7 +1,6 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -27,6 +26,5 @@ public interface UserService {
     @Nonnull
     List<User> findAll(@Nonnull final String filterText);
 
-    @Transactional
     void delete(@Nonnull final User user);
 }

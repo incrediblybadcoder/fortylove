@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 
 import java.util.List;
@@ -35,8 +36,11 @@ public class User extends AbstractEntity {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Booking> ownerBookings;
+
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Booking> bookings;
+    private List<Booking> opponentBookings;
 
     public User() {
         super();
@@ -49,6 +53,7 @@ public class User extends AbstractEntity {
                 final String password,
                 final boolean enabled,
                 final List<Role> roles,
+                final List<Booking> ownerBookings,
                 final List<Booking> bookings) {
         super(id, 0);
         this.firstName = firstName;
@@ -57,7 +62,8 @@ public class User extends AbstractEntity {
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
-        this.bookings = bookings;
+        this.ownerBookings = ownerBookings;
+        this.opponentBookings = bookings;
     }
 
     public String getFirstName() {
@@ -112,12 +118,20 @@ public class User extends AbstractEntity {
         this.enabled = enabled;
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
+    public List<Booking> getOwnerBookings() {
+        return ownerBookings;
     }
 
-    public void setBookings(final List<Booking> bookings) {
-        this.bookings = bookings;
+    public void setOwnerBookings(final List<Booking> ownerBookings) {
+        this.ownerBookings = ownerBookings;
+    }
+
+    public List<Booking> getOpponentBookings() {
+        return opponentBookings;
+    }
+
+    public void setOpponentBookings(final List<Booking> opponentBookings) {
+        this.opponentBookings = opponentBookings;
     }
 
     @Override

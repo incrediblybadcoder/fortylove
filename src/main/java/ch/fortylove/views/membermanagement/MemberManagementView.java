@@ -83,7 +83,7 @@ public class MemberManagementView extends VerticalLayout {
         Optional<User> userToDelete = userService.findById(userFormInformations.getId());
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
-            if (user.getBookings().size() == 0) {
+            if (user.getOpponentBookings().size() == 0) {
                 userService.delete(user);
                 updateUserList();
                 closeEditor();
@@ -111,6 +111,7 @@ public class MemberManagementView extends VerticalLayout {
                 userFormInformations.getEmail(),
                 passwordEncoder.encode("newpassword"),
                 true, roles,
+                null,
                 null);
         userService.create(saveUser);
         updateUserList();
@@ -142,7 +143,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User(0L, "", "", "", "", false, null, null));
+        createNewUser(new User(0L, "", "", "", "", false, null, null, null));
     }
 
     private void createNewUser(final User user) {
