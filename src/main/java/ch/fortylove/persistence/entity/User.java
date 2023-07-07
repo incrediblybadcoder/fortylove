@@ -41,7 +41,7 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> ownerBookings;
 
-    @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     private List<Booking> opponentBookings;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

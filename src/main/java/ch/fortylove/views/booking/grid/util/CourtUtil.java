@@ -12,7 +12,7 @@ public class CourtUtil {
     @Nonnull
     public static Optional<Booking> getBookingForTimeSlot(@Nonnull final List<Booking> bookings,
                                                           @Nonnull final Timeslot timeslot) {
-        final List<Booking> filteredBookings = bookings.stream().filter(booking -> booking.getTimeslotIndex() == timeslot.getIndex()).toList();
+        final List<Booking> filteredBookings = bookings.stream().filter(booking -> booking.getTimeslot().equals(timeslot)).toList();
         if (filteredBookings.size() > 1) {
             throw new IllegalStateException("Duplicate Booking for timeslot: " + timeslot.getIndex());
         }

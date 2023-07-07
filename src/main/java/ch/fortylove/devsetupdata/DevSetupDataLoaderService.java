@@ -18,8 +18,9 @@ public class DevSetupDataLoaderService {
     @Nonnull private final PrivilegeSetupData privilegeSetupData;
     @Nonnull private final CourtSetupData courtSetupData;
     @Nonnull private final BookingSetupData bookingSetupData;
-
     @Nonnull private final PlayerStatusSetupData playerStatusSetupData;
+
+    private boolean alreadySetup = false;
 
     @Autowired
     public DevSetupDataLoaderService(@Nonnull final UserSetupData userSetupData,
@@ -37,11 +38,17 @@ public class DevSetupDataLoaderService {
     }
 
     public void initData() {
+        if (alreadySetup) {
+            return;
+        }
+
         privilegeSetupData.createPrivileges();
         roleSetupData.createRoles();
         playerStatusSetupData.createPlayerStatus();
         userSetupData.createUsers();
         courtSetupData.createCourts();
         bookingSetupData.createBookings();
+
+        alreadySetup = true;
     }
 }
