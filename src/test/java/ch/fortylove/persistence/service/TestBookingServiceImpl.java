@@ -17,12 +17,12 @@ import java.util.List;
 @SpringTest
 class TestBookingServiceImpl {
 
-    @Autowired PrivilegeService privilegeService;
-    @Autowired RoleService roleService;
-    @Autowired UserService userService;
-    @Autowired CourtService courtService;
+    @Autowired private PrivilegeService privilegeService;
+    @Autowired private RoleService roleService;
+    @Autowired private UserService userService;
+    @Autowired private CourtService courtService;
 
-    @Autowired BookingService testee;
+    @Autowired private BookingService testee;
 
     @Test
     public void testFindAllByCourtId_emptyRepository() {

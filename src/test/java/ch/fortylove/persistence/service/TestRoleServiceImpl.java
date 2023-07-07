@@ -13,9 +13,9 @@ import java.util.Optional;
 @SpringTest
 class TestRoleServiceImpl {
 
-    @Autowired PrivilegeService privilegeService;
+    @Autowired private PrivilegeService privilegeService;
 
-    @Autowired RoleService testee;
+    @Autowired private RoleService testee;
 
     @Test
     public void testCreate() {

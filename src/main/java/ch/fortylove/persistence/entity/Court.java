@@ -16,7 +16,7 @@ import java.util.Objects;
 @FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "date = :date")
 public class Court extends AbstractEntity {
 
-    @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filter(name = "bookingDateFilter")
     private List<Booking> bookings;
 

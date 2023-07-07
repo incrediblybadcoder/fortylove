@@ -11,7 +11,7 @@ import java.util.Optional;
 @SpringTest
 class TestPrivilegeServiceImpl {
 
-    @Autowired PrivilegeService testee;
+    @Autowired private PrivilegeService testee;
 
     @Test
     public void testCreate() {
@@ -50,7 +50,7 @@ class TestPrivilegeServiceImpl {
         final Privilege privilege2 = testee.create(new Privilege(0L, "name2", null));
         testee.create(new Privilege(0L, "name3", null));
 
-        testee.delete(privilege2);
+        testee.delete(privilege2.getId());
 
         final Optional<Privilege> findDeleted = testee.findById(privilege2.getId());
         Assertions.assertTrue(findDeleted.isEmpty());

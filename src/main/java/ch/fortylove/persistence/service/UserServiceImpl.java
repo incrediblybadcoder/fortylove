@@ -69,15 +69,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*
-        * Delete given user from database and all its bookings (see @Transactional and @ManyToMany relationship with CascadeType.ALL)
-        * @param user to delete
-     */
     @Override
-    public void delete(@Nonnull final User user) {
-        if (userRepository.findById(user.getId()).isEmpty()) {
-            throw new RecordNotFoundException(user);
-        }
+    public void delete(final long id) {
+        final User user = userRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
         userRepository.delete(user);
     }
 }
