@@ -5,12 +5,11 @@ import ch.fortylove.views.membermanagement.MemberManagementView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
@@ -22,9 +21,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-@CssImport(value = "./themes/fortylove/views/main-layout.css", themeFor = "vaadin-vertical-layout")
 public class MainLayout extends AppLayout {
 
     @Nonnull private final SecurityService securityService;
@@ -40,17 +36,8 @@ public class MainLayout extends AppLayout {
 
         final Tabs menu = createMenuTabs();
 
-        addToNavbar(appName, menu);
-    }
-
-    @Nonnull
-    private Button createLogoutButton() {
-        final Button logoutButton = new Button("Logout", new Icon(VaadinIcon.SIGN_OUT));
-        logoutButton.getStyle().set("margin-right", "var(--lumo-space-m)");
-        logoutButton.addClickListener(event -> {
-            securityService.logout();
-        });
-        return logoutButton;
+        addToNavbar(appName);
+        addToNavbar(true, menu);
     }
 
     @Nonnull
@@ -64,28 +51,27 @@ public class MainLayout extends AppLayout {
     @Nonnull
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "Buchen", ch.fortylove.views.booking.BookingView.class));
+        tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", ch.fortylove.views.booking.BookingView.class));
         tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", MemberManagementView.class));
+        tabs.add(getLogoutTab());
 
-        final Icon logoutIcon = new Icon(VaadinIcon.SIGN_OUT);
-        final Span logoutText = new Span("Logout");
-        logoutText.addClassName("logout-text");  // Fügen Sie die CSS-Klasse hinzu
+        return tabs;
+    }
 
-        final VerticalLayout logoutLink = new VerticalLayout(logoutIcon, logoutText);
-        logoutLink.getElement().getThemeList().add("logout-link");  // Fügen Sie den Theme-Namen hinzu
-        logoutLink.getStyle().set("cursor", "pointer");
-        logoutLink.setPadding(false);
-        logoutLink.setSpacing(false);
-        logoutLink.addClickListener(event -> {
-            securityService.logout();
-        });
+    private Tab getLogoutTab() {
+        final Icon logoutIcon = VaadinIcon.SIGN_OUT.create();
+        final Label logoutLabel = new Label("Logout");
+        final VerticalLayout layout = new VerticalLayout(logoutIcon, logoutLabel);
+        layout.setSpacing(false);
+        layout.setPadding(false);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        layout.addClickListener(event -> securityService.logout());
 
         final Tab logoutTab = new Tab();
         logoutTab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
-        logoutTab.add(logoutLink);
-        tabs.add(logoutTab);
-
-        return tabs;
+        logoutTab.add(layout);
+        return logoutTab;
     }
 
     @Nonnull
