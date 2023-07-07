@@ -1,0 +1,9 @@
+:host([theme~="logout-link"]) .logout-text {
+    margin-top: -5px;
+}
+
+@media only screen and (max-width: 600px) {
+    :host([theme~="logout-link"]) .logout-text {
+        margin-top: -3px;
+    }
+}
