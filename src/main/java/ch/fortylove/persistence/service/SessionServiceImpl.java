@@ -2,6 +2,7 @@ package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.security.SecurityService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class SessionServiceImpl implements SessionService {
 
     @Nonnull private final UserService userService;

@@ -1,7 +1,10 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Nonnull private final UserRepository userRepository;
@@ -22,16 +26,19 @@ public class UserServiceImpl implements UserService {
     @Nonnull
     @Override
     public User create(@Nonnull final User user) {
+        if (userRepository.findById(user.getId()).isPresent()) {
+            throw new DuplicateRecordException(user);
+        }
         return userRepository.save(user);
     }
 
     @Nonnull
     @Override
     public User update(@Nonnull final User user) {
-        if (userRepository.findById(user.getId()).isPresent()) {
-            return userRepository.save(user);
+        if (userRepository.findById(user.getId()).isEmpty()) {
+            throw new RecordNotFoundException(user);
         }
-        throw new IllegalArgumentException("User id must not be null");
+        return userRepository.save(user);
     }
 
     @Nonnull
@@ -68,6 +75,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void delete(@Nonnull final User user) {
+        if (userRepository.findById(user.getId()).isEmpty()) {
+            throw new RecordNotFoundException(user);
+        }
         userRepository.delete(user);
     }
 }

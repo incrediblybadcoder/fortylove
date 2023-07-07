@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.BookingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class BookingServiceImpl implements BookingService {
 
     @Nonnull private final BookingRepository bookingRepository;
@@ -23,7 +25,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Nonnull
     @Override
-    public Booking create(@Nonnull final Booking booking) {
+    public Booking create(@Nonnull final Booking booking){
         if (bookingRepository.findById(booking.getId()).isPresent() ||
                 !bookingRepository.findAllByCourtAndTimeslotIndexAndDate(booking.getCourt(), booking.getTimeslotIndex(), booking.getDate()).isEmpty()) {
             throw new DuplicateRecordException(booking);

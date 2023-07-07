@@ -2,6 +2,7 @@ package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.repository.BookingSettingsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Service
+@Transactional
 public class BookingSettingsServiceImpl implements BookingSettingsService {
 
     @Nonnull private final BookingSettingsRepository bookingSettingsRepository;

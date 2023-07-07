@@ -45,12 +45,12 @@ class TestPrivilegeServiceImpl {
     }
 
     @Test
-    public void testDeleteById() {
+    public void testDelete() {
         testee.create(new Privilege(0L, "name1", null));
         final Privilege privilege2 = testee.create(new Privilege(0L, "name2", null));
         testee.create(new Privilege(0L, "name3", null));
 
-        testee.deleteById(privilege2.getId());
+        testee.delete(privilege2);
 
         final Optional<Privilege> findDeleted = testee.findById(privilege2.getId());
         Assertions.assertTrue(findDeleted.isEmpty());
