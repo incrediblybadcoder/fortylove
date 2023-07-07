@@ -1,7 +1,9 @@
 package ch.fortylove.views.membermanagement;
 
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.service.PlayerStatusService;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
 import ch.fortylove.views.MainLayout;
@@ -19,30 +21,34 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
 @RolesAllowed(Role.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
-    private final UserForm form;
-    Grid<User> grid = new Grid<>(User.class);
-    TextField filterText = new TextField();
-    private final UserService userService;
-    private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
+    @Nonnull private final UserForm form;
+    @Nonnull private final Grid<User> grid = new Grid<>(User.class);
+    @Nonnull private final TextField filterText = new TextField();
+    @Nonnull private final UserService userService;
+    @Nonnull private final PlayerStatusService playerStatusService;
+    @Nonnull private final RoleService roleService;
+    @Nonnull private final PasswordEncoder passwordEncoder;
 
     Notification notification = new Notification(
             "Besten Dank", 5000);
 
 
-    public MemberManagementView(UserService userService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
+    public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.playerStatusService = playerStatusService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         addClassName("member-management-view");
@@ -83,7 +89,7 @@ public class MemberManagementView extends VerticalLayout {
         Optional<User> userToDelete = userService.findById(userFormInformations.getId());
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
-            if (user.getOpponentBookings().size() == 0) {
+            if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
                 userService.delete(user);
                 updateUserList();
                 closeEditor();
@@ -105,14 +111,21 @@ public class MemberManagementView extends VerticalLayout {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
         role.ifPresent(roles::add);
+        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName("aktiv");
+        if (playerStatus.isEmpty()) {
+            throw new RuntimeException("PlayerStatus aktiv not found");
+        }
+
         final User saveUser = new User(0L,
                 userFormInformations.getFirstName(),
                 userFormInformations.getLastName(),
                 userFormInformations.getEmail(),
                 passwordEncoder.encode("newpassword"),
-                true, roles,
+                true,
+                roles,
                 null,
-                null);
+                null,
+                playerStatus.get());
         userService.create(saveUser);
         updateUserList();
         closeEditor();
@@ -143,7 +156,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User(0L, "", "", "", "", false, null, null, null));
+        createNewUser(new User(0L, "", "", "", "", false, null, null, null, null));
     }
 
     private void createNewUser(final User user) {
@@ -164,8 +177,18 @@ public class MemberManagementView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("member-grid");
         grid.setSizeFull();
-        //ToDO: add role column
-        grid.setColumns("id", "firstName", "lastName", "email");
+        grid.removeAllColumns();
+        grid.addColumn(User::getId).setHeader("ID");
+        grid.addColumn(user -> user.getPlayerStatus().getName()).setHeader("Spieler Status");
+        grid.addColumn(User::getFirstName).setHeader("Vorname");
+        grid.addColumn(User::getLastName).setHeader("Nachname");
+        grid.addColumn(User::getEmail).setHeader("Email");
+        grid.addColumn(user -> user.getRoles().stream()
+                        .map(Role::getName)
+                        .collect(Collectors.joining(", "))
+                )
+                .setHeader("Roles");
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));

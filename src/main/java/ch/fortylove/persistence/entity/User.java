@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 
@@ -42,6 +43,12 @@ public class User extends AbstractEntity {
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Booking> opponentBookings;
 
+
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "player_status_id")
+    private PlayerStatus playerStatus;
+
     public User() {
         super();
     }
@@ -54,7 +61,8 @@ public class User extends AbstractEntity {
                 final boolean enabled,
                 final List<Role> roles,
                 final List<Booking> ownerBookings,
-                final List<Booking> bookings) {
+                final List<Booking> opponentBookings,
+                final PlayerStatus playerStatus) {
         super(id, 0);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,7 +71,8 @@ public class User extends AbstractEntity {
         this.enabled = enabled;
         this.roles = roles;
         this.ownerBookings = ownerBookings;
-        this.opponentBookings = bookings;
+        this.opponentBookings = opponentBookings;
+        this.playerStatus = playerStatus;
     }
 
     public String getFirstName() {
@@ -132,6 +141,14 @@ public class User extends AbstractEntity {
 
     public void setOpponentBookings(final List<Booking> opponentBookings) {
         this.opponentBookings = opponentBookings;
+    }
+
+    public PlayerStatus getPlayerStatus() {
+        return playerStatus;
+    }
+
+    public void setPlayerStatus(final PlayerStatus playerStatus) {
+        this.playerStatus = playerStatus;
     }
 
     @Override
