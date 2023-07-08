@@ -4,7 +4,6 @@ import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import org.junit.jupiter.api.Assertions;
@@ -20,14 +19,17 @@ import java.util.Optional;
 @SpringTest
 class TestBookingServiceImpl extends ServiceTest {
 
-    @Nonnull private List<Timeslot> timeslots;
-
-    @Autowired private BookingService testee;
+    @Nonnull private final BookingService testee;
 
     @Nonnull private Court court;
     @Nonnull private User owner;
     @Nonnull private User opponent;
     @Nonnull private BookingSettings bookingSettings;
+
+    @Autowired
+    public TestBookingServiceImpl(@Nonnull final BookingService testee) {
+        this.testee = testee;
+    }
 
     @BeforeEach
     void setUp() {
@@ -85,5 +87,44 @@ class TestBookingServiceImpl extends ServiceTest {
         final List<Booking> foundBookings = testee.findAllByCourtId(court3.getId());
 
         Assertions.assertTrue(foundBookings.isEmpty());
+    }
+
+    @Test
+    public void testIsBookingModifiable_allowed() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+
+        Assertions.assertTrue(testee.isBookingModifiable(owner, booking));
+    }
+
+    @Test
+    public void testIsBookingModifiable_notAllowed_notOwner() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+
+        Assertions.assertFalse(testee.isBookingModifiable(opponent, booking));
+    }
+
+    @Test
+    public void testIsBookingModifiable_notAllowed_dateInPast() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1));
+
+        Assertions.assertFalse(testee.isBookingModifiable(owner, booking));
+    }
+
+    @Test
+    public void testIsBookingCreatable_allowed() {
+        Assertions.assertTrue(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
+    }
+
+    @Test
+    public void testIsBookingCreatable_notAllowed_dateInPast() {
+        Assertions.assertFalse(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1)));
+    }
+
+    @Test
+    public void testIsBookingCreatable_notAllowed_bookingExists() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+        testee.create(booking);
+
+        Assertions.assertFalse(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
     }
 }

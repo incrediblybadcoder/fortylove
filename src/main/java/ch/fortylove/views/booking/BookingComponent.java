@@ -20,6 +20,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringComponent
@@ -54,6 +55,11 @@ public class BookingComponent extends VerticalLayout {
         constructUI();
     }
 
+    public void refresh() {
+        final List<Court> courts = courtService.findAllWithBookingsByDate(getSelectedDate());
+        bookingGridComponent.setItems(courts);
+    }
+
     private void constructUI() {
         add(getBookingGridComponent());
         add(getDateSelectionComponent());
@@ -72,21 +78,16 @@ public class BookingComponent extends VerticalLayout {
         return dateSelectionComponent;
     }
 
-    public void refresh() {
-        final List<Court> courts = courtService.findAllWithBookingsByDate(dateSelectionComponent.getDate());
-        bookingGridComponent.setItems(courts);
-    }
-
     private void dateChanged(@Nonnull final DateChangeEvent event) {
         refresh();
     }
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            if (userService.isUserAllowedToModifyBooking(currentUser, event.getBooking())) {
+            if (bookingService.isBookingModifiable(currentUser, event.getBooking())) {
                 final Booking booking = event.getBooking();
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents();
-                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), booking.getOwner(), possibleOpponents);
+                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
                 bookingDialog.openExisting(booking.getOpponents().get(0), booking);
             }
@@ -95,10 +96,12 @@ public class BookingComponent extends VerticalLayout {
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            final List<User> possibleOpponents = userService.getPossibleBookingOpponents();
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, possibleOpponents);
-            bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-            bookingDialog.openFree();
+            if (bookingService.isBookingCreatable(event.getCourt(), event.getTimeSlot(), getSelectedDate())) {
+                final List<User> possibleOpponents = userService.getPossibleBookingOpponents();
+                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
+                bookingDialog.addDialogBookingListener(this::handleDialogBooking);
+                bookingDialog.openFree();
+            }
         });
     }
 
@@ -109,5 +112,10 @@ public class BookingComponent extends VerticalLayout {
             case DELETE -> bookingService.delete(dialogBookingEvent.getBooking().getId());
         }
         refresh();
+    }
+
+    @Nonnull
+    private LocalDate getSelectedDate() {
+        return dateSelectionComponent.getDate();
     }
 }

@@ -16,10 +16,15 @@ import java.util.Optional;
 @SpringTest
 class TestUserServiceImpl extends ServiceTest {
 
-    @Autowired private UserService testee;
+    @Nonnull private final UserService testee;
 
     @Nonnull private Role role;
     @Nonnull private PlayerStatus playerStatus;
+
+    @Autowired
+    public TestUserServiceImpl(@Nonnull final UserService testee) {
+        this.testee = testee;
+    }
 
     @BeforeEach
     void setUp() {

@@ -1,6 +1,9 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.Timeslot;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.BookingRepository;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Nonnull
     @Override
-    public Booking create(@Nonnull final Booking booking){
+    public Booking create(@Nonnull final Booking booking) {
         if (bookingRepository.findById(booking.getId()).isPresent() ||
                 !bookingRepository.findAllByCourtAndTimeslotAndDate(booking.getCourt(), booking.getTimeslot(), booking.getDate()).isEmpty()) {
             throw new DuplicateRecordException(booking);
@@ -63,5 +67,24 @@ public class BookingServiceImpl implements BookingService {
         booking.removeOpponents();
 
         bookingRepository.delete(booking);
+    }
+
+    @Override
+    public boolean isBookingModifiable(@Nonnull final User user,
+                                       @Nonnull final Booking booking) {
+        final boolean isOwner = user.equals(booking.getOwner());
+        return isOwner && isCurrentOrFutureDate(booking.getDate());
+    }
+
+    @Override
+    public boolean isBookingCreatable(@Nonnull final Court court,
+                                      @Nonnull final Timeslot timeslot,
+                                      @Nonnull final LocalDate date) {
+        final boolean existsBooking = bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0;
+        return !existsBooking && isCurrentOrFutureDate(date);
+    }
+
+    private boolean isCurrentOrFutureDate(@Nonnull final LocalDate date) {
+        return !date.isBefore(LocalDate.now());
     }
 }
