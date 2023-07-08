@@ -60,6 +60,10 @@ public class Timeslot extends AbstractEntity {
         return BASE_TIME.plusMinutes((index + 1) * MINUTES_PER_TIMESLOT);
     }
 
+    public String getTimeIntervalText() {
+        return getStartTime() + " - " + getEndTime();
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

@@ -112,12 +112,12 @@ class TestBookingServiceImpl extends ServiceTest {
 
     @Test
     public void testIsBookingCreatable_allowed() {
-        Assertions.assertTrue(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        Assertions.assertTrue(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
     }
 
     @Test
     public void testIsBookingCreatable_notAllowed_dateInPast() {
-        Assertions.assertFalse(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1)));
+        Assertions.assertFalse(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1)));
     }
 
     @Test
@@ -125,6 +125,6 @@ class TestBookingServiceImpl extends ServiceTest {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
         testee.create(booking);
 
-        Assertions.assertFalse(testee.isBookingCreatable(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        Assertions.assertFalse(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
     }
 }

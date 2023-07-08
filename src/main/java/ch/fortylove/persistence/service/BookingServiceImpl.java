@@ -2,6 +2,7 @@ package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
@@ -35,6 +36,11 @@ public class BookingServiceImpl implements BookingService {
             throw new DuplicateRecordException(booking);
         }
         return bookingRepository.save(booking);
+    }
+
+    private int getUserBookingsOnDay(@Nonnull final User user,
+                                     @Nonnull final LocalDate date) {
+        return bookingRepository.getUserBookingsOnDay(user, date);
     }
 
     @Nonnull
@@ -77,14 +83,22 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean isBookingCreatable(@Nonnull final Court court,
-                                      @Nonnull final Timeslot timeslot,
-                                      @Nonnull final LocalDate date) {
+    public boolean isBookingCreatableOnDate(@Nonnull final Court court,
+                                            @Nonnull final Timeslot timeslot,
+                                            @Nonnull final LocalDate date) {
         final boolean existsBooking = bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0;
         return !existsBooking && isCurrentOrFutureDate(date);
     }
 
     private boolean isCurrentOrFutureDate(@Nonnull final LocalDate date) {
         return !date.isBefore(LocalDate.now());
+    }
+
+    @Override
+    public boolean isUserBookingAllowedOnDate(@Nonnull final User user,
+                                              @Nonnull final LocalDate date) {
+        final int userBookingsOnDay = getUserBookingsOnDay(user, date);
+        final PlayerStatus playerStatus = user.getPlayerStatus();
+        return userBookingsOnDay < playerStatus.getBookingsPerDay();
     }
 }

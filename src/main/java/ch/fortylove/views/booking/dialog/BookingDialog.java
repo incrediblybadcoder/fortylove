@@ -65,7 +65,7 @@ public class BookingDialog extends Dialog {
         courtField.setReadOnly(true);
 
         final TextField dateField = new TextField("Zeit / Datum");
-        dateField.setValue(timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + date.format(FormatUtil.getDateTextFormatter()));
+        dateField.setValue(timeslot.getTimeIntervalText() + " / " + date.format(FormatUtil.getDateTextFormatter()));
         dateField.setReadOnly(true);
 
         final TextField ownerField = new TextField("Spieler");
@@ -159,7 +159,7 @@ public class BookingDialog extends Dialog {
         final String title = "Bearbeiten";
         setHeaderTitle(title);
 
-        addButtons(modifyButton, deleteButton);
+        addButtons(deleteButton, modifyButton);
         opponentComboBox.setValue(opponent);
 
         open();
