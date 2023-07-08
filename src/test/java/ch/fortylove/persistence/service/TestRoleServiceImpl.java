@@ -20,10 +20,10 @@ class TestRoleServiceImpl {
     @Test
     public void testCreate() {
         final String roleName = "roleName";
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
 
-        final Role createdRole = testee.create(new Role(0L, roleName, null, Arrays.asList(privilege1, privilege2)));
+        final Role createdRole = testee.create(new Role(roleName, Arrays.asList(privilege1, privilege2)));
 
         Assertions.assertTrue(testee.findByName(roleName).isPresent());
         Assertions.assertEquals(createdRole, testee.findByName(roleName).get());
@@ -33,10 +33,10 @@ class TestRoleServiceImpl {
 
     @Test
     public void testFindByName_notExists() {
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        testee.create(new Role(0L, "roleName1", null, Arrays.asList(privilege1, privilege2)));
-        testee.create(new Role(0L, "roleName3", null, Arrays.asList(privilege1, privilege2)));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
+        testee.create(new Role("roleName1", Arrays.asList(privilege1, privilege2)));
+        testee.create(new Role("roleName3", Arrays.asList(privilege1, privilege2)));
 
         final Optional<Role> role = testee.findByName("roleName2");
 
@@ -46,11 +46,11 @@ class TestRoleServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String roleName2 = "roleName2";
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        testee.create(new Role(0L, "roleName1", null, Arrays.asList(privilege1, privilege2)));
-        final Role role2 = testee.create(new Role(0L, roleName2, null, Arrays.asList(privilege1, privilege2)));
-        testee.create(new Role(0L, "roleName3", null, Arrays.asList(privilege1, privilege2)));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
+        testee.create(new Role("roleName1", Arrays.asList(privilege1, privilege2)));
+        final Role role2 = testee.create(new Role(roleName2, Arrays.asList(privilege1, privilege2)));
+        testee.create(new Role("roleName3", Arrays.asList(privilege1, privilege2)));
 
         final Optional<Role> role = testee.findByName(roleName2);
 

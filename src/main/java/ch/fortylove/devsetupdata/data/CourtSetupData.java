@@ -33,7 +33,7 @@ public class CourtSetupData {
         final Optional<Court> court = courtService.findById(id);
 
         if (court.isEmpty()) {
-            courtService.create(new Court(0L, null));
+            courtService.create(new Court());
         }
     }
 }

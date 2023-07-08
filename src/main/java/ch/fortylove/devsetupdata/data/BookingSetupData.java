@@ -153,7 +153,7 @@ public class BookingSetupData {
         final List<Booking> bookingDTOs = bookingService.findAllByCourtId(court.getId());
 
         if (isNewBooking(bookingDTOs, date, timeslot)) {
-            final Booking booking = new Booking(0L, court, player, partners, timeslot, date);
+            final Booking booking = new Booking(court, player, partners, timeslot, date);
             bookingService.create(booking);
 //            court.addBooking(booking);
         }

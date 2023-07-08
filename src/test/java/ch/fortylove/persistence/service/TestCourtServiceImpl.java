@@ -15,7 +15,7 @@ class TestCourtServiceImpl {
 
     @Test
     public void testCreate() {
-        final Court createdCourt = testee.create(new Court(0L, null));
+        final Court createdCourt = testee.create(new Court());
 
         Assertions.assertTrue(testee.findById(createdCourt.getId()).isPresent());
         Assertions.assertEquals(createdCourt, testee.findById(createdCourt.getId()).get());
@@ -23,7 +23,7 @@ class TestCourtServiceImpl {
 
     @Test
     public void testFindById_notExists() {
-        final Court court1 = testee.create(new Court(0L, null));
+        final Court court1 = testee.create(new Court());
 
         final Optional<Court> court = testee.findById(court1.getId() + 1L);
 
@@ -32,8 +32,8 @@ class TestCourtServiceImpl {
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court(0L, null));
-        final Court court2 = testee.create(new Court(0L, null));
+        testee.create(new Court());
+        final Court court2 = testee.create(new Court());
 
         final Optional<Court> court = testee.findById(court2.getId());
 

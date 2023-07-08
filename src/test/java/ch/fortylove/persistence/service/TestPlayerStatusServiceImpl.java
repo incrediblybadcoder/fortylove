@@ -19,7 +19,7 @@ public class TestPlayerStatusServiceImpl {
         //Arange
         final String name = "playerStatusName";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(0L, name, null, 2, 7));
+        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
         //Assert
         Assertions.assertTrue(testee.findByName(name).isPresent());
         Assertions.assertEquals(createdPlayerStatus, testee.findByName(name).get());
@@ -30,7 +30,7 @@ public class TestPlayerStatusServiceImpl {
         //Arange
         final String name = "playerStatusName1";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(0L, name, null, 2, 7));
+        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
         final Optional<PlayerStatus> playerStatusName2 = testee.findByName("playerStatusName2");
         //Assert
         Assertions.assertTrue(playerStatusName2.isEmpty());
@@ -41,7 +41,7 @@ public class TestPlayerStatusServiceImpl {
         //Arange
         final String name = "playerStatusName1";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(0L, name, null, 2, 7));
+        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
         final Optional<PlayerStatus> playerStatusName = testee.findByName("playerStatusName1");
         //Assert
         Assertions.assertTrue(playerStatusName.isPresent());

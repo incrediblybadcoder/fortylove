@@ -116,15 +116,12 @@ public class MemberManagementView extends VerticalLayout {
             throw new RuntimeException("PlayerStatus aktiv not found");
         }
 
-        final User saveUser = new User(0L,
-                userFormInformations.getFirstName(),
+        final User saveUser = new User(userFormInformations.getFirstName(),
                 userFormInformations.getLastName(),
                 userFormInformations.getEmail(),
                 passwordEncoder.encode("newpassword"),
                 true,
                 roles,
-                null,
-                null,
                 playerStatus.get());
         userService.create(saveUser);
         updateUserList();
@@ -156,7 +153,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User(0L, "", "", "", "", false, null, null, null, null));
+        createNewUser(new User("", "", "", "", true, null, null));
     }
 
     private void createNewUser(final User user) {

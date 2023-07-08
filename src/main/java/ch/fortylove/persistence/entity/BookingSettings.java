@@ -20,9 +20,8 @@ public class BookingSettings extends AbstractEntity {
         super();
     }
 
-    public BookingSettings(final long id,
-                           final List<Timeslot> timeslots) {
-        super(id, 0);
+    public BookingSettings(final List<Timeslot> timeslots) {
+        super();
         this.timeslots = timeslots;
     }
 
