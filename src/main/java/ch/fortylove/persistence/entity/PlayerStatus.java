@@ -3,7 +3,6 @@ package ch.fortylove.persistence.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
@@ -21,8 +20,7 @@ public class PlayerStatus extends AbstractEntity {
     @Column(name = "bookable_days_in_advance")
     private int bookableDaysInAdvance;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "player_status_id")
+    @OneToMany(mappedBy = "playerStatus", fetch = FetchType.EAGER)
     private List<User> users;
 
 

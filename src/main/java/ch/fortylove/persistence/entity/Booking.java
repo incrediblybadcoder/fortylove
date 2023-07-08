@@ -25,7 +25,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     @JoinColumn(name = "user_owner_id")
     private User owner;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
     private List<User> opponents;
 
