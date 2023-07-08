@@ -25,10 +25,9 @@ public class Privilege extends AbstractEntity {
         super();
     }
 
-    public Privilege(final long id,
-                     final String name,
+    public Privilege(final String name,
                      final List<Role> roles) {
-        super(id, 0);
+        super();
         this.name = name;
         this.roles = roles;
     }

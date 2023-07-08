@@ -94,7 +94,7 @@ public class UserSetupData {
         final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {
-            userService.create(new User(0L, firstName, lastName, email, passwordEncoder.encode(password), true, Roles, null, null, playerStatus));
+            userService.create(new User(firstName, lastName, email, passwordEncoder.encode(password), true, Roles, null, null, playerStatus));
         }
     }
 }

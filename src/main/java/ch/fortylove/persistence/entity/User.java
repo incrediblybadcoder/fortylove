@@ -52,8 +52,7 @@ public class User extends AbstractEntity {
         super();
     }
 
-    public User(final long id,
-                final String firstName,
+    public User(final String firstName,
                 final String lastName,
                 final String email,
                 final String password,
@@ -62,7 +61,7 @@ public class User extends AbstractEntity {
                 final List<Booking> ownerBookings,
                 final List<Booking> opponentBookings,
                 final PlayerStatus playerStatus) {
-        super(id, 0);
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

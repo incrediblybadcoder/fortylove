@@ -23,13 +23,11 @@ public class PlayerStatus extends AbstractEntity {
     @OneToMany(mappedBy = "playerStatus", fetch = FetchType.EAGER)
     private List<User> users;
 
-
-    public PlayerStatus(final long id,
-                        final String name,
+    public PlayerStatus(final String name,
                         final List<User> users,
                         final int bookingsPerDay,
                         final int bookableDaysInAdvance) {
-        super(id, 0);
+        super();
         this.name = name;
         this.users = users;
         this.bookingsPerDay = bookingsPerDay;

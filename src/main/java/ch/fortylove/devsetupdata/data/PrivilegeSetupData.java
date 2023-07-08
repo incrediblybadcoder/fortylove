@@ -29,7 +29,7 @@ public class PrivilegeSetupData {
     void createPrivilegeIfNotFound(@Nonnull final String name) {
         final Optional<Privilege> privilege = privilegeService.findByName(name);
         if (privilege.isEmpty()) {
-            privilegeService.create(new Privilege(0L, name, null));
+            privilegeService.create(new Privilege(name, null));
         }
     }
 }

@@ -24,12 +24,6 @@ public class Court extends AbstractEntity {
         super();
     }
 
-    public Court(final long id,
-                 final List<Booking> bookings) {
-        super(id, 0);
-        this.bookings = bookings;
-    }
-
     public List<Booking> getBookings() {
         return bookings;
     }

@@ -31,11 +31,10 @@ public class Role extends AbstractEntity {
         super();
     }
 
-    public Role(final long id,
-                final String name,
+    public Role(final String name,
                 final List<User> users,
                 final List<Privilege> privileges) {
-        super(id, 0);
+        super();
         this.name = name;
         this.users = users;
         this.privileges = privileges;

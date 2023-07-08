@@ -22,11 +22,11 @@ class TestUserServiceImpl {
 
     @Test
     public void testCreate() {
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
-        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
-        final User createdUser = testee.create(new User(0L, "firstName", "lastName", "email@fortylove.ch", "password", true, Arrays.asList(role1, role2), null, null, null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Role role1 = roleService.create(new Role("roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role("roleName2", null, List.of(privilege2)));
+        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", "password", true, Arrays.asList(role1, role2), null, null, null));
 
         Assertions.assertEquals(1, testee.findAll().size());
         Assertions.assertEquals(createdUser, testee.findAll().get(0));
@@ -37,12 +37,12 @@ class TestUserServiceImpl {
 
     @Test
     public void testFindByEmail_notExists() {
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
-        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
-        testee.create(new User(0L, "firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        testee.create(new User(0L, "firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Arrays.asList(role1, role2), null, null, null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Role role1 = roleService.create(new Role("roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role("roleName2", null, List.of(privilege2)));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Arrays.asList(role1, role2), null, null, null));
 
         final Optional<User> user = testee.findByEmail("email2");
 
@@ -51,13 +51,13 @@ class TestUserServiceImpl {
 
     @Test
     public void testFindByEmail_exists() {
-        final Privilege privilege1 = privilegeService.create(new Privilege(0L, "privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege(0L, "privilegeName2", null));
-        final Role role1 = roleService.create(new Role(0L, "roleName1", null, List.of(privilege1)));
-        final Role role2 = roleService.create(new Role(0L, "roleName2", null, List.of(privilege2)));
-        testee.create(new User(0L, "firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        final User user2 = testee.create(new User(0L, "firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
-        testee.create(new User(0L, "firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Arrays.asList(role1, role2), null, null, null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Role role1 = roleService.create(new Role("roleName1", null, List.of(privilege1)));
+        final Role role2 = roleService.create(new Role("roleName2", null, List.of(privilege2)));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
+        final User user2 = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Arrays.asList(role1, role2), null, null, null));
 
         final Optional<User> user = testee.findByEmail("email2@fortylove.ch");
 

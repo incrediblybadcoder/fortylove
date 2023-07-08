@@ -37,7 +37,7 @@ public class PlayerStatusSetupData {
                                               final int bookableDaysInAdvance) {
        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
        if(playerStatus.isEmpty()) {
-           playerStatusService.create(new PlayerStatus(0L, name, null, bookingsPerDay, bookableDaysInAdvance));
+           playerStatusService.create(new PlayerStatus(name, null, bookingsPerDay, bookableDaysInAdvance));
        }
     }
 }

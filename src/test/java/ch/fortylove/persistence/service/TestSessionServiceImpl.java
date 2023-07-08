@@ -35,7 +35,7 @@ public class TestSessionServiceImpl {
         UserDetails userDetails = mock(UserDetails.class);
         when(userDetails.getUsername()).thenReturn("testuser");
         when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(userDetails));
-        User expectedUser = new User(0L, "firstname", "lastname", "email", "password", true, null, null, null, null);
+        User expectedUser = new User("firstname", "lastname", "email", "password", true, null, null, null, null);
         when(userService.findByEmail("testuser")).thenReturn(Optional.of(expectedUser));
 
         // Act

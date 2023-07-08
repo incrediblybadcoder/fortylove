@@ -40,13 +40,12 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         super();
     }
 
-    public Booking(final long id,
-                   final Court court,
+    public Booking(final Court court,
                    final User owner,
                    final List<User> opponents,
                    final Timeslot timeslot,
                    final LocalDate date) {
-        super(id, 0);
+        super();
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;

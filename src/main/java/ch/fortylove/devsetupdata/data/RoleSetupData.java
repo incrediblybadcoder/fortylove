@@ -34,14 +34,14 @@ public class RoleSetupData {
 
     @Nonnull
     private List<Privilege> getUserPrivileges() {
-        final ArrayList<Privilege> Privileges = new ArrayList<>();
+        final ArrayList<Privilege> privileges = new ArrayList<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
 
-        readPrivilege.ifPresent(Privileges::add);
-        changePasswordPrivilege.ifPresent(Privileges::add);
+        readPrivilege.ifPresent(privileges::add);
+        changePasswordPrivilege.ifPresent(privileges::add);
 
-        return Privileges;
+        return privileges;
     }
 
     @Nonnull
@@ -51,25 +51,25 @@ public class RoleSetupData {
 
     @Nonnull
     private List<Privilege> getAdminPrivileges() {
-        final ArrayList<Privilege> Privileges = new ArrayList<>();
+        final ArrayList<Privilege> privileges = new ArrayList<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
         final Optional<Privilege> writePrivilege = privilegeService.findByName(Privilege.WRITE_PRIVILEGE);
 
-        readPrivilege.ifPresent(Privileges::add);
-        writePrivilege.ifPresent(Privileges::add);
-        changePasswordPrivilege.ifPresent(Privileges::add);
+        readPrivilege.ifPresent(privileges::add);
+        writePrivilege.ifPresent(privileges::add);
+        changePasswordPrivilege.ifPresent(privileges::add);
 
-        return Privileges;
+        return privileges;
     }
 
     @Transactional
     private void createRoleIfNotFound(@Nonnull final String name,
-                                      @Nonnull final List<Privilege> Privileges) {
+                                      @Nonnull final List<Privilege> privileges) {
         final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {
-            roleService.create(new Role(0L, name, null, Privileges));
+            roleService.create(new Role(name, null, privileges));
         }
     }
 }
