@@ -11,8 +11,12 @@ import java.util.Optional;
 @DevSetupData
 public class PlayerStatusSetupData {
 
-    @Nonnull private final PlayerStatusService playerStatusService;
+    @Nonnull public static final String AKTIV = "aktiv";
+    @Nonnull public static final String PASSIV = "passiv";
+    @Nonnull public static final String TURNIER = "turnier";
+    @Nonnull public static final String INAKTIV = "inaktiv";
 
+    @Nonnull private final PlayerStatusService playerStatusService;
 
     @Autowired
     public PlayerStatusSetupData(@Nonnull final PlayerStatusService playerStatusService) {
@@ -20,17 +24,18 @@ public class PlayerStatusSetupData {
     }
 
     public void createPlayerStatus() {
-        createPlayerStatusIfNotFound("aktiv", 2, 7);
-        createPlayerStatusIfNotFound("passiv", 1, 3);
-        createPlayerStatusIfNotFound("turnier spieler", 3, 7);
-        createPlayerStatusIfNotFound("inaktiv", 0, 0);
+        createPlayerStatusIfNotFound(AKTIV, 2, 7);
+        createPlayerStatusIfNotFound(PASSIV, 1, 3);
+        createPlayerStatusIfNotFound(TURNIER, 3, 7);
+        createPlayerStatusIfNotFound(INAKTIV, 0, 0);
     }
 
-    private void createPlayerStatusIfNotFound(final String name, final int bookingsPerDay, final int bookableDaysInAdvance) {
+    private void createPlayerStatusIfNotFound(@Nonnull final String name,
+                                              final int bookingsPerDay,
+                                              final int bookableDaysInAdvance) {
        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
        if(playerStatus.isEmpty()) {
            playerStatusService.create(new PlayerStatus(0L, name, null, bookingsPerDay, bookableDaysInAdvance));
        }
-
     }
 }

@@ -9,11 +9,11 @@ import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "bookingsettings")
+@Entity(name = "booking_settings")
 public class BookingSettings extends AbstractEntity {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bookingsettings_id")
+    @JoinColumn(name = "booking_settings_id")
     private List<Timeslot> timeslots;
 
     public BookingSettings() {

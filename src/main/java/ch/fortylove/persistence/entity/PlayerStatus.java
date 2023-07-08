@@ -1,6 +1,5 @@
 package ch.fortylove.persistence.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "player_status")
 public class PlayerStatus extends AbstractEntity {
@@ -15,12 +15,15 @@ public class PlayerStatus extends AbstractEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "bookings_per_day")
+    private int bookingsPerDay;
+
+    @Column(name = "bookable_days_in_advance")
+    private int bookableDaysInAdvance;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_status_id")
     private List<User> users;
-
-    @Nonnull private int bookingsPerDay;
-    @Nonnull private int bookableDaysInAdvance;
 
 
     public PlayerStatus(final long id,
@@ -36,7 +39,7 @@ public class PlayerStatus extends AbstractEntity {
     }
 
     public PlayerStatus() {
-
+        super();
     }
 
     public String getName() {
@@ -69,5 +72,21 @@ public class PlayerStatus extends AbstractEntity {
 
     public void setBookableDaysInAdvance(final int bookableDaysInAdvance) {
         this.bookableDaysInAdvance = bookableDaysInAdvance;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final PlayerStatus that = (PlayerStatus) o;
+        return bookingsPerDay == that.bookingsPerDay &&
+                bookableDaysInAdvance == that.bookableDaysInAdvance &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(users, that.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, users, bookingsPerDay, bookableDaysInAdvance);
     }
 }

@@ -46,72 +46,72 @@ public class BookingSetupData {
 
     private void createBookingsToday(@Nonnull final List<Timeslot> timeslots) {
         final LocalDate today = LocalDate.now();
-        getCourt(1L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
         getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
         getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
         getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
 
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
 
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
 
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), today, timeslot)));
 
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
 
-        getCourt(6L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
-        getCourt(6L).ifPresent(court -> getTimeslot(timeslots,14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
+        getCourt(6L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), today, timeslot)));
+        getCourt(6L).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), today, timeslot)));
     }
 
     private void createBookingsYesterday(@Nonnull final List<Timeslot> timeslots) {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
-        getCourt(1L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
-        getCourt(1L).ifPresent(court -> getTimeslot(timeslots,11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
-        getCourt(1L).ifPresent(court -> getTimeslot(timeslots,15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
 
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), yesterday, timeslot)));
 
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
 
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("jonas@fortylove.ch"), yesterday, timeslot)));
 
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
 
-        getCourt(6L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
-        getCourt(6L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
+        getCourt(6L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
+        getCourt(6L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), yesterday, timeslot)));
     }
 
     private void createBookingsTomorrow(@Nonnull final List<Timeslot> timeslots) {
         final LocalDate tomorrow = LocalDate.now().plusDays(1);
-        getCourt(1L).ifPresent(court -> getTimeslot(timeslots,9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(1L).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
 
-        getCourt(2L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(2L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
 
-        getCourt(3L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(3L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco@fortylove.ch"), getOpponents("jonas@fortylove.ch"), tomorrow, timeslot)));
 
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
-        getCourt(4L).ifPresent(court -> getTimeslot(timeslots,13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(4L).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("daniel@fortylove.ch"), getOpponents("marco@fortylove.ch"), tomorrow, timeslot)));
 
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
-        getCourt(5L).ifPresent(court -> getTimeslot(timeslots,14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(5L).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
 
-        getCourt(6L).ifPresent(court -> getTimeslot(timeslots,10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
+        getCourt(6L).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas@fortylove.ch"), getOpponents("daniel@fortylove.ch"), tomorrow, timeslot)));
     }
 
     @Nonnull
