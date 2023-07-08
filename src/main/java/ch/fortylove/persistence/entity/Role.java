@@ -7,15 +7,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
 
-    public final static String ROLE_ADMIN = "ROLE_ADMIN";
-    public final static String ROLE_STAFF = "ROLE_STAFF";
-    public final static String ROLE_USER = "ROLE_USER";
+    @Nonnull public final static String ROLE_ADMIN = "ROLE_ADMIN";
+    @Nonnull public final static String ROLE_STAFF = "ROLE_STAFF";
+    @Nonnull public final static String ROLE_USER = "ROLE_USER";
 
     @Column(name = "name")
     private String name;

@@ -15,7 +15,7 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testCreate() {
-        final Privilege createdPrivilege = testee.create(new Privilege("name", null));
+        final Privilege createdPrivilege = testee.create(new Privilege("name"));
 
         Assertions.assertTrue(testee.findById(createdPrivilege.getId()).isPresent());
         Assertions.assertEquals(createdPrivilege, testee.findById(createdPrivilege.getId()).get());
@@ -23,8 +23,8 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testFindByName_notExists() {
-        testee.create(new Privilege("name1", null));
-        testee.create(new Privilege("name3", null));
+        testee.create(new Privilege("name1"));
+        testee.create(new Privilege("name3"));
 
         final Optional<Privilege> privilege = testee.findByName("name2");
 
@@ -34,9 +34,9 @@ class TestPrivilegeServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String name2 = "name2";
-        testee.create(new Privilege("name1", null));
-        final Privilege privilege2 = testee.create(new Privilege(name2, null));
-        testee.create(new Privilege("name3", null));
+        testee.create(new Privilege("name1"));
+        final Privilege privilege2 = testee.create(new Privilege(name2));
+        testee.create(new Privilege("name3"));
 
         final Optional<Privilege> privilege = testee.findByName(name2);
 
@@ -46,9 +46,9 @@ class TestPrivilegeServiceImpl {
 
     @Test
     public void testDelete() {
-        testee.create(new Privilege("name1", null));
-        final Privilege privilege2 = testee.create(new Privilege("name2", null));
-        testee.create(new Privilege("name3", null));
+        testee.create(new Privilege("name1"));
+        final Privilege privilege2 = testee.create(new Privilege("name2"));
+        testee.create(new Privilege("name3"));
 
         testee.delete(privilege2.getId());
 

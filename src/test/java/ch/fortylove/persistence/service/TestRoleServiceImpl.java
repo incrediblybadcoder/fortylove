@@ -20,8 +20,8 @@ class TestRoleServiceImpl {
     @Test
     public void testCreate() {
         final String roleName = "roleName";
-        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
 
         final Role createdRole = testee.create(new Role(roleName, null, Arrays.asList(privilege1, privilege2)));
 
@@ -33,8 +33,8 @@ class TestRoleServiceImpl {
 
     @Test
     public void testFindByName_notExists() {
-        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         testee.create(new Role("roleName1", null, Arrays.asList(privilege1, privilege2)));
         testee.create(new Role("roleName3", null, Arrays.asList(privilege1, privilege2)));
 
@@ -46,8 +46,8 @@ class TestRoleServiceImpl {
     @Test
     public void testFindByName_exists() {
         final String roleName2 = "roleName2";
-        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
-        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
+        final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1"));
+        final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         testee.create(new Role("roleName1", null, Arrays.asList(privilege1, privilege2)));
         final Role role2 = testee.create(new Role(roleName2, null, Arrays.asList(privilege1, privilege2)));
         testee.create(new Role("roleName3", null, Arrays.asList(privilege1, privilege2)));

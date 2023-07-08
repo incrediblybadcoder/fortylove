@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,36 +23,36 @@ public class PlayerStatus extends AbstractEntity {
     private int bookableDaysInAdvance;
 
     @OneToMany(mappedBy = "playerStatus", fetch = FetchType.EAGER)
-    private List<User> users;
-
-    public PlayerStatus(final String name,
-                        final List<User> users,
-                        final int bookingsPerDay,
-                        final int bookableDaysInAdvance) {
-        super();
-        this.name = name;
-        this.users = users;
-        this.bookingsPerDay = bookingsPerDay;
-        this.bookableDaysInAdvance = bookableDaysInAdvance;
-    }
+    private List<User> users = new ArrayList<>();
 
     public PlayerStatus() {
         super();
     }
 
+    public PlayerStatus(@Nonnull final String name,
+                        final int bookingsPerDay,
+                        final int bookableDaysInAdvance) {
+        super();
+        this.name = name;
+        this.bookingsPerDay = bookingsPerDay;
+        this.bookableDaysInAdvance = bookableDaysInAdvance;
+    }
+
+    @Nonnull
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@Nonnull final String name) {
         this.name = name;
     }
 
+    @Nonnull
     public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(final List<User> users) {
+    public void setUsers(@Nonnull final List<User> users) {
         this.users = users;
     }
 

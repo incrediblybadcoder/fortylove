@@ -5,15 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
-    public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
-    public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
-    public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
+    @Nonnull public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
+    @Nonnull public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
+    @Nonnull public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
     @Column(name = "name")
     private String name;
@@ -25,26 +26,26 @@ public class Privilege extends AbstractEntity {
         super();
     }
 
-    public Privilege(final String name,
-                     final List<Role> roles) {
+    public Privilege(@Nonnull final String name) {
         super();
         this.name = name;
-        this.roles = roles;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@Nonnull final String name) {
         this.name = name;
     }
 
+    @Nonnull
     public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(final List<Role> roles) {
+    public void setRoles(@Nonnull final List<Role> roles) {
         this.roles = roles;
     }
 
