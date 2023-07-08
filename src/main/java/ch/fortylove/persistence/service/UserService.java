@@ -29,5 +29,5 @@ public interface UserService {
     void delete(final long id);
 
     @Nonnull
-    List<User> getPossibleBookingOpponents();
+    List<User> getPossibleBookingOpponents(@Nonnull final User currentUser);
 }
