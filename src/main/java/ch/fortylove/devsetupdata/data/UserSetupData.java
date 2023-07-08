@@ -28,7 +28,8 @@ public class UserSetupData {
     @Autowired
     public UserSetupData(@Nonnull final UserService userService,
                          @Nonnull final RoleService roleService,
-                         @Nonnull final PlayerStatusService playerStatus, @Nonnull final PasswordEncoder passwordEncoder) {
+                         @Nonnull final PlayerStatusService playerStatus,
+                         @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.playerStatusService = playerStatus;
@@ -48,7 +49,8 @@ public class UserSetupData {
         createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV));
     }
 
-    private PlayerStatus getPlayerStatus(String name) {
+    @Nonnull
+    private PlayerStatus getPlayerStatus(@Nonnull final String name) {
         final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
         if(playerStatus.isPresent()) {
             return playerStatus.get();

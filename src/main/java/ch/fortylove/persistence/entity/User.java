@@ -169,11 +169,12 @@ public class User extends AbstractEntity {
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password);
+                Objects.equals(password, user.password) &&
+                Objects.equals(playerStatus, user.playerStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email, password, enabled);
+        return Objects.hash(firstName, lastName, email, password, enabled, playerStatus);
     }
 }

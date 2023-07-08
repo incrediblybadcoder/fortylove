@@ -119,14 +119,12 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         final Booking booking = (Booking) o;
         return Objects.equals(timeslot, booking.timeslot) &&
                 Objects.equals(court, booking.court) &&
-                Objects.equals(owner, booking.owner) &&
-                Objects.equals(opponents, booking.opponents) &&
                 Objects.equals(date, booking.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(court, owner, opponents, timeslot, date);
+        return Objects.hash(court, timeslot, date);
     }
 
     @Override
