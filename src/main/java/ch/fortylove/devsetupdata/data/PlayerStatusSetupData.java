@@ -3,6 +3,7 @@ package ch.fortylove.devsetupdata.data;
 import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.service.PlayerStatusService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
@@ -30,6 +31,7 @@ public class PlayerStatusSetupData {
         createPlayerStatusIfNotFound(INAKTIV, 0, 0);
     }
 
+    @Transactional
     private void createPlayerStatusIfNotFound(@Nonnull final String name,
                                               final int bookingsPerDay,
                                               final int bookableDaysInAdvance) {

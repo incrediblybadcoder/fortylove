@@ -79,12 +79,11 @@ public class PlayerStatus extends AbstractEntity {
         final PlayerStatus that = (PlayerStatus) o;
         return bookingsPerDay == that.bookingsPerDay &&
                 bookableDaysInAdvance == that.bookableDaysInAdvance &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(users, that.users);
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, users, bookingsPerDay, bookableDaysInAdvance);
+        return Objects.hash(name, bookingsPerDay, bookableDaysInAdvance);
     }
 }

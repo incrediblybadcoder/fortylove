@@ -71,12 +71,11 @@ public class Role extends AbstractEntity {
         if (o == null || getClass() != o.getClass()) return false;
         final Role role = (Role) o;
         return Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users) &&
-                Objects.equals(privileges, role.privileges);
+                Objects.equals(users, role.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, users, privileges);
+        return Objects.hash(name, users);
     }
 }
