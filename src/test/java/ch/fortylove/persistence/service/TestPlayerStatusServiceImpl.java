@@ -6,45 +6,51 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SpringTest
-public class TestPlayerStatusServiceImpl {
+public class TestPlayerStatusServiceImpl extends ServiceTest {
+
+    @Nonnull private final PlayerStatusService testee;
 
     @Autowired
-    PlayerStatusService testee;
+    public TestPlayerStatusServiceImpl(@Nonnull final PlayerStatusService testee) {
+        this.testee = testee;
+    }
 
     @Test
     public void testCreate() {
-        //Arange
+        //Arrange
         final String name = "playerStatusName";
         //Act
         final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
         //Assert
-        Assertions.assertTrue(testee.findByName(name).isPresent());
-        Assertions.assertEquals(createdPlayerStatus, testee.findByName(name).get());
+        final Optional<PlayerStatus> foundPlayerStatus = testee.findByName(name);
+        Assertions.assertTrue(foundPlayerStatus.isPresent());
+        Assertions.assertEquals(createdPlayerStatus, foundPlayerStatus.get());
     }
 
     @Test
     public void testFindByName_notExists() {
-        //Arange
+        //Arrange
         final String name = "playerStatusName1";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
-        final Optional<PlayerStatus> playerStatusName2 = testee.findByName("playerStatusName2");
+        testee.create(new PlayerStatus(name, 2, 7));
+        final Optional<PlayerStatus> foundPlayerStatus = testee.findByName("playerStatusName2");
         //Assert
-        Assertions.assertTrue(playerStatusName2.isEmpty());
+        Assertions.assertTrue(foundPlayerStatus.isEmpty());
     }
 
     @Test
     public void testFindByName_exists() {
-        //Arange
-        final String name = "playerStatusName1";
+        //Arrange
+        final String name = "playerStatusName";
         //Act
         final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
-        final Optional<PlayerStatus> playerStatusName = testee.findByName("playerStatusName1");
+        final Optional<PlayerStatus> foundPlayerStatus = testee.findByName(name);
         //Assert
-        Assertions.assertTrue(playerStatusName.isPresent());
-        Assertions.assertEquals(createdPlayerStatus, playerStatusName.get());
+        Assertions.assertTrue(foundPlayerStatus.isPresent());
+        Assertions.assertEquals(createdPlayerStatus, foundPlayerStatus.get());
     }
 }
