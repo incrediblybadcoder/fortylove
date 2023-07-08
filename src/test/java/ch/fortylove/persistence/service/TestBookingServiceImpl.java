@@ -10,9 +10,12 @@ import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +28,14 @@ class TestBookingServiceImpl extends BaseDataTest {
     @Autowired private CourtService courtService;
     @Autowired private BookingSettingsService bookingSettingsService;
 
+    @Nonnull private List<Timeslot> timeslots;
+
     @Autowired private BookingService testee;
+
+    @BeforeEach
+    void setUp() {
+        timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
+    }
 
     @Test
     public void testFindAllByCourtId_emptyRepository() {
@@ -43,7 +53,7 @@ class TestBookingServiceImpl extends BaseDataTest {
         final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
         final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
         final Court court = courtService.create(new Court());
-        final Booking booking = new Booking(court, user1, List.of(user2), null, null);
+        final Booking booking = new Booking(court, user1, List.of(user2), timeslots.get(0), LocalDate.now());
 
         final Booking createdBooking = testee.create(booking);
 
@@ -60,7 +70,7 @@ class TestBookingServiceImpl extends BaseDataTest {
         final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
         final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
         final Court court = courtService.create(new Court());
-        final Booking booking = new Booking(court, user1, List.of(user2), null, null);
+        final Booking booking = new Booking(court, user1, List.of(user2), timeslots.get(0), LocalDate.now());
         testee.create(booking);
 
         Assertions.assertThrows(DuplicateRecordException.class, () -> testee.create(booking));
@@ -68,7 +78,6 @@ class TestBookingServiceImpl extends BaseDataTest {
 
     @Test
     public void testFindAllByCourtId_exists() {
-        final List<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
         final Role role1 = roleService.create(new Role("roleName1", null, List.of(privilege1)));
@@ -77,9 +86,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
         final Court court1 = courtService.create(new Court());
         final Court court2 = courtService.create(new Court());
-        final Booking booking1 = testee.create(new Booking(court1, user1, List.of(user2), timeslots.get(0), null));
-        final Booking booking2 = testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(1), null));
-        final Booking booking3 = testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(2), null));
+        final Booking booking1 = testee.create(new Booking(court1, user1, List.of(user2), timeslots.get(0), LocalDate.now()));
+        final Booking booking2 = testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(1), LocalDate.now().plusDays(1)));
+        final Booking booking3 = testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(2), LocalDate.now().plusDays(2)));
 
         final List<Booking> bookings = testee.findAllByCourtId(court2.getId());
 
@@ -92,7 +101,6 @@ class TestBookingServiceImpl extends BaseDataTest {
 
     @Test
     public void testFindAllByCourtId_notExist() {
-        final List<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         final Privilege privilege1 = privilegeService.create(new Privilege("privilegeName1", null));
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2", null));
         final Role role1 = roleService.create(new Role("roleName1", null, List.of(privilege1)));
@@ -102,9 +110,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final Court court1 = courtService.create(new Court());
         final Court court2 = courtService.create(new Court());
         final Court court3 = courtService.create(new Court());
-        testee.create(new Booking(court1, user1, List.of(user2), timeslots.get(0), null));
-        testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(1), null));
-        testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(2), null));
+        testee.create(new Booking(court1, user1, List.of(user2), timeslots.get(0), LocalDate.now()));
+        testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(1), LocalDate.now().plusDays(1)));
+        testee.create(new Booking(court2, user1, List.of(user2), timeslots.get(2), LocalDate.now().plusDays(2)));
 
         final List<Booking> bookings = testee.findAllByCourtId(court3.getId());
 
