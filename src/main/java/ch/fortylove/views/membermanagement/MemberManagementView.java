@@ -122,8 +122,6 @@ public class MemberManagementView extends VerticalLayout {
                 passwordEncoder.encode("newpassword"),
                 true,
                 roles,
-                null,
-                null,
                 playerStatus.get());
         userService.create(saveUser);
         updateUserList();
@@ -155,7 +153,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User("", "", "", "", false, null, null, null, null));
+        createNewUser(new User("", "", "", "", true, null, null));
     }
 
     private void createNewUser(final User user) {

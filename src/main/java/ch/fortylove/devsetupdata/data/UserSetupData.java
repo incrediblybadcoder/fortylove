@@ -50,10 +50,10 @@ public class UserSetupData {
 
     private PlayerStatus getPlayerStatus(String name) {
         final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
-        if(playerStatus.isPresent()) {
+        if (playerStatus.isPresent()) {
             return playerStatus.get();
         }
-        throw new RecordNotFoundException("PlayerStatus "+name+" not found");
+        throw new RecordNotFoundException("PlayerStatus " + name + " not found");
     }
 
 
@@ -94,7 +94,7 @@ public class UserSetupData {
         final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {
-            userService.create(new User(firstName, lastName, email, passwordEncoder.encode(password), true, Roles, null, null, playerStatus));
+            userService.create(new User(firstName, lastName, email, passwordEncoder.encode(password), true, Roles, playerStatus));
         }
     }
 }

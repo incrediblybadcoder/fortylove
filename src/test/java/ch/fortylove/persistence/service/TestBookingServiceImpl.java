@@ -4,6 +4,7 @@ import ch.fortylove.BaseDataTest;
 import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.Timeslot;
@@ -27,6 +28,7 @@ class TestBookingServiceImpl extends BaseDataTest {
     @Autowired private UserService userService;
     @Autowired private CourtService courtService;
     @Autowired private BookingSettingsService bookingSettingsService;
+    @Autowired private PlayerStatusService playerStatusService;
 
     @Nonnull private List<Timeslot> timeslots;
 
@@ -50,8 +52,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         final Role role1 = roleService.create(new Role("roleName1", List.of(privilege1)));
         final Role role2 = roleService.create(new Role("roleName2", List.of(privilege2)));
-        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
+        final PlayerStatus playerStatus = playerStatusService.create(new PlayerStatus("aktiv", 1, 1));
+        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), playerStatus));
+        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), playerStatus));
         final Court court = courtService.create(new Court());
         final Booking booking = new Booking(court, user1, List.of(user2), timeslots.get(0), LocalDate.now());
 
@@ -67,8 +70,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         final Role role1 = roleService.create(new Role("roleName1", List.of(privilege1)));
         final Role role2 = roleService.create(new Role("roleName2", List.of(privilege2)));
-        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
+        final PlayerStatus playerStatus = playerStatusService.create(new PlayerStatus("aktiv", 1, 1));
+        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), playerStatus));
+        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), playerStatus));
         final Court court = courtService.create(new Court());
         final Booking booking = new Booking(court, user1, List.of(user2), timeslots.get(0), LocalDate.now());
         testee.create(booking);
@@ -82,8 +86,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         final Role role1 = roleService.create(new Role("roleName1", List.of(privilege1)));
         final Role role2 = roleService.create(new Role("roleName2", List.of(privilege2)));
-        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
+        final PlayerStatus playerStatus = playerStatusService.create(new PlayerStatus("aktiv", 1, 1));
+        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), playerStatus));
+        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), playerStatus));
         final Court court1 = courtService.create(new Court());
         final Court court2 = courtService.create(new Court());
         final Booking booking1 = testee.create(new Booking(court1, user1, List.of(user2), timeslots.get(0), LocalDate.now()));
@@ -105,8 +110,9 @@ class TestBookingServiceImpl extends BaseDataTest {
         final Privilege privilege2 = privilegeService.create(new Privilege("privilegeName2"));
         final Role role1 = roleService.create(new Role("roleName1", List.of(privilege1)));
         final Role role2 = roleService.create(new Role("roleName2", List.of(privilege2)));
-        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), null, null, null));
-        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), null, null, null));
+        final PlayerStatus playerStatus = playerStatusService.create(new PlayerStatus("aktiv", 1, 1));
+        final User user1 = userService.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Arrays.asList(role1, role2), playerStatus));
+        final User user2 = userService.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Arrays.asList(role1, role2), playerStatus));
         final Court court1 = courtService.create(new Court());
         final Court court2 = courtService.create(new Court());
         final Court court3 = courtService.create(new Court());
