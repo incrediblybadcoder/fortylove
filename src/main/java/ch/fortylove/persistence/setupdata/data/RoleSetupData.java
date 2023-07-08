@@ -16,9 +16,9 @@ import java.util.Optional;
 @SetupData
 public class RoleSetupData {
 
-    @Nonnull public final static String ROLE_ADMIN = "ROLE_ADMIN";
-    @Nonnull public final static String ROLE_STAFF = "ROLE_STAFF";
-    @Nonnull public final static String ROLE_USER = "ROLE_USER";
+    @Nonnull public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    @Nonnull public static final String ROLE_STAFF = "ROLE_STAFF";
+    @Nonnull public static final String ROLE_USER = "ROLE_USER";
 
     @Nonnull private final RoleService roleService;
     @Nonnull private final PrivilegeService privilegeService;

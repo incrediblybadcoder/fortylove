@@ -22,6 +22,16 @@ import java.util.Optional;
 @DevSetupData
 public class UserSetupData {
 
+    @Nonnull public static final String ADMIN = "admin@fortylove.ch";
+    @Nonnull public static final String STAFF = "staff@fortylove.ch";
+    @Nonnull public static final String USER1 = "marco@fortylove.ch";
+    @Nonnull public static final String USER2 = "jonas@fortylove.ch";
+    @Nonnull public static final String USER3 = "daniel@fortylove.ch";
+    @Nonnull public static final String AKTIV = "aktiv@fortylove.ch";
+    @Nonnull public static final String PASSIV = "passiv@fortylove.ch";
+    @Nonnull public static final String TURNIER = "turnier@fortylove.ch";
+    @Nonnull public static final String INAKIV = "inaktiv@fortylove.ch";
+
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PlayerStatusService playerStatusService;
@@ -39,16 +49,17 @@ public class UserSetupData {
     }
 
     public void createUsers() {
-        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
-        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(ADMIN, "Admin", "Admin", "password", getAdminRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(STAFF, "Staff", "Staff", "password", getStaffRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
 
-        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
-        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
-        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(USER1, "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(USER2, "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(USER3, "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
 
-        createUserIfNotFound("passivPlayer@fortylove.ch", "Passiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIV));
-        createUserIfNotFound("turnierspielerPlayerr@fortylove.ch", "Turnier Spieler", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.TURNIER));
-        createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV));
+        createUserIfNotFound(AKTIV, "Aktiv", "Aktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound(PASSIV, "Passiv", "Passiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIV));
+        createUserIfNotFound(TURNIER, "Turnier", "Turnier", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.TURNIER));
+        createUserIfNotFound(INAKIV, "Inaktiv", "Inaktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV));
     }
 
     @Nonnull

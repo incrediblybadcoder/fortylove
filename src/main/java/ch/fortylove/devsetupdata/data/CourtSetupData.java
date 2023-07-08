@@ -12,7 +12,7 @@ import java.util.Optional;
 @DevSetupData
 public class CourtSetupData {
 
-    private static final long[] COURT_IDS = {1L, 2L, 3L, 4L, 5L, 6L};
+    public static final long[] COURT_IDS = {1L, 2L, 3L, 4L, 5L, 6L};
 
     @Nonnull private final CourtService courtService;
 
