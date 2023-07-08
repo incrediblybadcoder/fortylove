@@ -6,38 +6,45 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SpringTest
-class TestCourtServiceImpl {
+class TestCourtServiceImpl extends ServiceTest {
 
-    @Autowired private CourtService testee;
+    @Nonnull private final CourtService testee;
+
+    @Autowired
+    public TestCourtServiceImpl(@Nonnull final CourtService testee) {
+        this.testee = testee;
+    }
 
     @Test
     public void testCreate() {
-        final Court createdCourt = testee.create(new Court(0L, null));
+        final Court createdCourt = testee.create(new Court());
 
-        Assertions.assertTrue(testee.findById(createdCourt.getId()).isPresent());
-        Assertions.assertEquals(createdCourt, testee.findById(createdCourt.getId()).get());
+        final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
+        Assertions.assertTrue(foundCourt.isPresent());
+        Assertions.assertEquals(createdCourt, foundCourt.get());
     }
 
     @Test
     public void testFindById_notExists() {
-        final Court court1 = testee.create(new Court(0L, null));
+        final Court createdCourt = testee.create(new Court());
 
-        final Optional<Court> court = testee.findById(court1.getId() + 1L);
+        final Optional<Court> foundCourt = testee.findById(createdCourt.getId() + 1L);
 
-        Assertions.assertTrue(court.isEmpty());
+        Assertions.assertTrue(foundCourt.isEmpty());
     }
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court(0L, null));
-        final Court court2 = testee.create(new Court(0L, null));
+        testee.create(new Court());
+        final Court createdCourt = testee.create(new Court());
 
-        final Optional<Court> court = testee.findById(court2.getId());
+        final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
 
-        Assertions.assertTrue(court.isPresent());
-        Assertions.assertEquals(court2, court.get());
+        Assertions.assertTrue(foundCourt.isPresent());
+        Assertions.assertEquals(createdCourt, foundCourt.get());
     }
 }

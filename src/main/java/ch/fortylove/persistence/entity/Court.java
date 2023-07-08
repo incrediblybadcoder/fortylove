@@ -8,7 +8,9 @@ import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,23 +20,18 @@ public class Court extends AbstractEntity {
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filter(name = "bookingDateFilter")
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
     public Court() {
         super();
     }
 
-    public Court(final long id,
-                 final List<Booking> bookings) {
-        super(id, 0);
-        this.bookings = bookings;
-    }
-
+    @Nonnull
     public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(final List<Booking> bookings) {
+    public void setBookings(@Nonnull final List<Booking> bookings) {
         this.bookings = bookings;
     }
 
@@ -49,5 +46,10 @@ public class Court extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(bookings);
+    }
+
+    public void addBooking(@Nonnull final Booking booking) {
+        bookings.add(booking);
+        booking.setCourt(this);
     }
 }

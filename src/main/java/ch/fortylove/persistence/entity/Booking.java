@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +28,8 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
-    private List<User> opponents;
+    @Nonnull
+    private List<User> opponents = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "timeslot_id")
@@ -40,13 +42,12 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         super();
     }
 
-    public Booking(final long id,
-                   final Court court,
-                   final User owner,
-                   final List<User> opponents,
-                   final Timeslot timeslot,
-                   final LocalDate date) {
-        super(id, 0);
+    public Booking(@Nonnull final Court court,
+                   @Nonnull final User owner,
+                   @Nonnull final List<User> opponents,
+                   @Nonnull final Timeslot timeslot,
+                   @Nonnull final LocalDate date) {
+        super();
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;
@@ -54,43 +55,48 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         this.date = date;
     }
 
+    @Nonnull
     public Timeslot getTimeslot() {
         return timeslot;
     }
 
-    public void setTimeslot(final Timeslot timeslot) {
+    public void setTimeslot(@Nonnull final Timeslot timeslot) {
         this.timeslot = timeslot;
     }
 
+    @Nonnull
     public Court getCourt() {
         return court;
     }
 
-    public void setCourt(final Court court) {
+    public void setCourt(@Nonnull final Court court) {
         this.court = court;
     }
 
+    @Nonnull
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(final LocalDate date) {
+    public void setDate(@Nonnull final LocalDate date) {
         this.date = date;
     }
 
+    @Nonnull
     public User getOwner() {
         return owner;
     }
 
-    public void setOwner(final User owner) {
+    public void setOwner(@Nonnull final User owner) {
         this.owner = owner;
     }
 
+    @Nonnull
     public List<User> getOpponents() {
         return opponents;
     }
 
-    public void setOpponents(final List<User> opponents) {
+    public void setOpponents(@Nonnull final List<User> opponents) {
         this.opponents = opponents;
     }
 

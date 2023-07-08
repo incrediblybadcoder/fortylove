@@ -12,6 +12,8 @@ import java.util.Optional;
 @DevSetupData
 public class CourtSetupData {
 
+    public static final long[] COURT_IDS = {1L, 2L, 3L, 4L, 5L, 6L};
+
     @Nonnull private final CourtService courtService;
 
     @Autowired
@@ -20,12 +22,9 @@ public class CourtSetupData {
     }
 
     public void createCourts() {
-        createCourtIfNotFound(1L);
-        createCourtIfNotFound(2L);
-        createCourtIfNotFound(3L);
-        createCourtIfNotFound(4L);
-        createCourtIfNotFound(5L);
-        createCourtIfNotFound(6L);
+        for (final long courtId : COURT_IDS) {
+            createCourtIfNotFound(courtId);
+        }
     }
 
     @Transactional
@@ -33,7 +32,7 @@ public class CourtSetupData {
         final Optional<Court> court = courtService.findById(id);
 
         if (court.isEmpty()) {
-            courtService.create(new Court(0L, null));
+            courtService.create(new Court());
         }
     }
 }

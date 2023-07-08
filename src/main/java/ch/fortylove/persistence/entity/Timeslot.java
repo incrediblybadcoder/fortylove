@@ -10,8 +10,8 @@ import java.util.Objects;
 @Entity(name = "timeslots")
 public class Timeslot extends AbstractEntity {
 
+    @Nonnull public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
     public static final long MINUTES_PER_TIMESLOT = 60;
-    public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
 
     @Column(name = "bookable")
     private boolean bookable;
@@ -23,10 +23,9 @@ public class Timeslot extends AbstractEntity {
         super();
     }
 
-    public Timeslot(final long id,
-                    final boolean bookable,
+    public Timeslot(final boolean bookable,
                     final int index) {
-        super(id, 0);
+        super();
         this.bookable = bookable;
         this.index = index;
     }

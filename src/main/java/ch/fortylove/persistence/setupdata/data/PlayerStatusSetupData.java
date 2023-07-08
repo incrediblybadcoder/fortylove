@@ -1,15 +1,15 @@
-package ch.fortylove.devsetupdata.data;
+package ch.fortylove.persistence.setupdata.data;
 
-import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.service.PlayerStatusService;
+import ch.fortylove.persistence.setupdata.SetupData;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-@DevSetupData
+@SetupData
 public class PlayerStatusSetupData {
 
     @Nonnull public static final String AKTIV = "aktiv";
@@ -35,9 +35,9 @@ public class PlayerStatusSetupData {
     private void createPlayerStatusIfNotFound(@Nonnull final String name,
                                               final int bookingsPerDay,
                                               final int bookableDaysInAdvance) {
-       final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
-       if(playerStatus.isEmpty()) {
-           playerStatusService.create(new PlayerStatus(0L, name, null, bookingsPerDay, bookableDaysInAdvance));
-       }
+        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
+        if (playerStatus.isEmpty()) {
+            playerStatusService.create(new PlayerStatus(name, bookingsPerDay, bookableDaysInAdvance));
+        }
     }
 }

@@ -7,61 +7,59 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
 
-    public final static String ROLE_ADMIN = "ROLE_ADMIN";
-    public final static String ROLE_STAFF = "ROLE_STAFF";
-    public final static String ROLE_USER = "ROLE_USER";
-
     @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    private List<Privilege> privileges;
+    private List<Privilege> privileges = new ArrayList<>();
 
     public Role() {
         super();
     }
 
-    public Role(final long id,
-                final String name,
-                final List<User> users,
-                final List<Privilege> privileges) {
-        super(id, 0);
+    public Role(@Nonnull final String name,
+                @Nonnull final List<Privilege> privileges) {
+        super();
         this.name = name;
-        this.users = users;
         this.privileges = privileges;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@Nonnull final String name) {
         this.name = name;
     }
 
+    @Nonnull
     public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(final List<User> users) {
+    public void setUsers(@Nonnull final List<User> users) {
         this.users = users;
     }
 
+    @Nonnull
     public List<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(final List<Privilege> privileges) {
+    public void setPrivileges(@Nonnull final List<Privilege> privileges) {
         this.privileges = privileges;
     }
 

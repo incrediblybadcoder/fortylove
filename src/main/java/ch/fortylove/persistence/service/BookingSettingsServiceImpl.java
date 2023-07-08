@@ -36,9 +36,9 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
     public BookingSettings getBookingSettings() {
         final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
         if (bookingSettings.isEmpty()) {
-            throw new IllegalStateException("No booking settings.");
+            throw new IllegalStateException("No booking data.");
         } else if (bookingSettings.size() > 1) {
-            throw new IllegalStateException("More than one booking settings.");
+            throw new IllegalStateException("More than one booking data.");
         }
 
         return bookingSettings.get(0);
