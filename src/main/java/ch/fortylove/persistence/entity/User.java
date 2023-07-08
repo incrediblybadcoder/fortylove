@@ -40,10 +40,12 @@ public class User extends AbstractEntity {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> ownerBookings = new ArrayList<>();;
+    private List<Booking> ownerBookings = new ArrayList<>();
+    ;
 
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Booking> opponentBookings = new ArrayList<>();;
+    private List<Booking> opponentBookings = new ArrayList<>();
+    ;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_status_id")
@@ -170,15 +172,11 @@ public class User extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final User user = (User) o;
-        return enabled == user.enabled &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password);
+        return Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email, password, enabled);
+        return Objects.hash(email);
     }
 }
