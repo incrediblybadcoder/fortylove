@@ -28,5 +28,7 @@ public interface BookingService {
 
     boolean isBookingModifiable(@Nonnull final User user, @Nonnull final Booking booking);
 
-    boolean isBookingCreatable(@Nonnull final Court court, @Nonnull final Timeslot timeslot, @Nonnull final LocalDate date);
+    boolean isBookingCreatableOnDate(@Nonnull final Court court, @Nonnull final Timeslot timeslot, @Nonnull final LocalDate date);
+
+    boolean isUserBookingAllowedOnDate(@Nonnull final User user, @Nonnull final LocalDate date);
 }

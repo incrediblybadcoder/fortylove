@@ -7,6 +7,7 @@ import ch.fortylove.persistence.service.BookingService;
 import ch.fortylove.persistence.service.CourtService;
 import ch.fortylove.persistence.service.SessionService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.views.booking.dialog.BookingDialog;
@@ -98,7 +99,7 @@ public class BookingComponent extends VerticalLayout {
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            if (bookingService.isBookingCreatable(event.getCourt(), event.getTimeSlot(), getSelectedDate())) {
+            if (bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate())) {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
@@ -109,22 +110,35 @@ public class BookingComponent extends VerticalLayout {
 
     private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
         switch (dialogBookingEvent.getType()) {
-            case NEW -> {
-                bookingService.create(dialogBookingEvent.getBooking());
-                refresh();
-            }
-            case MODIFY -> {
-                bookingService.update(dialogBookingEvent.getBooking());
-                refresh();
-            }
-            case DELETE -> openConfirmDialog(dialogBookingEvent.getBooking());
+            case NEW -> newBookingAction(dialogBookingEvent.getBooking());
+            case MODIFY -> modifyBookingAction(dialogBookingEvent.getBooking());
+            case DELETE -> deleteBookingAction(dialogBookingEvent.getBooking());
         }
+    }
+
+    private void newBookingAction(final @Nonnull Booking booking) {
+        if (!bookingService.isUserBookingAllowedOnDate(booking.getOwner(), booking.getDate())) {
+            NotificationUtil.errorNotification("Tägliches Buchungslimit erreicht");
+        } else {
+            bookingService.create(booking);
+            NotificationUtil.infoNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
+            refresh();
+        }
+    }
+
+    private void modifyBookingAction(final @Nonnull Booking booking) {
+        bookingService.update(booking);
+        refresh();
+    }
+
+    private void deleteBookingAction(final @Nonnull Booking booking) {
+        openConfirmDialog(booking);
     }
 
     private void openConfirmDialog(@Nonnull final Booking booking) {
         final ConfirmDialog dialog = new ConfirmDialog();
-        dialog.setHeader("Buchung löschen");
-        dialog.setText(String.format("Wollen sie die Buchung %s wirklich löschen?", booking.getIdentifier()));
+        dialog.setHeader(booking.getIdentifier());
+        dialog.setText("Buchung wirklich löschen?");
 
         dialog.setCancelable(true);
         dialog.setConfirmButtonTheme(ButtonVariant.LUMO_PRIMARY.getVariantName());

@@ -144,6 +144,6 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     }
 
     public String getIdentifier() {
-        return court.getIdentifier() + ": " + timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + getDateFormatted();
+        return court.getIdentifier() + ": " + timeslot.getTimeIntervalText() + " / " + getDateFormatted();
     }
 }
