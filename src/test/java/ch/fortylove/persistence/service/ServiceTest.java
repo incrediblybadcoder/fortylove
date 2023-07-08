@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Nonnull;
 
 @SpringTest
-public abstract class ServiceTest {
+abstract class ServiceTest {
 
     @Autowired private TestDataFactory testDataFactory;
 

@@ -81,7 +81,7 @@ public class BookingDialog extends Dialog {
         getHeader().add(closeButton);
 
         newButton = new Button("Buchen", newButtonClickListener());
-        modifyButton = new Button("Bearbeiten", modifyButtonClickListener());
+        modifyButton = new Button("Speichern", modifyButtonClickListener());
         deleteButton = new Button("Löschen", deleteButtonClickListener());
         buttonContainer = new HorizontalLayout();
         buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -156,7 +156,7 @@ public class BookingDialog extends Dialog {
         final String title = "Bearbeiten";
         setHeaderTitle(title);
 
-        addButtons(deleteButton, modifyButton);
+        addButtons(modifyButton, deleteButton);
         opponentComboBox.setValue(opponent);
 
         open();

@@ -1,8 +1,12 @@
 package ch.fortylove.persistence.service;
 
 import ch.fortylove.persistence.entity.Booking;
+import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.Timeslot;
+import ch.fortylove.persistence.entity.User;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,4 +25,8 @@ public interface BookingService {
     List<Booking> findAllByCourtId(final long id);
 
     void delete(final long id);
+
+    boolean isBookingModifiable(@Nonnull final User user, @Nonnull final Booking booking);
+
+    boolean isBookingCreatable(@Nonnull final Court court, @Nonnull final Timeslot timeslot, @Nonnull final LocalDate date);
 }

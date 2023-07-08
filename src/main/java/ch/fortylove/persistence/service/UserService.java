@@ -1,6 +1,5 @@
 package ch.fortylove.persistence.service;
 
-import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
 
 import javax.annotation.Nonnull;
@@ -28,8 +27,6 @@ public interface UserService {
     List<User> findAll(@Nonnull final String filterText);
 
     void delete(final long id);
-
-    boolean isUserAllowedToModifyBooking(@Nonnull final User user, @Nonnull final Booking booking);
 
     @Nonnull
     List<User> getPossibleBookingOpponents();
