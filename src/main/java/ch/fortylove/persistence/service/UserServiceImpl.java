@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.service;
 
+import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,5 +76,20 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
         userRepository.delete(user);
+    }
+
+    @Override
+    public boolean isUserAllowedToModifyBooking(@Nonnull final User user,
+                                                @Nonnull final Booking booking) {
+        final boolean isOwner = user.equals(booking.getOwner());
+        final boolean isPastBooking = LocalDate.now().isBefore(booking.getDate());
+
+        return isOwner && !isPastBooking;
+    }
+
+    @Nonnull
+    @Override
+    public List<User> getPossibleBookingOpponents() {
+        return userRepository.findAllEnabledWithAvailableBookingsPerDay();
     }
 }

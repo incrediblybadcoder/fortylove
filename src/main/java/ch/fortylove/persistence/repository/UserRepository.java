@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where lower(u.firstName) like lower(concat('%', :searchTerm, '%')) " +
             "or lower(u.lastName) like lower(concat('%', :searchTerm, '%'))")
     List<User> search(@Param("searchTerm") String searchTerm);
+
+    @Query("SELECT u FROM users u WHERE u.playerStatus.bookingsPerDay > 0 AND u.enabled = true")
+    List<User> findAllEnabledWithAvailableBookingsPerDay();
 }

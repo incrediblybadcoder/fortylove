@@ -12,8 +12,10 @@ public abstract class TestDataTest extends BaseDataTest {
 
     @Autowired DevSetupDataLoaderService devSetupDataLoaderService;
 
+    @Override
     @BeforeEach
     void initTestData() {
+        super.initTestData();
         devSetupDataLoaderService.initData();
     }
 }

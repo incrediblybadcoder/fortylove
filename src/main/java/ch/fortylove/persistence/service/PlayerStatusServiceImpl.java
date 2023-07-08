@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PlayerStatusServiceImpl implements PlayerStatusService{
+public class PlayerStatusServiceImpl implements PlayerStatusService {
 
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 

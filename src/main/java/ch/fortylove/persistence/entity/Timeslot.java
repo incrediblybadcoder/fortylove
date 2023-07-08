@@ -66,7 +66,8 @@ public class Timeslot extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Timeslot timeslot = (Timeslot) o;
-        return bookable == timeslot.bookable && index == timeslot.index;
+        return bookable == timeslot.bookable &&
+                index == timeslot.index;
     }
 
     @Override

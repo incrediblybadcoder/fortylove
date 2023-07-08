@@ -36,16 +36,16 @@ public class UserSetupData {
     }
 
     public void createUsers() {
-        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole(), getPlayerStatus("aktiv"));
-        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole(), getPlayerStatus("aktiv"));
+        createUserIfNotFound("admin@fortylove.ch", "admin", "admin", "password", getAdminRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound("staff@fortylove.ch", "staff", "staff", "password", getStaffRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
 
-        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus("aktiv"));
-        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus("aktiv"));
-        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus("aktiv"));
+        createUserIfNotFound("marco@fortylove.ch", "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound("jonas@fortylove.ch", "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
+        createUserIfNotFound("daniel@fortylove.ch", "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV));
 
-        createUserIfNotFound("passivPlayer@fortylove.ch", "Passiv", "Player", "password", getUserRole(), getPlayerStatus("passiv"));
-        createUserIfNotFound("turnierspielerPlayerr@fortylove.ch", "Turnier Spieler", "Player", "password", getUserRole(), getPlayerStatus("turnier spieler"));
-        createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus("inaktiv"));
+        createUserIfNotFound("passivPlayer@fortylove.ch", "Passiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIV));
+        createUserIfNotFound("turnierspielerPlayerr@fortylove.ch", "Turnier Spieler", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.TURNIER));
+        createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV));
     }
 
     private PlayerStatus getPlayerStatus(String name) {

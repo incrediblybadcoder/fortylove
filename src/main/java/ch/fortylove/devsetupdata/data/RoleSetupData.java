@@ -64,8 +64,8 @@ public class RoleSetupData {
     }
 
     @Transactional
-    void createRoleIfNotFound(@Nonnull final String name,
-                              @Nonnull final List<Privilege> Privileges) {
+    private void createRoleIfNotFound(@Nonnull final String name,
+                                      @Nonnull final List<Privilege> Privileges) {
         final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {

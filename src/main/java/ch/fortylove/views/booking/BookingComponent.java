@@ -83,9 +83,9 @@ public class BookingComponent extends VerticalLayout {
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            if (currentUser.equals(event.getBooking().getOwner())) {
+            if (userService.isUserAllowedToModifyBooking(currentUser, event.getBooking())) {
                 final Booking booking = event.getBooking();
-                final List<User> possibleOpponents = userService.findAll();
+                final List<User> possibleOpponents = userService.getPossibleBookingOpponents();
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), booking.getOwner(), possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
                 bookingDialog.openExisting(booking.getOpponents().get(0), booking);
@@ -95,7 +95,7 @@ public class BookingComponent extends VerticalLayout {
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            final List<User> possibleOpponents = userService.findAll();
+            final List<User> possibleOpponents = userService.getPossibleBookingOpponents();
             final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), dateSelectionComponent.getDate(), currentUser, possibleOpponents);
             bookingDialog.addDialogBookingListener(this::handleDialogBooking);
             bookingDialog.openFree();

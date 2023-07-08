@@ -54,12 +54,11 @@ public class Privilege extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Privilege privilege = (Privilege) o;
-        return Objects.equals(name, privilege.name) &&
-                Objects.equals(roles, privilege.roles);
+        return Objects.equals(name, privilege.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, roles);
+        return Objects.hash(name);
     }
 }
