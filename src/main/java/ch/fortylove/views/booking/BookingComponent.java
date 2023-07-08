@@ -14,6 +14,8 @@ import ch.fortylove.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.views.booking.grid.BookingGridComponent;
 import ch.fortylove.views.booking.grid.events.BookedCellClickEvent;
 import ch.fortylove.views.booking.grid.events.FreeCellClickEvent;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -107,11 +109,34 @@ public class BookingComponent extends VerticalLayout {
 
     private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
         switch (dialogBookingEvent.getType()) {
-            case NEW -> bookingService.create(dialogBookingEvent.getBooking());
-            case MODIFY -> bookingService.update(dialogBookingEvent.getBooking());
-            case DELETE -> bookingService.delete(dialogBookingEvent.getBooking().getId());
+            case NEW -> {
+                bookingService.create(dialogBookingEvent.getBooking());
+                refresh();
+            }
+            case MODIFY -> {
+                bookingService.update(dialogBookingEvent.getBooking());
+                refresh();
+            }
+            case DELETE -> openConfirmDialog(dialogBookingEvent.getBooking());
         }
-        refresh();
+    }
+
+    private void openConfirmDialog(@Nonnull final Booking booking) {
+        final ConfirmDialog dialog = new ConfirmDialog();
+        dialog.setHeader("Buchung löschen");
+        dialog.setText(String.format("Wollen sie die Buchung %s wirklich löschen?", booking.getIdentifier()));
+
+        dialog.setCancelable(true);
+        dialog.setConfirmButtonTheme(ButtonVariant.LUMO_PRIMARY.getVariantName());
+
+        dialog.setConfirmText("Löschen");
+        dialog.setConfirmButtonTheme(ButtonVariant.LUMO_ERROR.getVariantName());
+        dialog.addConfirmListener(event -> {
+            bookingService.delete(booking.getId());
+            refresh();
+        });
+
+        dialog.open();
     }
 
     @Nonnull

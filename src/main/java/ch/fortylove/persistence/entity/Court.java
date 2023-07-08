@@ -52,4 +52,9 @@ public class Court extends AbstractEntity {
         bookings.add(booking);
         booking.setCourt(this);
     }
+
+    @Nonnull
+    public String getIdentifier() {
+        return "Platz " + getId();
+    }
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.List;
 
 @SetupData
@@ -22,7 +21,7 @@ public class BookingSettingsSetupData {
     }
 
     public void createBookingSettings() {
-        final List<Timeslot> timeslots = Arrays.asList(
+        final List<Timeslot> timeslots = List.of(
                 new Timeslot(false, 0),
                 new Timeslot(false, 1),
                 new Timeslot(false, 2),

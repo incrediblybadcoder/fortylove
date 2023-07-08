@@ -4,7 +4,6 @@ import ch.fortylove.persistence.entity.Timeslot;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringComponent
@@ -12,7 +11,7 @@ public class TimeslotTestDataFactory {
 
     @Nonnull
     public List<Timeslot> getDefaultBookable() {
-        return Arrays.asList(
+        return List.of(
                 new Timeslot(true, 0),
                 new Timeslot(true, 1),
                 new Timeslot(true, 2),
@@ -42,7 +41,7 @@ public class TimeslotTestDataFactory {
 
     @Nonnull
     public List<Timeslot> getDefaultNonBookable() {
-        return Arrays.asList(
+        return List.of(
                 new Timeslot(false, 0),
                 new Timeslot(false, 1),
                 new Timeslot(false, 2),
