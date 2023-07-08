@@ -1,10 +1,10 @@
-package ch.fortylove.devsetupdata.data;
+package ch.fortylove.persistence.setupdata.data;
 
-import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.service.PrivilegeService;
 import ch.fortylove.persistence.service.RoleService;
+import ch.fortylove.persistence.setupdata.SetupData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@DevSetupData
+@SetupData
 public class RoleSetupData {
+
+    @Nonnull public final static String ROLE_ADMIN = "ROLE_ADMIN";
+    @Nonnull public final static String ROLE_STAFF = "ROLE_STAFF";
+    @Nonnull public final static String ROLE_USER = "ROLE_USER";
 
     @Nonnull private final RoleService roleService;
     @Nonnull private final PrivilegeService privilegeService;
@@ -27,16 +31,16 @@ public class RoleSetupData {
     }
 
     public void createRoles() {
-        createRoleIfNotFound(Role.ROLE_ADMIN, getAdminPrivileges());
-        createRoleIfNotFound(Role.ROLE_STAFF, getStaffPrivileges());
-        createRoleIfNotFound(Role.ROLE_USER, getUserPrivileges());
+        createRoleIfNotFound(ROLE_ADMIN, getAdminPrivileges());
+        createRoleIfNotFound(ROLE_STAFF, getStaffPrivileges());
+        createRoleIfNotFound(ROLE_USER, getUserPrivileges());
     }
 
     @Nonnull
     private List<Privilege> getUserPrivileges() {
         final ArrayList<Privilege> privileges = new ArrayList<>();
-        final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
+        final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
+        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
 
         readPrivilege.ifPresent(privileges::add);
         changePasswordPrivilege.ifPresent(privileges::add);
@@ -52,9 +56,9 @@ public class RoleSetupData {
     @Nonnull
     private List<Privilege> getAdminPrivileges() {
         final ArrayList<Privilege> privileges = new ArrayList<>();
-        final Optional<Privilege> readPrivilege = privilegeService.findByName(Privilege.READ_PRIVILEGE);
-        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(Privilege.CHANGE_PASSWORD_PRIVILEGE);
-        final Optional<Privilege> writePrivilege = privilegeService.findByName(Privilege.WRITE_PRIVILEGE);
+        final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
+        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
+        final Optional<Privilege> writePrivilege = privilegeService.findByName(PrivilegeSetupData.WRITE_PRIVILEGE);
 
         readPrivilege.ifPresent(privileges::add);
         writePrivilege.ifPresent(privileges::add);

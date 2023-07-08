@@ -8,6 +8,8 @@ import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.service.PlayerStatusService;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.persistence.setupdata.data.PlayerStatusSetupData;
+import ch.fortylove.persistence.setupdata.data.RoleSetupData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,8 @@ public class UserSetupData {
     @Autowired
     public UserSetupData(@Nonnull final UserService userService,
                          @Nonnull final RoleService roleService,
-                         @Nonnull final PlayerStatusService playerStatus, @Nonnull final PasswordEncoder passwordEncoder) {
+                         @Nonnull final PlayerStatusService playerStatus,
+                         @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.playerStatusService = playerStatus;
@@ -48,7 +51,8 @@ public class UserSetupData {
         createUserIfNotFound("inaktivPlayer@fortylove.ch", "Inaktiv", "Player", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV));
     }
 
-    private PlayerStatus getPlayerStatus(String name) {
+    @Nonnull
+    private PlayerStatus getPlayerStatus(@Nonnull final String name) {
         final Optional<PlayerStatus> playerStatus = playerStatusService.findByName(name);
         if (playerStatus.isPresent()) {
             return playerStatus.get();
@@ -56,11 +60,10 @@ public class UserSetupData {
         throw new RecordNotFoundException("PlayerStatus " + name + " not found");
     }
 
-
     @Nonnull
     private List<Role> getAdminRole() {
         final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = roleService.findByName(Role.ROLE_ADMIN);
+        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_ADMIN);
         role.ifPresent(roles::add);
 
         return roles;
@@ -69,7 +72,7 @@ public class UserSetupData {
     @Nonnull
     private List<Role> getStaffRole() {
         final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = roleService.findByName(Role.ROLE_STAFF);
+        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_STAFF);
         role.ifPresent(roles::add);
 
         return roles;
@@ -78,7 +81,7 @@ public class UserSetupData {
     @Nonnull
     private List<Role> getUserRole() {
         final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
+        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
 
         return roles;

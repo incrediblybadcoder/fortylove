@@ -1,16 +1,20 @@
-package ch.fortylove.devsetupdata.data;
+package ch.fortylove.persistence.setupdata.data;
 
-import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.service.PrivilegeService;
+import ch.fortylove.persistence.setupdata.SetupData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-@DevSetupData
+@SetupData
 public class PrivilegeSetupData {
+
+    @Nonnull public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
+    @Nonnull public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
+    @Nonnull public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
     @Nonnull private final PrivilegeService privilegeService;
 
@@ -20,9 +24,9 @@ public class PrivilegeSetupData {
     }
 
     public void createPrivileges() {
-        createPrivilegeIfNotFound(Privilege.READ_PRIVILEGE);
-        createPrivilegeIfNotFound(Privilege.WRITE_PRIVILEGE);
-        createPrivilegeIfNotFound(Privilege.CHANGE_PASSWORD_PRIVILEGE);
+        createPrivilegeIfNotFound(READ_PRIVILEGE);
+        createPrivilegeIfNotFound(WRITE_PRIVILEGE);
+        createPrivilegeIfNotFound(CHANGE_PASSWORD_PRIVILEGE);
     }
 
     @Transactional

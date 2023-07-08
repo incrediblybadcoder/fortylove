@@ -155,7 +155,7 @@ public class BookingSetupData {
         if (isNewBooking(bookingDTOs, date, timeslot)) {
             final Booking booking = new Booking(court, player, partners, timeslot, date);
             bookingService.create(booking);
-//            court.addBooking(booking);
+            court.addBooking(booking);
         }
     }
 

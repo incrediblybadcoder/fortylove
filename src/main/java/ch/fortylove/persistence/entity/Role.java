@@ -15,10 +15,6 @@ import java.util.Objects;
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
 
-    @Nonnull public final static String ROLE_ADMIN = "ROLE_ADMIN";
-    @Nonnull public final static String ROLE_STAFF = "ROLE_STAFF";
-    @Nonnull public final static String ROLE_USER = "ROLE_USER";
-
     @Column(name = "name")
     private String name;
 

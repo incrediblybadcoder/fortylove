@@ -47,4 +47,9 @@ public class Court extends AbstractEntity {
     public int hashCode() {
         return Objects.hash(bookings);
     }
+
+    public void addBooking(@Nonnull final Booking booking) {
+        bookings.add(booking);
+        booking.setCourt(this);
+    }
 }
