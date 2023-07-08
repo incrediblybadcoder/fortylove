@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class Privilege extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public Privilege() {
         super();

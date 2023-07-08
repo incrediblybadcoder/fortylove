@@ -69,7 +69,7 @@ public class RoleSetupData {
         final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {
-            roleService.create(new Role(name, null, privileges));
+            roleService.create(new Role(name, privileges));
         }
     }
 }
