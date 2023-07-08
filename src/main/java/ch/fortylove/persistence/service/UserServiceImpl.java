@@ -78,7 +78,9 @@ public class UserServiceImpl implements UserService {
 
     @Nonnull
     @Override
-    public List<User> getPossibleBookingOpponents() {
-        return userRepository.findAllEnabledWithAvailableBookingsPerDay();
+    public List<User> getPossibleBookingOpponents(@Nonnull final User currentUser) {
+        final List<User> users = userRepository.findAllEnabledWithAvailableBookingsPerDay();
+        users.remove(currentUser);
+        return users;
     }
 }
