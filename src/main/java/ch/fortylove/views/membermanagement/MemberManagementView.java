@@ -6,6 +6,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.service.PlayerStatusService;
 import ch.fortylove.persistence.service.RoleService;
 import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.persistence.setupdata.data.RoleSetupData;
 import ch.fortylove.views.MainLayout;
 import ch.fortylove.views.membermanagement.dto.UserFormInformations;
 import ch.fortylove.views.membermanagement.events.DeleteEvent;
@@ -31,7 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
-@RolesAllowed(Role.ROLE_ADMIN)
+@RolesAllowed(RoleSetupData.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
     @Nonnull private final UserForm form;
@@ -109,7 +110,7 @@ public class MemberManagementView extends VerticalLayout {
     private void saveUser(final SaveEvent saveEvent) {
         final UserFormInformations userFormInformations = saveEvent.getUser();
         final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = roleService.findByName(Role.ROLE_USER);
+        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
         final Optional<PlayerStatus> playerStatus = playerStatusService.findByName("aktiv");
         if (playerStatus.isEmpty()) {

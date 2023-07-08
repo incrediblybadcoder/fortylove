@@ -1,4 +1,4 @@
-package ch.fortylove.persistence.setupdata.settings;
+package ch.fortylove.persistence.setupdata.data;
 
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;

@@ -13,10 +13,6 @@ import java.util.Objects;
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
-    @Nonnull public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
-    @Nonnull public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
-    @Nonnull public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
-
     @Column(name = "name")
     private String name;
 
