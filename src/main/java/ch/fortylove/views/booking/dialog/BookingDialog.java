@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.util.FormatUtil;
 import ch.fortylove.views.booking.dialog.events.DialogBookingEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -20,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 public class BookingDialog extends Dialog {
@@ -65,7 +65,7 @@ public class BookingDialog extends Dialog {
         courtField.setReadOnly(true);
 
         final TextField dateField = new TextField("Zeit / Datum");
-        dateField.setValue(timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + date);
+        dateField.setValue(timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + date.format(FormatUtil.getDateTextFormatter()));
         dateField.setReadOnly(true);
 
         final TextField ownerField = new TextField("Spieler");
@@ -80,9 +80,12 @@ public class BookingDialog extends Dialog {
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         getHeader().add(closeButton);
 
-        newButton = new Button("Buchen", newButtonClickListener());
+        newButton = new Button("Speichern", newButtonClickListener());
+        newButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         modifyButton = new Button("Speichern", modifyButtonClickListener());
+        modifyButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         deleteButton = new Button("Löschen", deleteButtonClickListener());
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonContainer = new HorizontalLayout();
         buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         getFooter().add(buttonContainer);
@@ -122,7 +125,7 @@ public class BookingDialog extends Dialog {
 
     @Nonnull
     private List<User> getOpponents() {
-        return Arrays.asList(opponentComboBox.getValue());
+        return List.of(opponentComboBox.getValue());
     }
 
     @Nonnull

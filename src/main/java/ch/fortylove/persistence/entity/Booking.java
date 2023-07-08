@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import ch.fortylove.util.FormatUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -136,5 +137,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     @Override
     public int compareTo(final Booking otherBooking) {
         return date.compareTo(otherBooking.getDate());
+    }
+
+    public String getDateFormatted() {
+        return date.format(FormatUtil.getDateTextFormatter());
+    }
+
+    public String getIdentifier() {
+        return court.getIdentifier() + ": " + timeslot.getStartTime() + " - " + timeslot.getEndTime() + " / " + getDateFormatted();
     }
 }
