@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
@@ -19,27 +20,31 @@ import java.util.Objects;
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity implements Comparable<Booking> {
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id")
     private Court court;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_owner_id")
     private User owner;
 
+    @NotNull
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
-    @Nonnull
     private List<User> opponents = new ArrayList<>();
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "timeslot_id")
     private Timeslot timeslot;
 
+    @NotNull
     @Column(name = "date")
     private LocalDate date;
 
-    public Booking() {
+    protected Booking() {
         super();
     }
 

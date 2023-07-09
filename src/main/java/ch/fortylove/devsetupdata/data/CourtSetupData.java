@@ -2,6 +2,7 @@ package ch.fortylove.devsetupdata.data;
 
 import ch.fortylove.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.CourtType;
 import ch.fortylove.persistence.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +24,18 @@ public class CourtSetupData {
 
     public void createCourts() {
         for (final long courtId : COURT_IDS) {
-            createCourtIfNotFound(courtId);
+            createCourtIfNotFound(courtId, CourtType.CLAY, false);
         }
     }
 
     @Transactional
-    void createCourtIfNotFound(final long id) {
+    void createCourtIfNotFound(final long id,
+                               final CourtType courtType,
+                               final boolean hasBallMachine) {
         final Optional<Court> court = courtService.findById(id);
 
         if (court.isEmpty()) {
-            courtService.create(new Court());
+            courtService.create(new Court(courtType, hasBallMachine));
         }
     }
 }

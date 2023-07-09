@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -19,39 +20,43 @@ import java.util.Objects;
 @Entity(name = "users")
 public class User extends AbstractEntity {
 
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
     @Email
+    @NotNull
     @Column(name = "email", unique = true)
     private String email;
 
+    @NotNull
     @Column(name = "password", length = 60)
     private String password;
 
     @Column(name = "enabled")
     private boolean enabled;
 
+    @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> ownerBookings = new ArrayList<>();
-    ;
 
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Booking> opponentBookings = new ArrayList<>();
-    ;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_status_id")
     private PlayerStatus playerStatus;
 
-    public User() {
+    protected User() {
         super();
     }
 

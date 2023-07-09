@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -15,17 +16,19 @@ import java.util.Objects;
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private List<User> users = new ArrayList<>();
 
+    @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "privilege_id"))
     private List<Privilege> privileges = new ArrayList<>();
 
-    public Role() {
+    protected Role() {
         super();
     }
 
