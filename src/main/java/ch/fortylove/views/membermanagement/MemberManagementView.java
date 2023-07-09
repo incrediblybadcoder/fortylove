@@ -1,12 +1,12 @@
 package ch.fortylove.views.membermanagement;
 
+import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.PlayerStatusService;
-import ch.fortylove.persistence.service.RoleService;
-import ch.fortylove.persistence.service.UserService;
-import ch.fortylove.persistence.setupdata.data.RoleSetupData;
+import ch.fortylove.service.PlayerStatusService;
+import ch.fortylove.service.RoleService;
+import ch.fortylove.service.UserService;
 import ch.fortylove.views.MainLayout;
 import ch.fortylove.views.membermanagement.dto.UserFormInformations;
 import ch.fortylove.views.membermanagement.events.DeleteEvent;

@@ -1,7 +1,7 @@
 package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.persistence.service.PlayerStatusService;
+import ch.fortylove.service.PlayerStatusService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 

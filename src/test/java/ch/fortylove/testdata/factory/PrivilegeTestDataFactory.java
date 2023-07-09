@@ -1,7 +1,7 @@
 package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.persistence.service.PrivilegeService;
+import ch.fortylove.service.PrivilegeService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
