@@ -1,0 +1,15 @@
+package ch.fortylove.service;
+
+import ch.fortylove.persistence.entity.Role;
+
+import javax.annotation.Nonnull;
+import java.util.Optional;
+
+public interface RoleService {
+
+    @Nonnull
+    Role create(@Nonnull final Role role);
+
+    @Nonnull
+    Optional<Role> findByName(@Nonnull final String name);
+}

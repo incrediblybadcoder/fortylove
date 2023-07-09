@@ -3,7 +3,7 @@ package ch.fortylove.security;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

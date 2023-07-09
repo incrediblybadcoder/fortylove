@@ -3,7 +3,7 @@ package ch.fortylove.testdata.factory;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.service.UserService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -2,7 +2,7 @@ package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtType;
-import ch.fortylove.persistence.service.CourtService;
+import ch.fortylove.service.CourtService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 

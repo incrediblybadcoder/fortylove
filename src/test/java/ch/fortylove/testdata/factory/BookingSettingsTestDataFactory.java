@@ -2,7 +2,7 @@ package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.persistence.service.BookingSettingsService;
+import ch.fortylove.service.BookingSettingsService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 

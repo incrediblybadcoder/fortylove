@@ -1,7 +1,7 @@
 package ch.fortylove.testdata;
 
 import ch.fortylove.SpringTest;
-import ch.fortylove.devsetupdata.DevSetupDataLoaderService;
+import ch.fortylove.configuration.devsetupdata.DevSetupDataLoaderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 

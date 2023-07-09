@@ -3,7 +3,7 @@ package ch.fortylove.views.booking.grid;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.persistence.service.BookingSettingsService;
+import ch.fortylove.service.BookingSettingsService;
 import ch.fortylove.views.booking.grid.cells.BookedCellComponent;
 import ch.fortylove.views.booking.grid.cells.BookingCellComponent;
 import ch.fortylove.views.booking.grid.cells.CourtInfoComponent;
