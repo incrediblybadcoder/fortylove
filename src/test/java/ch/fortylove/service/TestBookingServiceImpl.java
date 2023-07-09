@@ -93,31 +93,32 @@ class TestBookingServiceImpl extends ServiceTest {
     public void testIsBookingModifiable_allowed() {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
 
-        Assertions.assertTrue(testee.isBookingModifiable(owner, booking));
-    }
+        final ValidationResult validationResult = testee.isBookingModifiable(owner, booking);
 
-    @Test
-    public void testIsBookingModifiable_notAllowed_notOwner() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
-
-        Assertions.assertFalse(testee.isBookingModifiable(opponent, booking));
+        Assertions.assertTrue(validationResult.isSuccessful());
     }
 
     @Test
     public void testIsBookingModifiable_notAllowed_dateInPast() {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1));
 
-        Assertions.assertFalse(testee.isBookingModifiable(owner, booking));
+        final ValidationResult validationResult = testee.isBookingModifiable(owner, booking);
+
+        Assertions.assertFalse(validationResult.isSuccessful());
     }
 
     @Test
     public void testIsBookingCreatable_allowed() {
-        Assertions.assertTrue(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now());
+
+        Assertions.assertTrue(validationResult.isSuccessful());
     }
 
     @Test
     public void testIsBookingCreatable_notAllowed_dateInPast() {
-        Assertions.assertFalse(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1)));
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1));
+
+        Assertions.assertFalse(validationResult.isSuccessful());
     }
 
     @Test
@@ -125,6 +126,8 @@ class TestBookingServiceImpl extends ServiceTest {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
         testee.create(booking);
 
-        Assertions.assertFalse(testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now());
+
+        Assertions.assertFalse(validationResult.isSuccessful());
     }
 }

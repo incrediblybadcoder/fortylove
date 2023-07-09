@@ -75,30 +75,61 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.delete(booking);
     }
 
+    @Nonnull
     @Override
-    public boolean isBookingModifiable(@Nonnull final User user,
-                                       @Nonnull final Booking booking) {
-        final boolean isOwner = user.equals(booking.getOwner());
-        return isOwner && isCurrentOrFutureDate(booking.getDate());
+    public ValidationResult isBookingModifiable(@Nonnull final User user,
+                                                @Nonnull final Booking booking) {
+        if (isInPast(booking.getDate())) {
+            return ValidationResult.failure("Datum liegt in der Vergangenheit");
+        }
+
+        return ValidationResult.success();
     }
 
     @Override
-    public boolean isBookingCreatableOnDate(@Nonnull final Court court,
-                                            @Nonnull final Timeslot timeslot,
-                                            @Nonnull final LocalDate date) {
-        final boolean existsBooking = bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0;
-        return !existsBooking && isCurrentOrFutureDate(date);
+    @Nonnull
+    public ValidationResult isBookingCreatableOnDate(@Nonnull final Court court,
+                                                     @Nonnull final Timeslot timeslot,
+                                                     @Nonnull final LocalDate date) {
+        if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
+            return ValidationResult.failure("Duplikate Buchung");
+        }
+        if (isInPast(date)) {
+            return ValidationResult.failure("Datum liegt in der Vergangenheit");
+        }
+
+        return ValidationResult.success();
     }
 
-    private boolean isCurrentOrFutureDate(@Nonnull final LocalDate date) {
-        return !date.isBefore(LocalDate.now());
+    private boolean isInPast(@Nonnull final LocalDate date) {
+        return date.isBefore(LocalDate.now());
     }
 
     @Override
-    public boolean isUserBookingAllowedOnDate(@Nonnull final User user,
-                                              @Nonnull final LocalDate date) {
+    @Nonnull
+    public ValidationResult isUserBookingAllowedOnDate(@Nonnull final User user,
+                                                       @Nonnull final LocalDate date) {
+        if (isUserBookingAmountOverLimit(user, date)) {
+            return ValidationResult.failure("Tägliches Buchungslimit erreicht");
+        }
+        if (isOutsideOfBookableDaysInAdvance(user.getPlayerStatus(), date)) {
+            return ValidationResult.failure("Buchung liegt ausserhalb des erlaubten Bereichs");
+        }
+
+        return ValidationResult.success();
+    }
+
+    private boolean isOutsideOfBookableDaysInAdvance(@Nonnull final PlayerStatus playerStatus,
+                                                     @Nonnull final LocalDate date) {
+        final LocalDate maxAllowedDateInAdvance = LocalDate.now().plusDays(playerStatus.getBookableDaysInAdvance());
+        return date.isAfter(maxAllowedDateInAdvance);
+    }
+
+    private boolean isUserBookingAmountOverLimit(@Nonnull final User user,
+                                                 @Nonnull final LocalDate date) {
         final int userBookingsOnDay = getUserBookingsOnDay(user, date);
-        final PlayerStatus playerStatus = user.getPlayerStatus();
-        return userBookingsOnDay < playerStatus.getBookingsPerDay();
+        final int allowedBookingsPerDay = user.getPlayerStatus().getBookingsPerDay();
+
+        return userBookingsOnDay >= allowedBookingsPerDay;
     }
 }

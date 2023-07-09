@@ -7,6 +7,7 @@ import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
 import ch.fortylove.service.SessionService;
 import ch.fortylove.service.UserService;
+import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.views.booking.dateselection.events.DateChangeEvent;
@@ -87,23 +88,33 @@ public class BookingComponent extends VerticalLayout {
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            if (bookingService.isBookingModifiable(currentUser, event.getBooking())) {
+            if (currentUser.equals(event.getBooking().getOwner())) {
+                return;
+            }
+
+            final ValidationResult validationResult = bookingService.isBookingModifiable(currentUser, event.getBooking());
+            if (validationResult.isSuccessful()) {
                 final Booking booking = event.getBooking();
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
                 bookingDialog.openExisting(booking.getOpponents().get(0), booking);
+            } else {
+                NotificationUtil.infoNotification(validationResult.getMessage());
             }
         });
     }
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         sessionService.getCurrentUser().ifPresent(currentUser -> {
-            if (bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate())) {
+            final ValidationResult validationResult = bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate());
+            if (validationResult.isSuccessful()) {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
                 bookingDialog.openFree();
+            } else {
+                NotificationUtil.infoNotification(validationResult.getMessage());
             }
         });
     }
@@ -117,17 +128,19 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void newBookingAction(final @Nonnull Booking booking) {
-        if (!bookingService.isUserBookingAllowedOnDate(booking.getOwner(), booking.getDate())) {
-            NotificationUtil.errorNotification("Tägliches Buchungslimit erreicht");
-        } else {
+        final ValidationResult validationResult = bookingService.isUserBookingAllowedOnDate(booking.getOwner(), booking.getDate());
+        if (validationResult.isSuccessful()) {
             bookingService.create(booking);
             NotificationUtil.infoNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
             refresh();
+        } else {
+            NotificationUtil.errorNotification(validationResult.getMessage());
         }
     }
 
     private void modifyBookingAction(final @Nonnull Booking booking) {
         bookingService.update(booking);
+        NotificationUtil.infoNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
         refresh();
     }
 
@@ -147,6 +160,7 @@ public class BookingComponent extends VerticalLayout {
         dialog.setConfirmButtonTheme(ButtonVariant.LUMO_ERROR.getVariantName());
         dialog.addConfirmListener(event -> {
             bookingService.delete(booking.getId());
+            NotificationUtil.infoNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
             refresh();
         });
 
