@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -13,13 +14,14 @@ import java.util.Objects;
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    public Privilege() {
+    protected Privilege() {
         super();
     }
 

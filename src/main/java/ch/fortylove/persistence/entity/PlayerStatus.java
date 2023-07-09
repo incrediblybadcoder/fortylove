@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -13,19 +15,22 @@ import java.util.Objects;
 @Entity(name = "player_status")
 public class PlayerStatus extends AbstractEntity {
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
+    @PositiveOrZero
     @Column(name = "bookings_per_day")
     private int bookingsPerDay;
 
+    @PositiveOrZero
     @Column(name = "bookable_days_in_advance")
     private int bookableDaysInAdvance;
 
     @OneToMany(mappedBy = "playerStatus", fetch = FetchType.EAGER)
     private List<User> users = new ArrayList<>();
 
-    public PlayerStatus() {
+    protected PlayerStatus() {
         super();
     }
 

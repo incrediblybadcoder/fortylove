@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -14,6 +15,7 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull
     @Column(name = "id", unique = true, nullable = false)
     private Long id = 0L;
 

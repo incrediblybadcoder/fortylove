@@ -2,6 +2,7 @@ package ch.fortylove.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
 import java.time.LocalTime;
@@ -16,10 +17,11 @@ public class Timeslot extends AbstractEntity {
     @Column(name = "bookable")
     private boolean bookable;
 
+    @PositiveOrZero
     @Column(name = "index")
     private int index;
 
-    public Timeslot() {
+    protected Timeslot() {
         super();
     }
 

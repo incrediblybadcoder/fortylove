@@ -2,6 +2,7 @@ package ch.fortylove.persistence.service;
 
 import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.CourtType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final Court createdCourt = testee.create(new Court());
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
         Assertions.assertTrue(foundCourt.isPresent());
@@ -30,7 +31,7 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testFindById_notExists() {
-        final Court createdCourt = testee.create(new Court());
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId() + 1L);
 
@@ -39,8 +40,8 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court());
-        final Court createdCourt = testee.create(new Court());
+        testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
 
