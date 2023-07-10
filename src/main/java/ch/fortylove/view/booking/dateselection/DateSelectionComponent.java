@@ -27,6 +27,9 @@ public class DateSelectionComponent extends VerticalLayout {
         super();
         this.date = LocalDate.now();
 
+        setAlignItems(Alignment.CENTER);
+        setPadding(false);
+
         constructUI(date);
     }
 
