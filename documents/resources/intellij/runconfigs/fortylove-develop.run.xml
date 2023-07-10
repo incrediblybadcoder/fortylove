@@ -2,7 +2,7 @@
   <configuration default="false" name="fortylove-develop" type="Application" factoryName="Application" folderName="fortylove-templates">
     <envs>
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
-      <env name="SPRING_DATASOURCE_USERNAME" value="" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="sa" />
       <env name="SPRING_PROFILE" value="develop" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
