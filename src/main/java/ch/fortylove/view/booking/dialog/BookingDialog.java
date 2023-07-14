@@ -61,7 +61,7 @@ public class BookingDialog extends Dialog {
         dialogLayout.setPadding(false);
 
         final TextField courtField = new TextField("Platz");
-        courtField.setValue(String.valueOf(court.getId()));
+        courtField.setValue(court.getIdentifier());
         courtField.setReadOnly(true);
 
         final TextField dateField = new TextField("Zeit / Datum");
@@ -74,9 +74,11 @@ public class BookingDialog extends Dialog {
 
         opponentComboBox = new ComboBox<>("Gegenspieler");
         opponentComboBox.setItems(possibleOpponents);
-        opponentComboBox.setItemLabelGenerator(User::getFirstName);
+        opponentComboBox.setItemLabelGenerator(User::getFullName);
+        opponentComboBox.setRequired(true);
+        opponentComboBox.setRequiredIndicatorVisible(true);
 
-        Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
+        final Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         getHeader().add(closeButton);
 
