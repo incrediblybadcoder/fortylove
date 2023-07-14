@@ -4,6 +4,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class NotificationUtil {
 
@@ -11,18 +12,20 @@ public class NotificationUtil {
     @Nonnull private final static Notification.Position POSITION = Notification.Position.TOP_CENTER;
 
     public static void errorNotification(@Nonnull final String text) {
-        final Notification notification = getDefaultNotification(text);
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        notification.open();
+        getDefaultNotification(text).ifPresent(notification -> {
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            notification.open();
+        });
     }
 
     public static void infoNotification(@Nonnull final String text) {
-        final Notification notification = getDefaultNotification(text);
-        notification.open();
+        getDefaultNotification(text).ifPresent(Notification::open);
     }
 
     @Nonnull
-    private static Notification getDefaultNotification(@Nonnull final String text) {
-        return new Notification(text, DURATION, POSITION);
+    private static Optional<Notification> getDefaultNotification(@Nonnull final String text) {
+        return text.isBlank() ?
+                Optional.empty() :
+                Optional.of(new Notification(text, DURATION, POSITION));
     }
 }

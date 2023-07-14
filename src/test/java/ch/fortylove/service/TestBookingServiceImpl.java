@@ -4,6 +4,7 @@ import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import org.junit.jupiter.api.Assertions;
@@ -90,39 +91,39 @@ class TestBookingServiceImpl extends ServiceTest {
     }
 
     @Test
-    public void testIsBookingModifiable_allowed() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+    public void testIsBookingModifiableOnDate_allowed() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now());
 
-        final ValidationResult validationResult = testee.isBookingModifiable(owner, booking);
+        final ValidationResult validationResult = testee.isBookingModifiableOnDate(owner, booking);
 
         Assertions.assertTrue(validationResult.isSuccessful());
     }
 
     @Test
-    public void testIsBookingModifiable_notAllowed_dateInPast() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1));
+    public void testIsBookingModifiableOnDate_notAllowed_dateInPast() {
+        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now().minusDays(1));
 
-        final ValidationResult validationResult = testee.isBookingModifiable(owner, booking);
+        final ValidationResult validationResult = testee.isBookingModifiableOnDate(owner, booking);
 
         Assertions.assertFalse(validationResult.isSuccessful());
     }
 
     @Test
-    public void testIsBookingCreatable_allowed() {
-        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now());
+    public void testIsBookingCreatableOnDate_allowed() {
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now());
 
         Assertions.assertTrue(validationResult.isSuccessful());
     }
 
     @Test
-    public void testIsBookingCreatable_notAllowed_dateInPast() {
+    public void testIsBookingCreatableOnDate_notAllowed_dateInPast() {
         final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now().minusDays(1));
 
         Assertions.assertFalse(validationResult.isSuccessful());
     }
 
     @Test
-    public void testIsBookingCreatable_notAllowed_bookingExists() {
+    public void testIsBookingCreatableOnDate_notAllowed_bookingExists() {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
         testee.create(booking);
 
