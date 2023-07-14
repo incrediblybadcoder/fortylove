@@ -33,7 +33,7 @@ public class Role extends AbstractEntity {
 
     public Role(@Nonnull final String name,
                 @Nonnull final List<Privilege> privileges) {
-        super();
+        this();
         this.name = name;
         this.privileges = privileges;
     }

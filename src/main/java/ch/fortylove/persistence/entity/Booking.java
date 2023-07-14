@@ -52,7 +52,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
                    @Nonnull final List<User> opponents,
                    @Nonnull final Timeslot timeslot,
                    @Nonnull final LocalDate date) {
-        super();
+        this();
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;

@@ -66,7 +66,7 @@ public class User extends AbstractEntity {
                 final boolean enabled,
                 @Nonnull final List<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
-        super();
+        this();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

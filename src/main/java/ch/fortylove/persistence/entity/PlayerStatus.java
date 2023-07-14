@@ -36,7 +36,7 @@ public class PlayerStatus extends AbstractEntity {
     public PlayerStatus(@Nonnull final String name,
                         final int bookingsPerDay,
                         final int bookableDaysInAdvance) {
-        super();
+        this();
         this.name = name;
         this.bookingsPerDay = bookingsPerDay;
         this.bookableDaysInAdvance = bookableDaysInAdvance;

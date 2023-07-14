@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Nullable
     User findByEmail(@Nonnull final String email);

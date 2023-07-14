@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -52,16 +53,16 @@ public class BookingService {
     }
 
     @Nonnull
-    public Optional<Booking> findById(final long id) {
+    public Optional<Booking> findById(@Nonnull final UUID id) {
         return bookingRepository.findById(id);
     }
 
     @Nonnull
-    public List<Booking> findAllByCourtId(final long id) {
+    public List<Booking> findAllByCourtId(@Nonnull final UUID id) {
         return bookingRepository.findAllByCourtId(id);
     }
 
-    public void delete(final long id) {
+    public void delete(@Nonnull final UUID id) {
         final Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
 
@@ -72,8 +73,7 @@ public class BookingService {
     }
 
     @Nonnull
-    public ValidationResult isBookingModifiableOnDate(@Nonnull final User user,
-                                                      @Nonnull final Booking booking) {
+    public ValidationResult isBookingModifiableOnDate(@Nonnull final Booking booking) {
         if (isInPast(booking.getDate(), booking.getTimeslot())) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }

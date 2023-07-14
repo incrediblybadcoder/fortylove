@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -23,7 +24,7 @@ public class PrivilegeService {
     }
 
     @Nonnull
-    public Optional<Privilege> findById(final long id) {
+    public Optional<Privilege> findById(@Nonnull final UUID id) {
        return privilegeRepository.findById(id);
     }
 
@@ -40,7 +41,7 @@ public class PrivilegeService {
         return privilegeRepository.save(privilege);
     }
 
-    public void delete(final long id) {
+    public void delete(@Nonnull final UUID id) {
         final Privilege privilege = privilegeRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
         privilegeRepository.delete(privilege);

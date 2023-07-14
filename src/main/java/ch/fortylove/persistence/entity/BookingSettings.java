@@ -24,7 +24,7 @@ public class BookingSettings extends AbstractEntity {
     }
 
     public BookingSettings(@Nonnull final List<Timeslot> timeslots) {
-        super();
+        this();
         this.timeslots = timeslots;
     }
 

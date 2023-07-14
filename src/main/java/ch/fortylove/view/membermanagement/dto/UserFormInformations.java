@@ -1,15 +1,18 @@
 package ch.fortylove.view.membermanagement.dto;
 
+import java.util.UUID;
+
 public class UserFormInformations {
 
     private final String firstName;
     private final String lastName;
     private final String email;
-    private final Long id;
+    private final UUID id;
 
     public UserFormInformations(final String firstName,
                                 final String lastName,
-                                final String email, final Long id) {
+                                final String email,
+                                final UUID id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -28,7 +31,7 @@ public class UserFormInformations {
         return email;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 }

@@ -94,7 +94,7 @@ class TestBookingService extends ServiceTest {
     public void testIsBookingModifiableOnDate_allowed() {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now());
 
-        final ValidationResult validationResult = testee.isBookingModifiableOnDate(owner, booking);
+        final ValidationResult validationResult = testee.isBookingModifiableOnDate(booking);
 
         Assertions.assertTrue(validationResult.isSuccessful());
     }
@@ -103,7 +103,7 @@ class TestBookingService extends ServiceTest {
     public void testIsBookingModifiableOnDate_notAllowed_dateInPast() {
         final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now().minusDays(1));
 
-        final ValidationResult validationResult = testee.isBookingModifiableOnDate(owner, booking);
+        final ValidationResult validationResult = testee.isBookingModifiableOnDate(booking);
 
         Assertions.assertFalse(validationResult.isSuccessful());
     }

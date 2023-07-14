@@ -25,7 +25,7 @@ public class Privilege extends AbstractEntity {
     }
 
     public Privilege(@Nonnull final String name) {
-        super();
+        this();
         this.name = name;
     }
 

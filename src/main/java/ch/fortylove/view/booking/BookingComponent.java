@@ -91,7 +91,7 @@ public class BookingComponent extends VerticalLayout {
                 return;
             }
 
-            final ValidationResult validationResult = bookingService.isBookingModifiableOnDate(currentUser, event.getBooking());
+            final ValidationResult validationResult = bookingService.isBookingModifiableOnDate(event.getBooking());
             if (validationResult.isSuccessful()) {
                 final Booking booking = event.getBooking();
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
