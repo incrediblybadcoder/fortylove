@@ -1,7 +1,6 @@
 package ch.fortylove.view.membermanagement;
 
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
-import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.service.PlayerStatusService;
@@ -56,7 +55,7 @@ public class MemberManagementView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        form = new UserForm();
+        form = new UserForm(playerStatusService.findAll());
         form.addSaveListener(this::saveUser);
         form.addUpdateListener(this::updateUser);
         form.addDeleteListener(this::deleteUser);
@@ -79,6 +78,7 @@ public class MemberManagementView extends VerticalLayout {
             user.setFirstName(userFormInformations.getFirstName());
             user.setLastName(userFormInformations.getLastName());
             user.setEmail(userFormInformations.getEmail());
+            user.setPlayerStatus(userFormInformations.getPlayerStatus());
             userService.update(user);
             updateUserList();
             closeEditor();
@@ -112,18 +112,17 @@ public class MemberManagementView extends VerticalLayout {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
-        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName("aktiv");
-        if (playerStatus.isEmpty()) {
-            throw new RuntimeException("PlayerStatus aktiv not found");
-        }
 
-        final User saveUser = new User(userFormInformations.getFirstName(),
+        final User saveUser = new User(
+                userFormInformations.getFirstName(),
                 userFormInformations.getLastName(),
                 userFormInformations.getEmail(),
                 passwordEncoder.encode("newpassword"),
                 true,
                 roles,
-                playerStatus.get());
+                userFormInformations.getPlayerStatus()
+        );
+
         userService.create(saveUser);
         updateUserList();
         closeEditor();

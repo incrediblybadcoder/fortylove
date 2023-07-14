@@ -3,6 +3,7 @@ package ch.fortylove.service;
 import ch.fortylove.persistence.entity.PlayerStatus;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 public interface PlayerStatusService {
@@ -15,4 +16,6 @@ public interface PlayerStatusService {
 
     @Nonnull
     PlayerStatus getDefaultNewUserPlayerStatus();
+
+    @Nonnull List<PlayerStatus> findAll();
 }

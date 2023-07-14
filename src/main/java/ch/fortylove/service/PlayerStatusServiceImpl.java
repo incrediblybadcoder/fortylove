@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,5 +46,11 @@ public class PlayerStatusServiceImpl implements PlayerStatusService {
             return playerStatus.get();
         }
         throw new RecordNotFoundException("PlayerStatus " + DEFAULT_PLAYER_STATUS_FOR_NEW_USER + " not found");
+    }
+
+    @Nonnull
+    @Override
+    public List<PlayerStatus> findAll() {
+        return playerStatusRepository.findAll();
     }
 }

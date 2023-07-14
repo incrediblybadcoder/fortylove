@@ -1,5 +1,6 @@
 package ch.fortylove.view.membermanagement;
 
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.view.membermanagement.events.CloseEvent;
 import ch.fortylove.view.membermanagement.events.DeleteEvent;
@@ -9,6 +10,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,10 +19,14 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
+
 public class UserForm extends FormLayout {
     @Nonnull private final TextField firstName = new TextField("Vorname");
     @Nonnull private final TextField lastName = new TextField("Nachname");
     @Nonnull private final TextField email = new TextField("Email");
+    @Nonnull private final ComboBox<PlayerStatus> status = new ComboBox<>("Status");
+    @Nonnull private final List<PlayerStatus> availableStatus;
 
     private Button save;
     private Button update;
@@ -28,7 +34,8 @@ public class UserForm extends FormLayout {
     private Button close;
     Binder<UserFormBackingBean> binder = new BeanValidationBinder<>(UserFormBackingBean.class); //BeanValidationBider oder nur Binder?
 
-    public UserForm() {
+    public UserForm(final List<PlayerStatus> availableStatus) {
+        this.availableStatus = availableStatus;
         addClassName("user-form");
 
         binder.forField(email)
@@ -36,9 +43,6 @@ public class UserForm extends FormLayout {
                 .bind(UserFormBackingBean::getEmail, UserFormBackingBean::setEmail);
 
         binder.bindInstanceFields(this);
-        //Todo: add role selection
-        //Todo: add user state
-
         constructUI();
     }
 
@@ -46,6 +50,12 @@ public class UserForm extends FormLayout {
         add(createInputFieldsLayout());
         initializeButtons();
         createButtonsLayout();
+        setStatusComboBoxItems();
+    }
+
+    private void setStatusComboBoxItems() {
+        status.setItems(availableStatus);
+        status.setItemLabelGenerator(PlayerStatus::getName);
     }
 
     private void initializeButtons() {
@@ -57,7 +67,7 @@ public class UserForm extends FormLayout {
 
     private VerticalLayout createInputFieldsLayout() {
         VerticalLayout inputFieldsLayout = new VerticalLayout();
-        inputFieldsLayout.add(firstName, lastName, email);
+        inputFieldsLayout.add(firstName, lastName, email, status);
         return inputFieldsLayout;
     }
 
@@ -91,11 +101,12 @@ public class UserForm extends FormLayout {
 
     public void setUser(User user) {
         if (user != null) {
-            UserFormBackingBean backingBean = new UserFormBackingBean();
+            UserFormBackingBean backingBean = new UserFormBackingBean(status);
             backingBean.setFirstName(user.getFirstName());
             backingBean.setLastName(user.getLastName());
             backingBean.setEmail(user.getEmail());
             backingBean.setId(user.getId());
+            backingBean.setStatus(user.getPlayerStatus());
             binder.setBean(backingBean);
         }
     }
