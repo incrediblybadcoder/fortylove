@@ -27,7 +27,7 @@ public interface BookingService {
     void delete(final long id);
 
     @Nonnull
-    ValidationResult isBookingModifiable(@Nonnull final User user, @Nonnull final Booking booking);
+    ValidationResult isBookingModifiableOnDate(@Nonnull final User user, @Nonnull final Booking booking);
 
     @Nonnull
     ValidationResult isBookingCreatableOnDate(@Nonnull final Court court, @Nonnull final Timeslot timeslot, @Nonnull final LocalDate date);

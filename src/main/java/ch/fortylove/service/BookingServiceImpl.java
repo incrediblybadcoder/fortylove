@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,9 +78,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Nonnull
     @Override
-    public ValidationResult isBookingModifiable(@Nonnull final User user,
-                                                @Nonnull final Booking booking) {
-        if (isInPast(booking.getDate())) {
+    public ValidationResult isBookingModifiableOnDate(@Nonnull final User user,
+                                                      @Nonnull final Booking booking) {
+        if (isInPast(booking.getDate(), booking.getTimeslot())) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }
 
@@ -94,15 +95,17 @@ public class BookingServiceImpl implements BookingService {
         if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
             return ValidationResult.failure("Duplikate Buchung");
         }
-        if (isInPast(date)) {
+        if (isInPast(date, timeslot)) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }
 
         return ValidationResult.success();
     }
 
-    private boolean isInPast(@Nonnull final LocalDate date) {
-        return date.isBefore(LocalDate.now());
+    private boolean isInPast(@Nonnull final LocalDate date,
+                             @Nonnull final Timeslot timeslot) {
+        return date.isBefore(LocalDate.now()) ||
+                LocalTime.now().isAfter(timeslot.getStartTime());
     }
 
     @Override
