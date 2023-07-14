@@ -4,9 +4,9 @@ import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.service.PlayerStatusService;
-import ch.fortylove.service.RoleService;
-import ch.fortylove.service.UserService;
+import ch.fortylove.service.PlayerStatusServiceImpl;
+import ch.fortylove.service.RoleServiceImpl;
+import ch.fortylove.service.UserServiceImpl;
 import ch.fortylove.view.MainLayout;
 import ch.fortylove.view.membermanagement.dto.UserFormInformations;
 import ch.fortylove.view.membermanagement.events.DeleteEvent;
@@ -38,16 +38,16 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final UserForm form;
     @Nonnull private final Grid<User> grid = new Grid<>(User.class);
     @Nonnull private final TextField filterText = new TextField();
-    @Nonnull private final UserService userService;
-    @Nonnull private final PlayerStatusService playerStatusService;
-    @Nonnull private final RoleService roleService;
+    @Nonnull private final UserServiceImpl userService;
+    @Nonnull private final PlayerStatusServiceImpl playerStatusService;
+    @Nonnull private final RoleServiceImpl roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     Notification notification = new Notification(
             "Besten Dank", 5000);
 
 
-    public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
+    public MemberManagementView(UserServiceImpl userService, final PlayerStatusServiceImpl playerStatusService, final RoleServiceImpl roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;

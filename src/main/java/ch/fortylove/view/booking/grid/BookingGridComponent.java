@@ -3,7 +3,7 @@ package ch.fortylove.view.booking.grid;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.service.BookingSettingsService;
+import ch.fortylove.service.BookingSettingsServiceImpl;
 import ch.fortylove.view.booking.grid.cells.BookedCellComponent;
 import ch.fortylove.view.booking.grid.cells.BookingCellComponent;
 import ch.fortylove.view.booking.grid.cells.CourtInfoComponent;
@@ -29,10 +29,10 @@ import java.util.Optional;
 @UIScope
 public class BookingGridComponent extends Grid<Court> {
 
-    @Nonnull private final BookingSettingsService bookingSettingsService;
+    @Nonnull private final BookingSettingsServiceImpl bookingSettingsService;
 
     @Autowired
-    public BookingGridComponent(@Nonnull final BookingSettingsService bookingSettingsService) {
+    public BookingGridComponent(@Nonnull final BookingSettingsServiceImpl bookingSettingsService) {
         super(Court.class, false);
         this.bookingSettingsService = bookingSettingsService;
 

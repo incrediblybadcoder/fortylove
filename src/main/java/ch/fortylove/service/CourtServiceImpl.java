@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CourtServiceImpl implements CourtService {
+public class CourtServiceImpl {
 
     @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
@@ -30,7 +30,6 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Nonnull
-    @Override
     public Court create(@Nonnull final Court court) {
         if (courtRepository.findById(court.getId()).isPresent()) {
             throw new DuplicateRecordException(court);
@@ -39,13 +38,11 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Nonnull
-    @Override
     public Optional<Court> findById(final long id) {
         return courtRepository.findById(id);
     }
 
     @Nonnull
-    @Override
     public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
         final Session session = entityManager.unwrap(Session.class);
         final Filter filter = session.enableFilter("bookingDateFilter");

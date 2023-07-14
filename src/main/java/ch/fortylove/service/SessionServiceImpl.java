@@ -11,19 +11,18 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class SessionServiceImpl implements SessionService {
+public class SessionServiceImpl {
 
-    @Nonnull private final UserService userService;
+    @Nonnull private final UserServiceImpl userService;
     @Nonnull private final SecurityService securityService;
 
-    public SessionServiceImpl(@Nonnull final UserService userService,
+    public SessionServiceImpl(@Nonnull final UserServiceImpl userService,
                               @Nonnull final SecurityService securityService) {
         this.userService = userService;
         this.securityService = securityService;
     }
 
     @Nonnull
-    @Override
     public Optional<User> getCurrentUser() {
         final Optional<UserDetails> authenticatedUser = securityService.getAuthenticatedUser();
         if (authenticatedUser.isEmpty()) {

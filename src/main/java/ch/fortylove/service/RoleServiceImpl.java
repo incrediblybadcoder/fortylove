@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl {
 
     @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = "ROLE_USER";
 
@@ -26,7 +26,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Nonnull
-    @Override
     public Role create(@Nonnull final Role role) {
         if (roleRepository.findById(role.getId()).isPresent()) {
             throw new DuplicateRecordException(role);
@@ -35,13 +34,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Nonnull
-    @Override
     public Optional<Role> findByName(@Nonnull final String name) {
         return Optional.ofNullable(roleRepository.findByName(name));
     }
 
     @Nonnull
-    @Override
     public List<Role> getDefaultNewUserRole() {
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = this.findByName(RoleServiceImpl.DEFAULT_ROLE_FOR_NEW_USER);

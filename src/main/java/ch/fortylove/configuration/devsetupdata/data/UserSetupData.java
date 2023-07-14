@@ -7,9 +7,9 @@ import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.RecordNotFoundException;
-import ch.fortylove.service.PlayerStatusService;
-import ch.fortylove.service.RoleService;
-import ch.fortylove.service.UserService;
+import ch.fortylove.service.PlayerStatusServiceImpl;
+import ch.fortylove.service.RoleServiceImpl;
+import ch.fortylove.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,15 +32,15 @@ public class UserSetupData {
     @Nonnull public static final String TURNIER = "turnier@fortylove.ch";
     @Nonnull public static final String INAKIV = "inaktiv@fortylove.ch";
 
-    @Nonnull private final UserService userService;
-    @Nonnull private final RoleService roleService;
-    @Nonnull private final PlayerStatusService playerStatusService;
+    @Nonnull private final UserServiceImpl userService;
+    @Nonnull private final RoleServiceImpl roleService;
+    @Nonnull private final PlayerStatusServiceImpl playerStatusService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserSetupData(@Nonnull final UserService userService,
-                         @Nonnull final RoleService roleService,
-                         @Nonnull final PlayerStatusService playerStatus,
+    public UserSetupData(@Nonnull final UserServiceImpl userService,
+                         @Nonnull final RoleServiceImpl roleService,
+                         @Nonnull final PlayerStatusServiceImpl playerStatus,
                          @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;

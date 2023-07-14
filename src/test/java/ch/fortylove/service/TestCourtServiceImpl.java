@@ -13,10 +13,10 @@ import java.util.Optional;
 @SpringTest
 class TestCourtServiceImpl extends ServiceTest {
 
-    @Nonnull private final CourtService testee;
+    @Nonnull private final CourtServiceImpl testee;
 
     @Autowired
-    public TestCourtServiceImpl(@Nonnull final CourtService testee) {
+    public TestCourtServiceImpl(@Nonnull final CourtServiceImpl testee) {
         this.testee = testee;
     }
 

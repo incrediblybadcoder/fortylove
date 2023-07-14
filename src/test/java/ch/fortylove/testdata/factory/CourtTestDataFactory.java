@@ -2,7 +2,7 @@ package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtType;
-import ch.fortylove.service.CourtService;
+import ch.fortylove.service.CourtServiceImpl;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,10 +14,10 @@ public class CourtTestDataFactory {
 
     public static final long DEFAULT_COURT = 1L;
 
-    @Nonnull private final CourtService courtService;
+    @Nonnull private final CourtServiceImpl courtService;
 
     @Autowired
-    public CourtTestDataFactory(@Nonnull final CourtService courtService) {
+    public CourtTestDataFactory(@Nonnull final CourtServiceImpl courtService) {
         this.courtService = courtService;
     }
 

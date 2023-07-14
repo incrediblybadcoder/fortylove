@@ -14,13 +14,13 @@ import java.util.List;
 @SpringTest
 class TestBookingSettingsServiceImpl extends ServiceTest {
 
-    @Nonnull private final BookingSettingsService testee;
+    @Nonnull private final BookingSettingsServiceImpl testee;
 
     @Nonnull private List<Timeslot> timeslotsAllBookable;
     @Nonnull private List<Timeslot> timeslotsNonBookable;
 
     @Autowired
-    public TestBookingSettingsServiceImpl(@Nonnull final BookingSettingsService testee) {
+    public TestBookingSettingsServiceImpl(@Nonnull final BookingSettingsServiceImpl testee) {
         this.testee = testee;
     }
 

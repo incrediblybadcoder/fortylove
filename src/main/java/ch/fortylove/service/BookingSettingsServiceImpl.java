@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class BookingSettingsServiceImpl implements BookingSettingsService {
+public class BookingSettingsServiceImpl {
 
     @Nonnull private final BookingSettingsRepository bookingSettingsRepository;
 
@@ -21,7 +21,6 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
     }
 
     @Nonnull
-    @Override
     public BookingSettings create(@Nonnull final BookingSettings bookingSettings) {
         final List<BookingSettings> existingBookingSettings = bookingSettingsRepository.findAll();
         if (existingBookingSettings.isEmpty()) {
@@ -32,7 +31,6 @@ public class BookingSettingsServiceImpl implements BookingSettingsService {
     }
 
     @Nonnull
-    @Override
     public BookingSettings getBookingSettings() {
         final List<BookingSettings> bookingSettings = bookingSettingsRepository.findAll();
         if (bookingSettings.isEmpty()) {

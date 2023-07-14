@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class BookingServiceImpl implements BookingService {
+public class BookingServiceImpl {
 
     @Nonnull private final BookingRepository bookingRepository;
 
@@ -30,7 +30,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Nonnull
-    @Override
     public Booking create(@Nonnull final Booking booking) {
         if (bookingRepository.findById(booking.getId()).isPresent() ||
                 !bookingRepository.findAllByCourtAndTimeslotAndDate(booking.getCourt(), booking.getTimeslot(), booking.getDate()).isEmpty()) {
@@ -45,7 +44,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Nonnull
-    @Override
     public Booking update(@Nonnull final Booking booking) {
         if (bookingRepository.findById(booking.getId()).isEmpty()) {
             throw new RecordNotFoundException(booking);
@@ -54,18 +52,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Nonnull
-    @Override
     public Optional<Booking> findById(final long id) {
         return bookingRepository.findById(id);
     }
 
     @Nonnull
-    @Override
     public List<Booking> findAllByCourtId(final long id) {
         return bookingRepository.findAllByCourtId(id);
     }
 
-    @Override
     public void delete(final long id) {
         final Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
@@ -77,7 +72,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Nonnull
-    @Override
     public ValidationResult isBookingModifiableOnDate(@Nonnull final User user,
                                                       @Nonnull final Booking booking) {
         if (isInPast(booking.getDate(), booking.getTimeslot())) {
@@ -87,7 +81,6 @@ public class BookingServiceImpl implements BookingService {
         return ValidationResult.success();
     }
 
-    @Override
     @Nonnull
     public ValidationResult isBookingCreatableOnDate(@Nonnull final Court court,
                                                      @Nonnull final Timeslot timeslot,
@@ -108,7 +101,6 @@ public class BookingServiceImpl implements BookingService {
                 LocalTime.now().isAfter(timeslot.getStartTime());
     }
 
-    @Override
     @Nonnull
     public ValidationResult isUserBookingAllowedOnDate(@Nonnull final User user,
                                                        @Nonnull final LocalDate date) {

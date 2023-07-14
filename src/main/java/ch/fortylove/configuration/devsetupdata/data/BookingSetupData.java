@@ -5,10 +5,10 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.service.BookingService;
-import ch.fortylove.service.BookingSettingsService;
-import ch.fortylove.service.CourtService;
-import ch.fortylove.service.UserService;
+import ch.fortylove.service.BookingServiceImpl;
+import ch.fortylove.service.BookingSettingsServiceImpl;
+import ch.fortylove.service.CourtServiceImpl;
+import ch.fortylove.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +21,16 @@ import java.util.Optional;
 @DevSetupData
 public class BookingSetupData {
 
-    @Nonnull private final CourtService courtService;
-    @Nonnull private final BookingService bookingService;
-    @Nonnull private final UserService userService;
-    @Nonnull private final BookingSettingsService bookingSettingsService;
+    @Nonnull private final CourtServiceImpl courtService;
+    @Nonnull private final BookingServiceImpl bookingService;
+    @Nonnull private final UserServiceImpl userService;
+    @Nonnull private final BookingSettingsServiceImpl bookingSettingsService;
 
     @Autowired
-    public BookingSetupData(@Nonnull final CourtService courtService,
-                            @Nonnull final BookingService bookingService,
-                            @Nonnull final UserService userService,
-                            @Nonnull final BookingSettingsService bookingSettingsService) {
+    public BookingSetupData(@Nonnull final CourtServiceImpl courtService,
+                            @Nonnull final BookingServiceImpl bookingService,
+                            @Nonnull final UserServiceImpl userService,
+                            @Nonnull final BookingSettingsServiceImpl bookingSettingsService) {
         this.courtService = courtService;
         this.bookingService = bookingService;
         this.userService = userService;

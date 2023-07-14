@@ -3,7 +3,7 @@ package ch.fortylove.configuration.setupdata.data;
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.service.BookingSettingsService;
+import ch.fortylove.service.BookingSettingsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +13,10 @@ import java.util.List;
 @SetupData
 public class BookingSettingsSetupData {
 
-    @Nonnull private final BookingSettingsService bookingSettingsService;
+    @Nonnull private final BookingSettingsServiceImpl bookingSettingsService;
 
     @Autowired
-    public BookingSettingsSetupData(@Nonnull final BookingSettingsService bookingSettingsService) {
+    public BookingSettingsSetupData(@Nonnull final BookingSettingsServiceImpl bookingSettingsService) {
         this.bookingSettingsService = bookingSettingsService;
     }
 

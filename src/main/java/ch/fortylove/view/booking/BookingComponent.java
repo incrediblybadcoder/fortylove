@@ -3,10 +3,10 @@ package ch.fortylove.view.booking;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.service.BookingService;
-import ch.fortylove.service.CourtService;
-import ch.fortylove.service.SessionService;
-import ch.fortylove.service.UserService;
+import ch.fortylove.service.BookingServiceImpl;
+import ch.fortylove.service.CourtServiceImpl;
+import ch.fortylove.service.SessionServiceImpl;
+import ch.fortylove.service.UserServiceImpl;
 import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.view.booking.dateselection.DateSelectionComponent;
@@ -31,18 +31,18 @@ import java.util.List;
 @UIScope
 public class BookingComponent extends VerticalLayout {
 
-    @Nonnull private final BookingService bookingService;
-    @Nonnull private final SessionService sessionService;
-    @Nonnull private final CourtService courtService;
-    @Nonnull private final UserService userService;
+    @Nonnull private final BookingServiceImpl bookingService;
+    @Nonnull private final SessionServiceImpl sessionService;
+    @Nonnull private final CourtServiceImpl courtService;
+    @Nonnull private final UserServiceImpl userService;
     @Nonnull private final BookingGridComponent bookingGridComponent;
     @Nonnull private final DateSelectionComponent dateSelectionComponent;
 
     @Autowired
-    public BookingComponent(@Nonnull final BookingService bookingService,
-                            @Nonnull final SessionService sessionService,
-                            @Nonnull final CourtService courtService,
-                            @Nonnull final UserService userService,
+    public BookingComponent(@Nonnull final BookingServiceImpl bookingService,
+                            @Nonnull final SessionServiceImpl sessionService,
+                            @Nonnull final CourtServiceImpl courtService,
+                            @Nonnull final UserServiceImpl userService,
                             @Nonnull final BookingGridComponent bookingGridComponent,
                             @Nonnull final DateSelectionComponent dateSelectionComponent) {
         this.bookingService = bookingService;

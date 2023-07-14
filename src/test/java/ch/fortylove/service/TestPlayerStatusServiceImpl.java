@@ -12,10 +12,10 @@ import java.util.Optional;
 @SpringTest
 public class TestPlayerStatusServiceImpl extends ServiceTest {
 
-    @Nonnull private final PlayerStatusService testee;
+    @Nonnull private final PlayerStatusServiceImpl testee;
 
     @Autowired
-    public TestPlayerStatusServiceImpl(@Nonnull final PlayerStatusService testee) {
+    public TestPlayerStatusServiceImpl(@Nonnull final PlayerStatusServiceImpl testee) {
         this.testee = testee;
     }
 

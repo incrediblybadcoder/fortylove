@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PrivilegeServiceImpl implements PrivilegeService {
+public class PrivilegeServiceImpl {
 
     @Nonnull private final PrivilegeRepository privilegeRepository;
 
@@ -23,19 +23,16 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Nonnull
-    @Override
     public Optional<Privilege> findById(final long id) {
        return privilegeRepository.findById(id);
     }
 
     @Nonnull
-    @Override
     public Optional<Privilege> findByName(@Nonnull final String name) {
         return Optional.ofNullable(privilegeRepository.findByName(name));
     }
 
     @Nonnull
-    @Override
     public Privilege create(@Nonnull final Privilege privilege) {
         if (privilegeRepository.findById(privilege.getId()).isPresent()) {
             throw new DuplicateRecordException(privilege);
@@ -43,7 +40,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
         return privilegeRepository.save(privilege);
     }
 
-    @Override
     public void delete(final long id) {
         final Privilege privilege = privilegeRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
