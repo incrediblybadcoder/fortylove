@@ -97,8 +97,11 @@ public class BookingService {
 
     private boolean isInPast(@Nonnull final LocalDate date,
                              @Nonnull final Timeslot timeslot) {
-        return date.isBefore(LocalDate.now()) ||
-                LocalTime.now().isAfter(timeslot.getStartTime());
+        final LocalDate today = LocalDate.now();
+        final boolean isPastDate = date.isBefore(today);
+        final boolean isToday = date.equals(today);
+        final boolean isPastTime = LocalTime.now().isAfter(timeslot.getStartTime());
+        return isPastDate || (isToday && isPastTime);
     }
 
     @Nonnull
