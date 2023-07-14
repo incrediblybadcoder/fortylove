@@ -26,7 +26,7 @@ public class Timeslot extends AbstractEntity {
 
     public Timeslot(final boolean bookable,
                     final int index) {
-        super();
+        this();
         this.bookable = bookable;
         this.index = index;
     }

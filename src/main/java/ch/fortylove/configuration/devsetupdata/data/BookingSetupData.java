@@ -17,6 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 
 @DevSetupData
 public class BookingSetupData {
@@ -39,80 +42,141 @@ public class BookingSetupData {
 
     public void createBookings() {
         final List<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
-        createBookingsToday(timeslots);
-        createBookingsYesterday(timeslots);
-        createBookingsTomorrow(timeslots);
+        final List<Court> courts = courtService.findAll();
+        createBookingsToday(courts, timeslots);
+        createBookingsYesterday(courts, timeslots);
+        createBookingsTomorrow(courts, timeslots);
     }
 
-    private void createBookingsToday(@Nonnull final List<Timeslot> timeslots) {
+    private void createBookingsToday(@Nonnull final List<Court> courts,
+                                     @Nonnull final List<Timeslot> timeslots) {
         final LocalDate today = LocalDate.now();
+        final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
+        bookings.put(0, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot)));
+        bookings.put(1, List.of(
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot)));
+        bookings.put(2, List.of(
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), today, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot)));
+        bookings.put(3, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), today, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)));
+        bookings.put(4, List.of(
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[5]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[5]).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot)));
+        bookings.put(5, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), today, timeslot))
+        ));
+
+        createBookings(courts, bookings);
     }
 
-    private void createBookingsYesterday(@Nonnull final List<Timeslot> timeslots) {
+    private void createBookingsYesterday(final List<Court> courts,
+                                         @Nonnull final List<Timeslot> timeslots) {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
+        final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), yesterday, timeslot)));
+        bookings.put(0, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
+        bookings.put(1, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), yesterday, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
+        bookings.put(2, List.of(
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), yesterday, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot)));
+        bookings.put(3, List.of(
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[5]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), yesterday, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[5]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot)));
+        bookings.put(4, List.of(
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), yesterday, timeslot))
+        ));
+
+        bookings.put(5, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER1), yesterday, timeslot))
+        ));
+
+        createBookings(courts, bookings);
     }
 
-    private void createBookingsTomorrow(@Nonnull final List<Timeslot> timeslots) {
+    private void createBookingsTomorrow(final List<Court> courts,
+                                        @Nonnull final List<Timeslot> timeslots) {
         final LocalDate tomorrow = LocalDate.now().plusDays(1);
-        getCourt(CourtSetupData.COURT_IDS[0]).ifPresent(court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), tomorrow, timeslot)));
+        final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
-        getCourt(CourtSetupData.COURT_IDS[1]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot)));
+        bookings.put(0, List.of(
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER3), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[2]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), tomorrow, timeslot)));
+        bookings.put(1, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER1), tomorrow, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[3]).ifPresent(court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot)));
+        bookings.put(2, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), tomorrow, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), tomorrow, timeslot)));
-        getCourt(CourtSetupData.COURT_IDS[4]).ifPresent(court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot)));
+        bookings.put(3, List.of(
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER2), getOpponents(UserSetupData.USER3), tomorrow, timeslot))
+        ));
 
-        getCourt(CourtSetupData.COURT_IDS[5]).ifPresent(court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), tomorrow, timeslot)));
+        bookings.put(4, List.of(
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER3), getOpponents(UserSetupData.USER2), tomorrow, timeslot))
+        ));
+
+        bookings.put(5, List.of(
+                court -> getTimeslot(timeslots, 7).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserSetupData.USER1), getOpponents(UserSetupData.USER2), tomorrow, timeslot))
+        ));
+
+        createBookings(courts, bookings);
+    }
+
+    private void createBookings(@Nonnull final List<Court> courts,
+                                @Nonnull final SortedMap<Integer, List<Consumer<Court>>> bookings) {
+        for (int i = 0; i < courts.size(); i++) {
+            for (final Consumer<Court> courtConsumer : bookings.get(i)) {
+                courtConsumer.accept(courts.get(i));
+            }
+        }
     }
 
     @Nonnull
@@ -136,13 +200,8 @@ public class BookingSetupData {
         return opponentsList;
     }
 
-    private User getOwner(final String owner) {
+    private User getOwner(@Nonnull final String owner) {
         return userService.findByEmail(owner).get();
-    }
-
-    @Nonnull
-    private Optional<Court> getCourt(final long id) {
-        return courtService.findById(id);
     }
 
     @Transactional

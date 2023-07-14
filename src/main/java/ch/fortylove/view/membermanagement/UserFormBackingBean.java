@@ -2,12 +2,14 @@ package ch.fortylove.view.membermanagement;
 
 import ch.fortylove.view.membermanagement.dto.UserFormInformations;
 
+import java.util.UUID;
+
 public class UserFormBackingBean {
 
     private String firstName;
     private String lastName;
     private String email;
-    private Long id;
+    private UUID id;
 
     public UserFormBackingBean() {
     }
@@ -40,11 +42,11 @@ public class UserFormBackingBean {
         return new UserFormInformations(firstName, lastName, email, id);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(final UUID id) {
         this.id = id;
     }
 }

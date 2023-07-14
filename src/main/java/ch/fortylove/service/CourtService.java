@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -38,7 +39,12 @@ public class CourtService {
     }
 
     @Nonnull
-    public Optional<Court> findById(final long id) {
+    public Optional<Court> findById(@Nonnull final UUID id) {
+        return courtRepository.findById(id);
+    }
+
+    @Nonnull
+    public Optional<Court> findByNumber(@Nonnull final UUID id) {
         return courtRepository.findById(id);
     }
 
@@ -51,5 +57,10 @@ public class CourtService {
         session.disableFilter("bookingDateFilter");
 
         return courts;
+    }
+
+    @Nonnull
+    public List<Court> findAll() {
+        return courtRepository.findAll();
     }
 }

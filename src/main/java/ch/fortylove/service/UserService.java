@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -45,8 +46,8 @@ public class UserService {
     }
 
     @Nonnull
-    public Optional<User> findById(@Nonnull final Long id) {
-        return userRepository.findById((id));
+    public Optional<User> findById(@Nonnull final UUID id) {
+        return userRepository.findById(id);
     }
 
     @Nonnull
@@ -63,7 +64,7 @@ public class UserService {
         }
     }
 
-    public void delete(final long id) {
+    public void delete(@Nonnull final UUID id) {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
         userRepository.delete(user);

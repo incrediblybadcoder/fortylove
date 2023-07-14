@@ -42,6 +42,7 @@ public class Court extends AbstractEntity {
     public Court(@Nonnull final CourtType courtType,
                  final int number,
                  final String name) {
+        this();
         this.courtType = courtType;
         this.number = number;
         this.name = name;
