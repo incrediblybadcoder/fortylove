@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringTest
-class TestUserServiceImpl extends ServiceTest {
+class TestUserService extends ServiceTest {
 
     @Nonnull private final UserService testee;
 
@@ -22,7 +22,7 @@ class TestUserServiceImpl extends ServiceTest {
     @Nonnull private PlayerStatus playerStatus;
 
     @Autowired
-    public TestUserServiceImpl(@Nonnull final UserService testee) {
+    public TestUserService(@Nonnull final UserService testee) {
         this.testee = testee;
     }
 

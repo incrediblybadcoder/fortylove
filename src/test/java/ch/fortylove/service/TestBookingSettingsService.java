@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @SpringTest
-class TestBookingSettingsServiceImpl extends ServiceTest {
+class TestBookingSettingsService extends ServiceTest {
 
     @Nonnull private final BookingSettingsService testee;
 
@@ -20,7 +20,7 @@ class TestBookingSettingsServiceImpl extends ServiceTest {
     @Nonnull private List<Timeslot> timeslotsNonBookable;
 
     @Autowired
-    public TestBookingSettingsServiceImpl(@Nonnull final BookingSettingsService testee) {
+    public TestBookingSettingsService(@Nonnull final BookingSettingsService testee) {
         this.testee = testee;
     }
 
