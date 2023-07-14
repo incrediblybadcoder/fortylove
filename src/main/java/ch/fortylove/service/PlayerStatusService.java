@@ -12,4 +12,7 @@ public interface PlayerStatusService {
 
     @Nonnull
     Optional<PlayerStatus> findByName(@Nonnull final String name);
+
+    @Nonnull
+    PlayerStatus getDefaultNewUserPlayerStatus();
 }
