@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity implements Comparable<Booking> {
@@ -122,21 +121,6 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
             opponents.get(i).removeOpponentBooking(this);
         }
         opponents.clear();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Booking booking = (Booking) o;
-        return Objects.equals(timeslot, booking.timeslot) &&
-                Objects.equals(court, booking.court) &&
-                Objects.equals(date, booking.date);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(court, timeslot, date);
     }
 
     @Override

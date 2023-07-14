@@ -10,7 +10,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity(name = "player_status")
 public class PlayerStatus extends AbstractEntity {
@@ -75,20 +74,5 @@ public class PlayerStatus extends AbstractEntity {
 
     public void setBookableDaysInAdvance(final int bookableDaysInAdvance) {
         this.bookableDaysInAdvance = bookableDaysInAdvance;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final PlayerStatus that = (PlayerStatus) o;
-        return bookingsPerDay == that.bookingsPerDay &&
-                bookableDaysInAdvance == that.bookableDaysInAdvance &&
-                Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, bookingsPerDay, bookableDaysInAdvance);
     }
 }
