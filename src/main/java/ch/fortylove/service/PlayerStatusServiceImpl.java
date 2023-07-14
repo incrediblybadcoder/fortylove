@@ -2,6 +2,7 @@ package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PlayerStatusServiceImpl implements PlayerStatusService {
+
+    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = "aktiv";
 
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
@@ -32,5 +35,15 @@ public class PlayerStatusServiceImpl implements PlayerStatusService {
     @Override
     public Optional<PlayerStatus> findByName(@Nonnull final String name) {
         return Optional.ofNullable(playerStatusRepository.findByName(name));
+    }
+
+    @Nonnull
+    @Override
+    public PlayerStatus getDefaultNewUserPlayerStatus() {
+        final Optional<PlayerStatus> playerStatus = this.findByName(DEFAULT_PLAYER_STATUS_FOR_NEW_USER);
+        if (playerStatus.isPresent()) {
+            return playerStatus.get();
+        }
+        throw new RecordNotFoundException("PlayerStatus " + DEFAULT_PLAYER_STATUS_FOR_NEW_USER + " not found");
     }
 }

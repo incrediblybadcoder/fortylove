@@ -154,7 +154,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User("", "", "", "", true, null, null));
+        createNewUser(new User("", "", "", "", true, roleService.getDefaultNewUserRole(), playerStatusService.getDefaultNewUserPlayerStatus()));
     }
 
     private void createNewUser(final User user) {
