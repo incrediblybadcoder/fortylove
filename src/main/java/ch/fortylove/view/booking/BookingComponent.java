@@ -54,7 +54,6 @@ public class BookingComponent extends VerticalLayout {
 
         setSpacing(false);
         setPadding(false);
-        setHeightFull();
 
         constructUI();
     }

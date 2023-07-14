@@ -13,9 +13,10 @@ import ch.fortylove.view.booking.grid.events.FreeCellClickEvent;
 import ch.fortylove.view.booking.grid.util.CourtUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class BookingGridComponent extends Grid<Court> {
         timeslots.forEach(timeslot ->
                 addComponentColumn(court -> createBookingComponent(court, timeslot))
                         .setHeader(timeslot.getStartTime().toString())
+                        .setTextAlign(ColumnTextAlign.CENTER)
                         .setVisible(timeslot.getBookable())
         );
     }
@@ -57,12 +59,11 @@ public class BookingGridComponent extends Grid<Court> {
                                                         @Nonnull final Timeslot timeslot) {
         final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeslot);
 
-
         if (booking.isPresent()) {
-            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeslot, booking.get()));
+            final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeslot, booking.get()));
             return new BookedCellComponent(booking.get(), clickListener);
         } else {
-            final ComponentEventListener<ClickEvent<HorizontalLayout>> clickListener = event -> fireEvent(new FreeCellClickEvent(this, court, timeslot));
+            final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener = event -> fireEvent(new FreeCellClickEvent(this, court, timeslot));
             return new FreeCellComponent(clickListener);
         }
     }
