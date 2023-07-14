@@ -10,12 +10,12 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SpringTest
-class TestPrivilegeServiceImpl extends ServiceTest {
+class TestPrivilegeService extends ServiceTest {
 
-    @Nonnull private final PrivilegeServiceImpl testee;
+    @Nonnull private final PrivilegeService testee;
 
     @Autowired
-    public TestPrivilegeServiceImpl(@Nonnull final PrivilegeServiceImpl testee) {
+    public TestPrivilegeService(@Nonnull final PrivilegeService testee) {
         this.testee = testee;
     }
 

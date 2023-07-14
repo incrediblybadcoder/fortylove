@@ -2,7 +2,7 @@ package ch.fortylove.configuration.setupdata.data;
 
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.service.PlayerStatusServiceImpl;
+import ch.fortylove.service.PlayerStatusService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,10 +17,10 @@ public class PlayerStatusSetupData {
     @Nonnull public static final String TURNIER = "turnier";
     @Nonnull public static final String INAKTIV = "inaktiv";
 
-    @Nonnull private final PlayerStatusServiceImpl playerStatusService;
+    @Nonnull private final PlayerStatusService playerStatusService;
 
     @Autowired
-    public PlayerStatusSetupData(@Nonnull final PlayerStatusServiceImpl playerStatusService) {
+    public PlayerStatusSetupData(@Nonnull final PlayerStatusService playerStatusService) {
         this.playerStatusService = playerStatusService;
     }
 

@@ -1,7 +1,7 @@
 package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.service.PlayerStatusServiceImpl;
+import ch.fortylove.service.PlayerStatusService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,10 +13,10 @@ public class PlayerStatusTestDataFactory {
 
     public static final String DEFAULT_PLAYER_STATUS = "default_player_status";
 
-    @Nonnull private final PlayerStatusServiceImpl playerStatusService;
+    @Nonnull private final PlayerStatusService playerStatusService;
 
     @Autowired
-    public PlayerStatusTestDataFactory(@Nonnull final PlayerStatusServiceImpl playerStatusService) {
+    public PlayerStatusTestDataFactory(@Nonnull final PlayerStatusService playerStatusService) {
         this.playerStatusService = playerStatusService;
     }
 

@@ -20,12 +20,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class BookingServiceImpl {
+public class BookingService {
 
     @Nonnull private final BookingRepository bookingRepository;
 
     @Autowired
-    public BookingServiceImpl(@Nonnull final BookingRepository bookingRepository) {
+    public BookingService(@Nonnull final BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
     }
 

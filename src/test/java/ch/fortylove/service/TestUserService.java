@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringTest
-class TestUserServiceImpl extends ServiceTest {
+class TestUserService extends ServiceTest {
 
-    @Nonnull private final UserServiceImpl testee;
+    @Nonnull private final UserService testee;
 
     @Nonnull private Role role;
     @Nonnull private PlayerStatus playerStatus;
 
     @Autowired
-    public TestUserServiceImpl(@Nonnull final UserServiceImpl testee) {
+    public TestUserService(@Nonnull final UserService testee) {
         this.testee = testee;
     }
 

@@ -14,14 +14,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class RoleServiceImpl {
+public class RoleService {
 
     @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = "ROLE_USER";
 
     @Nonnull private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleServiceImpl(@Nonnull final RoleRepository roleRepository) {
+    public RoleService(@Nonnull final RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
@@ -41,7 +41,7 @@ public class RoleServiceImpl {
     @Nonnull
     public List<Role> getDefaultNewUserRole() {
         final List<Role> roles = new ArrayList<>();
-        final Optional<Role> role = this.findByName(RoleServiceImpl.DEFAULT_ROLE_FOR_NEW_USER);
+        final Optional<Role> role = this.findByName(RoleService.DEFAULT_ROLE_FOR_NEW_USER);
         role.ifPresent(roles::add);
         return roles;
     }

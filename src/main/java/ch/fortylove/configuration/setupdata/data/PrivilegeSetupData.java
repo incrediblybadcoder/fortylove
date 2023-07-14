@@ -2,7 +2,7 @@ package ch.fortylove.configuration.setupdata.data;
 
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.service.PrivilegeServiceImpl;
+import ch.fortylove.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +16,10 @@ public class PrivilegeSetupData {
     @Nonnull public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
     @Nonnull public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
-    @Nonnull private final PrivilegeServiceImpl privilegeService;
+    @Nonnull private final PrivilegeService privilegeService;
 
     @Autowired
-    public PrivilegeSetupData(@Nonnull final PrivilegeServiceImpl privilegeService) {
+    public PrivilegeSetupData(@Nonnull final PrivilegeService privilegeService) {
         this.privilegeService = privilegeService;
     }
 

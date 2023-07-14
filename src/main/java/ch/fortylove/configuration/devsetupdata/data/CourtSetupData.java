@@ -3,7 +3,7 @@ package ch.fortylove.configuration.devsetupdata.data;
 import ch.fortylove.configuration.devsetupdata.DevSetupData;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtType;
-import ch.fortylove.service.CourtServiceImpl;
+import ch.fortylove.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +18,10 @@ public class CourtSetupData {
     private static final String[] NAMES = {"Becker", "Federer", "McEnroe", "Nadal", "Agassi", "Borg"};
     private static final CourtType[] COURT_TYPES = {CourtType.CLAY, CourtType.CLAY, CourtType.GRASS, CourtType.GRASS, CourtType.HARD, CourtType.SYNTHETIC};
 
-    @Nonnull private final CourtServiceImpl courtService;
+    @Nonnull private final CourtService courtService;
 
     @Autowired
-    public CourtSetupData(@Nonnull final CourtServiceImpl courtService) {
+    public CourtSetupData(@Nonnull final CourtService courtService) {
         this.courtService = courtService;
     }
 

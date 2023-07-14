@@ -17,14 +17,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CourtServiceImpl {
+public class CourtService {
 
     @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
 
     @Autowired
-    public CourtServiceImpl(@Nonnull final EntityManager entityManager,
-                            @Nonnull final CourtRepository courtRepository) {
+    public CourtService(@Nonnull final EntityManager entityManager,
+                        @Nonnull final CourtRepository courtRepository) {
         this.entityManager = entityManager;
         this.courtRepository = courtRepository;
     }

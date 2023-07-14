@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserServiceImpl {
+public class UserService {
 
     @Nonnull private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(@Nonnull final UserRepository userRepository) {
+    public UserService(@Nonnull final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

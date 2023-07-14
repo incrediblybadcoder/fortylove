@@ -12,13 +12,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PlayerStatusServiceImpl {
+public class PlayerStatusService {
 
     @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = "aktiv";
 
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
-    public PlayerStatusServiceImpl(@Nonnull final PlayerStatusRepository playerStatusRepository) {
+    public PlayerStatusService(@Nonnull final PlayerStatusRepository playerStatusRepository) {
         this.playerStatusRepository = playerStatusRepository;
     }
 

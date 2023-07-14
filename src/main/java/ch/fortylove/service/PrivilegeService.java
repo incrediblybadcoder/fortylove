@@ -13,12 +13,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PrivilegeServiceImpl {
+public class PrivilegeService {
 
     @Nonnull private final PrivilegeRepository privilegeRepository;
 
     @Autowired
-    public PrivilegeServiceImpl(@Nonnull final PrivilegeRepository privilegeRepository) {
+    public PrivilegeService(@Nonnull final PrivilegeRepository privilegeRepository) {
         this.privilegeRepository = privilegeRepository;
     }
 

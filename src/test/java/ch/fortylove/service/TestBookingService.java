@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringTest
-class TestBookingServiceImpl extends ServiceTest {
+class TestBookingService extends ServiceTest {
 
-    @Nonnull private final BookingServiceImpl testee;
+    @Nonnull private final BookingService testee;
 
     @Nonnull private Court court;
     @Nonnull private User owner;
@@ -28,7 +28,7 @@ class TestBookingServiceImpl extends ServiceTest {
     @Nonnull private BookingSettings bookingSettings;
 
     @Autowired
-    public TestBookingServiceImpl(@Nonnull final BookingServiceImpl testee) {
+    public TestBookingService(@Nonnull final BookingService testee) {
         this.testee = testee;
     }
 

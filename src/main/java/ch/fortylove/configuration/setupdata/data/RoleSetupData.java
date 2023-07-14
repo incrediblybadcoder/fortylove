@@ -3,8 +3,8 @@ package ch.fortylove.configuration.setupdata.data;
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
-import ch.fortylove.service.PrivilegeServiceImpl;
-import ch.fortylove.service.RoleServiceImpl;
+import ch.fortylove.service.PrivilegeService;
+import ch.fortylove.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +20,12 @@ public class RoleSetupData {
     @Nonnull public static final String ROLE_STAFF = "ROLE_STAFF";
     @Nonnull public static final String ROLE_USER = "ROLE_USER";
 
-    @Nonnull private final RoleServiceImpl roleService;
-    @Nonnull private final PrivilegeServiceImpl privilegeService;
+    @Nonnull private final RoleService roleService;
+    @Nonnull private final PrivilegeService privilegeService;
 
     @Autowired
-    public RoleSetupData(@Nonnull final RoleServiceImpl roleService,
-                         @Nonnull final PrivilegeServiceImpl privilegeService) {
+    public RoleSetupData(@Nonnull final RoleService roleService,
+                         @Nonnull final PrivilegeService privilegeService) {
         this.roleService = roleService;
         this.privilegeService = privilegeService;
     }

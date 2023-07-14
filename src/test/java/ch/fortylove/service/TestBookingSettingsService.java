@@ -12,15 +12,15 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @SpringTest
-class TestBookingSettingsServiceImpl extends ServiceTest {
+class TestBookingSettingsService extends ServiceTest {
 
-    @Nonnull private final BookingSettingsServiceImpl testee;
+    @Nonnull private final BookingSettingsService testee;
 
     @Nonnull private List<Timeslot> timeslotsAllBookable;
     @Nonnull private List<Timeslot> timeslotsNonBookable;
 
     @Autowired
-    public TestBookingSettingsServiceImpl(@Nonnull final BookingSettingsServiceImpl testee) {
+    public TestBookingSettingsService(@Nonnull final BookingSettingsService testee) {
         this.testee = testee;
     }
 

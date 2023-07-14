@@ -2,7 +2,7 @@ package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
-import ch.fortylove.service.RoleServiceImpl;
+import ch.fortylove.service.RoleService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,11 +16,11 @@ public class RoleTestDataFactory {
 
     @Nonnull public static final String DEFAULT_ROLE = "default_role";
 
-    @Nonnull private final RoleServiceImpl roleService;
+    @Nonnull private final RoleService roleService;
     @Nonnull private final PrivilegeTestDataFactory privilegeTestDataFactory;
 
     @Autowired
-    public RoleTestDataFactory(@Nonnull final RoleServiceImpl roleService,
+    public RoleTestDataFactory(@Nonnull final RoleService roleService,
                                @Nonnull final PrivilegeTestDataFactory privilegeTestDataFactory) {
         this.roleService = roleService;
         this.privilegeTestDataFactory = privilegeTestDataFactory;

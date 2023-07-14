@@ -1,7 +1,7 @@
 package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.service.PrivilegeServiceImpl;
+import ch.fortylove.service.PrivilegeService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,10 +13,10 @@ public class PrivilegeTestDataFactory {
 
     @Nonnull public static final String DEFAULT_PRIVILEGE = "default_privilege";
 
-    @Nonnull private final PrivilegeServiceImpl privilegeService;
+    @Nonnull private final PrivilegeService privilegeService;
 
     @Autowired
-    public PrivilegeTestDataFactory(@Nonnull final PrivilegeServiceImpl privilegeService) {
+    public PrivilegeTestDataFactory(@Nonnull final PrivilegeService privilegeService) {
         this.privilegeService = privilegeService;
     }
 

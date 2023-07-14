@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @Transactional
-public class BookingSettingsServiceImpl {
+public class BookingSettingsService {
 
     @Nonnull private final BookingSettingsRepository bookingSettingsRepository;
 
     @Autowired
-    public BookingSettingsServiceImpl(@Nonnull final BookingSettingsRepository bookingSettingsRepository) {
+    public BookingSettingsService(@Nonnull final BookingSettingsRepository bookingSettingsRepository) {
         this.bookingSettingsRepository = bookingSettingsRepository;
     }
 

@@ -3,7 +3,7 @@ package ch.fortylove.security;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.service.UserServiceImpl;
+import ch.fortylove.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +22,10 @@ import java.util.List;
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Nonnull private final UserServiceImpl userService;
+    @Nonnull private final UserService userService;
 
     @Autowired
-    public UserDetailsServiceImpl(@Nonnull final UserServiceImpl userService) {
+    public UserDetailsServiceImpl(@Nonnull final UserService userService) {
         super();
         this.userService = userService;
     }
