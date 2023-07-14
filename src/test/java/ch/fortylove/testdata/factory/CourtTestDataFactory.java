@@ -23,7 +23,7 @@ public class CourtTestDataFactory {
 
     @Nonnull
     public Court createCourt() {
-        return courtService.create(new Court(CourtType.CLAY, false));
+        return courtService.create(new Court(CourtType.CLAY, 0, "name"));
     }
 
     @Nonnull

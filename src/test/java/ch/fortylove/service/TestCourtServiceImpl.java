@@ -22,7 +22,7 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
         Assertions.assertTrue(foundCourt.isPresent());
@@ -31,7 +31,7 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testFindById_notExists() {
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId() + 1L);
 
@@ -40,8 +40,8 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court(CourtType.CLAY, false));
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        testee.create(new Court(CourtType.CLAY, 0, "name"));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
 

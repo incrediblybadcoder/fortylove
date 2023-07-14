@@ -14,6 +14,9 @@ import java.util.Optional;
 public class CourtSetupData {
 
     public static final long[] COURT_IDS = {1L, 2L, 3L, 4L, 5L, 6L};
+    private static final int[] NUMBERS = {1, 2, 3, 4, 5, 6};
+    private static final String[] NAMES = {"Becker", "Federer", "McEnroe", "Nadal", "Agassi", "Borg"};
+    private static final CourtType[] COURT_TYPES = {CourtType.CLAY, CourtType.CLAY, CourtType.GRASS, CourtType.GRASS, CourtType.HARD, CourtType.SYNTHETIC};
 
     @Nonnull private final CourtService courtService;
 
@@ -23,19 +26,20 @@ public class CourtSetupData {
     }
 
     public void createCourts() {
-        for (final long courtId : COURT_IDS) {
-            createCourtIfNotFound(courtId, CourtType.CLAY, false);
+        for (int i = 0; i < COURT_IDS.length; i++) {
+            createCourtIfNotFound(COURT_IDS[i], COURT_TYPES[i], NUMBERS[i], NAMES[i]);
         }
     }
 
     @Transactional
     void createCourtIfNotFound(final long id,
-                               final CourtType courtType,
-                               final boolean hasBallMachine) {
+                               @Nonnull final CourtType courtType,
+                               final int number,
+                               @Nonnull final String name) {
         final Optional<Court> court = courtService.findById(id);
 
         if (court.isEmpty()) {
-            courtService.create(new Court(courtType, hasBallMachine));
+            courtService.create(new Court(courtType, number, name));
         }
     }
 }

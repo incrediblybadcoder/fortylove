@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -24,8 +25,12 @@ public class Court extends AbstractEntity {
     @Column(name = "court_type")
     private CourtType courtType;
 
-    @Column(name = "has_ball_machine")
-    private boolean hasBallMachine;
+    @PositiveOrZero
+    @Column(name = "number")
+    private int number;
+
+    @Column(name = "name")
+    private String name;
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filter(name = "bookingDateFilter")
@@ -36,9 +41,11 @@ public class Court extends AbstractEntity {
     }
 
     public Court(@Nonnull final CourtType courtType,
-                 final boolean hasBallMachine) {
+                 final int number,
+                 final String name) {
         this.courtType = courtType;
-        this.hasBallMachine = hasBallMachine;
+        this.number = number;
+        this.name = name;
     }
 
     @Nonnull
@@ -50,12 +57,20 @@ public class Court extends AbstractEntity {
         this.courtType = courtType;
     }
 
-    public boolean isHasBallMachine() {
-        return hasBallMachine;
+    public int getNumber() {
+        return number;
     }
 
-    public void setHasBallMachine(final boolean hasBallMachine) {
-        this.hasBallMachine = hasBallMachine;
+    public void setNumber(final int number) {
+        this.number = number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     @Nonnull
@@ -72,14 +87,14 @@ public class Court extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Court court = (Court) o;
-        return getId().equals(court.getId()) &&
-                hasBallMachine == court.hasBallMachine
-                && courtType == court.courtType;
+        return number == court.number &&
+                courtType == court.courtType &&
+                Objects.equals(name, court.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), courtType, hasBallMachine);
+        return Objects.hash(courtType, number, name);
     }
 
     public void addBooking(@Nonnull final Booking booking) {
@@ -89,6 +104,6 @@ public class Court extends AbstractEntity {
 
     @Nonnull
     public String getIdentifier() {
-        return "Platz " + getId();
+        return "Platz " + getNumber() + " " + getName();
     }
 }
