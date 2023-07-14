@@ -9,6 +9,7 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 @MappedSuperclass
 public abstract class AbstractEntity {
@@ -43,5 +44,18 @@ public abstract class AbstractEntity {
 
     public int getVersion() {
         return version;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AbstractEntity abstractEntity = (AbstractEntity) o;
+        return Objects.equals(getId(), abstractEntity.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

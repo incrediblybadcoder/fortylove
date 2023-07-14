@@ -6,7 +6,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Entity(name = "timeslots")
 public class Timeslot extends AbstractEntity {
@@ -64,19 +63,5 @@ public class Timeslot extends AbstractEntity {
 
     public String getTimeIntervalText() {
         return getStartTime() + " - " + getEndTime();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Timeslot timeslot = (Timeslot) o;
-        return bookable == timeslot.bookable &&
-                index == timeslot.index;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bookable, index);
     }
 }

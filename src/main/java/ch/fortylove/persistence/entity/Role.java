@@ -11,7 +11,6 @@ import jakarta.validation.constraints.NotNull;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
@@ -64,19 +63,5 @@ public class Role extends AbstractEntity {
 
     public void setPrivileges(@Nonnull final List<Privilege> privileges) {
         this.privileges = privileges;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Role role = (Role) o;
-        return Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, users);
     }
 }
