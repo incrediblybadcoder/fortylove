@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -39,8 +39,8 @@ public class RoleService {
     }
 
     @Nonnull
-    public List<Role> getDefaultNewUserRole() {
-        final List<Role> roles = new ArrayList<>();
+    public Set<Role> getDefaultNewUserRoles() {
+        final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = this.findByName(RoleService.DEFAULT_ROLE_FOR_NEW_USER);
         role.ifPresent(roles::add);
         return roles;

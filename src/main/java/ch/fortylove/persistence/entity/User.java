@@ -14,7 +14,9 @@ import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -43,7 +45,7 @@ public class User extends AbstractEntity {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> ownerBookings = new ArrayList<>();
@@ -65,7 +67,7 @@ public class User extends AbstractEntity {
                 @Nonnull final String email,
                 @Nonnull final String password,
                 final boolean enabled,
-                @Nonnull final List<Role> roles,
+                @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
         super(UUID.randomUUID());
         this.firstName = firstName;
@@ -119,11 +121,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 
