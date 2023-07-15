@@ -61,7 +61,7 @@ public class BookingDialog extends Dialog {
         dialogLayout.setPadding(false);
 
         final TextField courtField = new TextField("Platz");
-        courtField.setValue(String.valueOf(court.getId()));
+        courtField.setValue(court.getIdentifier());
         courtField.setReadOnly(true);
 
         final TextField dateField = new TextField("Zeit / Datum");
@@ -69,14 +69,19 @@ public class BookingDialog extends Dialog {
         dateField.setReadOnly(true);
 
         final TextField ownerField = new TextField("Spieler");
-        ownerField.setValue(owner.getFirstName());
+        ownerField.setValue(owner.getFullName());
         ownerField.setReadOnly(true);
 
         opponentComboBox = new ComboBox<>("Gegenspieler");
         opponentComboBox.setItems(possibleOpponents);
-        opponentComboBox.setItemLabelGenerator(User::getFirstName);
+        opponentComboBox.setItemLabelGenerator(User::getFullName);
+        opponentComboBox.setRequired(true);
+        opponentComboBox.setRequiredIndicatorVisible(true);
+        opponentComboBox.addFocusListener(event -> validateOpponentSelection(opponentComboBox.getValue()));
+        opponentComboBox.addValueChangeListener(event -> validateOpponentSelection(event.getValue()));
+        opponentComboBox.focus();
 
-        Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
+        final Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         getHeader().add(closeButton);
 
@@ -92,6 +97,12 @@ public class BookingDialog extends Dialog {
 
         dialogLayout.add(courtField, dateField, ownerField, opponentComboBox);
         add(dialogLayout);
+    }
+
+    private void validateOpponentSelection(@Nullable final User user) {
+        boolean isOpponentSelectionValid = user != null;
+        newButton.setEnabled(isOpponentSelectionValid);
+        modifyButton.setEnabled(isOpponentSelectionValid);
     }
 
     @Nonnull
