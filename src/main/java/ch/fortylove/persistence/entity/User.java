@@ -13,9 +13,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,10 +46,10 @@ public class User extends AbstractEntity {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> ownerBookings = new ArrayList<>();
+    private Set<Booking> ownerBookings = new HashSet<>();
 
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Booking> opponentBookings = new ArrayList<>();
+    private Set<Booking> opponentBookings = new HashSet<>();
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -138,20 +136,20 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Booking> getOwnerBookings() {
+    public Set<Booking> getOwnerBookings() {
         return ownerBookings;
     }
 
-    public void setOwnerBookings(@Nonnull final List<Booking> ownerBookings) {
+    public void setOwnerBookings(@Nonnull final Set<Booking> ownerBookings) {
         this.ownerBookings = ownerBookings;
     }
 
     @Nonnull
-    public List<Booking> getOpponentBookings() {
+    public Set<Booking> getOpponentBookings() {
         return opponentBookings;
     }
 
-    public void setOpponentBookings(@Nonnull final List<Booking> opponentBookings) {
+    public void setOpponentBookings(@Nonnull final Set<Booking> opponentBookings) {
         this.opponentBookings = opponentBookings;
     }
 
