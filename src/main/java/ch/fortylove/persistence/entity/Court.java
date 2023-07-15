@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "courts")
 @FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "date = :date")
@@ -42,7 +43,7 @@ public class Court extends AbstractEntity {
     public Court(@Nonnull final CourtType courtType,
                  final int number,
                  final String name) {
-        this();
+        super(UUID.randomUUID());
         this.courtType = courtType;
         this.number = number;
         this.name = name;

@@ -22,8 +22,11 @@ public abstract class AbstractEntity {
     @Column(name = "version")
     private int version;
 
-    public AbstractEntity() {
-        id = UUID.randomUUID();
+    protected AbstractEntity() {
+    }
+
+    protected AbstractEntity(@Nonnull final UUID id) {
+        this.id = id;
     }
 
     @Nonnull

@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
@@ -33,7 +34,7 @@ public class Role extends AbstractEntity {
 
     public Role(@Nonnull final String name,
                 @Nonnull final List<Privilege> privileges) {
-        this();
+        super(UUID.randomUUID());
         this.name = name;
         this.privileges = privileges;
     }

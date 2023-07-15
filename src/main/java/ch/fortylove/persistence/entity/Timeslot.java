@@ -6,6 +6,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity(name = "timeslots")
 public class Timeslot extends AbstractEntity {
@@ -26,7 +27,7 @@ public class Timeslot extends AbstractEntity {
 
     public Timeslot(final boolean bookable,
                     final int index) {
-        this();
+        super(UUID.randomUUID());
         this.bookable = bookable;
         this.index = index;
     }

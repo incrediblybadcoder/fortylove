@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity implements Comparable<Booking> {
@@ -52,7 +53,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
                    @Nonnull final List<User> opponents,
                    @Nonnull final Timeslot timeslot,
                    @Nonnull final LocalDate date) {
-        this();
+        super(UUID.randomUUID());
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;

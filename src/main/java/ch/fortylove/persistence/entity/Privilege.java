@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
@@ -25,7 +26,7 @@ public class Privilege extends AbstractEntity {
     }
 
     public Privilege(@Nonnull final String name) {
-        this();
+        super(UUID.randomUUID());
         this.name = name;
     }
 
