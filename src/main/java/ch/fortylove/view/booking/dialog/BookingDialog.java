@@ -69,7 +69,7 @@ public class BookingDialog extends Dialog {
         dateField.setReadOnly(true);
 
         final TextField ownerField = new TextField("Spieler");
-        ownerField.setValue(owner.getFirstName());
+        ownerField.setValue(owner.getFullName());
         ownerField.setReadOnly(true);
 
         opponentComboBox = new ComboBox<>("Gegenspieler");
