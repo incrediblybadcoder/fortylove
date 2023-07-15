@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "users")
 public class User extends AbstractEntity {
@@ -66,7 +67,7 @@ public class User extends AbstractEntity {
                 final boolean enabled,
                 @Nonnull final List<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
-        this();
+        super(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
