@@ -7,7 +7,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.SortedSet;
 
 @SpringComponent
 public class BookingSettingsTestDataFactory {
@@ -23,7 +23,7 @@ public class BookingSettingsTestDataFactory {
     }
 
     @Nonnull
-    public BookingSettings createBookingSettings(@Nonnull final List<Timeslot> timeslots) {
+    public BookingSettings createBookingSettings(@Nonnull final SortedSet<Timeslot> timeslots) {
         return bookingSettingsService.create(new BookingSettings(timeslots));
     }
 

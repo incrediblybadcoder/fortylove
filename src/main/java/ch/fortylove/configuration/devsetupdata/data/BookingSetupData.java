@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
@@ -42,7 +43,7 @@ public class BookingSetupData {
     }
 
     public void createBookings() {
-        final List<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
+        final SortedSet<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         final List<Court> courts = courtService.findAll();
         createBookingsToday(courts, timeslots);
         createBookingsYesterday(courts, timeslots);
@@ -50,7 +51,7 @@ public class BookingSetupData {
     }
 
     private void createBookingsToday(@Nonnull final List<Court> courts,
-                                     @Nonnull final List<Timeslot> timeslots) {
+                                     @Nonnull final SortedSet<Timeslot> timeslots) {
         final LocalDate today = LocalDate.now();
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
@@ -96,8 +97,8 @@ public class BookingSetupData {
         createBookings(courts, bookings);
     }
 
-    private void createBookingsYesterday(final List<Court> courts,
-                                         @Nonnull final List<Timeslot> timeslots) {
+    private void createBookingsYesterday(@Nonnull final List<Court> courts,
+                                         @Nonnull final SortedSet<Timeslot> timeslots) {
         final LocalDate yesterday = LocalDate.now().minusDays(1);
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
@@ -136,8 +137,8 @@ public class BookingSetupData {
         createBookings(courts, bookings);
     }
 
-    private void createBookingsTomorrow(final List<Court> courts,
-                                        @Nonnull final List<Timeslot> timeslots) {
+    private void createBookingsTomorrow(@Nonnull final List<Court> courts,
+                                        @Nonnull final SortedSet<Timeslot> timeslots) {
         final LocalDate tomorrow = LocalDate.now().plusDays(1);
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
@@ -181,7 +182,7 @@ public class BookingSetupData {
     }
 
     @Nonnull
-    private Optional<Timeslot> getTimeslot(@Nonnull final List<Timeslot> timeslots,
+    private Optional<Timeslot> getTimeslot(@Nonnull final SortedSet<Timeslot> timeslots,
                                            final int index) {
         for (final Timeslot timeslot : timeslots) {
             if (timeslot.getIndex() == index) {
@@ -201,6 +202,7 @@ public class BookingSetupData {
         return opponentsList;
     }
 
+    @Nonnull
     private User getOwner(@Nonnull final String owner) {
         return userService.findByEmail(owner).get();
     }

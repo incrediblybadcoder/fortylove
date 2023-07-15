@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,34 +74,45 @@ public class BookingService {
 
     @Nonnull
     public ValidationResult isBookingModifiableOnDate(@Nonnull final Booking booking) {
-        if (isInPast(booking.getDate(), booking.getTimeslot())) {
-            return ValidationResult.failure("Datum liegt in der Vergangenheit");
-        }
-
-        return ValidationResult.success();
+        return isBookingModifiableOnDateInternal(booking, LocalDateTime.now());
     }
 
     @Nonnull
-    public ValidationResult isBookingCreatableOnDate(@Nonnull final Court court,
-                                                     @Nonnull final Timeslot timeslot,
-                                                     @Nonnull final LocalDate date) {
-        if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
-            return ValidationResult.failure("Duplikate Buchung");
-        }
-        if (isInPast(date, timeslot)) {
+    protected ValidationResult isBookingModifiableOnDateInternal(@Nonnull final Booking booking,
+                                                                 @Nonnull final LocalDateTime currentDateTime) {
+        if (isInPast(currentDateTime, booking.getDate(), booking.getTimeslot())) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }
 
         return ValidationResult.success();
     }
 
-    private boolean isInPast(@Nonnull final LocalDate date,
+    public ValidationResult isBookingCreatableOnDate(@Nonnull final Court court,
+                                                     @Nonnull final Timeslot timeslot,
+                                                     @Nonnull final LocalDate date) {
+        return isBookingCreatableOnDateInternal(court, timeslot, date, LocalDateTime.now());
+    }
+
+    @Nonnull
+    protected ValidationResult isBookingCreatableOnDateInternal(@Nonnull final Court court,
+                                                                @Nonnull final Timeslot timeslot,
+                                                                @Nonnull final LocalDate date,
+                                                                @Nonnull final LocalDateTime currentDateTime) {
+        if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
+            return ValidationResult.failure("Duplikate Buchung");
+        }
+        if (isInPast(currentDateTime, date, timeslot)) {
+            return ValidationResult.failure("Datum liegt in der Vergangenheit");
+        }
+
+        return ValidationResult.success();
+    }
+
+    private boolean isInPast(@Nonnull final LocalDateTime currentDateTime,
+                             @Nonnull final LocalDate date,
                              @Nonnull final Timeslot timeslot) {
-        final LocalDate today = LocalDate.now();
-        final boolean isPastDate = date.isBefore(today);
-        final boolean isToday = date.equals(today);
-        final boolean isPastTime = LocalTime.now().isAfter(timeslot.getStartTime());
-        return isPastDate || (isToday && isPastTime);
+        final LocalDateTime bookingDateTime = LocalDateTime.of(date, timeslot.getStartTime());
+        return bookingDateTime.isBefore(currentDateTime);
     }
 
     @Nonnull
