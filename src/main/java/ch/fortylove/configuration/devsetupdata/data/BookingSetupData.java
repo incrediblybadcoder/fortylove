@@ -14,9 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -191,8 +192,8 @@ public class BookingSetupData {
     }
 
     @Nonnull
-    private List<User> getOpponents(@Nonnull final String... opponents) {
-        final ArrayList<User> opponentsList = new ArrayList<>();
+    private Set<User> getOpponents(@Nonnull final String... opponents) {
+        final Set<User> opponentsList = new HashSet<>();
         for (final String opponent : opponents) {
             userService.findByEmail(opponent).ifPresent(opponentsList::add);
         }
@@ -207,7 +208,7 @@ public class BookingSetupData {
     @Transactional
     void createBookingIfNotFound(@Nonnull final Court court,
                                  @Nonnull final User player,
-                                 @Nonnull final List<User> partners,
+                                 @Nonnull final Set<User> partners,
                                  @Nonnull final LocalDate date,
                                  @Nonnull final Timeslot timeslot) {
         final List<Booking> bookingDTOs = bookingService.findAllByCourtId(court.getId());

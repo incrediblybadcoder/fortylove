@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringTest
 class TestBookingService extends ServiceTest {
@@ -42,7 +43,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+        final Booking booking = new Booking(court, owner, Set.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
 
         final Booking createdBooking = testee.create(booking);
 
@@ -53,7 +54,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testCreate_duplicateRecordException() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+        final Booking booking = new Booking(court, owner, Set.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
         testee.create(booking);
 
         Assertions.assertThrows(DuplicateRecordException.class, () -> testee.create(booking));
@@ -63,9 +64,9 @@ class TestBookingService extends ServiceTest {
     public void testFindAllByCourtId_exists() {
         final Court court1 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Court court2 = getTestDataFactory().getCourtDataFactory().createCourt();
-        final Booking booking1 = testee.create(new Booking(court1, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now()));
-        final Booking booking2 = testee.create(new Booking(court2, owner, List.of(opponent), bookingSettings.getTimeslots().get(1), LocalDate.now().plusDays(1)));
-        final Booking booking3 = testee.create(new Booking(court2, owner, List.of(opponent), bookingSettings.getTimeslots().get(2), LocalDate.now().plusDays(2)));
+        final Booking booking1 = testee.create(new Booking(court1, owner, Set.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        final Booking booking2 = testee.create(new Booking(court2, owner, Set.of(opponent), bookingSettings.getTimeslots().get(1), LocalDate.now().plusDays(1)));
+        final Booking booking3 = testee.create(new Booking(court2, owner, Set.of(opponent), bookingSettings.getTimeslots().get(2), LocalDate.now().plusDays(2)));
 
         final List<Booking> foundBookings = testee.findAllByCourtId(court2.getId());
 
@@ -81,9 +82,9 @@ class TestBookingService extends ServiceTest {
         final Court court1 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Court court2 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Court court3 = getTestDataFactory().getCourtDataFactory().createCourt();
-        testee.create(new Booking(court1, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now()));
-        testee.create(new Booking(court2, owner, List.of(opponent), bookingSettings.getTimeslots().get(1), LocalDate.now().plusDays(1)));
-        testee.create(new Booking(court2, owner, List.of(opponent), bookingSettings.getTimeslots().get(2), LocalDate.now().plusDays(2)));
+        testee.create(new Booking(court1, owner, Set.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now()));
+        testee.create(new Booking(court2, owner, Set.of(opponent), bookingSettings.getTimeslots().get(1), LocalDate.now().plusDays(1)));
+        testee.create(new Booking(court2, owner, Set.of(opponent), bookingSettings.getTimeslots().get(2), LocalDate.now().plusDays(2)));
 
         final List<Booking> foundBookings = testee.findAllByCourtId(court3.getId());
 
@@ -92,7 +93,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testIsBookingModifiableOnDate_allowed() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now());
+        final Booking booking = new Booking(court, owner, Set.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now());
 
         final ValidationResult validationResult = testee.isBookingModifiableOnDate(booking);
 
@@ -101,7 +102,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testIsBookingModifiableOnDate_notAllowed_dateInPast() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now().minusDays(1));
+        final Booking booking = new Booking(court, owner, Set.of(opponent), bookingSettings.getTimeslots().get(Timeslot.getTotalNumberOfTimeSlots()-1), LocalDate.now().minusDays(1));
 
         final ValidationResult validationResult = testee.isBookingModifiableOnDate(booking);
 
@@ -124,7 +125,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testIsBookingCreatableOnDate_notAllowed_bookingExists() {
-        final Booking booking = new Booking(court, owner, List.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
+        final Booking booking = new Booking(court, owner, Set.of(opponent), bookingSettings.getTimeslots().get(0), LocalDate.now());
         testee.create(booking);
 
         final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, bookingSettings.getTimeslots().get(0), LocalDate.now());

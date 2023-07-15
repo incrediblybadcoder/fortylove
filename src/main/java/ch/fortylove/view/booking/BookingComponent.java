@@ -97,7 +97,7 @@ public class BookingComponent extends VerticalLayout {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-                bookingDialog.openExisting(booking.getOpponents().get(0), booking);
+                bookingDialog.openExisting(booking.getOpponents(), booking);
             }
         });
     }
