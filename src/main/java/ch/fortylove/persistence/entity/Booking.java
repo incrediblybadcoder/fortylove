@@ -41,7 +41,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     private Timeslot timeslot;
 
     @NotNull
-    @Column(name = "date")
+    @Column(name = "booking_date")
     private LocalDate date;
 
     protected Booking() {
