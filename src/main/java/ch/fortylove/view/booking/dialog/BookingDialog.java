@@ -77,6 +77,9 @@ public class BookingDialog extends Dialog {
         opponentComboBox.setItemLabelGenerator(User::getFullName);
         opponentComboBox.setRequired(true);
         opponentComboBox.setRequiredIndicatorVisible(true);
+        opponentComboBox.addFocusListener(event -> validateOpponentSelection(opponentComboBox.getValue()));
+        opponentComboBox.addValueChangeListener(event -> validateOpponentSelection(event.getValue()));
+        opponentComboBox.focus();
 
         final Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -94,6 +97,12 @@ public class BookingDialog extends Dialog {
 
         dialogLayout.add(courtField, dateField, ownerField, opponentComboBox);
         add(dialogLayout);
+    }
+
+    private void validateOpponentSelection(@Nullable final User user) {
+        boolean isOpponentSelectionValid = user != null;
+        newButton.setEnabled(isOpponentSelectionValid);
+        modifyButton.setEnabled(isOpponentSelectionValid);
     }
 
     @Nonnull
