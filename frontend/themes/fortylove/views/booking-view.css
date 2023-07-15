@@ -20,10 +20,6 @@
     justify-content: center;
 }
 
-.booking-view vaadin-avatar-group::part(container) {
-    justify-content: center;
-}
-
 @media (max-width: 600px) {
     .booking-view vaadin-avatar {
         width: var(--lumo-size-xs);

@@ -103,7 +103,8 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     }
 
     public void setOpponents(@Nonnull final Set<User> opponents) {
-        this.opponents = opponents;
+        removeAllOpponents();
+        opponents.forEach(this::addOpponent);
     }
 
     public void addOpponent(@Nonnull final User user) {
@@ -116,9 +117,9 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         user.getOpponentBookings().remove(this);
     }
 
-    public void removeOpponents() {
+    public void removeAllOpponents() {
         for (final User opponent : opponents) {
-            opponent.removeOpponentBooking(this);
+            opponent.getOpponentBookings().remove(this);
         }
         opponents.clear();
     }
@@ -134,5 +135,15 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     public String getIdentifier() {
         return court.getIdentifier() + ": " + timeslot.getTimeIntervalText() + " / " + getDateFormatted();
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "court=" + court +
+                ", owner=" + owner +
+                ", timeslot=" + timeslot +
+                ", date=" + date +
+                '}';
     }
 }
