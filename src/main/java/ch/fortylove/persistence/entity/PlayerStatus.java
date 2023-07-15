@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "player_status")
@@ -28,7 +28,7 @@ public class PlayerStatus extends AbstractEntity {
     private int bookableDaysInAdvance;
 
     @OneToMany(mappedBy = "playerStatus", fetch = FetchType.EAGER)
-    private List<User> users = new ArrayList<>();
+    private Set<User> users = new HashSet<>();
 
     protected PlayerStatus() {
         super();
@@ -53,11 +53,11 @@ public class PlayerStatus extends AbstractEntity {
     }
 
     @Nonnull
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<User> users) {
+    public void setUsers(@Nonnull final Set<User> users) {
         this.users = users;
     }
 
