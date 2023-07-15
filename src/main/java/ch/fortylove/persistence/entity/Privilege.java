@@ -7,8 +7,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "privileges")
@@ -19,7 +19,7 @@ public class Privilege extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     protected Privilege() {
         super();
@@ -40,11 +40,11 @@ public class Privilege extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 }
