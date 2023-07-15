@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @DevSetupData
 public class UserSetupData {
@@ -72,8 +72,8 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private List<Role> getAdminRole() {
-        final List<Role> roles = new ArrayList<>();
+    private Set<Role> getAdminRole() {
+        final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_ADMIN);
         role.ifPresent(roles::add);
 
@@ -81,8 +81,8 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private List<Role> getStaffRole() {
-        final List<Role> roles = new ArrayList<>();
+    private Set<Role> getStaffRole() {
+        final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_STAFF);
         role.ifPresent(roles::add);
 
@@ -90,8 +90,8 @@ public class UserSetupData {
     }
 
     @Nonnull
-    private List<Role> getUserRole() {
-        final List<Role> roles = new ArrayList<>();
+    private Set<Role> getUserRole() {
+        final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
 
@@ -103,7 +103,7 @@ public class UserSetupData {
                               @Nonnull final String firstName,
                               @Nonnull final String lastName,
                               @Nonnull final String password,
-                              @Nonnull final List<Role> Roles,
+                              @Nonnull final Set<Role> Roles,
                               @Nonnull final PlayerStatus playerStatus) {
         final Optional<User> user = userService.findByEmail(email);
 

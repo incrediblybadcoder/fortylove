@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public class BookingDialog extends Dialog {
 
@@ -135,8 +136,8 @@ public class BookingDialog extends Dialog {
     }
 
     @Nonnull
-    private List<User> getOpponents() {
-        return List.of(opponentComboBox.getValue());
+    private Set<User> getOpponents() {
+        return Set.of(opponentComboBox.getValue());
     }
 
     @Nonnull
@@ -163,7 +164,7 @@ public class BookingDialog extends Dialog {
         open();
     }
 
-    public void openExisting(@Nonnull final User opponent,
+    public void openExisting(@Nonnull final Set<User> opponents,
                              @Nonnull final Booking existingBooking) {
         this.existingBooking = existingBooking;
 
@@ -171,7 +172,9 @@ public class BookingDialog extends Dialog {
         setHeaderTitle(title);
 
         addButtons(deleteButton, modifyButton);
-        opponentComboBox.setValue(opponent);
+        for (final User opponent : opponents) {
+            opponentComboBox.setValue(opponent);
+        }
 
         open();
     }

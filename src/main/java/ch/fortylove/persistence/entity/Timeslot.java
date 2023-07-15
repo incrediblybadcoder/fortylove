@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity(name = "timeslots")
-public class Timeslot extends AbstractEntity {
+public class Timeslot extends AbstractEntity implements Comparable<Timeslot> {
 
     @Nonnull public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
     public static final long MINUTES_PER_TIMESLOT = 60;
@@ -64,5 +64,10 @@ public class Timeslot extends AbstractEntity {
 
     public String getTimeIntervalText() {
         return getStartTime() + " - " + getEndTime();
+    }
+
+    @Override
+    public int compareTo(@Nonnull final Timeslot timeslot) {
+        return Integer.compare(index, timeslot.getIndex());
     }
 }

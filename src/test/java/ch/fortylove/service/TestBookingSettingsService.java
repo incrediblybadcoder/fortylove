@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.SortedSet;
 
 @SpringTest
 class TestBookingSettingsService extends ServiceTest {
 
     @Nonnull private final BookingSettingsService testee;
 
-    @Nonnull private List<Timeslot> timeslotsAllBookable;
-    @Nonnull private List<Timeslot> timeslotsNonBookable;
+    @Nonnull private SortedSet<Timeslot> timeslotsAllBookable;
+    @Nonnull private SortedSet<Timeslot> timeslotsNonBookable;
 
     @Autowired
     public TestBookingSettingsService(@Nonnull final BookingSettingsService testee) {

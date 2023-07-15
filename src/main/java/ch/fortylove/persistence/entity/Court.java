@@ -13,12 +13,12 @@ import org.hibernate.annotations.ParamDef;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "courts")
-@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "date = :date")
+@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "booking_date = :date")
 public class Court extends AbstractEntity {
 
     @NotNull
@@ -34,7 +34,7 @@ public class Court extends AbstractEntity {
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filter(name = "bookingDateFilter")
-    private List<Booking> bookings = new ArrayList<>();
+    private Set<Booking> bookings = new HashSet<>();
 
     protected Court() {
         super();
@@ -75,11 +75,11 @@ public class Court extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Booking> getBookings() {
+    public Set<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<Booking> bookings) {
+    public void setBookings(@Nonnull final Set<Booking> bookings) {
         this.bookings = bookings;
     }
 

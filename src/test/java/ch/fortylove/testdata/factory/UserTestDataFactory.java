@@ -8,9 +8,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringComponent
 public class UserTestDataFactory {
@@ -32,7 +31,7 @@ public class UserTestDataFactory {
 
     @Nonnull
     public User createUser(@Nonnull final String email) {
-        final List<Role> roles = Collections.singletonList(roleTestDataFactory.getDefault());
+        final Set<Role> roles = Set.of(roleTestDataFactory.getDefault());
         final PlayerStatus playerStatus = playerStatusTestDataFactory.getDefault();
         return userService.create(new User("firstName", "lastName", email, "password", true, roles, playerStatus));
     }
