@@ -101,6 +101,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
+    public String getAbbreviatedName() {
+        return firstName.substring(0,1) + ". " + lastName;
+    }
+
+    @Nonnull
     public String getEmail() {
         return email;
     }
@@ -170,5 +175,16 @@ public class User extends AbstractEntity {
     public void removeOpponentBooking(@Nonnull final Booking booking) {
         opponentBookings.remove(booking);
         booking.getOpponents().remove(this);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", playerStatus=" + playerStatus +
+                '}';
     }
 }

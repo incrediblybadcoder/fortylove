@@ -70,4 +70,14 @@ public class Timeslot extends AbstractEntity implements Comparable<Timeslot> {
     public int compareTo(@Nonnull final Timeslot timeslot) {
         return Integer.compare(index, timeslot.getIndex());
     }
+
+    @Override
+    public String toString() {
+        return "Timeslot{" +
+                "bookable=" + bookable +
+                ", index=" + index +
+                ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
+                '}';
+    }
 }

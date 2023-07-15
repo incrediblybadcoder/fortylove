@@ -76,4 +76,11 @@ public class PlayerStatus extends AbstractEntity {
     public void setBookableDaysInAdvance(final int bookableDaysInAdvance) {
         this.bookableDaysInAdvance = bookableDaysInAdvance;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerStatus{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

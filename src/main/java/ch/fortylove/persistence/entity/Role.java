@@ -65,4 +65,11 @@ public class Role extends AbstractEntity {
     public void setPrivileges(@Nonnull final Set<Privilege> privileges) {
         this.privileges = privileges;
     }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

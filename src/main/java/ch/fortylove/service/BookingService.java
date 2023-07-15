@@ -67,7 +67,7 @@ public class BookingService {
                 .orElseThrow(() -> new RecordNotFoundException(id));
 
         booking.getOwner().getOwnerBookings().remove(booking);
-        booking.removeOpponents();
+        booking.removeAllOpponents();
 
         bookingRepository.delete(booking);
     }

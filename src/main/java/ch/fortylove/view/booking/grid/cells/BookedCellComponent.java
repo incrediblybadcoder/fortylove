@@ -22,8 +22,9 @@ public class BookedCellComponent extends BookingCellComponent {
                              @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
         final AvatarGroup avatarGroup = new AvatarGroup();
         avatarGroup.addThemeVariants(AvatarGroupVariant.LUMO_SMALL);
+        avatarGroup.setMaxItemsVisible(2);
         avatarGroup.add(new AvatarGroup.AvatarGroupItem(booking.getOwner().getFullName()));
-        booking.getOpponents().forEach(partner -> avatarGroup.add(new AvatarGroup.AvatarGroupItem(partner.getFullName())));
+        booking.getOpponents().forEach(opponent -> avatarGroup.add(new AvatarGroup.AvatarGroupItem(opponent.getFullName())));
 
         addClickListener(clickListener);
 

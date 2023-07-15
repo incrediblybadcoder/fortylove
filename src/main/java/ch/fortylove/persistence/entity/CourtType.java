@@ -34,4 +34,12 @@ public enum CourtType {
     public String getIcon() {
         return icon;
     }
+
+    @Override
+    public String toString() {
+        return "CourtType{" +
+                "code='" + code + '\'' +
+                ", material='" + material + '\'' +
+                '}';
+    }
 }

@@ -90,6 +90,15 @@ public class Court extends AbstractEntity {
 
     @Nonnull
     public String getIdentifier() {
-        return "Platz " + getNumber() + " " + getName();
+        return getNumber() + ": " + getName();
+    }
+
+    @Override
+    public String toString() {
+        return "Court{" +
+                "courtType=" + courtType +
+                ", number=" + number +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
