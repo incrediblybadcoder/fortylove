@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "booking_settings")
 public class BookingSettings extends AbstractEntity {
@@ -24,7 +25,7 @@ public class BookingSettings extends AbstractEntity {
     }
 
     public BookingSettings(@Nonnull final List<Timeslot> timeslots) {
-        this();
+        super(UUID.randomUUID());
         this.timeslots = timeslots;
     }
 

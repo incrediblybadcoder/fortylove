@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "player_status")
 public class PlayerStatus extends AbstractEntity {
@@ -36,7 +37,7 @@ public class PlayerStatus extends AbstractEntity {
     public PlayerStatus(@Nonnull final String name,
                         final int bookingsPerDay,
                         final int bookableDaysInAdvance) {
-        this();
+        super(UUID.randomUUID());
         this.name = name;
         this.bookingsPerDay = bookingsPerDay;
         this.bookableDaysInAdvance = bookableDaysInAdvance;
