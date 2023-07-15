@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @SetupData
 public class RoleSetupData {
@@ -37,8 +37,8 @@ public class RoleSetupData {
     }
 
     @Nonnull
-    private List<Privilege> getUserPrivileges() {
-        final ArrayList<Privilege> privileges = new ArrayList<>();
+    private Set<Privilege> getUserPrivileges() {
+        final Set<Privilege> privileges = new HashSet<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
 
@@ -49,13 +49,13 @@ public class RoleSetupData {
     }
 
     @Nonnull
-    private List<Privilege> getStaffPrivileges() {
+    private Set<Privilege> getStaffPrivileges() {
         return getAdminPrivileges();
     }
 
     @Nonnull
-    private List<Privilege> getAdminPrivileges() {
-        final ArrayList<Privilege> privileges = new ArrayList<>();
+    private Set<Privilege> getAdminPrivileges() {
+        final Set<Privilege> privileges = new HashSet<>();
         final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
         final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
         final Optional<Privilege> writePrivilege = privilegeService.findByName(PrivilegeSetupData.WRITE_PRIVILEGE);
@@ -69,7 +69,7 @@ public class RoleSetupData {
 
     @Transactional
     private void createRoleIfNotFound(@Nonnull final String name,
-                                      @Nonnull final List<Privilege> privileges) {
+                                      @Nonnull final Set<Privilege> privileges) {
         final Optional<Role> role = roleService.findByName(name);
 
         if (role.isEmpty()) {

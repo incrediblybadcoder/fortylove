@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringTest
 class TestRoleService extends ServiceTest {
@@ -33,7 +33,7 @@ class TestRoleService extends ServiceTest {
     public void testCreate() {
         final String roleName = "roleName";
 
-        final Role createdRole = testee.create(new Role(roleName, List.of(privilege)));
+        final Role createdRole = testee.create(new Role(roleName, Set.of(privilege)));
 
         final Optional<Role> foundRole = testee.findByName(roleName);
         Assertions.assertTrue(foundRole.isPresent());
@@ -42,8 +42,8 @@ class TestRoleService extends ServiceTest {
 
     @Test
     public void testFindByName_notExists() {
-        testee.create(new Role("roleName1", List.of(privilege)));
-        testee.create(new Role("roleName3", List.of(privilege)));
+        testee.create(new Role("roleName1", Set.of(privilege)));
+        testee.create(new Role("roleName3", Set.of(privilege)));
 
         final Optional<Role> foundRole = testee.findByName("roleName2");
 
@@ -53,9 +53,9 @@ class TestRoleService extends ServiceTest {
     @Test
     public void testFindByName_exists() {
         final String roleName2 = "roleName2";
-        testee.create(new Role("roleName1", List.of(privilege)));
-        final Role createdRole = testee.create(new Role(roleName2, List.of(privilege)));
-        testee.create(new Role("roleName3", List.of(privilege)));
+        testee.create(new Role("roleName1", Set.of(privilege)));
+        final Role createdRole = testee.create(new Role(roleName2, Set.of(privilege)));
+        testee.create(new Role("roleName3", Set.of(privilege)));
 
         final Optional<Role> foundRole = testee.findByName(roleName2);
 
