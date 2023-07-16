@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class User extends AbstractEntity {
 
     @NotNull
+    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
 

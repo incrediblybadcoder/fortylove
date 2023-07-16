@@ -6,16 +6,14 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
+import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.view.MainLayout;
-import ch.fortylove.view.membermanagement.dto.UserFormInformations;
 import ch.fortylove.view.membermanagement.events.DeleteEvent;
 import ch.fortylove.view.membermanagement.events.SaveEvent;
 import ch.fortylove.view.membermanagement.events.UpdateEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -42,10 +40,6 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final RoleService roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
-    Notification notification = new Notification(
-            "Besten Dank", 5000);
-
-
     public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.playerStatusService = playerStatusService;
@@ -71,69 +65,50 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void updateUser(final UpdateEvent updateEvent) {
-        UserFormInformations userFormInformations = updateEvent.getUser();
-        Optional<User> userToUpdate = userService.findById(userFormInformations.getId());
-        if (userToUpdate.isPresent()) {
-            User user = userToUpdate.get();
-            user.setFirstName(userFormInformations.getFirstName());
-            user.setLastName(userFormInformations.getLastName());
-            user.setEmail(userFormInformations.getEmail());
-            user.setPlayerStatus(userFormInformations.getPlayerStatus());
-            userService.update(user);
+            userService.update(updateEvent.getUser());
             updateUserList();
             closeEditor();
-        }
     }
 
     private void deleteUser(final DeleteEvent deleteEvent) {
-        UserFormInformations userFormInformations = deleteEvent.getUser();
-        Optional<User> userToDelete = userService.findById(userFormInformations.getId());
+        Optional<User> userToDelete = userService.findById(deleteEvent.getUser().getId());
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
             if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
                 userService.delete(user.getId());
                 updateUserList();
                 closeEditor();
-                notification.setText("Mitglied wurde erfolgreich gelöscht");
-                notification.setDuration(10000);
-                notification.open();
+                NotificationUtil.infoNotification("Mitglied wurde erfolgreich gelöscht");
             } else {
-                notification.setText("Mitglied kann nicht gelöscht werden, da es noch Buchungen hat");
-                notification.setDuration(10000);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.open();
+                NotificationUtil.errorNotification("Mitglied kann nicht gelöscht werden, da es noch Buchungen hat");
             }
         }
     }
 
     private void saveUser(final SaveEvent saveEvent) {
-        final UserFormInformations userFormInformations = saveEvent.getUser();
+        final User user = saveEvent.getUser();
         final List<Role> roles = new ArrayList<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
 
         final User saveUser = new User(
-                userFormInformations.getFirstName(),
-                userFormInformations.getLastName(),
-                userFormInformations.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
                 passwordEncoder.encode("newpassword"),
                 true,
                 roles,
-                userFormInformations.getPlayerStatus()
+                user.getPlayerStatus()
         );
 
         userService.create(saveUser);
         updateUserList();
         closeEditor();
-        notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
-        notification.setDuration(5000);
-        notification.setPosition(Notification.Position.MIDDLE);
-        notification.open();
+        NotificationUtil.infoNotification("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
     }
 
     private void closeEditor() {
-        //form.setUser(null);
+        form.setUser(null);
         form.setVisible(false);
         removeClassName("editing");
     }
