@@ -12,13 +12,14 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class UserForm extends FormLayout {
     private Button update;
     private Button delete;
     private Button close;
+    private VerticalLayout buttonContainer;
     @Nonnull final private Binder<User> binder;
 
     public UserForm(final List<PlayerStatus> availableStatus) {
@@ -44,10 +46,10 @@ public class UserForm extends FormLayout {
         this.email = new TextField("Email");
         this.playerStatus = new ComboBox<>("Status");
         this.availableStatus = availableStatus;
+
         constructUI();
 
-        this.binder = new BeanValidationBinder<>(User.class); //BeanValidationBider oder nur Binder?;
-//        defineInputFieldInputClickListener();
+        this.binder = new Binder<>(User.class);
         defineValidators();
         binder.addValueChangeListener(inputEvent -> {
             updateButtonState();
@@ -57,29 +59,21 @@ public class UserForm extends FormLayout {
 
 
     }
-
-    private void defineInputFieldInputClickListener() {
-        firstName.addInputListener(inputEvent -> {
-            updateButtonState();
-        });
-
-        lastName.addInputListener(inputEvent -> {
-            updateButtonState();
-        });
-
-        email.addInputListener(inputEvent -> {
-            updateButtonState();
-        });
-
-        playerStatus.addValueChangeListener(inputEvent -> {
-            updateButtonState();
-        });
-    }
-
     private void defineValidators() {
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
                 .bind(User::getEmail, User::setEmail);
+
+        binder.forField(firstName)
+                .withValidator((Validator<String>) (value, context) -> {
+                    if (value.isEmpty()) {
+                        return ValidationResult.error("Der Vorname darf nicht leer sein");
+                    } else if (value.length() > 50) {
+                        return ValidationResult.error("Der Vorname darf maximal 50 Zeichen haben");
+                    }
+                    return ValidationResult.ok();
+                })
+                .bind(User::getFirstName, User::setFirstName);
 
 
         binder.forField(lastName)
@@ -105,15 +99,21 @@ public class UserForm extends FormLayout {
     }
 
     private void constructUI() {
-        add(createInputFieldsLayout());
         initializeButtons();
-        createButtonsLayout();
+        initializeButtonsContainer();
         setStatusComboBoxItems();
+        add(createInputFieldsLayout(), buttonContainer);
+    }
+
+    private void initializeButtonsContainer() {
+        buttonContainer = new VerticalLayout();
+        buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     }
 
     private void setStatusComboBoxItems() {
         playerStatus.setItems(availableStatus);
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
+        playerStatus.setAllowCustomValue(false);
     }
 
     private void initializeButtons() {
@@ -121,15 +121,7 @@ public class UserForm extends FormLayout {
         update = new Button("Aktualisieren");
         delete = new Button("Löschen");
         close = new Button("Abbrechen");
-    }
 
-    private VerticalLayout createInputFieldsLayout() {
-        VerticalLayout inputFieldsLayout = new VerticalLayout();
-        inputFieldsLayout.add(firstName, lastName, email, playerStatus);
-        return inputFieldsLayout;
-    }
-
-    private void createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -145,6 +137,15 @@ public class UserForm extends FormLayout {
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
     }
 
+    private VerticalLayout createInputFieldsLayout() {
+        VerticalLayout inputFieldsLayout = new VerticalLayout();
+        firstName.setValueChangeMode(ValueChangeMode.EAGER);
+        lastName.setValueChangeMode(ValueChangeMode.EAGER);
+        email.setValueChangeMode(ValueChangeMode.EAGER);
+        inputFieldsLayout.add(firstName, lastName, email, playerStatus);
+        return inputFieldsLayout;
+    }
+
     private void updateButtonState() {
         final boolean ok = binder.isValid();
         save.setEnabled(ok);
@@ -154,36 +155,26 @@ public class UserForm extends FormLayout {
     }
 
     public void createUserForm(){
-        removeAll();
-        add(createInputFieldsLayout(), save, close);
+        addButtons(save, close);
     }
 
     public void updateUserForm(){
-        removeAll();
-        add(createInputFieldsLayout(), update, delete, close);
+        addButtons(update, delete, close);
+    }
+
+    private void addButtons(@Nonnull final Button... buttons) {
+        buttonContainer.removeAll();
+        buttonContainer.add(buttons);
     }
 
     public void setUser(User user) {
-        resetForm();
-        binder.removeBean();
-        if (user != null) {
             binder.setBean(user);
-            binder.readBean(user);
-            binder.validate();
-        }
     }
 
-    public void resetForm() {
-        binder.setBean(null);
-
-        firstName.clear();
-        lastName.clear();
-        email.clear();
-        playerStatus.clear();
-    }
 
     private void validateAndUpdate() {
         if(binder.isValid()){
+            final User bean = binder.getBean();
             fireEvent(new UpdateEvent(this, binder.getBean()));
         }
     }

@@ -171,7 +171,12 @@ public class MemberManagementView extends VerticalLayout {
             closeEditor();
         } else {
             form.updateUserForm();
-            form.setUser(user);
+            // Wenn man einen User im Grid anwählt und einen Eintrag ändert (z.B. Marco auf Carlos)
+            // und dann auf Abbrechen klick und dann im Grid wieder den User Marco auswählt,
+            // dann wird der User Carlos angezeigt, da der User Carlos noch im Form ist.
+            // Daher wird hier der User aus der DB geladen und nicht der User aus dem Grid.
+            userService.findById(user.getId()).ifPresent(form::setUser);
+            //form.setUser(user);
             form.setVisible(true);
             addClassName("editing");
         }
