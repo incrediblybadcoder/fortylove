@@ -12,6 +12,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -131,6 +132,7 @@ public class UserForm extends FormLayout {
         availableRoles.ifPresent(roleCheckboxGroup::setItems);
         roleCheckboxGroup.setRequired(true);
         roleCheckboxGroup.setRequiredIndicatorVisible(true);
+        roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
     }
 
     private void setStatusComboBoxItems() {
