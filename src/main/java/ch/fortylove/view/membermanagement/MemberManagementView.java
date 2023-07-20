@@ -1,22 +1,19 @@
 package ch.fortylove.view.membermanagement;
 
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
-import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
+import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.view.MainLayout;
-import ch.fortylove.view.membermanagement.dto.UserFormInformations;
 import ch.fortylove.view.membermanagement.events.DeleteEvent;
 import ch.fortylove.view.membermanagement.events.SaveEvent;
 import ch.fortylove.view.membermanagement.events.UpdateEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -43,8 +40,6 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final RoleService roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
-    Notification notification = new Notification(
-            "Besten Dank", 5000);
 
 
     public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
@@ -56,7 +51,7 @@ public class MemberManagementView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        form = new UserForm();
+        form = new UserForm(playerStatusService.findAll());
         form.addSaveListener(this::saveUser);
         form.addUpdateListener(this::updateUser);
         form.addDeleteListener(this::deleteUser);
@@ -72,69 +67,50 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void updateUser(final UpdateEvent updateEvent) {
-        UserFormInformations userFormInformations = updateEvent.getUser();
-        Optional<User> userToUpdate = userService.findById(userFormInformations.getId());
-        if (userToUpdate.isPresent()) {
-            User user = userToUpdate.get();
-            user.setFirstName(userFormInformations.getFirstName());
-            user.setLastName(userFormInformations.getLastName());
-            user.setEmail(userFormInformations.getEmail());
-            userService.update(user);
+            userService.update(updateEvent.getUser());
             updateUserList();
             closeEditor();
-        }
     }
 
     private void deleteUser(final DeleteEvent deleteEvent) {
-        UserFormInformations userFormInformations = deleteEvent.getUser();
-        Optional<User> userToDelete = userService.findById(userFormInformations.getId());
+        Optional<User> userToDelete = userService.findById(deleteEvent.getUser().getId());
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
             if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
                 userService.delete(user.getId());
                 updateUserList();
                 closeEditor();
-                notification.setText("Mitglied wurde erfolgreich gelöscht");
-                notification.setDuration(10000);
-                notification.open();
+                NotificationUtil.infoNotification("Mitglied wurde erfolgreich gelöscht");
             } else {
-                notification.setText("Mitglied kann nicht gelöscht werden, da es noch Buchungen hat");
-                notification.setDuration(10000);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.open();
+                NotificationUtil.errorNotification("Mitglied kann nicht gelöscht werden, da es noch Buchungen hat");
             }
         }
     }
 
     private void saveUser(final SaveEvent saveEvent) {
-        final UserFormInformations userFormInformations = saveEvent.getUser();
+        final User user = saveEvent.getUser();
         final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
-        final Optional<PlayerStatus> playerStatus = playerStatusService.findByName("aktiv");
-        if (playerStatus.isEmpty()) {
-            throw new RuntimeException("PlayerStatus aktiv not found");
-        }
 
-        final User saveUser = new User(userFormInformations.getFirstName(),
-                userFormInformations.getLastName(),
-                userFormInformations.getEmail(),
+        final User saveUser = new User(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
                 passwordEncoder.encode("newpassword"),
                 true,
                 roles,
-                playerStatus.get());
+                user.getPlayerStatus()
+        );
+
         userService.create(saveUser);
         updateUserList();
         closeEditor();
-        notification.setText("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
-        notification.setDuration(5000);
-        notification.setPosition(Notification.Position.MIDDLE);
-        notification.open();
+        NotificationUtil.infoNotification("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
     }
 
     private void closeEditor() {
-        //form.setUser(null);
+        form.setUser(null);
         form.setVisible(false);
         removeClassName("editing");
     }
@@ -197,7 +173,12 @@ public class MemberManagementView extends VerticalLayout {
             closeEditor();
         } else {
             form.updateUserForm();
-            form.setUser(user);
+            // Wenn man einen User im Grid anwählt und einen Eintrag ändert (z.B. Marco auf Carlos)
+            // und dann auf Abbrechen klick und dann im Grid wieder den User Marco auswählt,
+            // dann wird der User Carlos angezeigt, da der User Carlos noch im Form ist.
+            // Daher wird hier der User aus der DB geladen und nicht der User aus dem Grid.
+            userService.findById(user.getId()).ifPresent(form::setUser);
+            //form.setUser(user);
             form.setVisible(true);
             addClassName("editing");
         }

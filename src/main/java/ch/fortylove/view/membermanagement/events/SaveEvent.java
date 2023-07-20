@@ -1,10 +1,10 @@
 package ch.fortylove.view.membermanagement.events;
 
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.view.membermanagement.UserForm;
-import ch.fortylove.view.membermanagement.dto.UserFormInformations;
 
 public class SaveEvent extends UserFormEvent {
-    public SaveEvent(UserForm source, UserFormInformations user) {
+    public SaveEvent(UserForm source, User user) {
         super(source, user);
     }
 }
