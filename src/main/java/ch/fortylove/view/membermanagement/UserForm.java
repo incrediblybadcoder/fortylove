@@ -1,6 +1,7 @@
 package ch.fortylove.view.membermanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.view.membermanagement.events.CloseEvent;
 import ch.fortylove.view.membermanagement.events.DeleteEvent;
@@ -10,6 +11,8 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -23,6 +26,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class UserForm extends FormLayout {
     @Nonnull private final TextField firstName ;
@@ -31,6 +36,10 @@ public class UserForm extends FormLayout {
     @Nonnull private final ComboBox<PlayerStatus> playerStatus;
     @Nonnull private final List<PlayerStatus> availableStatus;
 
+    @Nonnull private final CheckboxGroup<Role> roleCheckboxGroup;
+
+    @Nonnull private final Optional<List<Role>> availableRoles;
+
     private Button save;
     private Button update;
     private Button delete;
@@ -38,7 +47,7 @@ public class UserForm extends FormLayout {
     private VerticalLayout buttonContainer;
     @Nonnull final private Binder<User> binder;
 
-    public UserForm(final List<PlayerStatus> availableStatus) {
+    public UserForm(final List<PlayerStatus> availableStatus, Optional<List<Role>> availableRoles) {
         addClassName("user-form");
 
         this.firstName = new TextField("Vorname");
@@ -46,14 +55,14 @@ public class UserForm extends FormLayout {
         this.email = new TextField("Email");
         this.playerStatus = new ComboBox<>("Status");
         this.availableStatus = availableStatus;
+        this.roleCheckboxGroup = new CheckboxGroup<>();
+        this.availableRoles = availableRoles;
 
         constructUI();
 
         this.binder = new Binder<>(User.class);
         defineValidators();
-        binder.addValueChangeListener(inputEvent -> {
-            updateButtonState();
-        });
+        binder.addValueChangeListener(inputEvent -> updateButtonState());
 
         binder.bindInstanceFields(this);
 
@@ -96,24 +105,45 @@ public class UserForm extends FormLayout {
                     return ValidationResult.ok();
                 })
                 .bind(User::getPlayerStatus, User::setPlayerStatus);
+
+        binder.forField(roleCheckboxGroup)
+                .withValidator((Validator<Set<Role>>) (value, context) -> {
+                    if (value == null || value.isEmpty()) {
+                        return ValidationResult.error("Mindestens eine Rolle muss ausgewählt sein");
+                    }
+                    return ValidationResult.ok();
+                })
+                .bind(User::getRoles, User::setRoles);
+
+
     }
 
     private void constructUI() {
         initializeButtons();
         initializeButtonsContainer();
         setStatusComboBoxItems();
-        add(createInputFieldsLayout(), buttonContainer);
+        initializeCheckboxGroup();
+        add(createInputFieldsLayout(), roleCheckboxGroup, buttonContainer);
     }
 
-    private void initializeButtonsContainer() {
-        buttonContainer = new VerticalLayout();
-        buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+    private void initializeCheckboxGroup() {
+        roleCheckboxGroup.setLabel("Rollen");
+        roleCheckboxGroup.setItemLabelGenerator(Role::getName);
+        availableRoles.ifPresent(roleCheckboxGroup::setItems);
+        roleCheckboxGroup.setRequired(true);
+        roleCheckboxGroup.setRequiredIndicatorVisible(true);
+        roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
     }
 
     private void setStatusComboBoxItems() {
         playerStatus.setItems(availableStatus);
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
         playerStatus.setAllowCustomValue(false);
+    }
+
+    private void initializeButtonsContainer() {
+        buttonContainer = new VerticalLayout();
+        buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     }
 
     private void initializeButtons() {
@@ -142,6 +172,14 @@ public class UserForm extends FormLayout {
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
         email.setValueChangeMode(ValueChangeMode.EAGER);
+        firstName.setRequired(true);
+        firstName.setRequiredIndicatorVisible(true);
+        lastName.setRequired(true);
+        lastName.setRequiredIndicatorVisible(true);
+        email.setRequired(true);
+        email.setRequiredIndicatorVisible(true);
+        playerStatus.setRequired(true);
+        playerStatus.setRequiredIndicatorVisible(true);
         inputFieldsLayout.add(firstName, lastName, email, playerStatus);
         return inputFieldsLayout;
     }
@@ -174,7 +212,6 @@ public class UserForm extends FormLayout {
 
     private void validateAndUpdate() {
         if(binder.isValid()){
-            final User bean = binder.getBean();
             fireEvent(new UpdateEvent(this, binder.getBean()));
         }
     }

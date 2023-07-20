@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +37,11 @@ public class RoleService {
     @Nonnull
     public Optional<Role> findByName(@Nonnull final String name) {
         return Optional.ofNullable(roleRepository.findByName(name));
+    }
+
+    @Nonnull
+    public Optional<List<Role>> findAll() {
+        return Optional.of(roleRepository.findAll());
     }
 
     @Nonnull

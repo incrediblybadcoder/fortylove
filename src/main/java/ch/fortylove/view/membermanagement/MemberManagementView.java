@@ -51,7 +51,7 @@ public class MemberManagementView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        form = new UserForm(playerStatusService.findAll());
+        form = new UserForm(playerStatusService.findAll(), roleService.findAll());
         form.addSaveListener(this::saveUser);
         form.addUpdateListener(this::updateUser);
         form.addDeleteListener(this::deleteUser);
