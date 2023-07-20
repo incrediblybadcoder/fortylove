@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class MemberManagementView extends VerticalLayout {
 
     @Nonnull private final UserForm form;
-    @Nonnull private final Grid<User> grid = new Grid<>(User.class);
+    @Nonnull private final Grid<User> grid;
     @Nonnull private final TextField filterText = new TextField();
     @Nonnull private final UserService userService;
     @Nonnull private final PlayerStatusService playerStatusService;
@@ -43,6 +43,7 @@ public class MemberManagementView extends VerticalLayout {
 
 
     public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
+        grid  = new Grid<>(User.class);
         this.userService = userService;
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;
@@ -152,7 +153,6 @@ public class MemberManagementView extends VerticalLayout {
         grid.addClassName("member-grid");
         grid.setSizeFull();
         grid.removeAllColumns();
-        grid.addColumn(User::getId).setHeader("ID");
         grid.addColumn(user -> user.getPlayerStatus().getName()).setHeader("Spieler Status");
         grid.addColumn(User::getFirstName).setHeader("Vorname");
         grid.addColumn(User::getLastName).setHeader("Nachname");
