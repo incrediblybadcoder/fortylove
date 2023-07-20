@@ -153,20 +153,24 @@ public class MemberManagementView extends VerticalLayout {
         grid.addClassName("member-grid");
         grid.setSizeFull();
         grid.removeAllColumns();
-        grid.addColumn(user -> user.getPlayerStatus().getName()).setHeader("Spieler Status");
-        grid.addColumn(User::getFirstName).setHeader("Vorname");
-        grid.addColumn(User::getLastName).setHeader("Nachname");
-        grid.addColumn(User::getEmail).setHeader("Email");
-        grid.addColumn(user -> user.getRoles().stream()
+
+        Grid.Column<User> lastNameColumn = grid.addColumn(User::getLastName).setHeader("Nachname");
+        Grid.Column<User> firstNameColumn = grid.addColumn(User::getFirstName).setHeader("Vorname");
+        Grid.Column<User> emailColumn = grid.addColumn(User::getEmail).setHeader("Email");
+        Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getName()).setHeader("Spieler Status");
+        Grid.Column<User> rolesColumn = grid.addColumn(user -> user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.joining(", "))
                 )
                 .setHeader("Roles");
 
+        grid.setColumnOrder(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, rolesColumn);
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
     }
+
 
     private void editUser(User user) {
         if (user == null) {
