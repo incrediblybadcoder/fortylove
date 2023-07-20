@@ -22,8 +22,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringComponent
 @UIScope
@@ -43,7 +43,7 @@ public class BookingGridComponent extends Grid<Court> {
     }
 
     private void constructGrid() {
-        final List<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
+        final Set<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         addComponentColumn(CourtInfoComponent::new).setFrozen(true);
 
         timeslots.forEach(timeslot ->

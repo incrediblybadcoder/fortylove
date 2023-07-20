@@ -1,19 +1,48 @@
 package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.repository.RoleRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-public interface RoleService {
+@Service
+@Transactional
+public class RoleService {
+
+    @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = "ROLE_USER";
+
+    @Nonnull private final RoleRepository roleRepository;
+
+    @Autowired
+    public RoleService(@Nonnull final RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     @Nonnull
-    Role create(@Nonnull final Role role);
+    public Role create(@Nonnull final Role role) {
+        if (roleRepository.findById(role.getId()).isPresent()) {
+            throw new DuplicateRecordException(role);
+        }
+        return roleRepository.save(role);
+    }
 
     @Nonnull
-    Optional<Role> findByName(@Nonnull final String name);
+    public Optional<Role> findByName(@Nonnull final String name) {
+        return Optional.ofNullable(roleRepository.findByName(name));
+    }
 
     @Nonnull
-    List<Role> getDefaultNewUserRole();
+    public Set<Role> getDefaultNewUserRoles() {
+        final Set<Role> roles = new HashSet<>();
+        final Optional<Role> role = this.findByName(RoleService.DEFAULT_ROLE_FOR_NEW_USER);
+        role.ifPresent(roles::add);
+        return roles;
+    }
 }

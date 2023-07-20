@@ -1,16 +1,18 @@
 package ch.fortylove.view.booking.dialog;
 
+import ch.fortylove.configuration.setupdata.StaticConfiguration;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.util.FormatUtil;
 import ch.fortylove.view.booking.dialog.events.DialogBookingEvent;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -22,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public class BookingDialog extends Dialog {
 
@@ -31,7 +34,7 @@ public class BookingDialog extends Dialog {
     @Nonnull private final User owner;
     @Nonnull private final List<User> possibleOpponents;
 
-    private ComboBox<User> opponentComboBox;
+    private MultiSelectComboBox<User> opponentComboBox;
     private Button newButton;
     private Button modifyButton;
     private Button deleteButton;
@@ -60,23 +63,34 @@ public class BookingDialog extends Dialog {
         dialogLayout.setSpacing(false);
         dialogLayout.setPadding(false);
 
+        final String fieldWidth = "300px";
         final TextField courtField = new TextField("Platz");
-        courtField.setValue(String.valueOf(court.getId()));
+        courtField.setValue(court.getIdentifier());
         courtField.setReadOnly(true);
+        courtField.setWidth(fieldWidth);
 
         final TextField dateField = new TextField("Zeit / Datum");
         dateField.setValue(timeslot.getTimeIntervalText() + " / " + date.format(FormatUtil.getDateTextFormatter()));
         dateField.setReadOnly(true);
+        dateField.setWidth(fieldWidth);
 
         final TextField ownerField = new TextField("Spieler");
-        ownerField.setValue(owner.getFirstName());
+        ownerField.setValue(owner.getFullName());
         ownerField.setReadOnly(true);
+        ownerField.setWidth(fieldWidth);
 
-        opponentComboBox = new ComboBox<>("Gegenspieler");
+        opponentComboBox = new MultiSelectComboBox<>("Gegenspieler");
         opponentComboBox.setItems(possibleOpponents);
-        opponentComboBox.setItemLabelGenerator(User::getFirstName);
+        opponentComboBox.setItemLabelGenerator(User::getFullName);
+        opponentComboBox.setRequired(true);
+        opponentComboBox.setRequiredIndicatorVisible(true);
+        opponentComboBox.setWidth(fieldWidth);
+        opponentComboBox.addFocusListener(event -> validateOpponentSelection(opponentComboBox.getValue()));
+        opponentComboBox.addValueChangeListener(event -> validateOpponentSelection(event.getValue()));
+        opponentComboBox.addValueChangeListener(this::restrictMaximumOpponentSelection);
+        opponentComboBox.focus();
 
-        Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
+        final Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         getHeader().add(closeButton);
 
@@ -92,6 +106,20 @@ public class BookingDialog extends Dialog {
 
         dialogLayout.add(courtField, dateField, ownerField, opponentComboBox);
         add(dialogLayout);
+    }
+
+    private void restrictMaximumOpponentSelection(final AbstractField.ComponentValueChangeEvent<MultiSelectComboBox<User>, Set<User>> event) {
+        final Set<User> previousSelection = event.getOldValue();
+        final Set<User> selection = event.getValue();
+
+        if (selection.size() > StaticConfiguration.MAX_AMOUNT_OF_OPPONENTS_PER_BOOKING) {
+            opponentComboBox.setValue(previousSelection);
+        }
+    }
+
+    private void validateOpponentSelection(@Nonnull final Set<User> user) {
+        newButton.setEnabled(!user.isEmpty());
+        modifyButton.setEnabled(!user.isEmpty());
     }
 
     @Nonnull
@@ -124,8 +152,8 @@ public class BookingDialog extends Dialog {
     }
 
     @Nonnull
-    private List<User> getOpponents() {
-        return List.of(opponentComboBox.getValue());
+    private Set<User> getOpponents() {
+        return opponentComboBox.getValue();
     }
 
     @Nonnull
@@ -152,7 +180,7 @@ public class BookingDialog extends Dialog {
         open();
     }
 
-    public void openExisting(@Nonnull final User opponent,
+    public void openExisting(@Nonnull final Set<User> opponents,
                              @Nonnull final Booking existingBooking) {
         this.existingBooking = existingBooking;
 
@@ -160,7 +188,7 @@ public class BookingDialog extends Dialog {
         setHeaderTitle(title);
 
         addButtons(deleteButton, modifyButton);
-        opponentComboBox.setValue(opponent);
+        opponentComboBox.setValue(opponents);
 
         open();
     }

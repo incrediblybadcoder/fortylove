@@ -7,9 +7,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
@@ -19,14 +19,14 @@ public class Privilege extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     protected Privilege() {
         super();
     }
 
     public Privilege(@Nonnull final String name) {
-        super();
+        super(UUID.randomUUID());
         this.name = name;
     }
 
@@ -40,24 +40,18 @@ public class Privilege extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Privilege privilege = (Privilege) o;
-        return Objects.equals(name, privilege.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public String toString() {
+        return "Privilege{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

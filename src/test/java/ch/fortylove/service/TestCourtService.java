@@ -9,20 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringTest
-class TestCourtServiceImpl extends ServiceTest {
+class TestCourtService extends ServiceTest {
 
     @Nonnull private final CourtService testee;
 
     @Autowired
-    public TestCourtServiceImpl(@Nonnull final CourtService testee) {
+    public TestCourtService(@Nonnull final CourtService testee) {
         this.testee = testee;
     }
 
     @Test
     public void testCreate() {
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
         Assertions.assertTrue(foundCourt.isPresent());
@@ -31,17 +32,18 @@ class TestCourtServiceImpl extends ServiceTest {
 
     @Test
     public void testFindById_notExists() {
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
+        final UUID searchId = new UUID(0L, 0L);
+        Assertions.assertNotEquals(createdCourt.getId(), searchId);
 
-        final Optional<Court> foundCourt = testee.findById(createdCourt.getId() + 1L);
+        final Optional<Court> foundCourt = testee.findById(searchId);
 
         Assertions.assertTrue(foundCourt.isEmpty());
     }
 
     @Test
     public void testFindById_exists() {
-        testee.create(new Court(CourtType.CLAY, false));
-        final Court createdCourt = testee.create(new Court(CourtType.CLAY, false));
+        final Court createdCourt = testee.create(new Court(CourtType.CLAY, 0, "name"));
 
         final Optional<Court> foundCourt = testee.findById(createdCourt.getId());
 

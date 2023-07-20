@@ -23,9 +23,9 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
@@ -39,6 +39,8 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PasswordEncoder passwordEncoder;
+
+
 
     public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
@@ -87,7 +89,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void saveUser(final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
-        final List<Role> roles = new ArrayList<>();
+        final Set<Role> roles = new HashSet<>();
         final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
         role.ifPresent(roles::add);
 
@@ -128,7 +130,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User("", "", "", "", true, roleService.getDefaultNewUserRole(), playerStatusService.getDefaultNewUserPlayerStatus()));
+        createNewUser(new User("", "", "", "", true, roleService.getDefaultNewUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus()));
     }
 
     private void createNewUser(final User user) {

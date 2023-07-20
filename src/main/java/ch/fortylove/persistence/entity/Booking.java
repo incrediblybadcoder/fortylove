@@ -13,9 +13,9 @@ import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "bookings")
 public class Booking extends AbstractEntity implements Comparable<Booking> {
@@ -33,7 +33,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "bookings_opponents", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "user_opponent_id"))
-    private List<User> opponents = new ArrayList<>();
+    private Set<User> opponents = new HashSet<>();
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -41,7 +41,7 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     private Timeslot timeslot;
 
     @NotNull
-    @Column(name = "date")
+    @Column(name = "booking_date")
     private LocalDate date;
 
     protected Booking() {
@@ -50,10 +50,10 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     public Booking(@Nonnull final Court court,
                    @Nonnull final User owner,
-                   @Nonnull final List<User> opponents,
+                   @Nonnull final Set<User> opponents,
                    @Nonnull final Timeslot timeslot,
                    @Nonnull final LocalDate date) {
-        super();
+        super(UUID.randomUUID());
         this.court = court;
         this.owner = owner;
         this.opponents = opponents;
@@ -98,12 +98,13 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     }
 
     @Nonnull
-    public List<User> getOpponents() {
+    public Set<User> getOpponents() {
         return opponents;
     }
 
-    public void setOpponents(@Nonnull final List<User> opponents) {
-        this.opponents = opponents;
+    public void setOpponents(@Nonnull final Set<User> opponents) {
+        removeAllOpponents();
+        opponents.forEach(this::addOpponent);
     }
 
     public void addOpponent(@Nonnull final User user) {
@@ -116,27 +117,11 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         user.getOpponentBookings().remove(this);
     }
 
-    public void removeOpponents() {
-        //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < opponents.size(); i++) {
-            opponents.get(i).removeOpponentBooking(this);
+    public void removeAllOpponents() {
+        for (final User opponent : opponents) {
+            opponent.getOpponentBookings().remove(this);
         }
         opponents.clear();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Booking booking = (Booking) o;
-        return Objects.equals(timeslot, booking.timeslot) &&
-                Objects.equals(court, booking.court) &&
-                Objects.equals(date, booking.date);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(court, timeslot, date);
     }
 
     @Override
@@ -150,5 +135,15 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
 
     public String getIdentifier() {
         return court.getIdentifier() + ": " + timeslot.getTimeIntervalText() + " / " + getDateFormatted();
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "court=" + court +
+                ", owner=" + owner +
+                ", timeslot=" + timeslot +
+                ", date=" + date +
+                '}';
     }
 }

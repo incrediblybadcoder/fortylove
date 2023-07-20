@@ -6,10 +6,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
 import java.time.LocalTime;
-import java.util.Objects;
+import java.util.UUID;
 
 @Entity(name = "timeslots")
-public class Timeslot extends AbstractEntity {
+public class Timeslot extends AbstractEntity implements Comparable<Timeslot> {
 
     @Nonnull public static final LocalTime BASE_TIME = LocalTime.of(0, 0);
     public static final long MINUTES_PER_TIMESLOT = 60;
@@ -27,7 +27,7 @@ public class Timeslot extends AbstractEntity {
 
     public Timeslot(final boolean bookable,
                     final int index) {
-        super();
+        super(UUID.randomUUID());
         this.bookable = bookable;
         this.index = index;
     }
@@ -67,16 +67,17 @@ public class Timeslot extends AbstractEntity {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Timeslot timeslot = (Timeslot) o;
-        return bookable == timeslot.bookable &&
-                index == timeslot.index;
+    public int compareTo(@Nonnull final Timeslot timeslot) {
+        return Integer.compare(index, timeslot.getIndex());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(bookable, index);
+    public String toString() {
+        return "Timeslot{" +
+                "bookable=" + bookable +
+                ", index=" + index +
+                ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
+                '}';
     }
 }

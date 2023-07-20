@@ -6,39 +6,47 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "courts")
-@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "date = :date")
+@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "booking_date = :date")
 public class Court extends AbstractEntity {
 
     @NotNull
     @Column(name = "court_type")
     private CourtType courtType;
 
-    @Column(name = "has_ball_machine")
-    private boolean hasBallMachine;
+    @PositiveOrZero
+    @Column(name = "number")
+    private int number;
+
+    @Column(name = "name")
+    private String name;
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filter(name = "bookingDateFilter")
-    private List<Booking> bookings = new ArrayList<>();
+    private Set<Booking> bookings = new HashSet<>();
 
     protected Court() {
         super();
     }
 
     public Court(@Nonnull final CourtType courtType,
-                 final boolean hasBallMachine) {
+                 final int number,
+                 final String name) {
+        super(UUID.randomUUID());
         this.courtType = courtType;
-        this.hasBallMachine = hasBallMachine;
+        this.number = number;
+        this.name = name;
     }
 
     @Nonnull
@@ -50,36 +58,29 @@ public class Court extends AbstractEntity {
         this.courtType = courtType;
     }
 
-    public boolean isHasBallMachine() {
-        return hasBallMachine;
+    public int getNumber() {
+        return number;
     }
 
-    public void setHasBallMachine(final boolean hasBallMachine) {
-        this.hasBallMachine = hasBallMachine;
+    public void setNumber(final int number) {
+        this.number = number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     @Nonnull
-    public List<Booking> getBookings() {
+    public Set<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(@Nonnull final List<Booking> bookings) {
+    public void setBookings(@Nonnull final Set<Booking> bookings) {
         this.bookings = bookings;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Court court = (Court) o;
-        return getId().equals(court.getId()) &&
-                hasBallMachine == court.hasBallMachine
-                && courtType == court.courtType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), courtType, hasBallMachine);
     }
 
     public void addBooking(@Nonnull final Booking booking) {
@@ -89,6 +90,15 @@ public class Court extends AbstractEntity {
 
     @Nonnull
     public String getIdentifier() {
-        return "Platz " + getId();
+        return getNumber() + ": " + getName();
+    }
+
+    @Override
+    public String toString() {
+        return "Court{" +
+                "courtType=" + courtType +
+                ", number=" + number +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

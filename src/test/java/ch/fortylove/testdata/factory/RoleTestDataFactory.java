@@ -7,9 +7,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringComponent
 public class RoleTestDataFactory {
@@ -28,7 +27,7 @@ public class RoleTestDataFactory {
 
     @Nonnull
     public Role createRole(@Nonnull final String name) {
-        final List<Privilege> privileges = Collections.singletonList(privilegeTestDataFactory.getDefault());
+        final Set<Privilege> privileges = Set.of(privilegeTestDataFactory.getDefault());
         return roleService.create(new Role(name, privileges));
     }
 

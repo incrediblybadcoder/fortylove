@@ -13,9 +13,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "users")
 public class User extends AbstractEntity {
@@ -43,13 +43,13 @@ public class User extends AbstractEntity {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> ownerBookings = new ArrayList<>();
+    private Set<Booking> ownerBookings = new HashSet<>();
 
     @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Booking> opponentBookings = new ArrayList<>();
+    private Set<Booking> opponentBookings = new HashSet<>();
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -65,9 +65,9 @@ public class User extends AbstractEntity {
                 @Nonnull final String email,
                 @Nonnull final String password,
                 final boolean enabled,
-                @Nonnull final List<Role> roles,
+                @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
-        super();
+        super(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -101,6 +101,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
+    public String getAbbreviatedName() {
+        return firstName.substring(0,1) + ". " + lastName;
+    }
+
+    @Nonnull
     public String getEmail() {
         return email;
     }
@@ -119,11 +124,11 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final List<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -136,20 +141,20 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public List<Booking> getOwnerBookings() {
+    public Set<Booking> getOwnerBookings() {
         return ownerBookings;
     }
 
-    public void setOwnerBookings(@Nonnull final List<Booking> ownerBookings) {
+    public void setOwnerBookings(@Nonnull final Set<Booking> ownerBookings) {
         this.ownerBookings = ownerBookings;
     }
 
     @Nonnull
-    public List<Booking> getOpponentBookings() {
+    public Set<Booking> getOpponentBookings() {
         return opponentBookings;
     }
 
-    public void setOpponentBookings(@Nonnull final List<Booking> opponentBookings) {
+    public void setOpponentBookings(@Nonnull final Set<Booking> opponentBookings) {
         this.opponentBookings = opponentBookings;
     }
 
@@ -173,15 +178,13 @@ public class User extends AbstractEntity {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final User user = (User) o;
-        return Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email);
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", playerStatus=" + playerStatus +
+                '}';
     }
 }

@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringComponent
 public class CourtTestDataFactory {
 
-    public static final long DEFAULT_COURT = 1L;
-
     @Nonnull private final CourtService courtService;
+
+    private UUID defaultCourtId = new UUID(0L,0L);
 
     @Autowired
     public CourtTestDataFactory(@Nonnull final CourtService courtService) {
@@ -23,14 +24,16 @@ public class CourtTestDataFactory {
 
     @Nonnull
     public Court createCourt() {
-        return courtService.create(new Court(CourtType.CLAY, false));
+        return courtService.create(new Court(CourtType.CLAY, 0, "name"));
     }
 
     @Nonnull
     public Court getDefault() {
-        final Optional<Court> defaultCourt = courtService.findById(DEFAULT_COURT);
+        final Optional<Court> defaultCourt = courtService.findById(defaultCourtId);
         if (defaultCourt.isEmpty()) {
-            return createCourt();
+            final Court court = createCourt();
+            defaultCourtId = court.getId();
+            return court;
         }
 
         return defaultCourt.get();

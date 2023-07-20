@@ -8,9 +8,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
 
 @Entity(name = "booking_settings")
 public class BookingSettings extends AbstractEntity {
@@ -18,36 +18,23 @@ public class BookingSettings extends AbstractEntity {
     @NotNull
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "booking_settings_id", nullable=false)
-    private List<Timeslot> timeslots = new ArrayList<>();
+    private SortedSet<Timeslot> timeslots = new TreeSet<>();
 
     protected BookingSettings() {
         super();
     }
 
-    public BookingSettings(@Nonnull final List<Timeslot> timeslots) {
-        super();
+    public BookingSettings(@Nonnull final SortedSet<Timeslot> timeslots) {
+        super(UUID.randomUUID());
         this.timeslots = timeslots;
     }
 
     @Nonnull
-    public List<Timeslot> getTimeslots() {
+    public SortedSet<Timeslot> getTimeslots() {
         return timeslots;
     }
 
-    public void setTimeslots(@Nonnull final List<Timeslot> timeslots) {
+    public void setTimeslots(@Nonnull final SortedSet<Timeslot> timeslots) {
         this.timeslots = timeslots;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final BookingSettings that = (BookingSettings) o;
-        return Objects.equals(timeslots, that.timeslots);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(timeslots);
     }
 }

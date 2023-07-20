@@ -12,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringTest
-class TestUserServiceImpl extends ServiceTest {
+class TestUserService extends ServiceTest {
 
     @Nonnull private final UserService testee;
 
@@ -22,7 +23,7 @@ class TestUserServiceImpl extends ServiceTest {
     @Nonnull private PlayerStatus playerStatus;
 
     @Autowired
-    public TestUserServiceImpl(@Nonnull final UserService testee) {
+    public TestUserService(@Nonnull final UserService testee) {
         this.testee = testee;
     }
 
@@ -34,7 +35,7 @@ class TestUserServiceImpl extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", "password", true, List.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", "password", true, Set.of(role), playerStatus));
 
         final List<User> foundUser = testee.findAll();
         Assertions.assertEquals(1, foundUser.size());
@@ -43,8 +44,8 @@ class TestUserServiceImpl extends ServiceTest {
 
     @Test
     public void testFindByEmail_notExists() {
-        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, List.of(role), playerStatus));
-        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, List.of(role), playerStatus));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Set.of(role), playerStatus));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Set.of(role), playerStatus));
 
         final Optional<User> foundUser = testee.findByEmail("email2@fortylove.ch");
 
@@ -53,9 +54,9 @@ class TestUserServiceImpl extends ServiceTest {
 
     @Test
     public void testFindByEmail_exists() {
-        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, List.of(role), playerStatus));
-        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, List.of(role), playerStatus));
-        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, List.of(role), playerStatus));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Set.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Set.of(role), playerStatus));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Set.of(role), playerStatus));
 
         final Optional<User> foundUser = testee.findByEmail("email2@fortylove.ch");
 

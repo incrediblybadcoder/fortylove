@@ -91,15 +91,13 @@ public class BookingComponent extends VerticalLayout {
                 return;
             }
 
-            final ValidationResult validationResult = bookingService.isBookingModifiable(currentUser, event.getBooking());
+            final ValidationResult validationResult = bookingService.isBookingModifiableOnDate(event.getBooking());
             if (validationResult.isSuccessful()) {
                 final Booking booking = event.getBooking();
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-                bookingDialog.openExisting(booking.getOpponents().get(0), booking);
-            } else {
-                NotificationUtil.infoNotification(validationResult.getMessage());
+                bookingDialog.openExisting(booking.getOpponents(), booking);
             }
         });
     }
@@ -112,8 +110,6 @@ public class BookingComponent extends VerticalLayout {
                 final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
                 bookingDialog.addDialogBookingListener(this::handleDialogBooking);
                 bookingDialog.openFree();
-            } else {
-                NotificationUtil.infoNotification(validationResult.getMessage());
             }
         });
     }

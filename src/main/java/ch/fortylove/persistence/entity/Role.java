@@ -9,9 +9,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "roles")
 public class Role extends AbstractEntity {
@@ -21,20 +21,20 @@ public class Role extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-    private List<User> users = new ArrayList<>();
+    private Set<User> users = new HashSet<>();
 
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    private List<Privilege> privileges = new ArrayList<>();
+    private Set<Privilege> privileges = new HashSet<>();
 
     protected Role() {
         super();
     }
 
     public Role(@Nonnull final String name,
-                @Nonnull final List<Privilege> privileges) {
-        super();
+                @Nonnull final Set<Privilege> privileges) {
+        super(UUID.randomUUID());
         this.name = name;
         this.privileges = privileges;
     }
@@ -49,34 +49,27 @@ public class Role extends AbstractEntity {
     }
 
     @Nonnull
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(@Nonnull final List<User> users) {
+    public void setUsers(@Nonnull final Set<User> users) {
         this.users = users;
     }
 
     @Nonnull
-    public List<Privilege> getPrivileges() {
+    public Set<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(@Nonnull final List<Privilege> privileges) {
+    public void setPrivileges(@Nonnull final Set<Privilege> privileges) {
         this.privileges = privileges;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Role role = (Role) o;
-        return Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, users);
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
