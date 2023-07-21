@@ -166,6 +166,12 @@ public class MemberManagementView extends VerticalLayout {
 
         grid.setColumnOrder(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, rolesColumn);
 
+        lastNameColumn.setSortable(true);
+        firstNameColumn.setSortable(true);
+        emailColumn.setSortable(true);
+        playerStatusColumn.setSortable(true);
+        rolesColumn.setSortable(true);
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));

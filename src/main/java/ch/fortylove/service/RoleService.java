@@ -40,8 +40,8 @@ public class RoleService {
     }
 
     @Nonnull
-    public Optional<List<Role>> findAll() {
-        return Optional.of(roleRepository.findAll());
+    public List<Role> findAll() {
+        return roleRepository.findAll();
     }
 
     @Nonnull
