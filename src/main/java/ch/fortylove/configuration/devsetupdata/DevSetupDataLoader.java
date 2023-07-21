@@ -4,13 +4,13 @@ import ch.fortylove.configuration.setupdata.SetupDataLoaderService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 
 @SpringComponent
-@Conditional(DevSetupDataLoaderCondition.class)
+@Profile({"develop"})
 public class DevSetupDataLoader implements InitializingBean {
 
     @Nonnull private final SetupDataLoaderService setupDataLoaderService;

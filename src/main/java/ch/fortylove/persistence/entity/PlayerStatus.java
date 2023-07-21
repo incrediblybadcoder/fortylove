@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "player_status")
+@Entity(name = "playerstatus")
 public class PlayerStatus extends AbstractEntity implements Comparable<PlayerStatus> {
 
     @NotNull

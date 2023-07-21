@@ -11,7 +11,7 @@ import java.util.Optional;
 @SpringComponent
 public class PlayerStatusTestDataFactory {
 
-    public static final String DEFAULT_PLAYER_STATUS = "default_player_status";
+    public static final String DEFAULT_PLAYER_STATUS = "default_playerstatus";
 
     @Nonnull private final PlayerStatusService playerStatusService;
 

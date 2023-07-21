@@ -34,8 +34,8 @@ public class User extends AbstractEntity {
     private String email;
 
     @NotNull
-    @Column(name = "password", length = 60)
-    private String password;
+    @Column(name = "encrypted_password", length = 60)
+    private String encryptedPassword;
 
     @Column(name = "enabled")
     private boolean enabled;
@@ -53,7 +53,7 @@ public class User extends AbstractEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "player_status_id")
+    @JoinColumn(name = "playerstatus_id")
     private PlayerStatus playerStatus;
 
     protected User() {
@@ -63,7 +63,7 @@ public class User extends AbstractEntity {
     public User(@Nonnull final String firstName,
                 @Nonnull final String lastName,
                 @Nonnull final String email,
-                @Nonnull final String password,
+                @Nonnull final String encryptedPassword,
                 final boolean enabled,
                 @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
@@ -71,7 +71,7 @@ public class User extends AbstractEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.encryptedPassword = encryptedPassword;
         this.enabled = enabled;
         this.roles = roles;
         this.playerStatus = playerStatus;
@@ -115,12 +115,12 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public String getPassword() {
-        return password;
+    public String getEncryptedPassword() {
+        return encryptedPassword;
     }
 
-    public void setPassword(@Nonnull final String password) {
-        this.password = password;
+    public void setEncryptedPassword(@Nonnull final String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     @Nonnull
