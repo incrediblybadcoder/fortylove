@@ -24,6 +24,7 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,7 @@ public class UserForm extends FormLayout {
     private Button close;
     private VerticalLayout buttonContainer;
     @Nonnull final private Binder<User> binder;
+    @Nullable private User currentUser;
 
     public UserForm(final List<PlayerStatus> availableStatus, List<Role> availableRoles) {
         addClassName("user-form");
@@ -64,8 +66,6 @@ public class UserForm extends FormLayout {
         binder.addValueChangeListener(inputEvent -> updateButtonState());
 
         binder.bindInstanceFields(this);
-
-
     }
     private void defineValidators() {
         binder.forField(email)
@@ -162,7 +162,7 @@ public class UserForm extends FormLayout {
 
         save.addClickListener(click -> validateAndSave());
         update.addClickListener(click -> validateAndUpdate());
-        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
+        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, currentUser)));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
     }
 
@@ -204,20 +204,23 @@ public class UserForm extends FormLayout {
         buttonContainer.add(buttons);
     }
 
-    public void setUser(User user) {
-            binder.setBean(user);
+    public void setUser(@Nullable User user) {
+        this.currentUser = user;
+        binder.readBean(user);
     }
 
 
     private void validateAndUpdate() {
         if(binder.isValid()){
-            fireEvent(new UpdateEvent(this, binder.getBean()));
+            binder.writeBeanIfValid(currentUser);
+            fireEvent(new UpdateEvent(this, currentUser));
         }
     }
 
     private void validateAndSave() {
         if(binder.isValid()){
-            fireEvent(new SaveEvent(this, binder.getBean()));
+            binder.writeBeanIfValid(currentUser);
+            fireEvent(new SaveEvent(this, currentUser));
         }
     }
     public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
