@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nonnull;
 
 @SpringComponent
-@Profile({"production"})
+@Profile({"production", "local"})
 public class SetupDataLoader implements InitializingBean {
 
     @Nonnull private final SetupDataLoaderService setupDataLoaderService;
