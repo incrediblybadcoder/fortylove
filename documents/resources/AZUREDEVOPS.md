@@ -3,6 +3,7 @@
 ## Azure App Service
 In den WebApps des Azure App Services müssen folgende Environment Variablen für die DB Verbindung gesetzt werden (definiert im [application-properties](../../src/main/resources/application.properties)):
 * SPRING_PROFILE
+* SPRING_DATASOURCE_URL
 * SPRING_DATASOURCE_USERNAME
 * SPRING_DATASOURCE_PASSWORD
 
@@ -11,19 +12,19 @@ In den WebApps des Azure App Services müssen folgende Environment Variablen fü
 
 ### SQL Server Connection
 #### Local
-* Name: jdbc:sqlserver://localhost:1433;databaseName=fortylovedb;integratedSecurity=true;
-* User: *empty*
-* Password: *empty*
+* Name: jdbc:postgresql://localhost:5432/fortylovedb
+* User: locally defined user's username
+* Password: locally defined user's password
 
-#### Azure Sql main
+#### Azure postgresql main
 * Name: jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedb
-* User: fortylove
-* Password: nonstandard
+* User: 
+* Password: 
 
-#### Azure Sql dev
+#### Azure h2 dev
 * Name: jdbc:h2:mem:fortylove;DB_CLOSE_DELAY=-1
 * User: sa
-* Password: *empty*
+* Password:
 
 ## Azure Devops
 ### Pipeline

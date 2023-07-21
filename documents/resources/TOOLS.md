@@ -42,11 +42,3 @@ Datenbank ist erstellt - SSMS kann geschlossen werden
 * (2) SQL-Query ausführen
 * (3) Mit [fillTables.sql](.src/main/resources/schema/fillTables.sql) kann eine erste Tabelle mit Daten gefüllt werden
 ![img.png](images/DBSessions.png)
-
-# Heroku CLI
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) runterladen
-#### Login
-* Im terminal mit ``` heroku login ``` einloggen
-
-#### Logs ansehen
-* Mit ``` heroku logs --tail -a APPNAME ``` können die logs der laufenden Heroku App geöffnet werden

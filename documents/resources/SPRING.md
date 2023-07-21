@@ -10,6 +10,7 @@
 * [Spring Boot Data](https://docs.spring.io/spring-boot/docs/current/reference/html/data.html#data)
 * [Spring Boot Data JPA](https://docs.spring.io/spring-boot/docs/3.0.5/reference/htmlsingle/#data.sql.jpa-and-spring-data)
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+* [Flyway Migration Integration](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.migration-tool.flyway)
 
 #### Filtering & Sorting
 * [Repository Query Methods](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-keywords)
