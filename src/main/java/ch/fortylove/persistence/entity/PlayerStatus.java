@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "player_status")
-public class PlayerStatus extends AbstractEntity {
+public class PlayerStatus extends AbstractEntity implements Comparable<PlayerStatus> {
 
     @NotNull
     @Column(name = "name")
@@ -82,5 +82,10 @@ public class PlayerStatus extends AbstractEntity {
         return "PlayerStatus{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(final PlayerStatus o) {
+        return name.compareTo(o.getName());
     }
 }

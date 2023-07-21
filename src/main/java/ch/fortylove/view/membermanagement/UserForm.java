@@ -26,7 +26,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class UserForm extends FormLayout {
@@ -38,7 +37,7 @@ public class UserForm extends FormLayout {
 
     @Nonnull private final CheckboxGroup<Role> roleCheckboxGroup;
 
-    @Nonnull private final Optional<List<Role>> availableRoles;
+    @Nonnull private final List<Role> availableRoles;
 
     private Button save;
     private Button update;
@@ -47,7 +46,7 @@ public class UserForm extends FormLayout {
     private VerticalLayout buttonContainer;
     @Nonnull final private Binder<User> binder;
 
-    public UserForm(final List<PlayerStatus> availableStatus, Optional<List<Role>> availableRoles) {
+    public UserForm(final List<PlayerStatus> availableStatus, List<Role> availableRoles) {
         addClassName("user-form");
 
         this.firstName = new TextField("Vorname");
@@ -129,7 +128,7 @@ public class UserForm extends FormLayout {
     private void initializeCheckboxGroup() {
         roleCheckboxGroup.setLabel("Rollen");
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);
-        availableRoles.ifPresent(roleCheckboxGroup::setItems);
+        roleCheckboxGroup.setItems(availableRoles);
         roleCheckboxGroup.setRequired(true);
         roleCheckboxGroup.setRequiredIndicatorVisible(true);
         roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
