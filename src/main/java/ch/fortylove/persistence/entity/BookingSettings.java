@@ -5,19 +5,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-@Entity(name = "booking_settings")
+@Entity(name = "bookingsettings")
 public class BookingSettings extends AbstractEntity {
 
-    @NotNull
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "booking_settings_id", nullable=false)
+    @JoinColumn(name = "bookingsettings_id", nullable=false)
     private SortedSet<Timeslot> timeslots = new TreeSet<>();
 
     protected BookingSettings() {

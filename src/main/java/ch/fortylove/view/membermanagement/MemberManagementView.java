@@ -88,7 +88,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void saveUser(final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
-        user.setPassword(passwordEncoder.encode("newpassword"));
+        user.setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
         updateUserList();
         closeEditor();
