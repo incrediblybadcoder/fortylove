@@ -23,9 +23,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Route(value = "memberManagement", layout = MainLayout.class)
@@ -90,21 +88,8 @@ public class MemberManagementView extends VerticalLayout {
 
     private void saveUser(final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
-        final Set<Role> roles = new HashSet<>();
-        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
-        role.ifPresent(roles::add);
-
-        final User saveUser = new User(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                passwordEncoder.encode("newpassword"),
-                true,
-                roles,
-                user.getPlayerStatus()
-        );
-
-        userService.create(saveUser);
+        user.setPassword(passwordEncoder.encode("newpassword"));
+        userService.create(user);
         updateUserList();
         closeEditor();
         NotificationUtil.infoNotification("Mitglied wurde erfolgreich angelegt: Passwort = newpassword");
@@ -183,12 +168,7 @@ public class MemberManagementView extends VerticalLayout {
             closeEditor();
         } else {
             form.updateUserForm();
-            // Wenn man einen User im Grid anwählt und einen Eintrag ändert (z.B. Marco auf Carlos)
-            // und dann auf Abbrechen klick und dann im Grid wieder den User Marco auswählt,
-            // dann wird der User Carlos angezeigt, da der User Carlos noch im Form ist.
-            // Daher wird hier der User aus der DB geladen und nicht der User aus dem Grid.
-            userService.findById(user.getId()).ifPresent(form::setUser);
-            //form.setUser(user);
+            form.setUser(user);
             form.setVisible(true);
             addClassName("editing");
         }
