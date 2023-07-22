@@ -3,9 +3,9 @@ package ch.fortylove.view.booking;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.security.SecurityService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
-import ch.fortylove.service.SessionService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
@@ -32,7 +32,7 @@ import java.util.List;
 public class BookingComponent extends VerticalLayout {
 
     @Nonnull private final BookingService bookingService;
-    @Nonnull private final SessionService sessionService;
+    @Nonnull private final SecurityService securityService;
     @Nonnull private final CourtService courtService;
     @Nonnull private final UserService userService;
     @Nonnull private final BookingGridComponent bookingGridComponent;
@@ -40,13 +40,13 @@ public class BookingComponent extends VerticalLayout {
 
     @Autowired
     public BookingComponent(@Nonnull final BookingService bookingService,
-                            @Nonnull final SessionService sessionService,
+                            @Nonnull final SecurityService securityService,
                             @Nonnull final CourtService courtService,
                             @Nonnull final UserService userService,
                             @Nonnull final BookingGridComponent bookingGridComponent,
                             @Nonnull final DateSelectionComponent dateSelectionComponent) {
         this.bookingService = bookingService;
-        this.sessionService = sessionService;
+        this.securityService = securityService;
         this.courtService = courtService;
         this.userService = userService;
         this.bookingGridComponent = bookingGridComponent;
@@ -86,7 +86,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
-        sessionService.getCurrentUser().ifPresent(currentUser -> {
+        securityService.getCurrentUser().ifPresent(currentUser -> {
             if (!currentUser.equals(event.getBooking().getOwner())) {
                 return;
             }
@@ -103,7 +103,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
-        sessionService.getCurrentUser().ifPresent(currentUser -> {
+        securityService.getCurrentUser().ifPresent(currentUser -> {
             final ValidationResult validationResult = bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate());
             if (validationResult.isSuccessful()) {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);

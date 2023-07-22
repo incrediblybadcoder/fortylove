@@ -17,7 +17,7 @@ In den WebApps des Azure App Services müssen folgende Environment Variablen fü
 * Password: locally defined user's password
 
 #### Azure postgresql main
-* Name: jdbc:sqlserver://fortylove.database.windows.net:1433;databaseName=fortylovedb
+* Name: jdbc:postgresql://fortylove.postgres.database.azure.com:5432/fortylovedb?sslmode=require
 * User: 
 * Password: 
 
