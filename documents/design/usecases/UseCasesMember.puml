@@ -11,7 +11,8 @@ rectangle fortylove {
     Actor --> (Buchungskontingent anzeigen)
     Actor --> (Eigenes Profil anzeigen)
     Actor --> (Favoriten erstellen)
-    Actor --> (Anfrage fuer Clubbeitritt stellen)
+    Actor --> (Profil aus System loeschen)
+    Actor --> (Einloggen ins System)
 }
 
 @enduml

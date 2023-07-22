@@ -1,30 +1,32 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
-    public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
-    public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
-    public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
-
+    @NotNull
+    @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
+    @ManyToMany(mappedBy = "privileges", fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>();
 
-    public Privilege() {
+    protected Privilege() {
         super();
     }
 
     public Privilege(@Nonnull final String name) {
-        this();
+        super(UUID.randomUUID());
         this.name = name;
     }
 
@@ -38,25 +40,18 @@ public class Privilege extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final Collection<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Privilege privilege = (Privilege) o;
-        return Objects.equals(name, privilege.name) &&
-                Objects.equals(roles, privilege.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, roles);
+    public String toString() {
+        return "Privilege{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

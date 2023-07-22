@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 @Repository
-public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
+public interface PrivilegeRepository extends JpaRepository<Privilege, UUID> {
 
     @Nullable
     Privilege findByName(@Nonnull final String name);

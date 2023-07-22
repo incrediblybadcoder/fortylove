@@ -1,0 +1,15 @@
+@startuml
+object UC_1 {
+<#lightblue,#black>|= Name |<#white> Tennisplatz reservieren |
+<#lightblue,#black>|= Ziel im Kontext |<#white> Ein Member reserviert einen Tennisplatz |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein Member sucht sich einen freien Zeitslot, waehlt einen weiteren Member (Spielpartner) aus mit welchem die Reservation getaetigt wird.  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - Member hat ein Login\n - Member hat ausreichen "Kontigent / Budget" fuer die gewoenschte Platzreservation\n - Spielpartner-Member hat ausreichend "Kontigent / Budget" fuer die gewoenschte Platzreservation\n - Freie Plaetze sind vorhanden  |
+<#lightblue,#black>|= Akteure |<#white> - Member 1 (der der die Reservation taetig)\n - Member 2 (der Spielpartner-Member) |
+<#lightblue,#black>|= Trigger |<#white> Member taetigt eine Reservation  |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. Member waehlt freien Zeitslot aus\n\t-> Reaktion des Systems: List mit verfuegbaren Member (Spielpartner-Member) wird zur Auswahl bereitgestellt\n 2. Member waehlt gewoenschten Spielpartner-Member aus und bestaetigt Reservation\n\t-> Reaktion des Systems: Reservation wird im System registriert  |
+<#lightblue,#black>|= Erweiterungen |<#white> 2a. System stellt fest, dass Member 1 oder Member 2 zu wenig "Kontigent / Budget" hat\n 2b. System informiert Member ueber zu wenig "Kontigent / Budget" und lehnt Reservationsanfrage ab |
+<#lightblue,#black>|= Nachbedingungen |<#white> - Member 1 und Member 2 erhalten Reservationsbestaetigung\n - Reservation ist im System sichtbar\n - Reservierter Platz ist fuer weitere Reservation nicht mehr erhaeltlich\n - "Kontigent / Budget" Konto der beiden Member wird aktuallisiert |
+<#lightblue,#black>|= Fragen, Kommentare |<#with> - Wie sollen die beiden Member eine Reservationsbestaetigung erhalten?\n\t-> per Mail?\n\t-> per SMS?\n\t-> per WhatsApp?\n\t-> per App? |
+}
+
+@enduml

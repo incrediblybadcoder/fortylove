@@ -34,13 +34,6 @@ steps:
         Write-Host "========================================================================"
     displayName: "Print Variables"
 
-  - task: Cache@2
-    inputs:
-      key: "gradle | \"$(Agent.OS)\" | **/build/**"
-      restoreKeys: "gradle | \"$(Agent.OS)\""
-      path: ".gradle"
-    displayName: "Cache dependencies and build directory"
-
   - task: JavaToolInstaller@0
     inputs:
       versionSpec: "17"
@@ -62,6 +55,7 @@ steps:
       tasks: "build"
     env:
       SPRING_PROFILE: "$(SPRING_PROFILE)"
+      SPRING_DATASOURCE_URL: "$(SPRING_DATASOURCE_URL)"
       SPRING_DATASOURCE_USERNAME: "$(SPRING_DATASOURCE_USERNAME)"
       SPRING_DATASOURCE_PASSWORD: "$(SPRING_DATASOURCE_PASSWORD)"
     displayName: "Gradle Build"

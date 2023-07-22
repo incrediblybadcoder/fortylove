@@ -7,7 +7,20 @@ rectangle fortylove {
     Actor --> (Uebersicht der Reservierungen anzeigen)
     Actor --> (Platzbelegung anzeigen)
     Actor --> (Reservierungen bearbeiten)
+    Actor --> (Anfrage fuer Clubbeitritt stellen)
+
+    note "Ein Verein muss Plaetze\nfuer Guest freigegeben haben" as N2
+    (Tennisplatz reservieren) .. N2
+    (Reservierung loeschen) .. N2
+    (Uebersicht der Reservierungen anzeigen) .. N2
+    (Platzbelegung anzeigen) .. N2
+    (Reservierungen bearbeiten) .. N2
 }
 
 @enduml
+
+
+
+
+
 

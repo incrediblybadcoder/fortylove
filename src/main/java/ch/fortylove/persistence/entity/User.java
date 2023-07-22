@@ -1,57 +1,80 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "users")
 public class User extends AbstractEntity {
 
+    @NotNull
+    @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
+    @Column(name = "last_name")
     private String lastName;
 
+    @Email
+    @NotNull
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(length = 60)
-    private String password;
+    @NotNull
+    @Column(name = "encrypted_password", length = 60)
+    private String encryptedPassword;
 
+    @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Collection<Role> roles;
+    @NotNull
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users")
-    private Collection<Booking> bookings;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Booking> ownerBookings = new HashSet<>();
 
-    public User() {
+    @ManyToMany(mappedBy = "opponents", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private Set<Booking> opponentBookings = new HashSet<>();
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "playerstatus_id")
+    private PlayerStatus playerStatus;
+
+    protected User() {
         super();
-        this.enabled = false;
     }
 
     public User(@Nonnull final String firstName,
                 @Nonnull final String lastName,
-                @Nonnull final String password,
                 @Nonnull final String email,
-                @Nonnull final Collection<Role> roles) {
-        this();
+                @Nonnull final String encryptedPassword,
+                final boolean enabled,
+                @Nonnull final Set<Role> roles,
+                @Nonnull final PlayerStatus playerStatus) {
+        super(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
-        this.password = password;
         this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.enabled = enabled;
         this.roles = roles;
+        this.playerStatus = playerStatus;
     }
 
     @Nonnull
@@ -73,6 +96,16 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    @Nonnull
+    public String getAbbreviatedName() {
+        return firstName.substring(0,1) + ". " + lastName;
+    }
+
+    @Nonnull
     public String getEmail() {
         return email;
     }
@@ -82,20 +115,20 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public String getPassword() {
-        return password;
+    public String getEncryptedPassword() {
+        return encryptedPassword;
     }
 
-    public void setPassword(@Nonnull final String password) {
-        this.password = password;
+    public void setEncryptedPassword(@Nonnull final String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     @Nonnull
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull final Collection<Role> roles) {
+    public void setRoles(@Nonnull final Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -108,30 +141,50 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public Collection<Booking> getBookings() {
-        return bookings;
+    public Set<Booking> getOwnerBookings() {
+        return ownerBookings;
     }
 
-    public void setBookings(@Nonnull final Collection<Booking> bookings) {
-        this.bookings = bookings;
+    public void setOwnerBookings(@Nonnull final Set<Booking> ownerBookings) {
+        this.ownerBookings = ownerBookings;
+    }
+
+    @Nonnull
+    public Set<Booking> getOpponentBookings() {
+        return opponentBookings;
+    }
+
+    public void setOpponentBookings(@Nonnull final Set<Booking> opponentBookings) {
+        this.opponentBookings = opponentBookings;
+    }
+
+    @Nonnull
+    public PlayerStatus getPlayerStatus() {
+        return playerStatus;
+    }
+
+    public void setPlayerStatus(@Nonnull final PlayerStatus playerStatus) {
+        this.playerStatus = playerStatus;
+    }
+
+    public void addOpponentBooking(@Nonnull final Booking booking) {
+        opponentBookings.add(booking);
+        booking.getOpponents().add(this);
+    }
+
+    public void removeOpponentBooking(@Nonnull final Booking booking) {
+        opponentBookings.remove(booking);
+        booking.getOpponents().remove(this);
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final User user = (User) o;
-        return enabled == user.enabled &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(roles, user.roles) &&
-                Objects.equals(bookings, user.bookings);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, email, password, enabled, roles, bookings);
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", playerStatus=" + playerStatus +
+                '}';
     }
 }

@@ -1,0 +1,28 @@
+@media (max-width: 600px) {
+    .booking-view * {
+        font-size: var(--lumo-font-size-xs);
+    }
+}
+
+.booking-view vaadin-grid::part(cell) {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+@media (max-width: 600px) {
+    .booking-view vaadin-grid::part(cell) {
+        max-width: 65px;
+        max-height: 65px;
+    }
+}
+
+.booking-view vaadin-grid::part(row) {
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .booking-view vaadin-avatar {
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
+    }
+}

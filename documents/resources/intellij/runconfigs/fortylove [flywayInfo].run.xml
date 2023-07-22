@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fortylove [flywayInfo]" type="GradleRunConfiguration" factoryName="Gradle" folderName="fortylove-templates">
+    <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="SPRING_DATASOURCE_PASSWORD" value="" />
+          <entry key="SPRING_DATASOURCE_URL" value="" />
+          <entry key="SPRING_DATASOURCE_USERNAME" value="" />
+        </map>
+      </option>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="flywayInfo" />
+        </list>
+      </option>
+      <option name="vmOptions" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
+  </configuration>
+</component>

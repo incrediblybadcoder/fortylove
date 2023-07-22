@@ -1,82 +1,80 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "roles")
-public class Role extends AbstractEntity {
+public class Role extends AbstractEntity implements Comparable<Role> {
 
-    public final static String ROLE_ADMIN = "ROLE_ADMIN";
-    public final static String ROLE_STAFF = "ROLE_STAFF";
-    public final static String ROLE_USER = "ROLE_USER";
-
+    @NotNull
+    @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "roles_privileges",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "privilege_id")
-    )
-    private Collection<Privilege> privileges;
+    @NotNull
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "privilege_id"))
+    private Set<Privilege> privileges = new HashSet<>();
 
-    public Role() {
+    protected Role() {
         super();
     }
 
     public Role(@Nonnull final String name,
-                @Nonnull final Collection<Privilege> privileges) {
-        this();
+                @Nonnull final Set<Privilege> privileges) {
+        super(UUID.randomUUID());
         this.name = name;
         this.privileges = privileges;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@Nonnull final String name) {
         this.name = name;
     }
 
-    public Collection<User> getUsers() {
+    @Nonnull
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(final Collection<User> users) {
+    public void setUsers(@Nonnull final Set<User> users) {
         this.users = users;
     }
 
-    public Collection<Privilege> getPrivileges() {
+    @Nonnull
+    public Set<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(final Collection<Privilege> privileges) {
+    public void setPrivileges(@Nonnull final Set<Privilege> privileges) {
         this.privileges = privileges;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Role role = (Role) o;
-        return Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users) &&
-                Objects.equals(privileges, role.privileges);
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, users, privileges);
+    public int compareTo(final Role o) {
+        return this.getName().compareTo(o.getName());
     }
 }

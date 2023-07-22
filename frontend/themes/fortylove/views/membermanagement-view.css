@@ -1,0 +1,27 @@
+/* List view */
+.member-management-view .content {
+    display: flex;
+    gap: 20px;
+}
+
+.member-management-view .content-grid {
+    flex: 2;
+}
+
+.member-management-view .content-form {
+    flex: 1;
+    padding: var(--lumo-space-m);
+    background-color: green;
+}
+
+.member-management-view .toolbar {
+    flex: 2;
+    padding: var(--lumo-space-m);
+}
+
+@media all and (max-width: 1100px) {
+    .member-management-view.editing .toolbar,
+    .member-management-view.editing .content-form {
+        display: none;
+    }
+}

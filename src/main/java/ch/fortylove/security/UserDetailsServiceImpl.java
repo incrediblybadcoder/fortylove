@@ -3,7 +3,7 @@ package ch.fortylove.security;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.service.UserService;
+import ch.fortylove.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,14 +41,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         boolean accountNonLocked = true;
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), enabled, accountNonExpired,
+                user.getEmail(), user.getEncryptedPassword(), enabled, accountNonExpired,
                 credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
+    @Nonnull
     private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
+    @Nonnull
     private List<String> getPrivileges(final Collection<Role> roles) {
         final List<String> privileges = new ArrayList<>();
         final List<Privilege> collection = new ArrayList<>();
@@ -63,6 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return privileges;
     }
 
+    @Nonnull
     private List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
         for (final String privilege : privileges) {

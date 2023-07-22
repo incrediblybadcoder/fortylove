@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS persons;
-CREATE TABLE persons (person_id INT PRIMARY KEY, name VARCHAR(255));

@@ -2,6 +2,7 @@
   <configuration default="false" name="fortylove-local" type="Application" factoryName="Application" folderName="fortylove-templates">
     <envs>
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="" />
       <env name="SPRING_DATASOURCE_USERNAME" value="" />
       <env name="SPRING_PROFILE" value="local" />
     </envs>
@@ -9,7 +10,7 @@
     <module name="fortylove.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="ch.fortylove.views.*" />
+        <option name="PATTERN" value="ch.fortylove.view.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

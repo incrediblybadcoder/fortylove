@@ -1,0 +1,15 @@
+@startuml
+object UC_2 {
+<#lightblue,#black>|= Name|<#white> Platzbelegung anzeigen |
+<#lightblue,#black>|= Ziel im Kontext |<#white> Member sehen die Status der Plaetze eines Clubs  |
+<#lightblue,#black>|= Kurzbeschreibung |<#white> Ein Member navigiert zur Seite, auf welcher die Plaetze des Clubs angezeigt werden.\n Die Status der Plaetze werden pro Zeitslot angezeigt.  |
+<#lightblue,#black>|= Vorbedingungen |<#white> - Member hat ein Login\n - Member gehoert einem Club an\n - Club besitzt Plaetze  |
+<#lightblue,#black>|= Akteure |<#white> Member |
+<#lightblue,#black>|= Trigger |<#white> Member moechte sich einen ueberblick der aktuellen Platzauslastung machen |
+<#lightblue,#black>|= Essenzielle Schritte |<#white> 1. Member loggt sich ein\n 2. Member navigiert zur Platzuebersichts Ansicht  |
+<#lightblue,#black>|= Erweiterungen |<#white> 1.5 Member navigiert zu gewuenschtem Verein\n |
+<#lightblue,#black>|= Nachbedingungen |<#white> keine |
+<#lightblue,#black>|= Fragen, Kommentare |<#white> - Loggt man sich auf einen Verein ein oder auf die App auf welcher dann mehrer Verein ersichtlich sind? |
+}
+
+@enduml

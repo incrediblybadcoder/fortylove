@@ -1,0 +1,64 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+entity "Member" as member {
+  + E-Mail Adresse (PK)
+  --
+  firstname
+  lastname
+  sex
+  age
+  status
+  role
+}
+json Member {
+   "Attribute":"status",
+   "type":"Enum",
+   "color": ["Aktiv", "Passiv", "Inaktiv", "Junior", "Vorstand", "Ehrenmitglied"]
+}
+json Member1 {
+   "Attribute":"role",
+   "type":"Enum",
+   "color": ["Admin", "Stuff", "User"]
+}
+
+
+entity "Booking" as booking {
+  + Id (PK)
+  --
+  status
+  timeslot
+}
+
+json Booking {
+   "Attribute":"status",
+   "type":"Enum",
+   "color": ["gebucht", "frei"]
+}
+
+entity "Court" as court {
+  + Id (PK)
+  --
+  unterlage
+}
+note bottom: Ein Court besteht aus\n16 Bookings, welche\njeweils einen Status haben\n(gebucht oder frei).
+
+entity "Club" as club {
+  + Id (PK)
+  --
+  name
+  adresse
+}
+note top: Ein Club hat immer mindestens\nein Member, da ein Club von einem\nBenutzer erstellt wird und dadurch\nautomatisch zum Club gehört und\nAdmin ist.
+
+court "1"-left-"\t16" booking
+booking "0..*"-up-"2" member
+club "1"-down-"0..*" court
+member "1..*"-right-"1..*" club
+
+
+
+@enduml
+
+
