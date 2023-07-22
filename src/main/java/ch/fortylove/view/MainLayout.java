@@ -16,6 +16,7 @@ import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MainLayout extends AppLayout {
 
     @Nonnull private final SecurityService securityService;
 
+    @Autowired
     public MainLayout(@Nonnull final SecurityService securityService) {
         this.securityService = securityService;
 
