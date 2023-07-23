@@ -1,6 +1,7 @@
 package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
 import ch.fortylove.service.CourtService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -24,7 +25,7 @@ public class CourtTestDataFactory {
 
     @Nonnull
     public Court createCourt() {
-        return courtService.create(new Court(CourtType.CLAY, 0, "name"));
+        return courtService.create(new Court(CourtType.CLAY, CourtIcon.ORANGE, 0, "name"));
     }
 
     @Nonnull

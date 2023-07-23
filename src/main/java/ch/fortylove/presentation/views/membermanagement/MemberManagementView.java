@@ -3,10 +3,12 @@ package ch.fortylove.presentation.views.membermanagement;
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
 import ch.fortylove.presentation.views.membermanagement.events.UpdateEvent;
+import ch.fortylove.security.SecurityConfiguration;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
@@ -21,7 +23,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,18 +35,12 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final Grid<User> grid;
     @Nonnull private final TextField filterText = new TextField();
     @Nonnull private final UserService userService;
-    @Nonnull private final PlayerStatusService playerStatusService;
-    @Nonnull private final RoleService roleService;
-    @Nonnull private final PasswordEncoder passwordEncoder;
+    @Nonnull private final UserFactory userFactory;
 
-
-
-    public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
+    public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final UserFactory userFactory) {
+        this.userFactory = userFactory;
         grid  = new Grid<>(User.class);
         this.userService = userService;
-        this.playerStatusService = playerStatusService;
-        this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
         addClassName("membermanagement-view");
         setSizeFull();
         configureGrid();
@@ -88,7 +83,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void saveUser(final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
-        user.setEncryptedPassword(passwordEncoder.encode("newpassword"));
+        user.setEncryptedPassword(SecurityConfiguration.getPasswordEncoder().encode("newpassword"));
         userService.create(user);
         updateUserList();
         closeEditor();
@@ -116,7 +111,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(new User("", "", "", "", true, roleService.getDefaultNewUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus()));
+        createNewUser(userFactory.newDefaultUser());
     }
 
     private void createNewUser(final User user) {
