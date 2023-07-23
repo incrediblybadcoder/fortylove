@@ -57,7 +57,6 @@ public class User extends AbstractEntity {
     private PlayerStatus playerStatus;
 
     protected User() {
-        super();
     }
 
     public User(@Nonnull final String firstName,

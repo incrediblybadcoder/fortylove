@@ -19,7 +19,6 @@ public class BookingSettings extends AbstractEntity {
     private SortedSet<Timeslot> timeslots = new TreeSet<>();
 
     protected BookingSettings() {
-        super();
     }
 
     public BookingSettings(@Nonnull final SortedSet<Timeslot> timeslots) {

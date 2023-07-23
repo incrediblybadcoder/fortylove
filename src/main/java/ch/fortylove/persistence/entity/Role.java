@@ -29,7 +29,6 @@ public class Role extends AbstractEntity implements Comparable<Role> {
     private Set<Privilege> privileges = new HashSet<>();
 
     protected Role() {
-        super();
     }
 
     public Role(@Nonnull final String name,

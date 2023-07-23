@@ -37,7 +37,6 @@ public class Court extends AbstractEntity {
     private Set<Booking> bookings = new HashSet<>();
 
     protected Court() {
-        super();
     }
 
     public Court(@Nonnull final CourtType courtType,
