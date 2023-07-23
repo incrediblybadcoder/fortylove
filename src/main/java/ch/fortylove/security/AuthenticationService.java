@@ -55,7 +55,7 @@ public class AuthenticationService {
      */
     public boolean register(@Nonnull String firstName, @Nonnull String lastName, @Nonnull String email, @Nonnull  String plainPassword) {
         final Optional<User> byEmail = userService.findByEmail(email);
-        if (!byEmail.isPresent()) {
+        if (byEmail.isEmpty()) {
             userService.create(userFactory.newDefaultUser(firstName, lastName, email, plainPassword));
             return true;
         } else {
