@@ -1,34 +1,17 @@
 package ch.fortylove.security;
 
-import ch.fortylove.presentation.views.LoginView;
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Nonnull;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
-@EnableWebSecurity
 @Configuration
 @Profile("develop")
-public class DevSecurityConfiguration extends VaadinWebSecurity {
-
-    @Nonnull private final UserDetailsService userDetailsService;
-
-    @Autowired
-    public DevSecurityConfiguration(@Nonnull final UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+public class DevSecurityConfiguration extends SecurityConfiguration {
 
     @Override
     protected void configure(@Nonnull final HttpSecurity http) throws Exception {
@@ -39,24 +22,5 @@ public class DevSecurityConfiguration extends VaadinWebSecurity {
                         httpSecurityCsrfConfigurer.ignoringRequestMatchers(toH2Console()));
 
         super.configure(http);
-        setLoginView(http, LoginView.class);
-
-        http.authenticationProvider(getAuthenticationProvider());
-    }
-
-    @Bean
-    @Nonnull
-    public DaoAuthenticationProvider getAuthenticationProvider() {
-        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(getPasswordEncoder());
-
-        return authProvider;
-    }
-
-    @Bean
-    @Nonnull
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
