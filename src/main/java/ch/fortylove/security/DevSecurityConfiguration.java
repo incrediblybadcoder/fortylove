@@ -9,26 +9,35 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Nonnull;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 @EnableWebSecurity
 @Configuration
-@Profile("!develop")
-public class SecurityConfiguration extends VaadinWebSecurity {
+@Profile("develop")
+public class DevSecurityConfiguration extends VaadinWebSecurity {
 
     @Nonnull private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfiguration(@Nonnull final UserDetailsService userDetailsService) {
+    public DevSecurityConfiguration(@Nonnull final UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(@Nonnull final HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorizeHttpRequests ->
+                        authorizeHttpRequests.requestMatchers(toH2Console()).permitAll())
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .csrf(httpSecurityCsrfConfigurer ->
+                        httpSecurityCsrfConfigurer.ignoringRequestMatchers(toH2Console()));
+
         super.configure(http);
         setLoginView(http, LoginView.class);
 

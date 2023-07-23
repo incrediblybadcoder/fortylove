@@ -46,7 +46,7 @@ public class MemberManagementView extends VerticalLayout {
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
-        addClassName("member-management-presentation");
+        addClassName("membermanagement-view");
         setSizeFull();
         configureGrid();
 
