@@ -10,7 +10,7 @@
     <module name="fortylove.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="ch.fortylove.view.*" />
+        <option name="PATTERN" value="ch.fortylove.presentation.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

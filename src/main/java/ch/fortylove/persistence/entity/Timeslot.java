@@ -22,7 +22,6 @@ public class Timeslot extends AbstractEntity implements Comparable<Timeslot> {
     private int index;
 
     protected Timeslot() {
-        super();
     }
 
     public Timeslot(final boolean bookable,
