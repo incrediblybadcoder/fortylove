@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.views;
 
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
@@ -20,7 +21,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     @Nonnull private final LoginForm loginForm;
 
     public LoginView(){
-        addClassName("login-presentation");
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -33,7 +33,9 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginForm.setI18n(loginFormInternational);
         loginForm.setAction("login");
 
-        add(new H1("fortylove"), loginForm);
+        Anchor registrationLink = new Anchor("registration", "Noch kein Account? Hier registrieren!");
+
+        add(new H1("fortylove"), loginForm, registrationLink);
     }
 
     @Override

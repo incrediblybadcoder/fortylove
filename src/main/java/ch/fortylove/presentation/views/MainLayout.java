@@ -1,7 +1,7 @@
 package ch.fortylove.presentation.views;
 
 import ch.fortylove.presentation.views.membermanagement.MemberManagementView;
-import ch.fortylove.security.SecurityService;
+import ch.fortylove.security.AuthenticationService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -24,11 +24,11 @@ import java.util.List;
 
 public class MainLayout extends AppLayout {
 
-    @Nonnull private final SecurityService securityService;
+    @Nonnull private final AuthenticationService authenticationService;
 
     @Autowired
-    public MainLayout(@Nonnull final SecurityService securityService) {
-        this.securityService = securityService;
+    public MainLayout(@Nonnull final AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
 
         setDrawerOpened(false);
 
@@ -68,7 +68,7 @@ public class MainLayout extends AppLayout {
         layout.setPadding(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        layout.addClickListener(event -> securityService.logout());
+        layout.addClickListener(event -> authenticationService.logout());
 
         final Tab logoutTab = new Tab();
         logoutTab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
