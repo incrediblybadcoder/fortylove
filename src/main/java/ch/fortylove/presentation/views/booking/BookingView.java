@@ -25,7 +25,7 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     public BookingView(@Nonnull final BookingComponent bookingComponent) {
         this.bookingComponent = bookingComponent;
 
-        addClassNames(LumoUtility.Padding.MEDIUM, "booking-presentation");
+        addClassNames(LumoUtility.Padding.MEDIUM, "booking-view");
         setSizeFull();
 
         constructUI();
