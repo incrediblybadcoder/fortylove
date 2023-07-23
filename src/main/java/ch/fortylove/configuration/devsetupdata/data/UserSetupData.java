@@ -7,11 +7,11 @@ import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.RecordNotFoundException;
+import ch.fortylove.security.SecurityConfiguration;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
@@ -35,17 +35,14 @@ public class UserSetupData {
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PlayerStatusService playerStatusService;
-    @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserSetupData(@Nonnull final UserService userService,
                          @Nonnull final RoleService roleService,
-                         @Nonnull final PlayerStatusService playerStatus,
-                         @Nonnull final PasswordEncoder passwordEncoder) {
+                         @Nonnull final PlayerStatusService playerStatus) {
         this.userService = userService;
         this.roleService = roleService;
         this.playerStatusService = playerStatus;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public void createUsers() {
@@ -108,7 +105,7 @@ public class UserSetupData {
         final Optional<User> user = userService.findByEmail(email);
 
         if (user.isEmpty()) {
-            userService.create(new User(firstName, lastName, email, passwordEncoder.encode(password), true, Roles, playerStatus));
+            userService.create(new User(firstName, lastName, email, SecurityConfiguration.getPasswordEncoder().encode(password), true, Roles, playerStatus));
         }
     }
 }

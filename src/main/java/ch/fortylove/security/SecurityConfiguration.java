@@ -3,9 +3,7 @@ package ch.fortylove.security;
 import ch.fortylove.presentation.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,15 +15,9 @@ import javax.annotation.Nonnull;
 
 @EnableWebSecurity
 @Configuration
-@Profile("!develop")
 public class SecurityConfiguration extends VaadinWebSecurity {
 
-    @Nonnull private final UserDetailsService userDetailsService;
-
-    @Autowired
-    public SecurityConfiguration(@Nonnull final UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired private UserDetailsService userDetailsService;
 
     @Override
     protected void configure(@Nonnull final HttpSecurity http) throws Exception {
@@ -35,9 +27,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         http.authenticationProvider(getAuthenticationProvider());
     }
 
-    @Bean
     @Nonnull
-    public DaoAuthenticationProvider getAuthenticationProvider() {
+    private DaoAuthenticationProvider getAuthenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(getPasswordEncoder());
@@ -45,9 +36,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         return authProvider;
     }
 
-    @Bean
     @Nonnull
-    public PasswordEncoder getPasswordEncoder() {
+    public static PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
