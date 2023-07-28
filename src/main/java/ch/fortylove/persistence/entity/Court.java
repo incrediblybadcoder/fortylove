@@ -25,6 +25,10 @@ public class Court extends AbstractEntity {
     @Column(name = "court_type")
     private CourtType courtType;
 
+    @NotNull
+    @Column(name = "court_icon")
+    private CourtIcon courtIcon;
+
     @PositiveOrZero
     @Column(name = "number")
     private int number;
@@ -37,14 +41,15 @@ public class Court extends AbstractEntity {
     private Set<Booking> bookings = new HashSet<>();
 
     protected Court() {
-        super();
     }
 
     public Court(@Nonnull final CourtType courtType,
+                 @Nonnull final CourtIcon courtIcon,
                  final int number,
                  final String name) {
         super(UUID.randomUUID());
         this.courtType = courtType;
+        this.courtIcon = courtIcon;
         this.number = number;
         this.name = name;
     }
@@ -56,6 +61,15 @@ public class Court extends AbstractEntity {
 
     public void setCourtType(@Nonnull final CourtType courtType) {
         this.courtType = courtType;
+    }
+
+    @Nonnull
+    public CourtIcon getCourtIcon() {
+        return courtIcon;
+    }
+
+    public void setCourtIcon(@Nonnull final CourtIcon courtIcon) {
+        this.courtIcon = courtIcon;
     }
 
     public int getNumber() {
@@ -97,6 +111,7 @@ public class Court extends AbstractEntity {
     public String toString() {
         return "Court{" +
                 "courtType=" + courtType +
+                "courtIcon=" + courtIcon +
                 ", number=" + number +
                 ", name='" + name + '\'' +
                 '}';

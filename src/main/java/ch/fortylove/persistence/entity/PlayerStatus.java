@@ -31,7 +31,6 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     private Set<User> users = new HashSet<>();
 
     protected PlayerStatus() {
-        super();
     }
 
     public PlayerStatus(@Nonnull final String name,

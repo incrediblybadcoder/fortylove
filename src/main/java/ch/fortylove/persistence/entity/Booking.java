@@ -45,7 +45,6 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
     private LocalDate date;
 
     protected Booking() {
-        super();
     }
 
     public Booking(@Nonnull final Court court,

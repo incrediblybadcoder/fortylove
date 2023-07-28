@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fortylove-local-sql" type="Application" factoryName="Application" folderName="fortylove-templates">
+    <envs>
+      <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="" />
+      <env name="SPRING_PROFILE" value="local-sql" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
+    <module name="fortylove.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.fortylove.presentation.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

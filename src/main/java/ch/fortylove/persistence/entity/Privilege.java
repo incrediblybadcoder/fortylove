@@ -22,7 +22,6 @@ public class Privilege extends AbstractEntity {
     private Set<Role> roles = new HashSet<>();
 
     protected Privilege() {
-        super();
     }
 
     public Privilege(@Nonnull final String name) {
