@@ -113,8 +113,6 @@ public class UserForm extends FormLayout {
                     return ValidationResult.ok();
                 })
                 .bind(User::getRoles, User::setRoles);
-
-
     }
 
     private void constructUI() {
@@ -204,22 +202,19 @@ public class UserForm extends FormLayout {
         buttonContainer.add(buttons);
     }
 
-    public void setUser(@Nullable User user) {
+    public void setUser(@Nullable final User user) {
         this.currentUser = user;
         binder.readBean(user);
     }
 
-
     private void validateAndUpdate() {
-        if(binder.isValid()){
-            binder.writeBeanIfValid(currentUser);
+        if(binder.writeBeanIfValid(currentUser)){
             fireEvent(new UpdateEvent(this, currentUser));
         }
     }
 
     private void validateAndSave() {
-        if(binder.isValid()){
-            binder.writeBeanIfValid(currentUser);
+        if(binder.writeBeanIfValid(currentUser)){
             fireEvent(new SaveEvent(this, currentUser));
         }
     }

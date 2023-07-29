@@ -1,5 +1,6 @@
 package ch.fortylove.service;
 
+import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.repository.RoleRepository;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Transactional
 public class RoleService {
 
-    @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = "ROLE_USER";
+    @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = RoleSetupData.ROLE_USER;
 
     @Nonnull private final RoleRepository roleRepository;
 

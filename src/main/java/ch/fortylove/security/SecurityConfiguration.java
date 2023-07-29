@@ -8,7 +8,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Nonnull;
@@ -18,6 +17,7 @@ import javax.annotation.Nonnull;
 public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Autowired private UserDetailsService userDetailsService;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(@Nonnull final HttpSecurity http) throws Exception {
@@ -31,13 +31,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     private DaoAuthenticationProvider getAuthenticationProvider() {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(getPasswordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
 
         return authProvider;
-    }
-
-    @Nonnull
-    public static PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

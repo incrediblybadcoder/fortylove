@@ -1,7 +1,8 @@
-package ch.fortylove.presentation.views;
+package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.security.AuthenticationService;
+import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -18,36 +19,46 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Nonnull;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Route("registration")
 @PageTitle("Registration")
 @AnonymousAllowed
-public class RegistrationView extends VerticalLayout{
+public class RegistrationView extends VerticalLayout {
 
-    @Nonnull private final AuthenticationService authenticationService;
+    @Nonnull private final UserService userService;
+    @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Nonnull final private Binder<User> binder;
-    private final Button register = new Button("Registrieren");
-    private final Button abbrechen = new Button("Abbrechen");
+    @Nonnull private final Button register = new Button("Registrieren");
+    @Nonnull private final Button abbrechen = new Button("Abbrechen");
 
+    @Nonnull private final TextField email = new TextField("Email");
+    @Nonnull private final TextField firstName = new TextField("Vorname");
+    @Nonnull private final TextField lastName = new TextField("Nachname");
+    @Nonnull private final PasswordField plainPassword = new PasswordField("Passwort");
+    @Nonnull private final PasswordField confirmPlainPassword = new PasswordField("Passwort bestätigen");
 
-    private final TextField email = new TextField("Email");
-    private final TextField firstName = new TextField("Vorname");
-    private final TextField lastName = new TextField("Nachname");
-    private final PasswordField plainPassword = new PasswordField("Passwort");
-    private final PasswordField confirmPlainPassword = new PasswordField("Passwort bestätigen");
+    @Nonnull private final User user;
 
-    public RegistrationView(@Nonnull final AuthenticationService authenticationService){
-        addClassName("registration-view");
-        this.authenticationService = authenticationService;
+    private String plainPasswordInput;
+    private String confirmPlainPasswordInput;
+
+    public RegistrationView(@Nonnull final UserService userService,
+                            @Nonnull final PasswordEncoder passwordEncoder,
+                            @Nonnull final UserFactory userFactory) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         this.binder = new Binder<>(User.class);
 
         defineListeners();
         defineValidators();
         binder.bindInstanceFields(this);
+
+        user = userFactory.newEmptyDefaultUser();
+        binder.setBean(user);
 
         constructUI();
     }
@@ -56,9 +67,15 @@ public class RegistrationView extends VerticalLayout{
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 
         register.addClickListener(buttonClickEvent -> {
-            final boolean register = register(email.getValue(), firstName.getValue(), lastName.getValue(), plainPassword.getValue());
-            if (register){
-                buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
+            if (binder.writeBeanIfValid(user)) {
+                if (userService.findByEmail(user.getEmail()).isPresent()) {
+                    NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
+                } else {
+                    user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPasswordInput));
+                    userService.create(user);
+                    buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
+                    NotificationUtil.infoNotification("Registration erfolgreich");
+                }
             }
         });
 
@@ -66,12 +83,6 @@ public class RegistrationView extends VerticalLayout{
     }
 
     private void defineValidators() {
-        final AtomicReference<String> plainPasswordValue = new AtomicReference<>();
-
-        binder.forField(email)
-                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
-                .bind(User::getEmail, User::setEmail);
-
         binder.forField(firstName)
                 .withValidator((Validator<String>) (value, context) -> {
                     if (value.isEmpty()) {
@@ -82,7 +93,6 @@ public class RegistrationView extends VerticalLayout{
                     return ValidationResult.ok();
                 })
                 .bind(User::getFirstName, User::setFirstName);
-
 
         binder.forField(lastName)
                 .withValidator((Validator<String>) (value, context) -> {
@@ -95,6 +105,10 @@ public class RegistrationView extends VerticalLayout{
                 })
                 .bind(User::getLastName, User::setLastName);
 
+        binder.forField(email)
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .bind(User::getEmail, User::setEmail);
+
         binder.forField(plainPassword)
                 .withValidator((Validator<String>) (value, context) -> {
                     if (value.isEmpty()) {
@@ -102,10 +116,9 @@ public class RegistrationView extends VerticalLayout{
                     } else if (value.length() < 8) {
                         return ValidationResult.error("Das Passwort muss mindestens 8 Zeichen lang sein");
                     }
-                    plainPasswordValue.set(value);
                     return ValidationResult.ok();
                 })
-                .bind(User::getEncryptedPassword, (user, value) -> {});
+                .bind(user -> plainPasswordInput, (user, value) -> plainPasswordInput = value);
 
         binder.forField(confirmPlainPassword)
                 .withValidator((Validator<String>) (value, context) -> {
@@ -114,7 +127,7 @@ public class RegistrationView extends VerticalLayout{
                     }
                     return ValidationResult.ok();
                 })
-                .bind(User::getEncryptedPassword, (user, value) -> {});
+                .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
     }
 
     private void updateButtonState() {
@@ -123,14 +136,16 @@ public class RegistrationView extends VerticalLayout{
     }
 
     private void constructUI() {
-        add(new H2("Registration"), createInputFildsLayout(), buttonsLayout());
+        add(new H2("Registration"), createInputFieldsLayout(), buttonsLayout());
         setSizeFull();
+        setSpacing(false);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
     }
 
-    private Component createInputFildsLayout() {
-        VerticalLayout inputFieldsLayout = new VerticalLayout();
+    @Nonnull
+    private Component createInputFieldsLayout() {
+        final VerticalLayout inputFieldsLayout = new VerticalLayout();
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
         email.setValueChangeMode(ValueChangeMode.EAGER);
@@ -151,6 +166,7 @@ public class RegistrationView extends VerticalLayout{
         return inputFieldsLayout;
     }
 
+    @Nonnull
     private VerticalLayout buttonsLayout() {
         final VerticalLayout buttonsLayout = new VerticalLayout();
         register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -158,20 +174,5 @@ public class RegistrationView extends VerticalLayout{
         buttonsLayout.add(register, abbrechen);
         buttonsLayout.setAlignItems(Alignment.CENTER);
         return buttonsLayout;
-    }
-
-    private boolean register(@Nonnull String email, @Nonnull String firstName, @Nonnull String lastName, @Nonnull String password) {
-        if (binder.isValid()) {
-            if (authenticationService.register(firstName, lastName, email, password)) {
-                NotificationUtil.infoNotification("Registration erfolgreich");
-                return true;
-            } else {
-                NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
-                return false;
-            }
-        } else {
-            NotificationUtil.errorNotification("Da scheint etwas nicht zu funktionieren wie es sollte. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support falls das Problem weiterhin besteht.");
-            return false;
-        }
     }
 }
