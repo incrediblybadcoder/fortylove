@@ -8,7 +8,6 @@ import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
 import ch.fortylove.presentation.views.membermanagement.events.UpdateEvent;
-import ch.fortylove.security.SecurityConfiguration;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
@@ -23,6 +22,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,9 +36,15 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final TextField filterText = new TextField();
     @Nonnull private final UserService userService;
     @Nonnull private final UserFactory userFactory;
+    @Nonnull private final PasswordEncoder passwordEncoder;
 
-    public MemberManagementView(UserService userService, final PlayerStatusService playerStatusService, final RoleService roleService, final UserFactory userFactory) {
+    public MemberManagementView(@Nonnull final UserService userService,
+                                @Nonnull final PlayerStatusService playerStatusService,
+                                @Nonnull final RoleService roleService,
+                                @Nonnull final UserFactory userFactory,
+                                @Nonnull final PasswordEncoder passwordEncoder) {
         this.userFactory = userFactory;
+        this.passwordEncoder = passwordEncoder;
         grid  = new Grid<>(User.class);
         this.userService = userService;
         addClassName("membermanagement-view");
@@ -83,7 +89,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void saveUser(final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
-        user.setEncryptedPassword(SecurityConfiguration.getPasswordEncoder().encode("newpassword"));
+        user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
         updateUserList();
         closeEditor();
@@ -111,7 +117,7 @@ public class MemberManagementView extends VerticalLayout {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        createNewUser(userFactory.newDefaultUser());
+        createNewUser(userFactory.newEmptyDefaultUser());
     }
 
     private void createNewUser(final User user) {

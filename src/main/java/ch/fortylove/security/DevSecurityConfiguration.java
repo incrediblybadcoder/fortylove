@@ -18,8 +18,8 @@ public class DevSecurityConfiguration extends SecurityConfiguration {
         http.authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests.requestMatchers(toH2Console()).permitAll())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .csrf(httpSecurityCsrfConfigurer ->
-                        httpSecurityCsrfConfigurer.ignoringRequestMatchers(toH2Console()));
+                .csrf(httpSecurityCsrfConfigurator ->
+                        httpSecurityCsrfConfigurator.ignoringRequestMatchers(toH2Console()));
 
         super.configure(http);
     }

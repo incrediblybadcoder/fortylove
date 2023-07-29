@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service("userDetailsService")
+@Service()
 @Transactional
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
@@ -39,7 +39,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         boolean accountNonLocked = true;
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getEncryptedPassword(), enabled, accountNonExpired,
+                user.getEmail(), user.getAuthenticationDetails().getEncryptedPassword(), enabled, accountNonExpired,
                 credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
