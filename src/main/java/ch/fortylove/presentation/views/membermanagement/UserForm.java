@@ -8,6 +8,8 @@ import ch.fortylove.presentation.views.membermanagement.events.CloseEvent;
 import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
 import ch.fortylove.presentation.views.membermanagement.events.UpdateEvent;
+import ch.fortylove.service.PlayerStatusService;
+import ch.fortylove.service.RoleService;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -24,23 +26,25 @@ import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Set;
 
+@SpringComponent
 public class UserForm extends FormLayout {
 
-    @Nonnull private final TextField firstName ;
+    @Nonnull private final PlayerStatusService playerStatusService;
+    @Nonnull private final RoleService roleService;
+
+    @Nonnull private final TextField firstName;
     @Nonnull private final TextField lastName;
     @Nonnull private final TextField email;
     @Nonnull private final ComboBox<PlayerStatus> playerStatus;
-    @Nonnull private final List<PlayerStatus> availableStatus;
 
     @Nonnull private final CheckboxGroup<Role> roleCheckboxGroup;
-
-    @Nonnull private final List<Role> availableRoles;
 
     @Nonnull final private Binder<User> binder;
     @Nullable private User currentUser;
@@ -51,10 +55,11 @@ public class UserForm extends FormLayout {
     private Button close;
     private VerticalLayout buttonContainer;
 
-    public UserForm(final List<PlayerStatus> availableStatus, List<Role> availableRoles) {
-
-        this.availableStatus = availableStatus;
-        this.availableRoles = availableRoles;
+    @Autowired
+    public UserForm(@Nonnull final PlayerStatusService playerStatusService,
+                    @Nonnull final RoleService roleService) {
+        this.playerStatusService = playerStatusService;
+        this.roleService = roleService;
 
         firstName = new TextField("Vorname");
         lastName = new TextField("Nachname");
@@ -130,14 +135,14 @@ public class UserForm extends FormLayout {
     private void initializeCheckboxGroup() {
         roleCheckboxGroup.setLabel("Rollen");
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);
-        roleCheckboxGroup.setItems(availableRoles);
+        roleCheckboxGroup.setItems(roleService.findAll());
         roleCheckboxGroup.setRequired(true);
         roleCheckboxGroup.setRequiredIndicatorVisible(true);
         roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
     }
 
     private void setStatusComboBoxItems() {
-        playerStatus.setItems(availableStatus);
+        playerStatus.setItems(playerStatusService.findAll());
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
         playerStatus.setAllowCustomValue(false);
     }
@@ -202,11 +207,11 @@ public class UserForm extends FormLayout {
         close.setEnabled(true);
     }
 
-    public void createUserForm(){
+    public void createUserForm() {
         addButtons(save, close);
     }
 
-    public void updateUserForm(){
+    public void updateUserForm() {
         addButtons(update, delete, close);
     }
 
@@ -221,16 +226,17 @@ public class UserForm extends FormLayout {
     }
 
     private void validateAndUpdate() {
-        if(binder.writeBeanIfValid(currentUser)){
+        if (binder.writeBeanIfValid(currentUser)) {
             fireEvent(new UpdateEvent(this, currentUser));
         }
     }
 
     private void validateAndSave() {
-        if(binder.writeBeanIfValid(currentUser)){
+        if (binder.writeBeanIfValid(currentUser)) {
             fireEvent(new SaveEvent(this, currentUser));
         }
     }
+
     public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
         addListener(DeleteEvent.class, listener);
     }
@@ -242,6 +248,7 @@ public class UserForm extends FormLayout {
     public void addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
         addListener(UpdateEvent.class, listener);
     }
+
     public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
         addListener(CloseEvent.class, listener);
     }

@@ -8,8 +8,6 @@ import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
 import ch.fortylove.presentation.views.membermanagement.events.UpdateEvent;
-import ch.fortylove.service.PlayerStatusService;
-import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
@@ -39,25 +37,25 @@ public class MemberManagementView extends VerticalLayout {
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     public MemberManagementView(@Nonnull final UserService userService,
-                                @Nonnull final PlayerStatusService playerStatusService,
-                                @Nonnull final RoleService roleService,
+                                @Nonnull final UserForm form,
                                 @Nonnull final UserFactory userFactory,
                                 @Nonnull final PasswordEncoder passwordEncoder) {
+        this.form = form;
         this.userFactory = userFactory;
         this.passwordEncoder = passwordEncoder;
-        grid  = new Grid<>(User.class);
         this.userService = userService;
+        grid = new Grid<>(User.class);
+
         addClassName("management-view");
         setSizeFull();
         configureGrid();
 
-        form = new UserForm(playerStatusService.findAll(), roleService.findAll());
         form.addSaveListener(this::saveUser);
         form.addUpdateListener(this::updateUser);
         form.addDeleteListener(this::deleteUser);
         form.addCloseListener(e -> closeEditor());
 
-        final Div content = new Div(grid, form);
+        final Div content = new Div(grid, this.form);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -67,9 +65,9 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void updateUser(@Nonnull final UpdateEvent updateEvent) {
-            userService.update(updateEvent.getUser());
-            updateUserList();
-            closeEditor();
+        userService.update(updateEvent.getUser());
+        updateUserList();
+        closeEditor();
     }
 
     private void deleteUser(@Nonnull final DeleteEvent deleteEvent) {
