@@ -8,6 +8,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringComponent
+@UIScope
 public abstract class ManagementForm<T> extends FormLayout implements FormObservable<T> {
 
     @Nonnull private final Binder<T> binder;
@@ -130,19 +132,23 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
 
     public void openCreate() {
         beforeOpen();
+
         currentItem = getNewItem();
         binder.readBean(currentItem);
         addButtons(save, close);
         updateButtonState(false);
+
         setVisible(true);
     }
 
     public void openUpdate(@Nonnull final T item) {
         beforeOpen();
+
         currentItem = item;
         binder.readBean(currentItem);
         addButtons(update, delete, close);
         updateButtonState(true);
+
         setVisible(true);
     }
 
@@ -168,5 +174,10 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     @Override
     public void addFormObserver(@Nonnull final FormObserver<T> listener) {
         formObservers.add(listener);
+        listener.addDetachListener(event -> removeFormObserver(listener));
+    }
+
+    private void removeFormObserver(@Nonnull final FormObserver<T> listener) {
+        formObservers.remove(listener);
     }
 }
