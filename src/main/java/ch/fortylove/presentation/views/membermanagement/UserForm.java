@@ -3,22 +3,13 @@ package ch.fortylove.presentation.views.membermanagement;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.DeleteConfirmationDialog;
-import ch.fortylove.presentation.views.membermanagement.events.CloseEvent;
-import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
-import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
-import ch.fortylove.presentation.views.membermanagement.events.UpdateEvent;
+import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -28,55 +19,45 @@ import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 @SpringComponent
-public class UserForm extends FormLayout {
+public class UserForm extends ManagementForm<User> {
 
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final RoleService roleService;
+    @Nonnull private final UserFactory userFactory;
 
-    @Nonnull private final TextField firstName;
-    @Nonnull private final TextField lastName;
-    @Nonnull private final TextField email;
-    @Nonnull private final ComboBox<PlayerStatus> playerStatus;
-
-    @Nonnull private final CheckboxGroup<Role> roleCheckboxGroup;
-
-    @Nonnull final private Binder<User> binder;
-    @Nullable private User currentUser;
-
-    private Button save;
-    private Button update;
-    private Button delete;
-    private Button close;
-    private VerticalLayout buttonContainer;
+    private TextField firstName;
+    private TextField lastName;
+    private TextField email;
+    private ComboBox<PlayerStatus> playerStatus;
+    private CheckboxGroup<Role> roleCheckboxGroup;
 
     @Autowired
     public UserForm(@Nonnull final PlayerStatusService playerStatusService,
-                    @Nonnull final RoleService roleService) {
+                    @Nonnull final RoleService roleService,
+                    @Nonnull final UserFactory userFactory) {
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;
-
-        firstName = new TextField("Vorname");
-        lastName = new TextField("Nachname");
-        email = new TextField("Email");
-        playerStatus = new ComboBox<>("Status");
-        roleCheckboxGroup = new CheckboxGroup<>();
-
-        constructUI();
-
-        this.binder = new Binder<>(User.class);
-        defineValidators();
-        binder.addValueChangeListener(inputEvent -> updateButtonState());
-
-        binder.bindInstanceFields(this);
+        this.userFactory = userFactory;
     }
 
-    private void defineValidators() {
+    @Override
+    protected void instantiateFields() {
+        firstName = new TextField();
+        lastName = new TextField();
+        email = new TextField();
+        playerStatus = new ComboBox<>();
+        roleCheckboxGroup = new CheckboxGroup<>();
+    }
+
+    @Override
+    protected Binder<User> getBinder() {
+        final Binder<User> binder = new Binder<>(User.class);
+
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
                 .bind(User::getEmail, User::setEmail);
@@ -92,7 +73,6 @@ public class UserForm extends FormLayout {
                 })
                 .bind(User::getFirstName, User::setFirstName);
 
-
         binder.forField(lastName)
                 .withValidator((Validator<String>) (value, context) -> {
                     if (value.isEmpty()) {
@@ -103,7 +83,6 @@ public class UserForm extends FormLayout {
                     return ValidationResult.ok();
                 })
                 .bind(User::getLastName, User::setLastName);
-
 
         binder.forField(playerStatus)
                 .withValidator((Validator<PlayerStatus>) (value, context) -> {
@@ -122,135 +101,86 @@ public class UserForm extends FormLayout {
                     return ValidationResult.ok();
                 })
                 .bind(User::getRoles, User::setRoles);
+
+        return binder;
     }
 
-    private void constructUI() {
-        initializeButtons();
-        initializeButtonsContainer();
-        setStatusComboBoxItems();
-        initializeCheckboxGroup();
-        add(createInputFieldsLayout(), roleCheckboxGroup, buttonContainer);
-    }
-
-    private void initializeCheckboxGroup() {
-        roleCheckboxGroup.setLabel("Rollen");
-        roleCheckboxGroup.setItemLabelGenerator(Role::getName);
-        roleCheckboxGroup.setItems(roleService.findAll());
-        roleCheckboxGroup.setRequired(true);
-        roleCheckboxGroup.setRequiredIndicatorVisible(true);
-        roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-    }
-
-    private void setStatusComboBoxItems() {
-        playerStatus.setItems(playerStatusService.findAll());
-        playerStatus.setItemLabelGenerator(PlayerStatus::getName);
-        playerStatus.setAllowCustomValue(false);
-    }
-
-    private void initializeButtonsContainer() {
-        buttonContainer = new VerticalLayout();
-        buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-    }
-
-    private void initializeButtons() {
-        save = new Button("Speichern");
-        update = new Button("Speichern");
-        delete = new Button("Löschen");
-        close = new Button("Abbrechen");
-
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        save.addClickShortcut(Key.ENTER);
-        update.addClickShortcut(Key.ENTER);
-        close.addClickShortcut(Key.ESCAPE);
-
-        save.addClickListener(click -> validateAndSave());
-        update.addClickListener(click -> validateAndUpdate());
-        delete.addClickListener(click -> delete());
-        close.addClickListener(click -> fireEvent(new CloseEvent(this)));
-    }
-
-    private void delete() {
-        new DeleteConfirmationDialog(
-                currentUser.getIdentifier(),
-                "User wirklich Löschen?",
-                () -> fireEvent(new DeleteEvent(this, currentUser))
-        ).open();
+    @Override
+    protected VerticalLayout getContent() {
+        return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPlayerStatusSelection(), getRoleSelection());
     }
 
     @Nonnull
-    private VerticalLayout createInputFieldsLayout() {
-        VerticalLayout inputFieldsLayout = new VerticalLayout();
+    private TextField getFirstNameField() {
+        firstName.setWidthFull();
+        firstName.setLabel("Vorname");
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
-        lastName.setValueChangeMode(ValueChangeMode.EAGER);
-        email.setValueChangeMode(ValueChangeMode.EAGER);
-        firstName.setRequired(true);
         firstName.setRequiredIndicatorVisible(true);
+        firstName.setRequired(true);
+        return firstName;
+    }
+
+    @Nonnull
+    private TextField getLastNameField() {
+        lastName.setWidthFull();
+        lastName.setLabel("Nachname");
+        lastName.setValueChangeMode(ValueChangeMode.EAGER);
         lastName.setRequired(true);
         lastName.setRequiredIndicatorVisible(true);
+        return lastName;
+    }
+
+    @Nonnull
+    private TextField getEmailField() {
+        email.setWidthFull();
+        email.setLabel("Email");
+        email.setValueChangeMode(ValueChangeMode.EAGER);
         email.setRequired(true);
         email.setRequiredIndicatorVisible(true);
+        return email;
+    }
+
+    private ComboBox<PlayerStatus> getPlayerStatusSelection() {
+        playerStatus.setWidthFull();
+        playerStatus.setLabel("Status");
         playerStatus.setRequired(true);
         playerStatus.setRequiredIndicatorVisible(true);
-        inputFieldsLayout.add(firstName, lastName, email, playerStatus);
-        return inputFieldsLayout;
+        playerStatus.setItemLabelGenerator(PlayerStatus::getName);
+        playerStatus.setAllowCustomValue(false);
+        return playerStatus;
     }
 
-    private void updateButtonState() {
-        final boolean ok = binder.isValid();
-        save.setEnabled(ok);
-        update.setEnabled(ok);
-        delete.setEnabled(true);
-        close.setEnabled(true);
+    @Nonnull
+    private CheckboxGroup<Role> getRoleSelection() {
+        roleCheckboxGroup.setWidthFull();
+        roleCheckboxGroup.setLabel("Rollen");
+        roleCheckboxGroup.setItemLabelGenerator(Role::getName);
+        roleCheckboxGroup.setRequired(true);
+        roleCheckboxGroup.setRequiredIndicatorVisible(true);
+        roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        return roleCheckboxGroup;
     }
 
-    public void createUserForm() {
-        addButtons(save, close);
+    @Override
+    protected User getNewItem() {
+        return userFactory.newEmptyDefaultUser();
     }
 
-    public void updateUserForm() {
-        addButtons(update, delete, close);
+    @Override
+    protected String getItemIdentifier(@Nonnull final User user) {
+        return user.getIdentifier();
     }
 
-    private void addButtons(@Nonnull final Button... buttons) {
-        buttonContainer.removeAll();
-        buttonContainer.add(buttons);
+    @Override
+    protected String getItemName() {
+        return "Benutzer";
     }
 
-    public void setUser(@Nullable final User user) {
-        this.currentUser = user;
-        binder.readBean(user);
-    }
-
-    private void validateAndUpdate() {
-        if (binder.writeBeanIfValid(currentUser)) {
-            fireEvent(new UpdateEvent(this, currentUser));
-        }
-    }
-
-    private void validateAndSave() {
-        if (binder.writeBeanIfValid(currentUser)) {
-            fireEvent(new SaveEvent(this, currentUser));
-        }
-    }
-
-    public void addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-        addListener(DeleteEvent.class, listener);
-    }
-
-    public void addSaveListener(ComponentEventListener<SaveEvent> listener) {
-        addListener(SaveEvent.class, listener);
-    }
-
-    public void addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
-        addListener(UpdateEvent.class, listener);
-    }
-
-    public void addCloseListener(ComponentEventListener<CloseEvent> listener) {
-        addListener(CloseEvent.class, listener);
+    @Override
+    protected void beforeOpen() {
+        super.beforeOpen();
+        playerStatus.setItems(playerStatusService.findAll());
+        roleCheckboxGroup.setItems(roleService.findAll());
     }
 }
 

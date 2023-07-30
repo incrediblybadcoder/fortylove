@@ -8,6 +8,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -29,12 +30,14 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     @Nullable private T currentItem;
 
     public ManagementForm() {
+        formObservers = new ArrayList<>();
+        addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
+
         instantiateFields();
         binder = getBinder();
 
         constructUI();
         closeForm();
-        formObservers = new ArrayList<>();
     }
 
     protected abstract void instantiateFields();
@@ -126,6 +129,7 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     }
 
     public void openCreate() {
+        beforeOpen();
         currentItem = getNewItem();
         binder.readBean(currentItem);
         addButtons(save, close);
@@ -133,10 +137,19 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     }
 
     public void openUpdate(@Nonnull final T item) {
+        beforeOpen();
         currentItem = item;
         binder.readBean(currentItem);
         addButtons(update, delete, close);
         setVisible(true);
+    }
+
+    /**
+     * Is called before any open procedures are made.
+     * Can be used to do additional steps before loading the selected item.
+     * For example filling comboboxes or radiogroups with selection items.
+     */
+    protected void beforeOpen() {
     }
 
     public void closeForm() {
