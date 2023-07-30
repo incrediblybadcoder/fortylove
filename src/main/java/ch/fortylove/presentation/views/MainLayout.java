@@ -56,8 +56,8 @@ public class MainLayout extends AppLayout {
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
         tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", BookingView.class));
-        tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
         tabs.add(createTab(VaadinIcon.LIST_OL, "Platzverwaltung", CourtManagementView.class));
+        tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
         tabs.add(getLogoutTab());
 
         return tabs;
