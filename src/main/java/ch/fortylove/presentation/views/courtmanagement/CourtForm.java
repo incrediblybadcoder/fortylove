@@ -18,7 +18,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 
 @SpringComponent
-public class CourtForm2 extends ManagementForm<Court> {
+public class CourtForm extends ManagementForm<Court> {
 
     private IntegerField numberField;
     private Select<CourtIcon> iconSelection;

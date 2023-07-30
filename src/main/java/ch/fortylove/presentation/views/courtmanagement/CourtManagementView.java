@@ -21,12 +21,12 @@ import jakarta.annotation.security.RolesAllowed;
 public class CourtManagementView extends VerticalLayout implements FormObserver<Court> {
 
     @Nonnull private final CourtService courtService;
-    @Nonnull private final CourtForm2 courtForm;
+    @Nonnull private final CourtForm courtForm;
 
     @Nonnull private final Grid<Court> grid;
 
     public CourtManagementView(@Nonnull final CourtService courtService,
-                               @Nonnull final CourtForm2 courtForm) {
+                               @Nonnull final CourtForm courtForm) {
         this.courtService = courtService;
         this.courtForm = courtForm;
         grid = new Grid<>(Court.class, false);
