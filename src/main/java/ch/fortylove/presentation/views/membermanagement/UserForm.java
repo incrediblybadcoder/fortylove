@@ -8,8 +8,7 @@ import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
-import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
@@ -35,7 +34,7 @@ public class UserForm extends ManagementForm<User> {
     private TextField lastName;
     private TextField email;
     private Select<PlayerStatus> playerStatus;
-    private CheckboxGroup<Role> roleCheckboxGroup;
+    private MultiSelectComboBox<Role> roleCheckboxGroup;
 
     @Autowired
     public UserForm(@Nonnull final PlayerStatusService playerStatusService,
@@ -52,7 +51,7 @@ public class UserForm extends ManagementForm<User> {
         lastName = new TextField();
         email = new TextField();
         playerStatus = new Select<>();
-        roleCheckboxGroup = new CheckboxGroup<>();
+        roleCheckboxGroup = new MultiSelectComboBox<>();
     }
 
     @Override
@@ -149,7 +148,6 @@ public class UserForm extends ManagementForm<User> {
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);
         roleCheckboxGroup.setRequired(true);
         roleCheckboxGroup.setRequiredIndicatorVisible(true);
-        roleCheckboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
         return roleCheckboxGroup;
     }
 
