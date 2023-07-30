@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 public class UserForm extends FormLayout {
+
     @Nonnull private final TextField firstName ;
     @Nonnull private final TextField lastName;
     @Nonnull private final TextField email;
@@ -40,24 +41,25 @@ public class UserForm extends FormLayout {
 
     @Nonnull private final List<Role> availableRoles;
 
+    @Nonnull final private Binder<User> binder;
+    @Nullable private User currentUser;
+
     private Button save;
     private Button update;
     private Button delete;
     private Button close;
     private VerticalLayout buttonContainer;
-    @Nonnull final private Binder<User> binder;
-    @Nullable private User currentUser;
 
     public UserForm(final List<PlayerStatus> availableStatus, List<Role> availableRoles) {
-        addClassName("user-form");
 
-        this.firstName = new TextField("Vorname");
-        this.lastName = new TextField("Nachname");
-        this.email = new TextField("Email");
-        this.playerStatus = new ComboBox<>("Status");
         this.availableStatus = availableStatus;
-        this.roleCheckboxGroup = new CheckboxGroup<>();
         this.availableRoles = availableRoles;
+
+        firstName = new TextField("Vorname");
+        lastName = new TextField("Nachname");
+        email = new TextField("Email");
+        playerStatus = new ComboBox<>("Status");
+        roleCheckboxGroup = new CheckboxGroup<>();
 
         constructUI();
 
@@ -67,6 +69,7 @@ public class UserForm extends FormLayout {
 
         binder.bindInstanceFields(this);
     }
+
     private void defineValidators() {
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
@@ -164,6 +167,7 @@ public class UserForm extends FormLayout {
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
     }
 
+    @Nonnull
     private VerticalLayout createInputFieldsLayout() {
         VerticalLayout inputFieldsLayout = new VerticalLayout();
         firstName.setValueChangeMode(ValueChangeMode.EAGER);

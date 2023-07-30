@@ -2,6 +2,7 @@ package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.CourtRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -34,6 +35,14 @@ public class CourtService {
     public Court create(@Nonnull final Court court) {
         if (courtRepository.findById(court.getId()).isPresent()) {
             throw new DuplicateRecordException(court);
+        }
+        return courtRepository.save(court);
+    }
+
+    @Nonnull
+    public Court update(@Nonnull final Court court) {
+        if (courtRepository.findById(court.getId()).isEmpty()) {
+            throw new RecordNotFoundException(court);
         }
         return courtRepository.save(court);
     }

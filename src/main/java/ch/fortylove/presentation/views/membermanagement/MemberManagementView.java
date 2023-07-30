@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Route(value = "memberManagement", layout = MainLayout.class)
+@Route(value = "membermanagement", layout = MainLayout.class)
 @RolesAllowed(RoleSetupData.ROLE_ADMIN)
 public class MemberManagementView extends VerticalLayout {
 
@@ -47,7 +47,7 @@ public class MemberManagementView extends VerticalLayout {
         this.passwordEncoder = passwordEncoder;
         grid  = new Grid<>(User.class);
         this.userService = userService;
-        addClassName("membermanagement-view");
+        addClassName("management-view");
         setSizeFull();
         configureGrid();
 
@@ -57,7 +57,7 @@ public class MemberManagementView extends VerticalLayout {
         form.addDeleteListener(this::deleteUser);
         form.addCloseListener(e -> closeEditor());
 
-        Div content = new Div(grid, form);
+        final Div content = new Div(grid, form);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -66,13 +66,13 @@ public class MemberManagementView extends VerticalLayout {
         closeEditor();
     }
 
-    private void updateUser(final UpdateEvent updateEvent) {
+    private void updateUser(@Nonnull final UpdateEvent updateEvent) {
             userService.update(updateEvent.getUser());
             updateUserList();
             closeEditor();
     }
 
-    private void deleteUser(final DeleteEvent deleteEvent) {
+    private void deleteUser(@Nonnull final DeleteEvent deleteEvent) {
         Optional<User> userToDelete = userService.findById(deleteEvent.getUser().getId());
         if (userToDelete.isPresent()) {
             User user = userToDelete.get();
@@ -87,7 +87,7 @@ public class MemberManagementView extends VerticalLayout {
         }
     }
 
-    private void saveUser(final SaveEvent saveEvent) {
+    private void saveUser(@Nonnull final SaveEvent saveEvent) {
         final User user = saveEvent.getUser();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
@@ -99,20 +99,18 @@ public class MemberManagementView extends VerticalLayout {
     private void closeEditor() {
         form.setUser(null);
         form.setVisible(false);
-        removeClassName("editing");
     }
 
+    @Nonnull
     private HorizontalLayout getToolBar() {
         filterText.setPlaceholder("Filter nach Name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateUserList());
 
-        Button addUserButton = new Button(("Mitglied anlegen"), click -> addUser());
+        final Button addUserButton = new Button(("Mitglied erstellen"), click -> addUser());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addUserButton);
-        toolbar.addClassName("toolbar");
-        return toolbar;
+        return new HorizontalLayout(filterText, addUserButton);
     }
 
     private void addUser() {
@@ -120,14 +118,13 @@ public class MemberManagementView extends VerticalLayout {
         createNewUser(userFactory.newEmptyDefaultUser());
     }
 
-    private void createNewUser(final User user) {
+    private void createNewUser(@Nonnull final User user) {
         if (user == null) {
             closeEditor();
         } else {
             form.createUserForm();
             form.setUser(user);
             form.setVisible(true);
-            addClassName("editing");
         }
     }
 
@@ -136,42 +133,47 @@ public class MemberManagementView extends VerticalLayout {
     }
 
     private void configureGrid() {
-        grid.addClassName("member-grid");
         grid.setSizeFull();
         grid.removeAllColumns();
 
-        Grid.Column<User> lastNameColumn = grid.addColumn(User::getLastName).setHeader("Nachname");
-        Grid.Column<User> firstNameColumn = grid.addColumn(User::getFirstName).setHeader("Vorname");
-        Grid.Column<User> emailColumn = grid.addColumn(User::getEmail).setHeader("Email");
-        Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getName()).setHeader("Spieler Status");
-        Grid.Column<User> rolesColumn = grid.addColumn(user -> user.getRoles().stream()
+        grid.addColumn(User::getLastName)
+                .setHeader("Nachname")
+                .setSortable(true)
+                .setAutoWidth(true);
+
+        grid.addColumn(User::getFirstName)
+                .setHeader("Vorname")
+                .setSortable(true)
+                .setAutoWidth(true);
+
+        grid.addColumn(User::getEmail)
+                .setHeader("Email")
+                .setSortable(true)
+                .setAutoWidth(true);
+
+        grid.addColumn(user -> user.getPlayerStatus().getName())
+                .setHeader("Spieler Status")
+                .setSortable(true)
+                .setAutoWidth(true);
+
+        grid.addColumn(user -> user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.joining(", "))
                 )
-                .setHeader("Roles");
-
-        grid.setColumnOrder(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, rolesColumn);
-
-        lastNameColumn.setSortable(true);
-        firstNameColumn.setSortable(true);
-        emailColumn.setSortable(true);
-        playerStatusColumn.setSortable(true);
-        rolesColumn.setSortable(true);
-
-        grid.getColumns().forEach(col -> col.setAutoWidth(true));
+                .setHeader("Roles")
+                .setSortable(true)
+                .setAutoWidth(true);
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
     }
 
-
-    private void editUser(User user) {
+    private void editUser(@Nonnull final User user) {
         if (user == null) {
             closeEditor();
         } else {
             form.updateUserForm();
             form.setUser(user);
             form.setVisible(true);
-            addClassName("editing");
         }
     }
 }
