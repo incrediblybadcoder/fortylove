@@ -9,7 +9,6 @@ import ch.fortylove.presentation.views.courtmanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.courtmanagement.events.SaveEvent;
 import ch.fortylove.presentation.views.courtmanagement.events.UpdateEvent;
 import ch.fortylove.service.CourtService;
-import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -65,11 +64,12 @@ public class CourtManagementView extends VerticalLayout {
         courtService.create(saveEvent.getCourt());
         updateCourtList();
         closeEditor();
-        NotificationUtil.infoNotification("Platz wurde erfolgreich angelegt");
     }
 
     private void deleteCourt(@Nonnull final DeleteEvent deleteEvent) {
-        // todo
+        courtService.delete(deleteEvent.getCourt().getId());
+        updateCourtList();
+        closeEditor();
     }
 
     private void updateCourt(@Nonnull final UpdateEvent updateEvent) {
@@ -101,24 +101,18 @@ public class CourtManagementView extends VerticalLayout {
 
         grid.addColumn(Court::getNumber)
                 .setHeader("Nummer")
-                .setAutoWidth(true)
-                .setFlexGrow(0)
                 .setSortable(true);
 
         grid.addComponentColumn(court -> getIconComponent(court.getCourtIcon()))
                 .setHeader("Icon")
-                .setAutoWidth(true)
-                .setFlexGrow(0)
                 .setSortable(true);
 
         grid.addColumn(court -> court.getCourtType().getMaterial())
                 .setHeader("Material")
-                .setFlexGrow(1)
                 .setSortable(true);
 
         grid.addColumn(Court::getName)
                 .setHeader("Name")
-                .setFlexGrow(1)
                 .setSortable(true);
 
         grid.asSingleSelect().addValueChangeListener(event -> editCourt(event.getValue()));
@@ -137,14 +131,16 @@ public class CourtManagementView extends VerticalLayout {
         grid.asSingleSelect().clear();
 
         final Court court = new Court(CourtType.CLAY, CourtIcon.ORANGE, 0, "");
-        courtForm.openNewCourt();
         courtForm.setCourt(court);
-        courtForm.setVisible(true);
+        courtForm.openNewCourt();
     }
 
     private void editCourt(@Nonnull final Court court) {
-        courtForm.openEditCourt();
-        courtForm.setCourt(court);
-        courtForm.setVisible(true);
+        if (court == null) {
+            closeEditor();
+        } else {
+            courtForm.setCourt(court);
+            courtForm.openEditCourt();
+        }
     }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Entity(name = "roles")
 public class Role extends AbstractEntity implements Comparable<Role> {
 
-    @NotNull
+    @NotBlank
     @Column(name = "name")
     private String name;
 

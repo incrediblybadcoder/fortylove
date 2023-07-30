@@ -23,12 +23,15 @@ public class CourtService {
 
     @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
+    @Nonnull private final BookingService bookingService;
 
     @Autowired
     public CourtService(@Nonnull final EntityManager entityManager,
-                        @Nonnull final CourtRepository courtRepository) {
+                        @Nonnull final CourtRepository courtRepository,
+                        @Nonnull final BookingService bookingService) {
         this.entityManager = entityManager;
         this.courtRepository = courtRepository;
+        this.bookingService = bookingService;
     }
 
     @Nonnull
@@ -45,6 +48,16 @@ public class CourtService {
             throw new RecordNotFoundException(court);
         }
         return courtRepository.save(court);
+    }
+
+    public void delete(@Nonnull final UUID id) {
+        final Court court = courtRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+
+        court.getBookings().forEach(booking -> bookingService.delete(booking.getId()));
+        court.getBookings().clear();
+
+        courtRepository.delete(court);
     }
 
     @Nonnull

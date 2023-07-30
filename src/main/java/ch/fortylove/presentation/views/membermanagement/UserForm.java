@@ -3,6 +3,7 @@ package ch.fortylove.presentation.views.membermanagement;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.presentation.components.DeleteConfirmationDialog;
 import ch.fortylove.presentation.views.membermanagement.events.CloseEvent;
 import ch.fortylove.presentation.views.membermanagement.events.DeleteEvent;
 import ch.fortylove.presentation.views.membermanagement.events.SaveEvent;
@@ -148,7 +149,7 @@ public class UserForm extends FormLayout {
 
     private void initializeButtons() {
         save = new Button("Speichern");
-        update = new Button("Aktualisieren");
+        update = new Button("Speichern");
         delete = new Button("Löschen");
         close = new Button("Abbrechen");
 
@@ -163,8 +164,16 @@ public class UserForm extends FormLayout {
 
         save.addClickListener(click -> validateAndSave());
         update.addClickListener(click -> validateAndUpdate());
-        delete.addClickListener(click -> fireEvent(new DeleteEvent(this, currentUser)));
+        delete.addClickListener(click -> delete());
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
+    }
+
+    private void delete() {
+        new DeleteConfirmationDialog(
+                currentUser.getIdentifier(),
+                "User wirklich Löschen?",
+                () -> fireEvent(new DeleteEvent(this, currentUser))
+        ).open();
     }
 
     @Nonnull

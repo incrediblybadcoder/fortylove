@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
@@ -21,16 +22,16 @@ import java.util.UUID;
 @Entity(name = "users")
 public class User extends AbstractEntity {
 
-    @NotNull
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
     @Email
-    @NotNull
+    @NotBlank
     @Column(name = "email", unique = true)
     private String email;
 
@@ -177,6 +178,11 @@ public class User extends AbstractEntity {
     public void removeOpponentBooking(@Nonnull final Booking booking) {
         opponentBookings.remove(booking);
         booking.getOpponents().remove(this);
+    }
+
+    @Nonnull
+    public String getIdentifier() {
+        return getFullName();
     }
 
     @Override

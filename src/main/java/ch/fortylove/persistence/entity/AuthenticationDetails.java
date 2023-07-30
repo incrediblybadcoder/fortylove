@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Entity(name ="authenticationdetails")
 public class AuthenticationDetails extends AbstractEntity {
 
-    @NotNull
+    @NotBlank
     @Column(name = "encrypted_password", length = 60)
     private String encryptedPassword;
 

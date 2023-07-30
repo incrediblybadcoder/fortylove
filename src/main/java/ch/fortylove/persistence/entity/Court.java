@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -29,10 +29,11 @@ public class Court extends AbstractEntity {
     @Column(name = "court_icon")
     private CourtIcon courtIcon;
 
-    @PositiveOrZero
+    @Positive
     @Column(name = "number")
     private int number;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
