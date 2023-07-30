@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views;
+package ch.fortylove.presentation.views.login;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nonnull;
 
 @SpringComponent
-@Profile({"develop"})
+@Profile("develop")
 public class DevSetupDataLoader implements InitializingBean {
 
     @Nonnull private final SetupDataLoaderService setupDataLoaderService;

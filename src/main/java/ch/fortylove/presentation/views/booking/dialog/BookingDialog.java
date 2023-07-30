@@ -5,7 +5,7 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.Dialog;
+import ch.fortylove.presentation.components.CancelableDialog;
 import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.util.FormatUtil;
 import com.vaadin.flow.component.AbstractField;
@@ -14,7 +14,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,7 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public class BookingDialog extends Dialog {
+public class BookingDialog extends CancelableDialog {
 
     @Nonnull private final Court court;
     @Nonnull private final Timeslot timeslot;
@@ -87,10 +86,6 @@ public class BookingDialog extends Dialog {
         opponentComboBox.addValueChangeListener(event -> validateOpponentSelection(event.getValue()));
         opponentComboBox.addValueChangeListener(this::restrictMaximumOpponentSelection);
         opponentComboBox.focus();
-
-        final Button closeButton = new Button(new Icon("lumo", "cross"), event -> close());
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        getHeader().add(closeButton);
 
         newButton = new Button("Speichern", newButtonClickListener());
         newButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

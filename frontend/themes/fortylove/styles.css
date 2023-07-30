@@ -1,3 +1,4 @@
-@import url("./presentation/views/booking/booking-view.css");
-@import url("./presentation/views/membermanagement/membermanagement-view.css");
 @import url("./presentation/views/vaadin-app-layout.css");
+
+@import url("./presentation/views/booking/booking-view.css");
+@import url("./presentation/views/management/management-view.css");

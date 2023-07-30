@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity(name = "privileges")
 public class Privilege extends AbstractEntity {
 
-    @NotNull
+    @NotBlank
     @Column(name = "name")
     private String name;
 

@@ -2,6 +2,7 @@ package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.CourtRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -22,12 +23,15 @@ public class CourtService {
 
     @Nonnull private final EntityManager entityManager;
     @Nonnull private final CourtRepository courtRepository;
+    @Nonnull private final BookingService bookingService;
 
     @Autowired
     public CourtService(@Nonnull final EntityManager entityManager,
-                        @Nonnull final CourtRepository courtRepository) {
+                        @Nonnull final CourtRepository courtRepository,
+                        @Nonnull final BookingService bookingService) {
         this.entityManager = entityManager;
         this.courtRepository = courtRepository;
+        this.bookingService = bookingService;
     }
 
     @Nonnull
@@ -36,6 +40,24 @@ public class CourtService {
             throw new DuplicateRecordException(court);
         }
         return courtRepository.save(court);
+    }
+
+    @Nonnull
+    public Court update(@Nonnull final Court court) {
+        if (courtRepository.findById(court.getId()).isEmpty()) {
+            throw new RecordNotFoundException(court);
+        }
+        return courtRepository.save(court);
+    }
+
+    public void delete(@Nonnull final UUID id) {
+        final Court court = courtRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+
+        court.getBookings().forEach(booking -> bookingService.delete(booking.getId()));
+        court.getBookings().clear();
+
+        courtRepository.delete(court);
     }
 
     @Nonnull
