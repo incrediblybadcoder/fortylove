@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.membermanagement;
+package ch.fortylove.presentation.views.management.usermanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;

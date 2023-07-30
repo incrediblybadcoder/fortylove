@@ -1,7 +1,8 @@
 package ch.fortylove.presentation.views;
 
-import ch.fortylove.presentation.views.courtmanagement.CourtManagementView;
-import ch.fortylove.presentation.views.membermanagement.MemberManagementView;
+import ch.fortylove.presentation.views.booking.BookingView;
+import ch.fortylove.presentation.views.management.courtmanagement.CourtManagementView;
+import ch.fortylove.presentation.views.management.usermanagement.UserManagementView;
 import ch.fortylove.security.AuthenticationService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -54,8 +55,8 @@ public class MainLayout extends AppLayout {
     @Nonnull
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", ch.fortylove.presentation.views.booking.BookingView.class));
-        tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", MemberManagementView.class));
+        tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", BookingView.class));
+        tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
         tabs.add(createTab(VaadinIcon.LIST_OL, "Platzverwaltung", CourtManagementView.class));
         tabs.add(getLogoutTab());
 

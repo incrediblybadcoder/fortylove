@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.membermanagement;
+package ch.fortylove.presentation.views.management.usermanagement;
 
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
@@ -21,9 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.stream.Collectors;
 
-@Route(value = "membermanagement", layout = MainLayout.class)
+@Route(value = "usermanagement", layout = MainLayout.class)
 @RolesAllowed(RoleSetupData.ROLE_ADMIN)
-public class MemberManagementView extends VerticalLayout implements FormObserver<User> {
+public class UserManagementView extends VerticalLayout implements FormObserver<User> {
 
     @Nonnull private final UserForm userForm;
     @Nonnull private final Grid<User> grid;
@@ -31,9 +31,9 @@ public class MemberManagementView extends VerticalLayout implements FormObserver
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
-    public MemberManagementView(@Nonnull final UserService userService,
-                                @Nonnull final UserForm userForm,
-                                @Nonnull final PasswordEncoder passwordEncoder) {
+    public UserManagementView(@Nonnull final UserService userService,
+                              @Nonnull final UserForm userForm,
+                              @Nonnull final PasswordEncoder passwordEncoder) {
         this.userForm = userForm;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;

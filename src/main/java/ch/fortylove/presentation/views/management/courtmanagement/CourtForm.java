@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.courtmanagement;
+package ch.fortylove.presentation.views.management.courtmanagement;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
