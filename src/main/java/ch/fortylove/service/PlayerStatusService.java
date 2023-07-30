@@ -1,5 +1,6 @@
 package ch.fortylove.service;
 
+import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Transactional
 public class PlayerStatusService {
 
-    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = "aktiv";
+    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = PlayerStatusSetupData.AKTIV;
 
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 

@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import javax.annotation.Nonnull;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity(name = "playerstatus")
 public class PlayerStatus extends AbstractEntity implements Comparable<PlayerStatus> {
 
-    @NotNull
+    @NotBlank
     @Column(name = "name")
     private String name;
 

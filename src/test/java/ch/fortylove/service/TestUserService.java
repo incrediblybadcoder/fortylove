@@ -1,6 +1,7 @@
 package ch.fortylove.service;
 
 import ch.fortylove.SpringTest;
+import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
@@ -35,7 +36,7 @@ class TestUserService extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", "password", true, Set.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
 
         final List<User> foundUser = testee.findAll();
         Assertions.assertEquals(1, foundUser.size());
@@ -44,8 +45,8 @@ class TestUserService extends ServiceTest {
 
     @Test
     public void testFindByEmail_notExists() {
-        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Set.of(role), playerStatus));
-        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Set.of(role), playerStatus));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
 
         final Optional<User> foundUser = testee.findByEmail("email2@fortylove.ch");
 
@@ -54,13 +55,17 @@ class TestUserService extends ServiceTest {
 
     @Test
     public void testFindByEmail_exists() {
-        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", "password1", true, Set.of(role), playerStatus));
-        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", "password2", true, Set.of(role), playerStatus));
-        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", "password3", true, Set.of(role), playerStatus));
+        testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
+        testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
 
         final Optional<User> foundUser = testee.findByEmail("email2@fortylove.ch");
 
         Assertions.assertTrue(foundUser.isPresent());
         Assertions.assertEquals(createdUser, foundUser.get());
+    }
+
+    private AuthenticationDetails getAuthenticationDetails() {
+        return new AuthenticationDetails("password", "activationCode");
     }
 }

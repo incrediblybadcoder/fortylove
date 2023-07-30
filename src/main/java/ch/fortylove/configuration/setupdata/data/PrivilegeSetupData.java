@@ -12,9 +12,13 @@ import java.util.Optional;
 @SetupData
 public class PrivilegeSetupData {
 
-    @Nonnull public final static String READ_PRIVILEGE = "READ_PRIVILEGE";
-    @Nonnull public final static String WRITE_PRIVILEGE = "WRITE_PRIVILEGE";
-    @Nonnull public final static String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
+    @Nonnull public final static String MANAGEMENT_USER_CREATE = "MANAGEMENT_USER_CREATE";
+    @Nonnull public final static String MANAGEMENT_USER_DELETE = "MANAGEMENT_USER_DELETE";
+    @Nonnull public final static String MANAGEMENT_USER_MODIFY = "MANAGEMENT_USER_MODIFY";
+
+    @Nonnull public final static String MANAGEMENT_COURT_CREATE = "MANAGEMENT_COURT_CREATE";
+    @Nonnull public final static String MANAGEMENT_COURT_DELETE = "MANAGEMENT_COURT_DELETE";
+    @Nonnull public final static String MANAGEMENT_COURT_MODIFY = "MANAGEMENT_COURT_MODIFY";
 
     @Nonnull private final PrivilegeService privilegeService;
 
@@ -24,9 +28,13 @@ public class PrivilegeSetupData {
     }
 
     public void createPrivileges() {
-        createPrivilegeIfNotFound(READ_PRIVILEGE);
-        createPrivilegeIfNotFound(WRITE_PRIVILEGE);
-        createPrivilegeIfNotFound(CHANGE_PASSWORD_PRIVILEGE);
+        createPrivilegeIfNotFound(MANAGEMENT_USER_CREATE);
+        createPrivilegeIfNotFound(MANAGEMENT_USER_DELETE);
+        createPrivilegeIfNotFound(MANAGEMENT_USER_MODIFY);
+
+        createPrivilegeIfNotFound(MANAGEMENT_COURT_CREATE);
+        createPrivilegeIfNotFound(MANAGEMENT_COURT_DELETE);
+        createPrivilegeIfNotFound(MANAGEMENT_COURT_MODIFY);
     }
 
     @Transactional

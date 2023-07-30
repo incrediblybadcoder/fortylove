@@ -3,6 +3,7 @@ package ch.fortylove.presentation.views.booking;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.presentation.components.DeleteConfirmationDialog;
 import ch.fortylove.presentation.views.booking.dateselection.DateSelectionComponent;
 import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
@@ -16,8 +17,6 @@ import ch.fortylove.service.CourtService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -86,7 +85,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
-        authenticationService.getCurrentUser().ifPresent(currentUser -> {
+        authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             if (!currentUser.equals(event.getBooking().getOwner())) {
                 return;
             }
@@ -103,7 +102,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
-        authenticationService.getCurrentUser().ifPresent(currentUser -> {
+        authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             final ValidationResult validationResult = bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate());
             if (validationResult.isSuccessful()) {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
@@ -144,22 +143,15 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void openConfirmDialog(@Nonnull final Booking booking) {
-        final ConfirmDialog dialog = new ConfirmDialog();
-        dialog.setHeader(booking.getIdentifier());
-        dialog.setText("Buchung wirklich löschen?");
-
-        dialog.setCancelable(true);
-        dialog.setConfirmButtonTheme(ButtonVariant.LUMO_PRIMARY.getVariantName());
-
-        dialog.setConfirmText("Löschen");
-        dialog.setConfirmButtonTheme(ButtonVariant.LUMO_ERROR.getVariantName());
-        dialog.addConfirmListener(event -> {
-            bookingService.delete(booking.getId());
-            NotificationUtil.infoNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
-            refresh();
-        });
-
-        dialog.open();
+        new DeleteConfirmationDialog(
+                booking.getIdentifier(),
+                "Buchung wirklich Löschen?",
+                () -> {
+                    bookingService.delete(booking.getId());
+                    NotificationUtil.infoNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
+                    refresh();
+                }
+        ).open();
     }
 
     @Nonnull

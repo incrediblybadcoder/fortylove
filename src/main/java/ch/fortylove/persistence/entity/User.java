@@ -9,7 +9,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import javax.annotation.Nonnull;
@@ -20,22 +22,23 @@ import java.util.UUID;
 @Entity(name = "users")
 public class User extends AbstractEntity {
 
-    @NotNull
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
     @Email
-    @NotNull
+    @NotBlank
     @Column(name = "email", unique = true)
     private String email;
 
     @NotNull
-    @Column(name = "encrypted_password", length = 60)
-    private String encryptedPassword;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "authenticationdetails_id")
+    private AuthenticationDetails authenticationDetails;
 
     @Column(name = "enabled")
     private boolean enabled;
@@ -62,7 +65,7 @@ public class User extends AbstractEntity {
     public User(@Nonnull final String firstName,
                 @Nonnull final String lastName,
                 @Nonnull final String email,
-                @Nonnull final String encryptedPassword,
+                @Nonnull final AuthenticationDetails authenticationDetails,
                 final boolean enabled,
                 @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
@@ -70,7 +73,8 @@ public class User extends AbstractEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.encryptedPassword = encryptedPassword;
+        this.authenticationDetails = authenticationDetails;
+        authenticationDetails.setUser(this);
         this.enabled = enabled;
         this.roles = roles;
         this.playerStatus = playerStatus;
@@ -83,6 +87,15 @@ public class User extends AbstractEntity {
 
     public void setFirstName(@Nonnull final String firstName) {
         this.firstName = firstName;
+    }
+
+    @Nonnull
+    public AuthenticationDetails getAuthenticationDetails() {
+        return authenticationDetails;
+    }
+
+    public void setUserAuthenticationDetails(@Nonnull final AuthenticationDetails authenticationDetails) {
+        this.authenticationDetails = authenticationDetails;
     }
 
     @Nonnull
@@ -100,26 +113,12 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public String getAbbreviatedName() {
-        return firstName.substring(0,1) + ". " + lastName;
-    }
-
-    @Nonnull
     public String getEmail() {
         return email;
     }
 
     public void setEmail(@Nonnull final String username) {
         this.email = username;
-    }
-
-    @Nonnull
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    public void setEncryptedPassword(@Nonnull final String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
     }
 
     @Nonnull
@@ -174,6 +173,11 @@ public class User extends AbstractEntity {
     public void removeOpponentBooking(@Nonnull final Booking booking) {
         opponentBookings.remove(booking);
         booking.getOpponents().remove(this);
+    }
+
+    @Nonnull
+    public String getIdentifier() {
+        return getFullName();
     }
 
     @Override
