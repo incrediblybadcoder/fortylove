@@ -17,7 +17,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "courtmanagement", layout = MainLayout.class)
-@RolesAllowed(RoleSetupData.ROLE_ADMIN)
+@RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
 public class CourtManagementView extends VerticalLayout implements FormObserver<Court> {
 
     @Nonnull private final CourtService courtService;

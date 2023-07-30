@@ -1,9 +1,11 @@
 package ch.fortylove.presentation.views;
 
+import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.management.courtmanagement.CourtManagementView;
 import ch.fortylove.presentation.views.management.usermanagement.UserManagementView;
 import ch.fortylove.security.AuthenticationService;
+import ch.fortylove.service.RoleService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -23,14 +25,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainLayout extends AppLayout {
 
     @Nonnull private final AuthenticationService authenticationService;
+    @Nonnull private final RoleService roleService;
 
     @Autowired
-    public MainLayout(@Nonnull final AuthenticationService authenticationService) {
+    public MainLayout(@Nonnull final AuthenticationService authenticationService,
+                      @Nonnull final RoleService roleService) {
         this.authenticationService = authenticationService;
+        this.roleService = roleService;
 
         setDrawerOpened(false);
 
@@ -56,13 +62,33 @@ public class MainLayout extends AppLayout {
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
         tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", BookingView.class));
-        tabs.add(createTab(VaadinIcon.LIST_OL, "Platzverwaltung", CourtManagementView.class));
-        tabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
+        tabs.addAll(getPrivilegedTabs());
         tabs.add(getLogoutTab());
 
         return tabs;
     }
 
+    @Nonnull
+    private List<Tab> getPrivilegedTabs() {
+        final List<Tab> privilegedTabs = new ArrayList<>();
+
+        authenticationService.getAuthenticatedUser().ifPresent(authenticatedUser -> {
+            final List<Role> managementRoles = roleService.getManagementRoles();
+            final Set<Role> userRoles = authenticatedUser.getRoles();
+
+            for (final Role userRole : userRoles) {
+                if (managementRoles.contains(userRole)) {
+                    privilegedTabs.add(createTab(VaadinIcon.LIST_OL, "Platzverwaltung", CourtManagementView.class));
+                    privilegedTabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
+                    break;
+                }
+            }
+        });
+
+        return privilegedTabs;
+    }
+
+    @Nonnull
     private Tab getLogoutTab() {
         final Icon logoutIcon = VaadinIcon.SIGN_OUT.create();
         final Label logoutLabel = new Label("Logout");
@@ -80,9 +106,9 @@ public class MainLayout extends AppLayout {
     }
 
     @Nonnull
-    private static Tab createTab(@Nonnull final VaadinIcon icon,
-                                 @Nonnull final String title,
-                                 @Nonnull final Class<? extends Component> viewClass) {
+    private Tab createTab(@Nonnull final VaadinIcon icon,
+                          @Nonnull final String title,
+                          @Nonnull final Class<? extends Component> viewClass) {
         final RouterLink content = populateLink(new RouterLink("", viewClass), icon, title);
 
         final Tab tab = new Tab();
@@ -92,9 +118,9 @@ public class MainLayout extends AppLayout {
     }
 
     @Nonnull
-    private static <T extends HasComponents> T populateLink(@Nonnull final T link,
-                                                            @Nonnull final VaadinIcon icon,
-                                                            @Nonnull final String title) {
+    private <T extends HasComponents> T populateLink(@Nonnull final T link,
+                                                     @Nonnull final VaadinIcon icon,
+                                                     @Nonnull final String title) {
         link.add(icon.create());
         link.add(title);
         return link;

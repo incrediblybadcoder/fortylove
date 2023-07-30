@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.stream.Collectors;
 
 @Route(value = "usermanagement", layout = MainLayout.class)
-@RolesAllowed(RoleSetupData.ROLE_ADMIN)
+@RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
 public class UserManagementView extends VerticalLayout implements FormObserver<User> {
 
     @Nonnull private final UserForm userForm;
