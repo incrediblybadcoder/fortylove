@@ -9,7 +9,6 @@ import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -42,7 +41,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         configureGrid();
         configureForm();
 
-        final Div content = new Div(grid, courtForm);
+        final HorizontalLayout content = new HorizontalLayout(grid, courtForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -110,7 +109,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         if (court == null) {
             courtForm.closeForm();
         } else {
-            courtForm.openUpdate(court);
+            courtForm.openModify(court);
         }
     }
 

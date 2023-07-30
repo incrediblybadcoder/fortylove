@@ -1,10 +1,12 @@
 package ch.fortylove.presentation.components.managementform;
 
 import ch.fortylove.presentation.components.DeleteConfirmationDialog;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -20,8 +22,11 @@ import java.util.List;
 @UIScope
 public abstract class ManagementForm<T> extends FormLayout implements FormObservable<T> {
 
-    @Nonnull private final Binder<T> binder;
     @Nonnull private final List<FormObserver<T>> formObservers;
+
+    private Binder<T> binder;
+
+    private H3 title;
 
     private Button save;
     private Button update;
@@ -34,9 +39,6 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     public ManagementForm() {
         formObservers = new ArrayList<>();
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
-
-        instantiateFields();
-        binder = getBinder();
 
         constructUI();
         closeForm();
@@ -56,11 +58,12 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
 
     private void constructUI() {
         initializeBinder();
-
-        add(getContent(), getButtons());
+        add(getTitle(), getContent(), getButtons());
     }
 
     private void initializeBinder() {
+        instantiateFields();
+        binder = getBinder();
         binder.addValueChangeListener(event -> updateButtonState(true));
     }
 
@@ -70,8 +73,12 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         final boolean isEnabled = isValid && hasChanges;
         save.setEnabled(isEnabled);
         update.setEnabled(isEnabled);
-        delete.setEnabled(true);
-        close.setEnabled(true);
+    }
+
+    @Nonnull
+    private Component getTitle() {
+        title = new H3();
+        return new VerticalLayout(title);
     }
 
     @Nonnull
@@ -97,7 +104,7 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         close.addClickShortcut(Key.ESCAPE);
         close.addClickListener(click -> closeClick());
 
-        buttonContainer = new VerticalLayout(save, update, delete, close);
+        buttonContainer = new VerticalLayout();
         return buttonContainer;
     }
 
@@ -131,23 +138,28 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     }
 
     public void openCreate() {
-        beforeOpen();
-
-        currentItem = getNewItem();
-        binder.readBean(currentItem);
-        addButtons(save, close);
-        updateButtonState(false);
-
-        setVisible(true);
+        final String title = getItemName() + " erstellen";
+        final Button[] buttons = {save, close};
+        open(title, getNewItem(), false, buttons);
     }
 
-    public void openUpdate(@Nonnull final T item) {
+    public void openModify(@Nonnull final T item) {
+        final String title = getItemName() + " bearbeiten";
+        final Button[] buttons = {update, delete, close};
+        open(title, item, true, buttons);
+    }
+
+    private void open(@Nonnull final String title,
+                      @Nonnull final T item,
+                      final boolean checkChanges,
+                      @Nonnull final Button... buttons) {
         beforeOpen();
 
+        this.title.setText(title);
         currentItem = item;
         binder.readBean(currentItem);
-        addButtons(update, delete, close);
-        updateButtonState(true);
+        addButtons(buttons);
+        updateButtonState(checkChanges);
 
         setVisible(true);
     }
