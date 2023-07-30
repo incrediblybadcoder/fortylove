@@ -113,11 +113,6 @@ public class User extends AbstractEntity {
     }
 
     @Nonnull
-    public String getAbbreviatedName() {
-        return firstName.substring(0,1) + ". " + lastName;
-    }
-
-    @Nonnull
     public String getEmail() {
         return email;
     }

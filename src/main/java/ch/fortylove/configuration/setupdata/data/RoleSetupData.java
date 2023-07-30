@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +31,11 @@ public class RoleSetupData {
         this.privilegeService = privilegeService;
     }
 
+    @Nonnull
+    public static List<String> getManagementRoles() {
+        return List.of(ROLE_ADMIN, ROLE_STAFF);
+    }
+
     public void createRoles() {
         createRoleIfNotFound(ROLE_ADMIN, getAdminPrivileges());
         createRoleIfNotFound(ROLE_STAFF, getStaffPrivileges());
@@ -38,31 +44,31 @@ public class RoleSetupData {
 
     @Nonnull
     private Set<Privilege> getUserPrivileges() {
-        final Set<Privilege> privileges = new HashSet<>();
-        final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
-        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
+        return new HashSet<>();
+    }
 
-        readPrivilege.ifPresent(privileges::add);
-        changePasswordPrivilege.ifPresent(privileges::add);
+    @Nonnull
+    private Set<Privilege> getStaffPrivileges() {
+        final Set<Privilege> privileges = new HashSet<>();
+
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_USER_MODIFY).ifPresent(privileges::add);
+
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_COURT_MODIFY).ifPresent(privileges::add);
 
         return privileges;
     }
 
     @Nonnull
-    private Set<Privilege> getStaffPrivileges() {
-        return getAdminPrivileges();
-    }
-
-    @Nonnull
     private Set<Privilege> getAdminPrivileges() {
         final Set<Privilege> privileges = new HashSet<>();
-        final Optional<Privilege> readPrivilege = privilegeService.findByName(PrivilegeSetupData.READ_PRIVILEGE);
-        final Optional<Privilege> changePasswordPrivilege = privilegeService.findByName(PrivilegeSetupData.CHANGE_PASSWORD_PRIVILEGE);
-        final Optional<Privilege> writePrivilege = privilegeService.findByName(PrivilegeSetupData.WRITE_PRIVILEGE);
 
-        readPrivilege.ifPresent(privileges::add);
-        writePrivilege.ifPresent(privileges::add);
-        changePasswordPrivilege.ifPresent(privileges::add);
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_USER_CREATE).ifPresent(privileges::add);
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_USER_DELETE).ifPresent(privileges::add);
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_USER_MODIFY).ifPresent(privileges::add);
+
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_COURT_CREATE).ifPresent(privileges::add);
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_COURT_DELETE).ifPresent(privileges::add);
+        privilegeService.findByName(PrivilegeSetupData.MANAGEMENT_COURT_MODIFY).ifPresent(privileges::add);
 
         return privileges;
     }

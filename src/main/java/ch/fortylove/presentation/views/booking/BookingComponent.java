@@ -85,7 +85,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
-        authenticationService.getCurrentUser().ifPresent(currentUser -> {
+        authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             if (!currentUser.equals(event.getBooking().getOwner())) {
                 return;
             }
@@ -102,7 +102,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
-        authenticationService.getCurrentUser().ifPresent(currentUser -> {
+        authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             final ValidationResult validationResult = bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate());
             if (validationResult.isSuccessful()) {
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);

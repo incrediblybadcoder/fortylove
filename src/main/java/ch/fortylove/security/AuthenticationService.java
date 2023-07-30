@@ -24,21 +24,18 @@ public class AuthenticationService {
     }
 
     @Nonnull
-    public Optional<UserDetails> getAuthenticatedUser() {
-        return authenticationContext.getAuthenticatedUser(UserDetails.class);
-    }
+    public Optional<User> getAuthenticatedUser() {
+        final Optional<UserDetails> authenticatedUser = authenticationContext.getAuthenticatedUser(UserDetails.class);
 
-    public void logout() {
-        authenticationContext.logout();
-    }
-
-    @Nonnull
-    public Optional<User> getCurrentUser() {
-        final Optional<UserDetails> authenticatedUser = getAuthenticatedUser();
         if (authenticatedUser.isEmpty()) {
             return Optional.empty();
         }
         final String username = authenticatedUser.get().getUsername();
         return userService.findByEmail(username);
     }
+
+    public void logout() {
+        authenticationContext.logout();
+    }
+
 }

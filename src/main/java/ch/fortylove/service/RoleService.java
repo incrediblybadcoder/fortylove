@@ -52,4 +52,10 @@ public class RoleService {
         role.ifPresent(roles::add);
         return roles;
     }
+
+    @Nonnull
+    public List<Role> getManagementRoles() {
+        @Nonnull final List<String> managementRoles = RoleSetupData.getManagementRoles();
+        return roleRepository.findRolesByNames(managementRoles);
+    }
 }
