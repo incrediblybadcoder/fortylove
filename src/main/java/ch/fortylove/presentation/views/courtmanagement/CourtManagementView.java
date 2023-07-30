@@ -57,7 +57,7 @@ public class CourtManagementView extends VerticalLayout {
         courtForm.addSaveListener(this::saveCourt);
         courtForm.addUpdateListener(this::updateCourt);
         courtForm.addDeleteListener(this::deleteCourt);
-        courtForm.addCloseListener(e -> closeEditor());
+        courtForm.addCloseListener(event -> closeEditor());
     }
 
     private void saveCourt(@Nonnull final SaveEvent saveEvent) {

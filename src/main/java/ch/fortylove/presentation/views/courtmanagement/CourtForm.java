@@ -176,9 +176,9 @@ public class CourtForm extends FormLayout {
         buttonContainer.add(buttons);
     }
 
-    public void setCourt(@Nullable final Court user) {
-        this.currentCourt = user;
-        binder.readBean(user);
+    public void setCourt(@Nullable final Court court) {
+        this.currentCourt = court;
+        binder.readBean(court);
     }
 
     private void save() {
