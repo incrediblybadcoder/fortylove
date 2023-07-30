@@ -59,13 +59,15 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     }
 
     private void initializeBinder() {
-        binder.addValueChangeListener(event -> updateButtonState());
+        binder.addValueChangeListener(event -> updateButtonState(true));
     }
 
-    private void updateButtonState() {
+    private void updateButtonState(final boolean checkChanges) {
         final boolean isValid = binder.isValid();
-        save.setEnabled(isValid);
-        update.setEnabled(isValid);
+        final boolean hasChanges = !checkChanges || binder.hasChanges();
+        final boolean isEnabled = isValid && hasChanges;
+        save.setEnabled(isEnabled);
+        update.setEnabled(isEnabled);
         delete.setEnabled(true);
         close.setEnabled(true);
     }
@@ -75,13 +77,11 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         save = new Button("Speichern");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.setWidthFull();
-        save.addClickShortcut(Key.ENTER);
         save.addClickListener(click -> saveClick());
 
         update = new Button("Speichern");
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         update.setWidthFull();
-        update.addClickShortcut(Key.ENTER);
         update.addClickListener(click -> updateClick());
 
         delete = new Button("Löschen");
@@ -133,6 +133,7 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         currentItem = getNewItem();
         binder.readBean(currentItem);
         addButtons(save, close);
+        updateButtonState(false);
         setVisible(true);
     }
 
@@ -141,6 +142,7 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         currentItem = item;
         binder.readBean(currentItem);
         addButtons(update, delete, close);
+        updateButtonState(true);
         setVisible(true);
     }
 

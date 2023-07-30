@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 
@@ -109,6 +110,7 @@ public class CourtForm extends ManagementForm<Court> {
     private Component getNameField() {
         nameField.setWidthFull();
         nameField.setLabel("Name");
+        nameField.setValueChangeMode(ValueChangeMode.EAGER);
         return nameField;
     }
 }
