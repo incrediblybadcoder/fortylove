@@ -7,10 +7,11 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -33,7 +34,7 @@ public class UserForm extends ManagementForm<User> {
     private TextField firstName;
     private TextField lastName;
     private TextField email;
-    private ComboBox<PlayerStatus> playerStatus;
+    private Select<PlayerStatus> playerStatus;
     private CheckboxGroup<Role> roleCheckboxGroup;
 
     @Autowired
@@ -50,7 +51,7 @@ public class UserForm extends ManagementForm<User> {
         firstName = new TextField();
         lastName = new TextField();
         email = new TextField();
-        playerStatus = new ComboBox<>();
+        playerStatus = new Select<>();
         roleCheckboxGroup = new CheckboxGroup<>();
     }
 
@@ -84,14 +85,7 @@ public class UserForm extends ManagementForm<User> {
                 })
                 .bind(User::getLastName, User::setLastName);
 
-        binder.forField(playerStatus)
-                .withValidator((Validator<PlayerStatus>) (value, context) -> {
-                    if (value == null) {
-                        return ValidationResult.error("Bitte wählen Sie einen gültigen Status aus");
-                    }
-                    return ValidationResult.ok();
-                })
-                .bind(User::getPlayerStatus, User::setPlayerStatus);
+        binder.forField(playerStatus).bind(User::getPlayerStatus, User::setPlayerStatus);
 
         binder.forField(roleCheckboxGroup)
                 .withValidator((Validator<Set<Role>>) (value, context) -> {
@@ -111,7 +105,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private TextField getFirstNameField() {
+    private Component getFirstNameField() {
         firstName.setWidthFull();
         firstName.setLabel("Vorname");
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -121,7 +115,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private TextField getLastNameField() {
+    private Component getLastNameField() {
         lastName.setWidthFull();
         lastName.setLabel("Nachname");
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -131,7 +125,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private TextField getEmailField() {
+    private Component getEmailField() {
         email.setWidthFull();
         email.setLabel("Email");
         email.setValueChangeMode(ValueChangeMode.EAGER);
@@ -140,18 +134,16 @@ public class UserForm extends ManagementForm<User> {
         return email;
     }
 
-    private ComboBox<PlayerStatus> getPlayerStatusSelection() {
+    @Nonnull
+    private Component getPlayerStatusSelection() {
         playerStatus.setWidthFull();
         playerStatus.setLabel("Status");
-        playerStatus.setRequired(true);
-        playerStatus.setRequiredIndicatorVisible(true);
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
-        playerStatus.setAllowCustomValue(false);
         return playerStatus;
     }
 
     @Nonnull
-    private CheckboxGroup<Role> getRoleSelection() {
+    private Component getRoleSelection() {
         roleCheckboxGroup.setWidthFull();
         roleCheckboxGroup.setLabel("Rollen");
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);
