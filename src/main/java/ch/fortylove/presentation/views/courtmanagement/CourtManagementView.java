@@ -3,11 +3,8 @@ package ch.fortylove.presentation.views.courtmanagement;
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
-import ch.fortylove.persistence.entity.CourtType;
+import ch.fortylove.presentation.components.managementform.FormObserver;
 import ch.fortylove.presentation.views.MainLayout;
-import ch.fortylove.presentation.views.courtmanagement.events.DeleteEvent;
-import ch.fortylove.presentation.views.courtmanagement.events.SaveEvent;
-import ch.fortylove.presentation.views.courtmanagement.events.UpdateEvent;
 import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -21,15 +18,15 @@ import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "courtmanagement", layout = MainLayout.class)
 @RolesAllowed(RoleSetupData.ROLE_ADMIN)
-public class CourtManagementView extends VerticalLayout {
+public class CourtManagementView extends VerticalLayout implements FormObserver<Court> {
 
     @Nonnull private final CourtService courtService;
+    @Nonnull private final CourtForm2 courtForm;
 
     @Nonnull private final Grid<Court> grid;
-    @Nonnull private final CourtForm courtForm;
 
     public CourtManagementView(@Nonnull final CourtService courtService,
-                               @Nonnull final CourtForm courtForm) {
+                               @Nonnull final CourtForm2 courtForm) {
         this.courtService = courtService;
         this.courtForm = courtForm;
         grid = new Grid<>(Court.class, false);
@@ -49,38 +46,11 @@ public class CourtManagementView extends VerticalLayout {
         content.setSizeFull();
 
         add(getToolBar(), content);
-        closeEditor();
         updateCourtList();
     }
 
     private void configureForm() {
-        courtForm.addSaveListener(this::saveCourt);
-        courtForm.addUpdateListener(this::updateCourt);
-        courtForm.addDeleteListener(this::deleteCourt);
-        courtForm.addCloseListener(event -> closeEditor());
-    }
-
-    private void saveCourt(@Nonnull final SaveEvent saveEvent) {
-        courtService.create(saveEvent.getCourt());
-        updateCourtList();
-        closeEditor();
-    }
-
-    private void deleteCourt(@Nonnull final DeleteEvent deleteEvent) {
-        courtService.delete(deleteEvent.getCourt().getId());
-        updateCourtList();
-        closeEditor();
-    }
-
-    private void updateCourt(@Nonnull final UpdateEvent updateEvent) {
-        courtService.update(updateEvent.getCourt());
-        updateCourtList();
-        closeEditor();
-    }
-
-    private void closeEditor() {
-        courtForm.setCourt(null);
-        courtForm.setVisible(false);
+        courtForm.addFormObserver(this);
     }
 
     private void updateCourtList() {
@@ -129,18 +99,32 @@ public class CourtManagementView extends VerticalLayout {
 
     private void addCourt() {
         grid.asSingleSelect().clear();
-
-        final Court court = new Court(CourtType.CLAY, CourtIcon.ORANGE, 0, "");
-        courtForm.setCourt(court);
-        courtForm.openNewCourt();
+        courtForm.openCreate();
     }
 
     private void editCourt(@Nonnull final Court court) {
         if (court == null) {
-            closeEditor();
+            courtForm.closeForm();
         } else {
-            courtForm.setCourt(court);
-            courtForm.openEditCourt();
+            courtForm.openUpdate(court);
         }
+    }
+
+    @Override
+    public void saveEvent(@Nonnull final Court court) {
+        courtService.create(court);
+        updateCourtList();
+    }
+
+    @Override
+    public void updateEvent(@Nonnull final Court court) {
+        courtService.update(court);
+        updateCourtList();
+    }
+
+    @Override
+    public void deleteEvent(@Nonnull final Court court) {
+        courtService.delete(court.getId());
+        updateCourtList();
     }
 }
