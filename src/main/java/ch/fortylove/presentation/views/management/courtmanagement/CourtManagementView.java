@@ -7,8 +7,8 @@ import ch.fortylove.presentation.components.managementform.FormObserver;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -41,7 +41,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         configureGrid();
         configureForm();
 
-        final Div content = new Div(grid, courtForm);
+        final HorizontalLayout content = new HorizontalLayout(grid, courtForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -60,10 +60,9 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
     @Nonnull
     private HorizontalLayout getToolBar() {
         final Button addCourtButton = new Button(("Court erstellen"), click -> addCourt());
+        addCourtButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        final HorizontalLayout toolbar = new HorizontalLayout();
-        toolbar.add(addCourtButton);
-        return toolbar;
+        return new HorizontalLayout(addCourtButton);
     }
 
     private void configureGrid() {
@@ -71,11 +70,15 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
 
         grid.addColumn(Court::getNumber)
                 .setHeader("Nummer")
+                .setAutoWidth(true)
+                .setFlexGrow(0)
                 .setSortable(true);
 
         grid.addComponentColumn(court -> getIconComponent(court.getCourtIcon()))
                 .setHeader("Icon")
-                .setSortable(true);
+                .setSortable(true)
+                .setAutoWidth(true)
+                .setFlexGrow(0);
 
         grid.addColumn(court -> court.getCourtType().getMaterial())
                 .setHeader("Material")
@@ -106,7 +109,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         if (court == null) {
             courtForm.closeForm();
         } else {
-            courtForm.openUpdate(court);
+            courtForm.openModify(court);
         }
     }
 

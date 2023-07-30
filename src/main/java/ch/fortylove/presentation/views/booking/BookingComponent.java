@@ -17,9 +17,12 @@ import ch.fortylove.service.CourtService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
@@ -34,8 +37,11 @@ public class BookingComponent extends VerticalLayout {
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final CourtService courtService;
     @Nonnull private final UserService userService;
+
     @Nonnull private final BookingGridComponent bookingGridComponent;
     @Nonnull private final DateSelectionComponent dateSelectionComponent;
+
+    private VerticalLayout emptyCourtComponent;
 
     @Autowired
     public BookingComponent(@Nonnull final BookingService bookingService,
@@ -59,12 +65,32 @@ public class BookingComponent extends VerticalLayout {
 
     public void refresh() {
         final List<Court> courts = courtService.findAllWithBookingsByDate(getSelectedDate());
-        bookingGridComponent.setItems(courts);
+
+        emptyCourtComponent.setVisible(courts.isEmpty());
+        bookingGridComponent.setVisible(!courts.isEmpty());
+        dateSelectionComponent.setVisible(!courts.isEmpty());
+
+        if (!courts.isEmpty()) {
+            bookingGridComponent.setItems(courts);
+        }
     }
 
     private void constructUI() {
+        add(getEmptyCourtComponent());
         add(getBookingGridComponent());
         add(getDateSelectionComponent());
+    }
+
+    @Nonnull
+    private Component getEmptyCourtComponent() {
+        final Span noCourtsText = new Span("Keine Plätze vorhanden");
+
+        emptyCourtComponent = new VerticalLayout(noCourtsText);
+        emptyCourtComponent.addClassNames(LumoUtility.Padding.XLARGE);
+        emptyCourtComponent.setAlignItems(Alignment.CENTER);
+        emptyCourtComponent.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        return emptyCourtComponent;
     }
 
     @Nonnull

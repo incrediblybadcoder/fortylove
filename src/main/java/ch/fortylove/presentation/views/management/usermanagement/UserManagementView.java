@@ -8,8 +8,8 @@ import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -49,7 +49,7 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         configureGrid();
         configureForm();
 
-        final Div content = new Div(grid, userForm);
+        final HorizontalLayout content = new HorizontalLayout(grid, userForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -103,6 +103,7 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         filterText.addValueChangeListener(e -> updateUserList());
 
         final Button addUserButton = new Button(("Benutzer erstellen"), click -> addUser());
+        addUserButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         return new HorizontalLayout(filterText, addUserButton);
     }
@@ -116,7 +117,7 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         if (user == null) {
             userForm.closeForm();
         } else {
-            userForm.openUpdate(user);
+            userForm.openModify(user);
         }
     }
 

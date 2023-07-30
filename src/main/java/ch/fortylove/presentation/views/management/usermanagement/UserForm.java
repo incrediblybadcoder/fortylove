@@ -18,12 +18,14 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 @SpringComponent
+@UIScope
 public class UserForm extends ManagementForm<User> {
 
     @Nonnull private final PlayerStatusService playerStatusService;
