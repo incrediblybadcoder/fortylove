@@ -5,7 +5,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class FreeCell extends BookingCell {
+public class FreeCell extends Cell {
 
     public FreeCell(@Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
         constructUI(clickListener);

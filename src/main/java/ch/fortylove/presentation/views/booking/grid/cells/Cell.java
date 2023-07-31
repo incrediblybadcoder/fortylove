@@ -8,5 +8,7 @@ public abstract class Cell extends VerticalLayout {
         addClassName("booking-grid-cell");
         setSpacing(false);
         setPadding(false);
+        setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
     }
 }

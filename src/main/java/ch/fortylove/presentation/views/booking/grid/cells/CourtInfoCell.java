@@ -5,7 +5,7 @@ import ch.fortylove.persistence.entity.CourtIcon;
 import com.vaadin.flow.component.html.Image;
 import jakarta.annotation.Nonnull;
 
-public class CourtInfoCell extends BookingCell {
+public class CourtInfoCell extends Cell {
 
     public CourtInfoCell(@Nonnull final Court court) {
         constructUI(court);
@@ -14,7 +14,7 @@ public class CourtInfoCell extends BookingCell {
     private void constructUI(@Nonnull final Court court) {
         final CourtIcon courtIcon = court.getCourtIcon();
         final Image icon = new Image(courtIcon.getResource(), court.getIdentifier());
-        icon.setWidth("2em");
+        icon.setWidth("2.5em");
 
         add(icon);
     }

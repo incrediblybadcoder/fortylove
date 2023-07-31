@@ -4,7 +4,7 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.presentation.views.booking.grid.cells.BookedCell;
-import ch.fortylove.presentation.views.booking.grid.cells.BookingCell;
+import ch.fortylove.presentation.views.booking.grid.cells.Cell;
 import ch.fortylove.presentation.views.booking.grid.cells.CourtInfoCell;
 import ch.fortylove.presentation.views.booking.grid.cells.FreeCell;
 import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
@@ -59,8 +59,8 @@ public class BookingGrid extends Grid<Court> {
     }
 
     @Nonnull
-    private BookingCell createBookingComponent(@Nonnull final Court court,
-                                               @Nonnull final Timeslot timeslot) {
+    private Cell createBookingComponent(@Nonnull final Court court,
+                                        @Nonnull final Timeslot timeslot) {
         final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeslot);
 
         if (booking.isPresent()) {

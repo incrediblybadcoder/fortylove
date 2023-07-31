@@ -28,10 +28,12 @@
 }
 .booking-grid-cell {
     padding: 8px;
+    height: 46px;
 }
 @media (max-width: 600px) {
     .booking-grid-cell {
         padding: 2px;
+        height: 36px;
     }
 }
 @media (max-width: 600px) {
