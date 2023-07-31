@@ -55,15 +55,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Nonnull
-    public List<User> findAll(@Nonnull final String filterText) {
-        if (filterText.isEmpty()) {
-            return userRepository.findAll();
-        } else {
-            return userRepository.search(filterText);
-        }
-    }
-
     public void delete(@Nonnull final UUID id) {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));

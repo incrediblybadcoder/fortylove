@@ -9,7 +9,6 @@ import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
@@ -33,7 +32,6 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
 
     @Nonnull private final UserForm userForm;
     @Nonnull private final Grid<User> grid;
-    @Nonnull private final TextField filterText = new TextField();
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
@@ -79,22 +77,22 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
                 .setSortable(true);
 
         final Grid.Column<User> firstNameColumn = grid.addColumn(User::getFirstName)
-                .setHeader("Nachname")
+                .setHeader("Vorname")
                 .setSortable(true);
 
         final Grid.Column<User> emailColumn = grid.addColumn(User::getEmail)
-                .setHeader("Nachname")
+                .setHeader("Email")
                 .setSortable(true);
 
         final Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getName())
-                .setHeader("Nachname")
+                .setHeader("Status")
                 .setSortable(true);
 
         final Grid.Column<User> roleColumn = grid.addColumn(user -> user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.joining(", "))
                 )
-                .setHeader("Nachname")
+                .setHeader("Rollen")
                 .setSortable(true);
 
         userFilter = new UserFilter();
@@ -110,15 +108,8 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
 
     @Nonnull
     private HorizontalLayout getToolBar() {
-        filterText.setPlaceholder("Filter nach Name...");
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        filterText.addValueChangeListener(e -> updateUserList());
-
         final Button addUserButton = new Button(("Benutzer erstellen"), click -> addUser());
-        addUserButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        return new HorizontalLayout(filterText, addUserButton);
+        return new HorizontalLayout(addUserButton);
     }
 
     private void updateUserList() {
