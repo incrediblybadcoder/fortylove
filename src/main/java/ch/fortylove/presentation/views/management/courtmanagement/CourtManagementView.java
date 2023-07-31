@@ -2,7 +2,9 @@ package ch.fortylove.presentation.views.management.courtmanagement;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
-import ch.fortylove.presentation.components.managementform.FormObserver;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -23,7 +25,7 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CourtManagementView extends VerticalLayout implements FormObserver<Court> {
+public class CourtManagementView extends VerticalLayout {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final CourtForm courtForm;
@@ -55,7 +57,9 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
     }
 
     private void configureForm() {
-        courtForm.addFormObserver(this);
+        courtForm.addSaveEventListener(this::saveEvent);
+        courtForm.addModifyEventListener(this::updateEvent);
+        courtForm.addDeleteEventListener(this::deleteEvent);
     }
 
     private void updateCourtList() {
@@ -128,20 +132,20 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         }
     }
 
-    @Override
-    public void saveEvent(@Nonnull final Court court) {
+    public void saveEvent(@Nonnull final ManagementFormSaveEvent<Court> managementFormSaveEvent) {
+        final Court court = managementFormSaveEvent.getItem();
         courtService.create(court);
         updateCourtList();
     }
 
-    @Override
-    public void updateEvent(@Nonnull final Court court) {
+    public void updateEvent(@Nonnull final ManagementFormModifyEvent<Court> managementFormModifyEvent) {
+        final Court court = managementFormModifyEvent.getItem();
         courtService.update(court);
         updateCourtList();
     }
 
-    @Override
-    public void deleteEvent(@Nonnull final Court court) {
+    public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<Court> managementFormDeleteEvent) {
+        final Court court = managementFormDeleteEvent.getItem();
         courtService.delete(court.getId());
         updateCourtList();
     }

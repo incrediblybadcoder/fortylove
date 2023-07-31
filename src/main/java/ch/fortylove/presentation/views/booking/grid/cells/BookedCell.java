@@ -8,7 +8,7 @@ import com.vaadin.flow.component.avatar.AvatarGroupVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class BookedCell extends BookingCell {
+public class BookedCell extends Cell {
 
     public BookedCell(@Nonnull final Booking booking,
                       @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {

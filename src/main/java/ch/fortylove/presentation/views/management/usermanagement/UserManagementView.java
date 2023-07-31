@@ -2,7 +2,9 @@ package ch.fortylove.presentation.views.management.usermanagement;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.managementform.FormObserver;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UserManagementView extends VerticalLayout implements FormObserver<User> {
+public class UserManagementView extends VerticalLayout {
 
     @Nonnull private final UserService userService;
     @Nonnull private final UserForm userForm;
@@ -68,7 +70,9 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
     }
 
     private void configureForm() {
-        userForm.addFormObserver(this);
+        userForm.addSaveEventListener(this::saveEvent);
+        userForm.addModifyEventListener(this::updateEvent);
+        userForm.addDeleteEventListener(this::deleteEvent);
     }
 
     private void updateUserList() {
@@ -166,22 +170,22 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         }
     }
 
-    @Override
-    public void saveEvent(@Nonnull final User user) {
+    public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
+        final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
         updateUserList();
         NotificationUtil.infoNotification("Benutzer wurde erfolgreich angelegt: Passwort = newpassword");
     }
 
-    @Override
-    public void updateEvent(@Nonnull final User user) {
+    public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
+        final User user = managementFormModifyEvent.getItem();
         userService.update(user);
         updateUserList();
     }
 
-    @Override
-    public void deleteEvent(@Nonnull final User user) {
+    public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
+        final User user = managementFormDeleteEvent.getItem();
         if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
             userService.delete(user.getId());
             updateUserList();
