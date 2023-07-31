@@ -87,4 +87,9 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     public int compareTo(final PlayerStatus o) {
         return name.compareTo(o.getName());
     }
+
+    @Nonnull
+    public String getIdentifier() {
+        return name;
+    }
 }
