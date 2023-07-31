@@ -1,38 +1,43 @@
 package ch.fortylove.presentation.views.management.courtmanagement;
 
-import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.presentation.components.managementform.FormObserver;
-import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.service.CourtService;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.security.RolesAllowed;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
-@Route(value = "courtmanagement", layout = MainLayout.class)
-@RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
+@SpringComponent
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CourtManagementView extends VerticalLayout implements FormObserver<Court> {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final CourtForm courtForm;
 
-    @Nonnull private final Grid<Court> grid;
+    private Grid<Court> grid;
 
     public CourtManagementView(@Nonnull final CourtService courtService,
                                @Nonnull final CourtForm courtForm) {
         this.courtService = courtService;
         this.courtForm = courtForm;
-        grid = new Grid<>(Court.class, false);
 
-        addClassName("management-view");
         setSizeFull();
+        setPadding(false);
+        addClassName(LumoUtility.Padding.Top.MEDIUM);
 
         constructUI();
     }
@@ -45,7 +50,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         content.addClassName("content");
         content.setSizeFull();
 
-        add(getToolBar(), content);
+        add(content);
         updateCourtList();
     }
 
@@ -57,46 +62,57 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         grid.setItems(courtService.findAll());
     }
 
-    @Nonnull
-    private HorizontalLayout getToolBar() {
-        final Button addCourtButton = new Button(("Court erstellen"), click -> addCourt());
-        return new HorizontalLayout(addCourtButton);
-    }
-
     private void configureGrid() {
+        grid = new Grid<>(Court.class, false);
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
-        grid.addColumn(Court::getNumber)
+        final Grid.Column<Court> numberColumn = grid.addColumn(Court::getNumber)
                 .setHeader("Nummer")
                 .setAutoWidth(true)
                 .setFlexGrow(0)
                 .setSortable(true);
 
-        grid.addComponentColumn(court -> getIconComponent(court.getCourtIcon()))
+        final Grid.Column<Court> iconColumn = grid.addComponentColumn(court -> getIconComponent(court.getCourtIcon()))
                 .setHeader("Icon")
                 .setSortable(true)
                 .setAutoWidth(true)
                 .setFlexGrow(0);
 
-        grid.addColumn(court -> court.getCourtType().getMaterial())
+        final Grid.Column<Court> typeColumn = grid.addColumn(court -> court.getCourtType().getMaterial())
                 .setHeader("Material")
                 .setSortable(true);
 
-        grid.addColumn(Court::getName)
+        final Grid.Column<Court> nameColumn = grid.addColumn(Court::getName)
                 .setHeader("Name")
                 .setSortable(true);
+
+        createGridFooter(numberColumn, iconColumn, typeColumn, nameColumn);
 
         grid.asSingleSelect().addValueChangeListener(event -> editCourt(event.getValue()));
     }
 
     @Nonnull
-    private VerticalLayout getIconComponent(@Nonnull final CourtIcon courtIcon) {
-        final VerticalLayout verticalLayout = new VerticalLayout();
+    private Component getIconComponent(@Nonnull final CourtIcon courtIcon) {
         final Image icon = new Image(courtIcon.getResource(), courtIcon.getCode());
         icon.setHeight("1em");
-        verticalLayout.add(icon);
-        return verticalLayout;
+        return icon;
+    }
+
+    private void createGridFooter(@Nonnull final Grid.Column<Court> numberColumn,
+                                  @Nonnull final Grid.Column<Court> iconColumn,
+                                  @Nonnull final Grid.Column<Court> typeColumn,
+                                  @Nonnull final Grid.Column<Court> nameColumn) {
+        grid.appendFooterRow();
+        final FooterRow footerRow = grid.appendFooterRow();
+        final FooterRow.FooterCell footerCell = footerRow.join(numberColumn, iconColumn, typeColumn, nameColumn);
+
+        final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE), click -> addCourt());
+        addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        final HorizontalLayout horizontalLayout = new HorizontalLayout(addButton);
+        horizontalLayout.addClassNames(LumoUtility.Border.TOP, LumoUtility.BorderColor.CONTRAST_20, LumoUtility.Padding.Left.SMALL, LumoUtility.Padding.Right.SMALL);
+        footerCell.setComponent(horizontalLayout);
     }
 
     private void addCourt() {
