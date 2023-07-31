@@ -7,7 +7,6 @@ import ch.fortylove.presentation.components.managementform.FormObserver;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
@@ -61,8 +60,6 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
     @Nonnull
     private HorizontalLayout getToolBar() {
         final Button addCourtButton = new Button(("Court erstellen"), click -> addCourt());
-        addCourtButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
         return new HorizontalLayout(addCourtButton);
     }
 

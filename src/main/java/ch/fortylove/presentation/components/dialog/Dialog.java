@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.components;
+package ch.fortylove.presentation.components.dialog;
 
 public class Dialog extends com.vaadin.flow.component.dialog.Dialog {
 
