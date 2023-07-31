@@ -2,9 +2,10 @@ package ch.fortylove.presentation.views.booking.grid.cells;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public abstract class CellComponent extends VerticalLayout {
+public abstract class Cell extends VerticalLayout {
 
-    public CellComponent() {
+    public Cell() {
+        addClassName("booking-grid-cell");
         setSpacing(false);
         setPadding(false);
     }

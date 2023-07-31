@@ -4,10 +4,10 @@ import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.service.BookingSettingsService;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;

@@ -3,9 +3,8 @@ package ch.fortylove.presentation.views.booking.grid.events;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.presentation.views.booking.grid.BookingGridComponent;
-
-import javax.annotation.Nonnull;
+import ch.fortylove.presentation.views.booking.grid.BookingGrid;
+import jakarta.annotation.Nonnull;
 
 public class BookedCellClickEvent extends BookingGridEvent {
 
@@ -13,7 +12,7 @@ public class BookedCellClickEvent extends BookingGridEvent {
     @Nonnull private final Timeslot timeslot;
     @Nonnull private final Booking booking;
 
-    public BookedCellClickEvent(@Nonnull final BookingGridComponent source,
+    public BookedCellClickEvent(@Nonnull final BookingGrid source,
                                 @Nonnull final Court court,
                                 @Nonnull final Timeslot timeslot,
                                 @Nonnull final Booking booking) {

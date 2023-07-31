@@ -6,13 +6,12 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroupVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
+public class BookedCell extends BookingCell {
 
-public class BookedCellComponent extends BookingCellComponent {
-
-    public BookedCellComponent(@Nonnull final Booking booking,
-                               @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
+    public BookedCell(@Nonnull final Booking booking,
+                      @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
         constructUI(booking, clickListener);
     }
 

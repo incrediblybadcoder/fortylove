@@ -2,11 +2,11 @@ package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.repository.BookingSettingsRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 @Service

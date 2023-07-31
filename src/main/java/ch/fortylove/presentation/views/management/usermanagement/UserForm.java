@@ -7,7 +7,6 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -106,7 +105,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getFirstNameField() {
+    private TextField getFirstNameField() {
         firstName.setWidthFull();
         firstName.setLabel("Vorname");
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -116,7 +115,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getLastNameField() {
+    private TextField getLastNameField() {
         lastName.setWidthFull();
         lastName.setLabel("Nachname");
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -126,7 +125,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getEmailField() {
+    private TextField getEmailField() {
         email.setWidthFull();
         email.setLabel("Email");
         email.setValueChangeMode(ValueChangeMode.EAGER);
@@ -136,7 +135,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getPlayerStatusSelection() {
+    private Select<PlayerStatus> getPlayerStatusSelection() {
         playerStatus.setWidthFull();
         playerStatus.setLabel("Status");
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
@@ -144,7 +143,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getRoleSelection() {
+    private MultiSelectComboBox<Role> getRoleSelection() {
         roleCheckboxGroup.setWidthFull();
         roleCheckboxGroup.setLabel("Rollen");
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);

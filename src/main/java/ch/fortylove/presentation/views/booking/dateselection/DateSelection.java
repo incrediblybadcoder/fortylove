@@ -11,19 +11,19 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.Locale;
 
 @SpringComponent
 @UIScope
-public class DateSelectionComponent extends VerticalLayout {
+public class DateSelection extends VerticalLayout {
 
     private LocalDate date;
     private DatePicker datePicker;
 
-    public DateSelectionComponent() {
+    public DateSelection() {
         this.date = LocalDate.now();
 
         setAlignItems(Alignment.CENTER);

@@ -19,14 +19,17 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.Nonnull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.Nonnull;
 
-@Route("registration")
-@PageTitle("Registration")
+@Route(RegistrationView.ROUTE)
+@PageTitle(RegistrationView.PAGE_TITLE)
 @AnonymousAllowed
 public class RegistrationView extends VerticalLayout {
+
+    @Nonnull public static final String ROUTE = "registration";
+    @Nonnull public static final String PAGE_TITLE = "Registration";
 
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;

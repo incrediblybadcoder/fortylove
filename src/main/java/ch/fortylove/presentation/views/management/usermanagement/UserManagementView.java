@@ -5,7 +5,6 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.managementform.FormObserver;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -23,6 +22,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -125,7 +125,7 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
     }
 
     @Nonnull
-    private Component createFilterHeader(@Nonnull final Consumer<String> filterChangeConsumer) {
+    private TextField createFilterHeader(@Nonnull final Consumer<String> filterChangeConsumer) {
         final TextField textField = new TextField();
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         textField.setClearButtonVisible(true);
@@ -158,7 +158,7 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         userForm.openCreate();
     }
 
-    private void editUser(@Nonnull final User user) {
+    private void editUser(@Nullable final User user) {
         if (user == null) {
             userForm.closeForm();
         } else {

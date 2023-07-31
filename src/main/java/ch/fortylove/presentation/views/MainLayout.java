@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.views;
 
+import ch.fortylove.FortyloveApplication;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.management.ManagementView;
@@ -19,9 +20,9 @@ import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,9 +40,8 @@ public class MainLayout extends AppLayout {
 
         setDrawerOpened(false);
 
-        final H3 appName = new H3("fortylove");
+        final H3 appName = new H3(FortyloveApplication.APP_NAME);
         appName.addClassNames(LumoUtility.Margin.Left.MEDIUM, LumoUtility.Margin.Right.MEDIUM);
-        appName.getStyle().set("left", "var(--lumo-space-l)");
 
         final Tabs menu = createMenuTabs();
 
@@ -60,7 +60,7 @@ public class MainLayout extends AppLayout {
     @Nonnull
     private List<Tab> getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, "Übersicht", BookingView.class));
+        tabs.add(createTab(VaadinIcon.CALENDAR, BookingView.PAGE_TITLE, BookingView.class));
         tabs.addAll(getPrivilegedTabs());
         tabs.add(getLogoutTab());
 
@@ -77,7 +77,7 @@ public class MainLayout extends AppLayout {
 
             for (final Role userRole : userRoles) {
                 if (managementRoles.contains(userRole)) {
-                    privilegedTabs.add(createTab(VaadinIcon.COG, "Management", ManagementView.class));
+                    privilegedTabs.add(createTab(VaadinIcon.COG, ManagementView.PAGE_TITLE, ManagementView.class));
                     break;
                 }
             }

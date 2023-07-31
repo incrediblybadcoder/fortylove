@@ -1,11 +1,11 @@
 package ch.fortylove.persistence.repository;
 
 import ch.fortylove.persistence.entity.Privilege;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 @Repository

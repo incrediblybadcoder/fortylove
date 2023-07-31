@@ -4,7 +4,6 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -71,7 +70,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getNumberField() {
+    private IntegerField getNumberField() {
         numberField.setLabel("Nummer");
         numberField.setWidthFull();
         numberField.setMin(1);
@@ -81,7 +80,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getIconSelection() {
+    private Select<CourtIcon> getIconSelection() {
         iconSelection.setWidthFull();
         iconSelection.setLabel("Icon");
         iconSelection.setItems(CourtIcon.values());
@@ -99,7 +98,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getCourtTypeSelection() {
+    private Select<CourtType> getCourtTypeSelection() {
         courtTypeSelection.setWidthFull();
         courtTypeSelection.setLabel("Typ");
         courtTypeSelection.setItems(CourtType.values());
@@ -109,7 +108,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getNameField() {
+    private TextField getNameField() {
         nameField.setWidthFull();
         nameField.setLabel("Name");
         nameField.setValueChangeMode(ValueChangeMode.EAGER);

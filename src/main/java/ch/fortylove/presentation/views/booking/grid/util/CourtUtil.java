@@ -2,8 +2,8 @@ package ch.fortylove.presentation.views.booking.grid.util;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Timeslot;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

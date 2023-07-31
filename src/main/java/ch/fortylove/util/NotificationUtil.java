@@ -2,8 +2,8 @@ package ch.fortylove.util;
 
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 public class NotificationUtil {

@@ -3,9 +3,9 @@ package ch.fortylove.testdata.factory;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.service.PlayerStatusService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SpringComponent
