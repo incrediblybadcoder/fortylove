@@ -4,7 +4,6 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.presentation.components.managementform.FormObserver;
 import ch.fortylove.service.CourtService;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -18,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -93,7 +93,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
     }
 
     @Nonnull
-    private Component getIconComponent(@Nonnull final CourtIcon courtIcon) {
+    private Image getIconComponent(@Nonnull final CourtIcon courtIcon) {
         final Image icon = new Image(courtIcon.getResource(), courtIcon.getCode());
         icon.setHeight("1em");
         return icon;
@@ -120,7 +120,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
         courtForm.openCreate();
     }
 
-    private void editCourt(@Nonnull final Court court) {
+    private void editCourt(@Nullable final Court court) {
         if (court == null) {
             courtForm.closeForm();
         } else {

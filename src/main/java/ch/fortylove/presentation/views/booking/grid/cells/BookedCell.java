@@ -8,10 +8,10 @@ import com.vaadin.flow.component.avatar.AvatarGroupVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class BookedCellComponent extends BookingCellComponent {
+public class BookedCell extends BookingCell {
 
-    public BookedCellComponent(@Nonnull final Booking booking,
-                               @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
+    public BookedCell(@Nonnull final Booking booking,
+                      @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
         constructUI(booking, clickListener);
     }
 

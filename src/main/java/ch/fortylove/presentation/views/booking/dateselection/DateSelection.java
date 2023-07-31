@@ -18,12 +18,12 @@ import java.util.Locale;
 
 @SpringComponent
 @UIScope
-public class DateSelectionComponent extends VerticalLayout {
+public class DateSelection extends VerticalLayout {
 
     private LocalDate date;
     private DatePicker datePicker;
 
-    public DateSelectionComponent() {
+    public DateSelection() {
         this.date = LocalDate.now();
 
         setAlignItems(Alignment.CENTER);
