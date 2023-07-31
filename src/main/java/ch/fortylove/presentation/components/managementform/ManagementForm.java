@@ -1,7 +1,11 @@
 package ch.fortylove.presentation.components.managementform;
 
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -13,16 +17,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringComponent
 @UIScope
-public abstract class ManagementForm<T> extends FormLayout implements FormObservable<T> {
-
-    @Nonnull private final List<FormObserver<T>> formObservers;
+public abstract class ManagementForm<T> extends FormLayout {
 
     private Binder<T> binder;
 
@@ -34,10 +32,9 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
     private Button close;
     private VerticalLayout buttonContainer;
 
-    @Nullable private T currentItem;
+    private T currentItem;
 
     public ManagementForm() {
-        formObservers = new ArrayList<>();
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
 
         constructUI();
@@ -110,14 +107,14 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
 
     private void saveClick() {
         if (binder.writeBeanIfValid(currentItem)) {
-            formObservers.forEach(formObserver -> formObserver.saveEvent(currentItem));
+            fireEvent(new ManagementFormSaveEvent<>(this, currentItem));
             closeForm();
         }
     }
 
     private void updateClick() {
         if (binder.writeBeanIfValid(currentItem)) {
-            formObservers.forEach(formObserver -> formObserver.updateEvent(currentItem));
+            fireEvent(new ManagementFormModifyEvent<>(this, currentItem));
             closeForm();
         }
     }
@@ -127,7 +124,7 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
                 getItemIdentifier(currentItem),
                 getItemName() + " wirklich löschen?",
                 () -> {
-                    formObservers.forEach(formObserver -> formObserver.deleteEvent(currentItem));
+                    fireEvent(new ManagementFormDeleteEvent<>(this, currentItem));
                     closeForm();
                 }
         ).open();
@@ -183,13 +180,18 @@ public abstract class ManagementForm<T> extends FormLayout implements FormObserv
         buttonContainer.add(buttons);
     }
 
-    @Override
-    public void addFormObserver(@Nonnull final FormObserver<T> listener) {
-        formObservers.add(listener);
-        listener.addDetachListener(event -> removeFormObserver(listener));
+    public void addSaveEventListener(@Nonnull final ComponentEventListener<ManagementFormSaveEvent<T>> listener) {
+        //noinspection unchecked,rawtypes
+        addListener(ManagementFormSaveEvent.class, (ComponentEventListener) listener);
     }
 
-    private void removeFormObserver(@Nonnull final FormObserver<T> listener) {
-        formObservers.remove(listener);
+    public void addModifyEventListener(@Nonnull final ComponentEventListener<ManagementFormModifyEvent<T>> listener) {
+        //noinspection unchecked,rawtypes
+        addListener(ManagementFormModifyEvent.class, (ComponentEventListener) listener);
+    }
+
+    public void addDeleteEventListener(@Nonnull final ComponentEventListener<ManagementFormDeleteEvent<T>> listener) {
+        //noinspection unchecked,rawtypes
+        addListener(ManagementFormDeleteEvent.class, (ComponentEventListener) listener);
     }
 }
