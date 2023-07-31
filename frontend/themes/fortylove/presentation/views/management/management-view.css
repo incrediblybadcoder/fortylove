@@ -2,3 +2,23 @@
     display: flex;
     gap: 20px;
 }
+
+.management-view vaadin-grid::part(cell) {
+    padding: 0.5em 1em;
+}
+
+.management-view vaadin-grid::part(footer-cell) {
+    padding: 0px;
+}
+
+.management-view vaadin-grid-cell-content {
+    padding: 0px;
+}
+
+.management-view vaadin-tabsheet::part(content) {
+    padding: 0px;
+}
+
+.management-view vaadin-grid::part(first-row) {
+    border-top: 1px solid var(--lumo-contrast-20pct);
+}

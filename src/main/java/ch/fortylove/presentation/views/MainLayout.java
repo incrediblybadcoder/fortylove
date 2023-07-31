@@ -2,8 +2,7 @@ package ch.fortylove.presentation.views;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.presentation.views.booking.BookingView;
-import ch.fortylove.presentation.views.management.courtmanagement.CourtManagementView;
-import ch.fortylove.presentation.views.management.usermanagement.UserManagementView;
+import ch.fortylove.presentation.views.management.ManagementView;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.component.Component;
@@ -78,8 +77,7 @@ public class MainLayout extends AppLayout {
 
             for (final Role userRole : userRoles) {
                 if (managementRoles.contains(userRole)) {
-                    privilegedTabs.add(createTab(VaadinIcon.LIST_OL, "Platzverwaltung", CourtManagementView.class));
-                    privilegedTabs.add(createTab(VaadinIcon.USERS, "Benutzerverwaltung", UserManagementView.class));
+                    privilegedTabs.add(createTab(VaadinIcon.COG, "Management", ManagementView.class));
                     break;
                 }
             }
