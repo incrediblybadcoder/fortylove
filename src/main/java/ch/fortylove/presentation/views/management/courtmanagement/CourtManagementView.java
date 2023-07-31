@@ -9,6 +9,7 @@ import ch.fortylove.service.CourtService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -67,6 +68,7 @@ public class CourtManagementView extends VerticalLayout implements FormObserver<
 
     private void configureGrid() {
         grid.setSizeFull();
+        grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
         grid.addColumn(Court::getNumber)
                 .setHeader("Nummer")

@@ -66,11 +66,6 @@ public class CourtService {
     }
 
     @Nonnull
-    public Optional<Court> findByNumber(@Nonnull final UUID id) {
-        return courtRepository.findById(id);
-    }
-
-    @Nonnull
     public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
         final Session session = entityManager.unwrap(Session.class);
         final Filter filter = session.enableFilter("bookingDateFilter");
