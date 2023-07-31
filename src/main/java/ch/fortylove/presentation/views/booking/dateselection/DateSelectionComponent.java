@@ -11,8 +11,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.Locale;
 

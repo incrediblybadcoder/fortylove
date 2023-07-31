@@ -9,10 +9,10 @@ import ch.fortylove.service.BookingService;
 import ch.fortylove.service.BookingSettingsService;
 import ch.fortylove.service.CourtService;
 import ch.fortylove.service.UserService;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;

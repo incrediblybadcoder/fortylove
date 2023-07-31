@@ -3,10 +3,9 @@ package ch.fortylove.testdata;
 import ch.fortylove.SpringTest;
 import ch.fortylove.configuration.setupdata.SetupDataLoaderService;
 import ch.fortylove.testdata.factory.TestDataFactory;
+import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.Nonnull;
 
 /**
  * Adds required application data to the database

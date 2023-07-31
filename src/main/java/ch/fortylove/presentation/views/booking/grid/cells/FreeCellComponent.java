@@ -4,8 +4,7 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class FreeCellComponent extends BookingCellComponent {
 

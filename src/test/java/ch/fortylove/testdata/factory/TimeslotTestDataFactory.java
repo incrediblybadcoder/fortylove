@@ -2,8 +2,8 @@ package ch.fortylove.testdata.factory;
 
 import ch.fortylove.persistence.entity.Timeslot;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;

@@ -10,13 +10,18 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 
-@Route(value = "management", layout = MainLayout.class)
+@Route(value = ManagementView.ROUTE, layout = MainLayout.class)
+@PageTitle(ManagementView.PAGE_TITLE)
 @RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
 public class ManagementView extends VerticalLayout {
+
+    @Nonnull public static final String ROUTE = "management";
+    @Nonnull public static final String PAGE_TITLE = "Verwaltung";
 
     @Nonnull private final CourtManagementView courtManagementView;
     @Nonnull private final UserManagementView userManagementView;

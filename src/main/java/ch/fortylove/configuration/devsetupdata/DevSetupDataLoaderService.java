@@ -3,9 +3,9 @@ package ch.fortylove.configuration.devsetupdata;
 import ch.fortylove.configuration.devsetupdata.data.BookingSetupData;
 import ch.fortylove.configuration.devsetupdata.data.CourtSetupData;
 import ch.fortylove.configuration.devsetupdata.data.UserSetupData;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 
 @DevSetupData
 public class DevSetupDataLoaderService {

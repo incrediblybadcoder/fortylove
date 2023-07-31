@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.error;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class DuplicateRecordException extends DataBaseException {
 

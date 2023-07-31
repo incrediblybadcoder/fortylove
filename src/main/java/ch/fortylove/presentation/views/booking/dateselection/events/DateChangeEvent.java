@@ -2,8 +2,8 @@ package ch.fortylove.presentation.views.booking.dateselection.events;
 
 import ch.fortylove.presentation.views.booking.dateselection.DateSelectionComponent;
 import com.vaadin.flow.component.ComponentEvent;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 
 public class DateChangeEvent extends ComponentEvent<DateSelectionComponent> {

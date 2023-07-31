@@ -1,12 +1,12 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.UUID;
 

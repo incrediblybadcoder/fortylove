@@ -1,10 +1,10 @@
 package ch.fortylove.persistence.entity.converter;
 
 import ch.fortylove.persistence.entity.CourtType;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)

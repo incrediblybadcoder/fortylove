@@ -3,10 +3,10 @@ package ch.fortylove.configuration.setupdata.data;
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.service.PrivilegeService;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SetupData

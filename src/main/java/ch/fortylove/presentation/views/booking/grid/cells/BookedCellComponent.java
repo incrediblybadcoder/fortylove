@@ -6,8 +6,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.avatar.AvatarGroup;
 import com.vaadin.flow.component.avatar.AvatarGroupVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class BookedCellComponent extends BookingCellComponent {
 

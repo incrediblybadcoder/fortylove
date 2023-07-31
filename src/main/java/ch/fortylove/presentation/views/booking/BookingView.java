@@ -8,16 +8,18 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-
-@Route(value = "/bookings", layout = MainLayout.class)
+@Route(value = BookingView.ROUTE, layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-@PageTitle("Platzübersicht")
+@PageTitle(BookingView.PAGE_TITLE)
 @PermitAll
 public class BookingView extends VerticalLayout implements AfterNavigationObserver {
+
+    @Nonnull public static final String ROUTE = "bookings";
+    @Nonnull public static final String PAGE_TITLE = "Plätze";
 
     @Nonnull private final BookingComponent bookingComponent;
 
@@ -25,7 +27,7 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     public BookingView(@Nonnull final BookingComponent bookingComponent) {
         this.bookingComponent = bookingComponent;
 
-        addClassNames(LumoUtility.Padding.MEDIUM, "booking-view");
+        addClassNames("booking-view", LumoUtility.Padding.MEDIUM);
         setSizeFull();
 
         constructUI();
