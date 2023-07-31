@@ -1,6 +1,6 @@
 package ch.fortylove.presentation.components.managementform;
 
-import ch.fortylove.presentation.components.DeleteConfirmationDialog;
+import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;

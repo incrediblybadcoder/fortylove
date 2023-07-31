@@ -5,7 +5,7 @@ import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.CancelableDialog;
+import ch.fortylove.presentation.components.dialog.CancelableDialog;
 import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.util.FormatUtil;
 import com.vaadin.flow.component.AbstractField;
