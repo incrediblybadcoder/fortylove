@@ -7,6 +7,7 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -55,6 +56,7 @@ public class UserForm extends ManagementForm<User> {
         roleCheckboxGroup = new MultiSelectComboBox<>();
     }
 
+    @Nonnull
     @Override
     protected Binder<User> getBinder() {
         final Binder<User> binder = new Binder<>(User.class);
@@ -99,6 +101,7 @@ public class UserForm extends ManagementForm<User> {
         return binder;
     }
 
+    @Nonnull
     @Override
     protected VerticalLayout getContent() {
         return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPlayerStatusSelection(), getRoleSelection());
@@ -152,19 +155,28 @@ public class UserForm extends ManagementForm<User> {
         return roleCheckboxGroup;
     }
 
+    @Nonnull
     @Override
     protected User getNewItem() {
         return userFactory.newEmptyDefaultUser();
     }
 
+    @Nonnull
     @Override
     protected String getItemIdentifier(@Nonnull final User user) {
         return user.getIdentifier();
     }
 
+    @Nonnull
     @Override
     protected String getItemName() {
         return "Benutzer";
+    }
+
+    @Nonnull
+    @Override
+    protected Focusable<TextField> getFocusOnOpen() {
+        return firstName;
     }
 
     @Override

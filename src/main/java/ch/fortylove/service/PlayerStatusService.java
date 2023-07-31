@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -33,6 +34,21 @@ public class PlayerStatusService {
     }
 
     @Nonnull
+    public PlayerStatus update(@Nonnull final PlayerStatus playerStatus) {
+        if (playerStatusRepository.findById(playerStatus.getId()).isEmpty()) {
+            throw new RecordNotFoundException(playerStatus);
+        }
+        return playerStatusRepository.save(playerStatus);
+    }
+
+    public void delete(@Nonnull final UUID id) {
+        final PlayerStatus playerStatus = playerStatusRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+
+        playerStatusRepository.delete(playerStatus);
+    }
+
+    @Nonnull
     public Optional<PlayerStatus> findByName(@Nonnull final String name) {
         return Optional.ofNullable(playerStatusRepository.findByName(name));
     }
@@ -50,6 +66,4 @@ public class PlayerStatusService {
     public List<PlayerStatus> findAll() {
         return playerStatusRepository.findAll();
     }
-
-
 }

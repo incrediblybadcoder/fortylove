@@ -6,6 +6,7 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -43,15 +44,17 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     protected abstract void instantiateFields();
 
-    protected abstract Binder<T> getBinder();
+    @Nonnull protected abstract Binder<T> getBinder();
 
-    protected abstract VerticalLayout getContent();
+    @Nonnull protected abstract VerticalLayout getContent();
 
-    protected abstract T getNewItem();
+    @Nonnull protected abstract T getNewItem();
 
-    protected abstract String getItemIdentifier(@Nonnull final T item);
+    @Nonnull protected abstract String getItemIdentifier(@Nonnull final T item);
 
-    protected abstract String getItemName();
+    @Nonnull protected abstract String getItemName();
+
+    @Nonnull protected abstract Focusable<? extends Component> getFocusOnOpen();
 
     private void constructUI() {
         initializeBinder();
@@ -157,6 +160,7 @@ public abstract class ManagementForm<T> extends FormLayout {
         binder.readBean(currentItem);
         addButtons(buttons);
         updateButtonState(checkChanges);
+        getFocusOnOpen().focus();
 
         setVisible(true);
     }
