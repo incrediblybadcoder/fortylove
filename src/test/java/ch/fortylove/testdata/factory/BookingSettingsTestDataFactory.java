@@ -4,9 +4,9 @@ import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.service.BookingSettingsService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.SortedSet;
 
 @SpringComponent

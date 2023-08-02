@@ -3,9 +3,9 @@ package ch.fortylove.testdata.factory;
 import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.service.PrivilegeService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SpringComponent

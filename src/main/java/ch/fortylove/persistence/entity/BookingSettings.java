@@ -1,12 +1,12 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
-import javax.annotation.Nonnull;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;

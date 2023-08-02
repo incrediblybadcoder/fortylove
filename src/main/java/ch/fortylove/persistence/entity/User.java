@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -66,7 +66,7 @@ public class User extends AbstractEntity {
                 @Nonnull final String lastName,
                 @Nonnull final String email,
                 @Nonnull final AuthenticationDetails authenticationDetails,
-                final boolean enabled,
+                @Nonnull final boolean enabled,
                 @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
         super(UUID.randomUUID());

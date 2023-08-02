@@ -1,35 +1,47 @@
 package ch.fortylove.presentation.views.management.usermanagement;
 
-import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.managementform.FormObserver;
-import ch.fortylove.presentation.views.MainLayout;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
+import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-@Route(value = "usermanagement", layout = MainLayout.class)
-@RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
-public class UserManagementView extends VerticalLayout implements FormObserver<User> {
+@SpringComponent
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class UserManagementView extends VerticalLayout {
 
-    @Nonnull private final UserForm userForm;
-    @Nonnull private final Grid<User> grid;
-    @Nonnull private final TextField filterText = new TextField();
     @Nonnull private final UserService userService;
+    @Nonnull private final UserForm userForm;
     @Nonnull private final PasswordEncoder passwordEncoder;
+
+    private Grid<User> grid;
+    private UserFilter userFilter;
 
     public UserManagementView(@Nonnull final UserService userService,
                               @Nonnull final UserForm userForm,
@@ -37,10 +49,10 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         this.userForm = userForm;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-        grid = new Grid<>(User.class);
 
-        addClassName("management-view");
         setSizeFull();
+        setPadding(false);
+        addClassName(LumoUtility.Padding.Top.MEDIUM);
 
         constructUI();
     }
@@ -49,62 +61,100 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         configureGrid();
         configureForm();
 
-        final Div content = new Div(grid, userForm);
+        final HorizontalLayout content = new HorizontalLayout(grid, userForm);
         content.addClassName("content");
         content.setSizeFull();
 
-        add(getToolBar(), content);
+        add(content);
         updateUserList();
     }
 
-    private void configureGrid() {
-        grid.setSizeFull();
-        grid.removeAllColumns();
+    private void configureForm() {
+        userForm.addSaveEventListener(this::saveEvent);
+        userForm.addModifyEventListener(this::updateEvent);
+        userForm.addDeleteEventListener(this::deleteEvent);
+    }
 
-        grid.addColumn(User::getLastName)
+    private void updateUserList() {
+        final GridListDataView<User> userGridListDataView = grid.setItems(userService.findAll());
+        userFilter.setDataView(userGridListDataView);
+    }
+
+    private void configureGrid() {
+        grid = new Grid<>(User.class, false);
+        grid.setSizeFull();
+        grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+
+        final Grid.Column<User> lastNameColumn = grid.addColumn(User::getLastName)
                 .setHeader("Nachname")
                 .setSortable(true);
 
-        grid.addColumn(User::getFirstName)
+        final Grid.Column<User> firstNameColumn = grid.addColumn(User::getFirstName)
                 .setHeader("Vorname")
                 .setSortable(true);
 
-        grid.addColumn(User::getEmail)
+        final Grid.Column<User> emailColumn = grid.addColumn(User::getEmail)
                 .setHeader("Email")
                 .setSortable(true);
 
-        grid.addColumn(user -> user.getPlayerStatus().getName())
+        final Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getName())
                 .setHeader("Status")
                 .setSortable(true);
 
-        grid.addColumn(user -> user.getRoles().stream()
+        final Grid.Column<User> roleColumn = grid.addColumn(user -> user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.joining(", "))
                 )
                 .setHeader("Rollen")
                 .setSortable(true);
 
+        createGridHeader(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
+        createGridFooter(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
+
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
     }
 
-    private void configureForm() {
-        userForm.addFormObserver(this);
-    }
-
-    private void updateUserList() {
-        grid.setItems(userService.findAll(filterText.getValue()));
+    private void createGridHeader(@Nonnull final Grid.Column<User> lastNameColumn,
+                                  @Nonnull final Grid.Column<User> firstNameColumn,
+                                  @Nonnull final Grid.Column<User> emailColumn,
+                                  @Nonnull final Grid.Column<User> playerStatusColumn,
+                                  @Nonnull final Grid.Column<User> roleColumn) {
+        userFilter = new UserFilter();
+        final HeaderRow headerRow = grid.appendHeaderRow();
+        headerRow.getCell(lastNameColumn).setComponent(createFilterHeader(userFilter::setLastName));
+        headerRow.getCell(firstNameColumn).setComponent(createFilterHeader(userFilter::setFirstName));
+        headerRow.getCell(emailColumn).setComponent(createFilterHeader(userFilter::setEmail));
+        headerRow.getCell(playerStatusColumn).setComponent(createFilterHeader(userFilter::setPlayerStatus));
+        headerRow.getCell(roleColumn).setComponent(createFilterHeader(userFilter::setRoles));
     }
 
     @Nonnull
-    private HorizontalLayout getToolBar() {
-        filterText.setPlaceholder("Filter nach Name...");
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        filterText.addValueChangeListener(e -> updateUserList());
+    private TextField createFilterHeader(@Nonnull final Consumer<String> filterChangeConsumer) {
+        final TextField textField = new TextField();
+        textField.setValueChangeMode(ValueChangeMode.EAGER);
+        textField.setClearButtonVisible(true);
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        textField.setWidthFull();
+        textField.addValueChangeListener(e -> filterChangeConsumer.accept(e.getValue()));
 
-        final Button addUserButton = new Button(("Benutzer erstellen"), click -> addUser());
+        return textField;
+    }
 
-        return new HorizontalLayout(filterText, addUserButton);
+    private void createGridFooter(@Nonnull final Grid.Column<User> lastNameColumn,
+                                  @Nonnull final Grid.Column<User> firstNameColumn,
+                                  @Nonnull final Grid.Column<User> emailColumn,
+                                  @Nonnull final Grid.Column<User> playerStatusColumn,
+                                  @Nonnull final Grid.Column<User> roleColumn) {
+        grid.appendFooterRow();
+        final FooterRow footerRow = grid.appendFooterRow();
+        final FooterRow.FooterCell footerCell = footerRow.join(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
+
+        final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE),click -> addUser());
+        addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        final HorizontalLayout horizontalLayout = new HorizontalLayout(addButton);
+        horizontalLayout.addClassNames(LumoUtility.Border.TOP, LumoUtility.BorderColor.CONTRAST_20, LumoUtility.Padding.Left.SMALL, LumoUtility.Padding.Right.SMALL);
+        footerCell.setComponent(horizontalLayout);
     }
 
     private void addUser() {
@@ -112,30 +162,30 @@ public class UserManagementView extends VerticalLayout implements FormObserver<U
         userForm.openCreate();
     }
 
-    private void editUser(@Nonnull final User user) {
+    private void editUser(@Nullable final User user) {
         if (user == null) {
             userForm.closeForm();
         } else {
-            userForm.openUpdate(user);
+            userForm.openModify(user);
         }
     }
 
-    @Override
-    public void saveEvent(@Nonnull final User user) {
+    public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
+        final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
         updateUserList();
         NotificationUtil.infoNotification("Benutzer wurde erfolgreich angelegt: Passwort = newpassword");
     }
 
-    @Override
-    public void updateEvent(@Nonnull final User user) {
+    public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
+        final User user = managementFormModifyEvent.getItem();
         userService.update(user);
         updateUserList();
     }
 
-    @Override
-    public void deleteEvent(@Nonnull final User user) {
+    public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
+        final User user = managementFormDeleteEvent.getItem();
         if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
             userService.delete(user.getId());
             updateUserList();

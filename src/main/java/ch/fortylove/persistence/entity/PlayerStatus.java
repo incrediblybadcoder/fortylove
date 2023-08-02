@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,7 +8,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -86,5 +86,10 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     @Override
     public int compareTo(final PlayerStatus o) {
         return name.compareTo(o.getName());
+    }
+
+    @Nonnull
+    public String getIdentifier() {
+        return name;
     }
 }

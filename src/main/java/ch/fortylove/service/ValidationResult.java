@@ -1,6 +1,6 @@
 package ch.fortylove.service;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ValidationResult {
 

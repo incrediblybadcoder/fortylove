@@ -4,11 +4,11 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,15 +53,6 @@ public class UserService {
     @Nonnull
     public List<User> findAll() {
         return userRepository.findAll();
-    }
-
-    @Nonnull
-    public List<User> findAll(@Nonnull final String filterText) {
-        if (filterText.isEmpty()) {
-            return userRepository.findAll();
-        } else {
-            return userRepository.search(filterText);
-        }
     }
 
     public void delete(@Nonnull final UUID id) {

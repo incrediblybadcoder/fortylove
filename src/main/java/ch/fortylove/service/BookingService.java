@@ -8,11 +8,11 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.BookingRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;

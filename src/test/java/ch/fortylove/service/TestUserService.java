@@ -5,12 +5,12 @@ import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

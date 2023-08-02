@@ -4,9 +4,9 @@ import ch.fortylove.persistence.entity.Privilege;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.Set;
 

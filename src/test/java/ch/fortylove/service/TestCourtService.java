@@ -4,11 +4,11 @@ import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
+import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.UUID;
 

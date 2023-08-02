@@ -4,9 +4,9 @@ import ch.fortylove.configuration.setupdata.data.BookingSettingsSetupData;
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.configuration.setupdata.data.PrivilegeSetupData;
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 
 @SetupData
 public class SetupDataLoaderService {

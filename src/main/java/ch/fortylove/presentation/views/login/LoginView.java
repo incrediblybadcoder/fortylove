@@ -1,5 +1,7 @@
 package ch.fortylove.presentation.views.login;
 
+import ch.fortylove.FortyloveApplication;
+import ch.fortylove.presentation.views.registration.RegistrationView;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
@@ -10,13 +12,15 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-
-@Route("login")
-@PageTitle("Login")
+@Route(LoginView.ROUTE)
+@PageTitle(LoginView.PAGE_TITLE)
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+
+    @Nonnull public static final String ROUTE = "login";
+    @Nonnull public static final String PAGE_TITLE = "Login";
 
     @Nonnull private final LoginForm loginForm;
 
@@ -33,9 +37,9 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginForm.setI18n(loginFormInternational);
         loginForm.setAction("login");
 
-        Anchor registrationLink = new Anchor("registration", "Noch kein Account? Hier registrieren!");
+        final Anchor registrationLink = new Anchor(RegistrationView.ROUTE, "Noch kein Account? Hier registrieren!");
 
-        add(new H1("fortylove"), loginForm, registrationLink);
+        add(new H1(FortyloveApplication.APP_NAME), loginForm, registrationLink);
     }
 
     @Override

@@ -5,8 +5,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
 import com.vaadin.flow.component.ComponentEvent;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
 

@@ -3,12 +3,12 @@ package ch.fortylove.presentation.views.booking;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.components.DeleteConfirmationDialog;
-import ch.fortylove.presentation.views.booking.dateselection.DateSelectionComponent;
+import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
 import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
 import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
 import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
-import ch.fortylove.presentation.views.booking.grid.BookingGridComponent;
+import ch.fortylove.presentation.views.booking.grid.BookingGrid;
 import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
 import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
 import ch.fortylove.security.AuthenticationService;
@@ -17,12 +17,14 @@ import ch.fortylove.service.CourtService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,24 +36,28 @@ public class BookingComponent extends VerticalLayout {
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final CourtService courtService;
     @Nonnull private final UserService userService;
-    @Nonnull private final BookingGridComponent bookingGridComponent;
-    @Nonnull private final DateSelectionComponent dateSelectionComponent;
+
+    @Nonnull private final BookingGrid bookingGrid;
+    @Nonnull private final DateSelection dateSelection;
+
+    private VerticalLayout emptyCourtComponent;
 
     @Autowired
     public BookingComponent(@Nonnull final BookingService bookingService,
                             @Nonnull final AuthenticationService authenticationService,
                             @Nonnull final CourtService courtService,
                             @Nonnull final UserService userService,
-                            @Nonnull final BookingGridComponent bookingGridComponent,
-                            @Nonnull final DateSelectionComponent dateSelectionComponent) {
+                            @Nonnull final BookingGrid bookingGrid,
+                            @Nonnull final DateSelection dateSelectionComponent) {
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
         this.courtService = courtService;
         this.userService = userService;
-        this.bookingGridComponent = bookingGridComponent;
-        this.dateSelectionComponent = dateSelectionComponent;
+        this.bookingGrid = bookingGrid;
+        this.dateSelection = dateSelectionComponent;
 
-        setSpacing(false);
+        setSizeFull();
+        setJustifyContentMode(JustifyContentMode.CENTER);
         setPadding(false);
 
         constructUI();
@@ -59,25 +65,45 @@ public class BookingComponent extends VerticalLayout {
 
     public void refresh() {
         final List<Court> courts = courtService.findAllWithBookingsByDate(getSelectedDate());
-        bookingGridComponent.setItems(courts);
+
+        emptyCourtComponent.setVisible(courts.isEmpty());
+        bookingGrid.setVisible(!courts.isEmpty());
+        dateSelection.setVisible(!courts.isEmpty());
+
+        if (!courts.isEmpty()) {
+            bookingGrid.setItems(courts);
+        }
     }
 
     private void constructUI() {
+        add(getEmptyCourtComponent());
         add(getBookingGridComponent());
         add(getDateSelectionComponent());
     }
 
     @Nonnull
-    private BookingGridComponent getBookingGridComponent() {
-        bookingGridComponent.addBookedCellClickListener(this::bookedCellClicked);
-        bookingGridComponent.addFreeCellClickListener(this::freeCellClicked);
-        return bookingGridComponent;
+    private VerticalLayout getEmptyCourtComponent() {
+        final Span noCourtsText = new Span("Keine Plätze vorhanden");
+
+        emptyCourtComponent = new VerticalLayout(noCourtsText);
+        emptyCourtComponent.addClassNames(LumoUtility.Padding.XLARGE);
+        emptyCourtComponent.setAlignItems(Alignment.CENTER);
+        emptyCourtComponent.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        return emptyCourtComponent;
     }
 
     @Nonnull
-    private DateSelectionComponent getDateSelectionComponent() {
-        dateSelectionComponent.addDateChangeListener(this::dateChanged);
-        return dateSelectionComponent;
+    private BookingGrid getBookingGridComponent() {
+        bookingGrid.addBookedCellClickListener(this::bookedCellClicked);
+        bookingGrid.addFreeCellClickListener(this::freeCellClicked);
+        return bookingGrid;
+    }
+
+    @Nonnull
+    private DateSelection getDateSelectionComponent() {
+        dateSelection.addDateChangeListener(this::dateChanged);
+        return dateSelection;
     }
 
     private void dateChanged(@Nonnull final DateChangeEvent event) {
@@ -156,6 +182,6 @@ public class BookingComponent extends VerticalLayout {
 
     @Nonnull
     private LocalDate getSelectedDate() {
-        return dateSelectionComponent.getDate();
+        return dateSelection.getDate();
     }
 }

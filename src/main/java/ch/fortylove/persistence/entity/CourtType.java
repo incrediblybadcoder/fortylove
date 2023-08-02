@@ -1,6 +1,6 @@
 package ch.fortylove.persistence.entity;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public enum CourtType {
     CLAY("clay", "Sand"),

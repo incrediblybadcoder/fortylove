@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.CourtRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.hibernate.Filter;
@@ -11,7 +12,6 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -62,11 +62,6 @@ public class CourtService {
 
     @Nonnull
     public Optional<Court> findById(@Nonnull final UUID id) {
-        return courtRepository.findById(id);
-    }
-
-    @Nonnull
-    public Optional<Court> findByNumber(@Nonnull final UUID id) {
         return courtRepository.findById(id);
     }
 

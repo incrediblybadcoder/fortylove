@@ -1,13 +1,12 @@
 package ch.fortylove.presentation.views.booking.grid.events;
 
-import ch.fortylove.presentation.views.booking.grid.BookingGridComponent;
+import ch.fortylove.presentation.views.booking.grid.BookingGrid;
 import com.vaadin.flow.component.ComponentEvent;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
+public abstract class BookingGridEvent extends ComponentEvent<BookingGrid> {
 
-public abstract class BookingGridEvent extends ComponentEvent<BookingGridComponent> {
-
-    public BookingGridEvent(@Nonnull final BookingGridComponent source) {
+    public BookingGridEvent(@Nonnull final BookingGrid source) {
         super(source, false);
     }
 }

@@ -7,7 +7,7 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -18,12 +18,14 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 @SpringComponent
+@UIScope
 public class UserForm extends ManagementForm<User> {
 
     @Nonnull private final PlayerStatusService playerStatusService;
@@ -54,6 +56,7 @@ public class UserForm extends ManagementForm<User> {
         roleCheckboxGroup = new MultiSelectComboBox<>();
     }
 
+    @Nonnull
     @Override
     protected Binder<User> getBinder() {
         final Binder<User> binder = new Binder<>(User.class);
@@ -98,13 +101,14 @@ public class UserForm extends ManagementForm<User> {
         return binder;
     }
 
+    @Nonnull
     @Override
     protected VerticalLayout getContent() {
         return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPlayerStatusSelection(), getRoleSelection());
     }
 
     @Nonnull
-    private Component getFirstNameField() {
+    private TextField getFirstNameField() {
         firstName.setWidthFull();
         firstName.setLabel("Vorname");
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -114,7 +118,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getLastNameField() {
+    private TextField getLastNameField() {
         lastName.setWidthFull();
         lastName.setLabel("Nachname");
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -124,7 +128,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getEmailField() {
+    private TextField getEmailField() {
         email.setWidthFull();
         email.setLabel("Email");
         email.setValueChangeMode(ValueChangeMode.EAGER);
@@ -134,7 +138,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getPlayerStatusSelection() {
+    private Select<PlayerStatus> getPlayerStatusSelection() {
         playerStatus.setWidthFull();
         playerStatus.setLabel("Status");
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
@@ -142,7 +146,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Nonnull
-    private Component getRoleSelection() {
+    private MultiSelectComboBox<Role> getRoleSelection() {
         roleCheckboxGroup.setWidthFull();
         roleCheckboxGroup.setLabel("Rollen");
         roleCheckboxGroup.setItemLabelGenerator(Role::getName);
@@ -151,19 +155,28 @@ public class UserForm extends ManagementForm<User> {
         return roleCheckboxGroup;
     }
 
+    @Nonnull
     @Override
     protected User getNewItem() {
         return userFactory.newEmptyDefaultUser();
     }
 
+    @Nonnull
     @Override
     protected String getItemIdentifier(@Nonnull final User user) {
         return user.getIdentifier();
     }
 
+    @Nonnull
     @Override
     protected String getItemName() {
         return "Benutzer";
+    }
+
+    @Nonnull
+    @Override
+    protected Focusable<TextField> getFocusOnOpen() {
+        return firstName;
     }
 
     @Override

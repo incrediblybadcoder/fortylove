@@ -1,10 +1,10 @@
 package ch.fortylove.persistence.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import javax.annotation.Nonnull;
 import java.time.LocalTime;
 import java.util.UUID;
 

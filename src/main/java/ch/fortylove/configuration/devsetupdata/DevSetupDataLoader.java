@@ -2,12 +2,12 @@ package ch.fortylove.configuration.devsetupdata;
 
 import ch.fortylove.configuration.setupdata.SetupDataLoaderService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nonnull;
 
 @SpringComponent
 @Profile("develop")

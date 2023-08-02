@@ -4,7 +4,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -17,9 +17,11 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 
 @SpringComponent
+@UIScope
 public class CourtForm extends ManagementForm<Court> {
 
     private IntegerField numberField;
@@ -35,6 +37,7 @@ public class CourtForm extends ManagementForm<Court> {
         nameField = new TextField();
     }
 
+    @Nonnull
     @Override
     protected Binder<Court> getBinder() {
         final Binder<Court> binder = new Binder<>(Court.class);
@@ -48,28 +51,38 @@ public class CourtForm extends ManagementForm<Court> {
         return binder;
     }
 
+    @Nonnull
     @Override
     protected VerticalLayout getContent() {
         return new VerticalLayout(getNumberField(), getIconSelection(), getCourtTypeSelection(), getNameField());
     }
 
+    @Nonnull
     @Override
     protected Court getNewItem() {
         return new Court(CourtType.CLAY, CourtIcon.ORANGE, 1, "");
     }
 
+    @Nonnull
     @Override
     protected String getItemIdentifier(@Nonnull final Court court) {
         return court.getIdentifier();
     }
 
+    @Nonnull
     @Override
     protected String getItemName() {
         return "Platz";
     }
 
     @Nonnull
-    private Component getNumberField() {
+    @Override
+    protected Focusable<IntegerField> getFocusOnOpen() {
+        return numberField;
+    }
+
+    @Nonnull
+    private IntegerField getNumberField() {
         numberField.setLabel("Nummer");
         numberField.setWidthFull();
         numberField.setMin(1);
@@ -79,7 +92,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getIconSelection() {
+    private Select<CourtIcon> getIconSelection() {
         iconSelection.setWidthFull();
         iconSelection.setLabel("Icon");
         iconSelection.setItems(CourtIcon.values());
@@ -97,7 +110,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getCourtTypeSelection() {
+    private Select<CourtType> getCourtTypeSelection() {
         courtTypeSelection.setWidthFull();
         courtTypeSelection.setLabel("Typ");
         courtTypeSelection.setItems(CourtType.values());
@@ -107,7 +120,7 @@ public class CourtForm extends ManagementForm<Court> {
     }
 
     @Nonnull
-    private Component getNameField() {
+    private TextField getNameField() {
         nameField.setWidthFull();
         nameField.setLabel("Name");
         nameField.setValueChangeMode(ValueChangeMode.EAGER);

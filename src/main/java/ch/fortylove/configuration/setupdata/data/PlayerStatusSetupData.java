@@ -3,10 +3,10 @@ package ch.fortylove.configuration.setupdata.data;
 import ch.fortylove.configuration.setupdata.SetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.service.PlayerStatusService;
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @SetupData

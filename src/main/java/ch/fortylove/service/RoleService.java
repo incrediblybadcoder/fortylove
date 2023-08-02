@@ -4,11 +4,11 @@ import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.repository.RoleRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
