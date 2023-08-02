@@ -14,7 +14,7 @@ public class RegistrationView extends VerticalLayout {
     @Nonnull public static final String ROUTE = "registration";
     @Nonnull public static final String PAGE_TITLE = "Registration";
 
-    public RegistrationView(final RegistrationForm registrationForm) {
+    public RegistrationView(@Nonnull final RegistrationForm registrationForm) {
         setHorizontalComponentAlignment(Alignment.CENTER, registrationForm);
 
         add(registrationForm);

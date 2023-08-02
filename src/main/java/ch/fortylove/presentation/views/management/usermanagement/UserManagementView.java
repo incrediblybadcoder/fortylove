@@ -7,6 +7,7 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -66,6 +67,11 @@ public class UserManagementView extends VerticalLayout {
         content.setSizeFull();
 
         add(content);
+    }
+
+    @Override
+    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
         updateUserList();
     }
 

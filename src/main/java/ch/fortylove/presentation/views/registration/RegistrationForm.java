@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -20,13 +21,13 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 @SpringComponent
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
 
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
+    @Nonnull private final UserFactory userFactory;
 
     @Nonnull final private Binder<User> binder;
 
@@ -37,10 +38,9 @@ public class RegistrationForm extends FormLayout {
     private PasswordField plainPassword;
     private PasswordField confirmPlainPassword;
     private Button register;
-    private Button abbrechen;
+    private Button cancel;
 
-
-    @Nonnull private final User user;
+    private User user;
 
     private String plainPasswordInput;
     private String confirmPlainPasswordInput;
@@ -50,17 +50,21 @@ public class RegistrationForm extends FormLayout {
                             @Nonnull final UserFactory userFactory) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.userFactory = userFactory;
         this.binder = new Binder<>(User.class);
 
         binder.bindInstanceFields(this);
 
-        user = userFactory.newEmptyDefaultUser();
-        binder.setBean(user);
-
         constructUI();
         defineValidators();
         defineListeners();
+    }
 
+    @Override
+    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        user = userFactory.newEmptyDefaultUser();
+        binder.setBean(user);
     }
 
     private void defineListeners() {
@@ -79,7 +83,7 @@ public class RegistrationForm extends FormLayout {
             }
         });
 
-        abbrechen.addClickListener(buttonClickEvent -> buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login")));
+        cancel.addClickListener(buttonClickEvent -> buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login")));
     }
 
     private void defineValidators() {
@@ -137,7 +141,7 @@ public class RegistrationForm extends FormLayout {
 
     private void constructUI() {
         initUIElements();
-        add(title, firstName, lastName, email, plainPassword, confirmPlainPassword, register, abbrechen);
+        add(title, firstName, lastName, email, plainPassword, confirmPlainPassword, register, cancel);
 
         setMaxWidth("1000px");
         setResponsiveSteps(new ResponsiveStep("0", 1, ResponsiveStep.LabelsPosition.TOP),
@@ -145,7 +149,7 @@ public class RegistrationForm extends FormLayout {
         setColspan(title, 2);
         setColspan(email, 2);
         setColspan(register, 2);
-        setColspan(abbrechen, 2);
+        setColspan(cancel, 2);
     }
 
     private void initUIElements() {
@@ -156,9 +160,9 @@ public class RegistrationForm extends FormLayout {
         plainPassword = new PasswordField("Passwort");
         confirmPlainPassword = new PasswordField("Passwort bestätigen");
         register = new Button("Registrieren");
-        abbrechen = new Button("Abbrechen");
+        cancel = new Button("Abbrechen");
         register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        abbrechen.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         firstName.setValueChangeMode(ValueChangeMode.EAGER);
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
         email.setValueChangeMode(ValueChangeMode.EAGER);
@@ -175,5 +179,4 @@ public class RegistrationForm extends FormLayout {
         confirmPlainPassword.setRequired(true);
         confirmPlainPassword.setRequiredIndicatorVisible(true);
     }
-
 }

@@ -6,6 +6,7 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.service.CourtService;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -53,6 +54,11 @@ public class CourtManagementView extends VerticalLayout {
         content.setSizeFull();
 
         add(content);
+    }
+
+    @Override
+    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
         updateCourtList();
     }
 
