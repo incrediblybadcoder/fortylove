@@ -33,13 +33,12 @@ public class UserDetailsService implements org.springframework.security.core.use
         final User user = userService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + email));
 
-        boolean enabled = true;
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getAuthenticationDetails().getEncryptedPassword(), enabled, accountNonExpired,
+                user.getEmail(), user.getAuthenticationDetails().getEncryptedPassword(), user.isEnabled(), accountNonExpired,
                 credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
