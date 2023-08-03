@@ -4,7 +4,6 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -19,23 +18,20 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
-
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_FIRST_NAME_LENGTH = 50;
     private static final int MAX_LAST_NAME_LENGTH = 50;
-
-
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
-    @Nonnull private final UserFactory userFactory;
-
     @Nonnull final private Binder<User> binder;
-
     private H2 title;
     private TextField firstName;
     private TextField lastName;
@@ -44,32 +40,24 @@ public class RegistrationForm extends FormLayout {
     private PasswordField confirmPlainPassword;
     private Button register;
     private Button cancel;
-
-    private User user;
-
+    private final User user;
     private String plainPasswordInput;
     private String confirmPlainPasswordInput;
-
     public RegistrationForm(@Nonnull final UserService userService,
                             @Nonnull final PasswordEncoder passwordEncoder,
                             @Nonnull final UserFactory userFactory) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.userFactory = userFactory;
 
         this.binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
+        user = userFactory.newEmptyDefaultUser();
+        binder.setBean(user);
+
         constructUI();
         defineValidators();
         defineListeners();
-    }
-
-    @Override
-    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-        user = userFactory.newEmptyDefaultUser();
-        binder.setBean(user);
     }
 
     private void defineListeners() {
@@ -164,7 +152,6 @@ public class RegistrationForm extends FormLayout {
         setColspan(register, 2);
         setColspan(cancel, 2);
     }
-
     private void initUIElements() {
         title = new H2("Registrierung");
         firstName = new TextField("Vorname");
