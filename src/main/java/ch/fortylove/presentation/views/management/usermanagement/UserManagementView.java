@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.views.management.usermanagement;
 
+import ch.fortylove.configuration.setupdata.data.DefaultUserSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
@@ -30,6 +31,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -82,7 +84,13 @@ public class UserManagementView extends VerticalLayout {
     }
 
     private void updateUserList() {
-        final GridListDataView<User> userGridListDataView = grid.setItems(userService.findAll());
+        List<User> allUsers = userService.findAll();
+
+        // Den DevUser soll nicht dargestellt werden
+        List<User> filteredUsers = allUsers.stream()
+                .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
+                .collect(Collectors.toList());
+        final GridListDataView<User> userGridListDataView = grid.setItems(filteredUsers);
         userFilter.setDataView(userGridListDataView);
     }
 
