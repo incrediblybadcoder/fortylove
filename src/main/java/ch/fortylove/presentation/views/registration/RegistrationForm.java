@@ -13,7 +13,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
-import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -24,6 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringComponent
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
+
+    private static final int MIN_PASSWORD_LENGTH = 8;
+    private static final int MAX_FIRST_NAME_LENGTH = 50;
+    private static final int MAX_LAST_NAME_LENGTH = 50;
+
 
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
@@ -51,8 +56,8 @@ public class RegistrationForm extends FormLayout {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.userFactory = userFactory;
-        this.binder = new Binder<>(User.class);
 
+        this.binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
         constructUI();
@@ -88,25 +93,11 @@ public class RegistrationForm extends FormLayout {
 
     private void defineValidators() {
         binder.forField(firstName)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (value.isEmpty()) {
-                        return ValidationResult.error("Der Vorname darf nicht leer sein");
-                    } else if (value.length() > 50) {
-                        return ValidationResult.error("Der Vorname darf maximal 50 Zeichen haben");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(this::validateFirstName)
                 .bind(User::getFirstName, User::setFirstName);
 
         binder.forField(lastName)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (value.isEmpty()) {
-                        return ValidationResult.error("Der Nachname darf nicht leer sein");
-                    } else if (value.length() > 50) {
-                        return ValidationResult.error("Der Nachname darf maximal 50 Zeichen haben");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(this::validateLastName)
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(email)
@@ -114,24 +105,46 @@ public class RegistrationForm extends FormLayout {
                 .bind(User::getEmail, User::setEmail);
 
         binder.forField(plainPassword)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (value.isEmpty()) {
-                        return ValidationResult.error("Passwort darf nicht leer sein");
-                    } else if (value.length() < 8) {
-                        return ValidationResult.error("Das Passwort muss mindestens 8 Zeichen lang sein");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(this::validatePassword)
                 .bind(user -> plainPasswordInput, (user, value) -> plainPasswordInput = value);
 
         binder.forField(confirmPlainPassword)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (!value.equals(plainPassword.getValue())) {
-                        return ValidationResult.error("Passwörter stimmen nicht überein");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(this::validateConfirmationPassword)
                 .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
+    }
+
+    private ValidationResult validateFirstName(String value, ValueContext context) {
+        if (value.isEmpty()) {
+            return ValidationResult.error("Der Vorname darf nicht leer sein");
+        } else if (value.length() > MAX_FIRST_NAME_LENGTH) {
+            return ValidationResult.error("Der Vorname darf maximal 50 Zeichen haben");
+        }
+        return ValidationResult.ok();
+    }
+
+    private ValidationResult validateLastName(String value, ValueContext context) {
+        if (value.isEmpty()) {
+            return ValidationResult.error("Der Nachname darf nicht leer sein");
+        } else if (value.length() > MAX_LAST_NAME_LENGTH) {
+            return ValidationResult.error("Der Nachname darf maximal 50 Zeichen haben");
+        }
+        return ValidationResult.ok();
+    }
+
+    private ValidationResult validatePassword(String value, ValueContext context) {
+        if (value.isEmpty()) {
+            return ValidationResult.error("Passwort darf nicht leer sein");
+        } else if (value.length() < MIN_PASSWORD_LENGTH) {
+            return ValidationResult.error("Das Passwort muss mindestens 8 Zeichen lang sein");
+        }
+        return ValidationResult.ok();
+    }
+
+    private ValidationResult validateConfirmationPassword(String value, ValueContext context) {
+        if (!value.equals(plainPassword.getValue())) {
+            return ValidationResult.error("Passwörter stimmen nicht überein");
+        }
+        return ValidationResult.ok();
     }
 
     private void updateButtonState() {
