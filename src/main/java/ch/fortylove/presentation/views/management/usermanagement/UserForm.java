@@ -7,6 +7,8 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
+import ch.fortylove.util.fieldvalidators.FirstNameValidator;
+import ch.fortylove.util.fieldvalidators.LastNameValidator;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -66,25 +68,11 @@ public class UserForm extends ManagementForm<User> {
                 .bind(User::getEmail, User::setEmail);
 
         binder.forField(firstName)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (value.isEmpty()) {
-                        return ValidationResult.error("Der Vorname darf nicht leer sein");
-                    } else if (value.length() > 50) {
-                        return ValidationResult.error("Der Vorname darf maximal 50 Zeichen haben");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(FirstNameValidator::validateFirstName)
                 .bind(User::getFirstName, User::setFirstName);
 
         binder.forField(lastName)
-                .withValidator((Validator<String>) (value, context) -> {
-                    if (value.isEmpty()) {
-                        return ValidationResult.error("Der Nachname darf nicht leer sein");
-                    } else if (value.length() > 50) {
-                        return ValidationResult.error("Der Nachname darf maximal 50 Zeichen haben");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(LastNameValidator::validateLastName)
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(playerStatus).bind(User::getPlayerStatus, User::setPlayerStatus);

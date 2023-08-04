@@ -1,5 +1,6 @@
 package ch.fortylove.service;
 
+import ch.fortylove.configuration.setupdata.data.DefaultUserSetupData;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
@@ -64,7 +65,23 @@ public class UserService {
     @Nonnull
     public List<User> getPossibleBookingOpponents(@Nonnull final User currentUser) {
         final List<User> users = userRepository.findAllEnabledWithAvailableBookingsPerDay();
+
+        // Sich selbst und den Develop User soll man nicht als Gegner auswählen können
         users.remove(currentUser);
-        return users;
+        return removeDevelopUser(users);
+    }
+
+    @Nonnull
+    public List<User> getAllVisibleUsers() {
+        final List<User> allUsers = this.findAll();
+
+        // Der Develop User soll für den Club-Admin nicht dargestellt werden
+        return removeDevelopUser(allUsers);
+    }
+
+    @Nonnull private List<User> removeDevelopUser(List<User> userList) {
+        return userList.stream()
+                .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
+                .toList();
     }
 }
