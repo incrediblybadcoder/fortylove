@@ -6,7 +6,8 @@ public enum CourtType {
     CLAY("clay", "Sand"),
     GRASS("grass", "Grass"),
     SYNTHETIC("synthetic", "Teppich"),
-    HARD("hard", "Hart");
+    HARD("hard", "Hart"),
+    REDCOURT("redcourt", "RedCourt");
 
     @Nonnull private final String code;
     @Nonnull private final String material;
