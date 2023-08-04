@@ -8,10 +8,13 @@ import com.vaadin.flow.component.avatar.AvatarGroupVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class BookedCell extends Cell {
+public class BookedCell extends BookableCell {
 
-    public BookedCell(@Nonnull final Booking booking,
+    public BookedCell(final boolean isInPast,
+                      @Nonnull final Booking booking,
                       @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
+        super(isInPast, clickListener);
+
         constructUI(booking, clickListener);
     }
 
@@ -22,8 +25,6 @@ public class BookedCell extends Cell {
         avatarGroup.setMaxItemsVisible(2);
         avatarGroup.add(new AvatarGroup.AvatarGroupItem(booking.getOwner().getFullName()));
         booking.getOpponents().forEach(opponent -> avatarGroup.add(new AvatarGroup.AvatarGroupItem(opponent.getFullName())));
-
-        addClickListener(clickListener);
 
         add(avatarGroup);
     }

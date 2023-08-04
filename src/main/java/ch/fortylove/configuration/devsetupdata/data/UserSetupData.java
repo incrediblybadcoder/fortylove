@@ -2,7 +2,6 @@ package ch.fortylove.configuration.devsetupdata.data;
 
 import ch.fortylove.configuration.devsetupdata.DevSetupData;
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
-import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -73,29 +71,17 @@ public class UserSetupData {
 
     @Nonnull
     private Set<Role> getAdminRole() {
-        final Set<Role> roles = new HashSet<>();
-        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_ADMIN);
-        role.ifPresent(roles::add);
-
-        return roles;
+        return roleService.getDefaultAdminRoles();
     }
 
     @Nonnull
     private Set<Role> getStaffRole() {
-        final Set<Role> roles = new HashSet<>();
-        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_STAFF);
-        role.ifPresent(roles::add);
-
-        return roles;
+        return roleService.getDefaultStaffRoles();
     }
 
     @Nonnull
     private Set<Role> getUserRole() {
-        final Set<Role> roles = new HashSet<>();
-        final Optional<Role> role = roleService.findByName(RoleSetupData.ROLE_USER);
-        role.ifPresent(roles::add);
-
-        return roles;
+        return roleService.getDefaultUserRoles();
     }
 
     @Transactional
@@ -105,7 +91,7 @@ public class UserSetupData {
                               @Nonnull final String password,
                               @Nonnull final Set<Role> Roles,
                               @Nonnull final PlayerStatus playerStatus,
-                              @Nonnull final boolean activationStatus) {
+                              final boolean activationStatus) {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {

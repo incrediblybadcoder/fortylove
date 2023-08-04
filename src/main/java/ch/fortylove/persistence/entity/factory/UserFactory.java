@@ -35,8 +35,31 @@ public class UserFactory {
                                @Nonnull final String lastName,
                                @Nonnull final String email,
                                @Nonnull final String plainPassword) {
-        final String encryptedPassword = passwordEncoder.encode(plainPassword);
+        final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
+        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
+    }
+
+    @Nonnull
+    public User newDefaultAdmin(@Nonnull final String firstName,
+                                @Nonnull final String lastName,
+                                @Nonnull final String email,
+                                @Nonnull final String plainPassword) {
+        final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
+        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+    }
+
+    @Nonnull
+    public User newDevAdmin(@Nonnull final String firstName,
+                                @Nonnull final String lastName,
+                                @Nonnull final String email,
+                                @Nonnull final String encryptedPassword) {
         final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword, "");
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultNewUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+    }
+
+    @Nonnull
+    private AuthenticationDetails getAuthenticationDetailsWithEncryption(@Nonnull final String plainPassword) {
+        final String encryptedPassword = passwordEncoder.encode(plainPassword);
+        return new AuthenticationDetails(encryptedPassword, "");
     }
 }

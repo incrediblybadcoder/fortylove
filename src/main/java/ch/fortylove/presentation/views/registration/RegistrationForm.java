@@ -4,6 +4,10 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
+import ch.fortylove.util.fieldvalidators.FirstNameValidator;
+import ch.fortylove.util.fieldvalidators.LastNameValidator;
+import ch.fortylove.util.uielements.ButtonsUtil;
+import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -26,9 +30,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
-    private static final int MIN_PASSWORD_LENGTH = 8;
-    private static final int MAX_FIRST_NAME_LENGTH = 50;
-    private static final int MAX_LAST_NAME_LENGTH = 50;
+
+
     @Nonnull private final UserService userService;
     @Nonnull private final PasswordEncoder passwordEncoder;
     @Nonnull final private Binder<User> binder;
@@ -43,6 +46,7 @@ public class RegistrationForm extends FormLayout {
     private final User user;
     private String plainPasswordInput;
     private String confirmPlainPasswordInput;
+
     public RegistrationForm(@Nonnull final UserService userService,
                             @Nonnull final PasswordEncoder passwordEncoder,
                             @Nonnull final UserFactory userFactory) {
@@ -81,55 +85,24 @@ public class RegistrationForm extends FormLayout {
 
     private void defineValidators() {
         binder.forField(firstName)
-                .withValidator(this::validateFirstName)
+                .withValidator(FirstNameValidator::validateFirstName)
                 .bind(User::getFirstName, User::setFirstName);
 
         binder.forField(lastName)
-                .withValidator(this::validateLastName)
+                .withValidator(LastNameValidator::validateLastName)
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
                 .bind(User::getEmail, User::setEmail);
 
-        binder.forField(plainPassword)
-                .withValidator(this::validatePassword)
-                .bind(user -> plainPasswordInput, (user, value) -> plainPasswordInput = value);
-
         binder.forField(confirmPlainPassword)
                 .withValidator(this::validateConfirmationPassword)
-                .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
+                        .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
     }
-
-    private ValidationResult validateFirstName(String value, ValueContext context) {
-        if (value.isEmpty()) {
-            return ValidationResult.error("Der Vorname darf nicht leer sein");
-        } else if (value.length() > MAX_FIRST_NAME_LENGTH) {
-            return ValidationResult.error("Der Vorname darf maximal 50 Zeichen haben");
-        }
-        return ValidationResult.ok();
-    }
-
-    private ValidationResult validateLastName(String value, ValueContext context) {
-        if (value.isEmpty()) {
-            return ValidationResult.error("Der Nachname darf nicht leer sein");
-        } else if (value.length() > MAX_LAST_NAME_LENGTH) {
-            return ValidationResult.error("Der Nachname darf maximal 50 Zeichen haben");
-        }
-        return ValidationResult.ok();
-    }
-
-    private ValidationResult validatePassword(String value, ValueContext context) {
-        if (value.isEmpty()) {
-            return ValidationResult.error("Passwort darf nicht leer sein");
-        } else if (value.length() < MIN_PASSWORD_LENGTH) {
-            return ValidationResult.error("Das Passwort muss mindestens 8 Zeichen lang sein");
-        }
-        return ValidationResult.ok();
-    }
-
-    private ValidationResult validateConfirmationPassword(String value, ValueContext context) {
-        if (!value.equals(plainPassword.getValue())) {
+    @Nonnull
+    private ValidationResult validateConfirmationPassword(String confirmPlainPasswordValue, ValueContext context) {
+        if (confirmPlainPasswordValue != null && !confirmPlainPasswordValue.equals(plainPassword.getValue())) {
             return ValidationResult.error("Passwörter stimmen nicht überein");
         }
         return ValidationResult.ok();
@@ -152,30 +125,25 @@ public class RegistrationForm extends FormLayout {
         setColspan(register, 2);
         setColspan(cancel, 2);
     }
+
     private void initUIElements() {
         title = new H2("Registrierung");
-        firstName = new TextField("Vorname");
+        firstName = InputFieldsUtil.createTextField("Vorname");
         lastName = new TextField("Nachname");
         email = new TextField("Email");
-        plainPassword = new PasswordField("Passwort");
+        plainPassword = ButtonsUtil.createPasswordField("Passwort!");
         confirmPlainPassword = new PasswordField("Passwort bestätigen");
         register = new Button("Registrieren");
         cancel = new Button("Abbrechen");
         register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        firstName.setValueChangeMode(ValueChangeMode.EAGER);
         lastName.setValueChangeMode(ValueChangeMode.EAGER);
         email.setValueChangeMode(ValueChangeMode.EAGER);
-        plainPassword.setValueChangeMode(ValueChangeMode.EAGER);
         confirmPlainPassword.setValueChangeMode(ValueChangeMode.EAGER);
-        firstName.setRequired(true);
-        firstName.setRequiredIndicatorVisible(true);
         lastName.setRequired(true);
         lastName.setRequiredIndicatorVisible(true);
         email.setRequired(true);
         email.setRequiredIndicatorVisible(true);
-        plainPassword.setRequired(true);
-        plainPassword.setRequiredIndicatorVisible(true);
         confirmPlainPassword.setRequired(true);
         confirmPlainPassword.setRequiredIndicatorVisible(true);
     }

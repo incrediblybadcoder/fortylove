@@ -31,8 +31,8 @@ public class BookingSettingsSetupData {
                         new Timeslot(false, 3),
                         new Timeslot(false, 4),
                         new Timeslot(false, 5),
-                        new Timeslot(false, 6),
-                        new Timeslot(false, 7),
+                        new Timeslot(true, 6),
+                        new Timeslot(true, 7),
                         new Timeslot(true, 8),
                         new Timeslot(true, 9),
                         new Timeslot(true, 10),
@@ -46,7 +46,7 @@ public class BookingSettingsSetupData {
                         new Timeslot(true, 18),
                         new Timeslot(true, 19),
                         new Timeslot(true, 20),
-                        new Timeslot(false, 21),
+                        new Timeslot(true, 21),
                         new Timeslot(false, 22),
                         new Timeslot(false, 23)
                 ));

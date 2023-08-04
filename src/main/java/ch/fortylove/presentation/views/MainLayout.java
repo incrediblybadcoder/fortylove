@@ -21,7 +21,6 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public class MainLayout extends AppLayout {
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final RoleService roleService;
 
-    @Autowired
     public MainLayout(@Nonnull final AuthenticationService authenticationService,
                       @Nonnull final RoleService roleService) {
         this.authenticationService = authenticationService;
@@ -72,7 +70,7 @@ public class MainLayout extends AppLayout {
         final List<Tab> privilegedTabs = new ArrayList<>();
 
         authenticationService.getAuthenticatedUser().ifPresent(authenticatedUser -> {
-            final List<Role> managementRoles = roleService.getManagementRoles();
+            final Set<Role> managementRoles = roleService.getDefaultManagementRoles();
             final Set<Role> userRoles = authenticatedUser.getRoles();
 
             for (final Role userRole : userRoles) {

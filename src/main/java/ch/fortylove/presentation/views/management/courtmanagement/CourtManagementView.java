@@ -79,15 +79,11 @@ public class CourtManagementView extends VerticalLayout {
 
         final Grid.Column<Court> numberColumn = grid.addColumn(Court::getNumber)
                 .setHeader("Nummer")
-                .setAutoWidth(true)
-                .setFlexGrow(0)
                 .setSortable(true);
 
         final Grid.Column<Court> iconColumn = grid.addComponentColumn(court -> getIconComponent(court.getCourtIcon()))
                 .setHeader("Icon")
-                .setSortable(true)
-                .setAutoWidth(true)
-                .setFlexGrow(0);
+                .setSortable(true);
 
         final Grid.Column<Court> typeColumn = grid.addColumn(court -> court.getCourtType().getMaterial())
                 .setHeader("Material")
