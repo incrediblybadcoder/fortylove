@@ -22,7 +22,7 @@
     border-left: 0px;
 }
 
-/* booking grid cells */
+/* booking grid cells sizing and padding*/
 .booking-view vaadin-grid-cell-content {
     padding: 0px;
 }
@@ -41,8 +41,13 @@
         width: 60px;
     }
 }
+
+/* booking cell shading on date*/
 .booking-grid-bookable-cell-in-past {
     background-color: var(--lumo-contrast-5pct);
+}
+.booking-grid-bookable-cell {
+    background-color: var(--lumo-success-color-10pct);
 }
 
 /* booking grid fonts */

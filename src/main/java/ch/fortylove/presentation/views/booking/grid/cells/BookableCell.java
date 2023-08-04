@@ -9,9 +9,8 @@ public abstract class BookableCell extends Cell {
 
     public BookableCell(final boolean isInPast,
                         @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
-        if (isInPast) {
-            addClassName("booking-grid-bookable-cell-in-past");
-        }
+        final String colorShadeClass = isInPast ? "booking-grid-bookable-cell-in-past" : "booking-grid-bookable-cell";
+        addClassName(colorShadeClass);
 
         addClickListener(clickListener);
     }
