@@ -24,10 +24,13 @@ import java.util.UUID;
 public class BookingService {
 
     @Nonnull private final BookingRepository bookingRepository;
+    @Nonnull private final TimeSlotService timeSlotService;
 
     @Autowired
-    public BookingService(@Nonnull final BookingRepository bookingRepository) {
+    public BookingService(@Nonnull final BookingRepository bookingRepository,
+                          @Nonnull final TimeSlotService timeSlotService) {
         this.bookingRepository = bookingRepository;
+        this.timeSlotService = timeSlotService;
     }
 
     @Nonnull
@@ -80,7 +83,7 @@ public class BookingService {
     @Nonnull
     protected ValidationResult isBookingModifiableOnDateInternal(@Nonnull final Booking booking,
                                                                  @Nonnull final LocalDateTime currentDateTime) {
-        if (isInPast(currentDateTime, booking.getDate(), booking.getTimeslot())) {
+        if (timeSlotService.isInPast(currentDateTime, booking.getDate(), booking.getTimeslot())) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }
 
@@ -101,19 +104,14 @@ public class BookingService {
         if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
             return ValidationResult.failure("Duplikate Buchung");
         }
-        if (isInPast(currentDateTime, date, timeslot)) {
+        if (timeSlotService.isInPast(currentDateTime, date, timeslot)) {
             return ValidationResult.failure("Datum liegt in der Vergangenheit");
         }
 
         return ValidationResult.success();
     }
 
-    private boolean isInPast(@Nonnull final LocalDateTime currentDateTime,
-                             @Nonnull final LocalDate date,
-                             @Nonnull final Timeslot timeslot) {
-        final LocalDateTime bookingDateTime = LocalDateTime.of(date, timeslot.getStartTime());
-        return bookingDateTime.isBefore(currentDateTime);
-    }
+
 
     @Nonnull
     public ValidationResult isUserBookingAllowedOnDate(@Nonnull final User user,

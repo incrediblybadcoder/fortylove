@@ -9,6 +9,7 @@ import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEv
 import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
 import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.presentation.views.booking.grid.BookingGrid;
+import ch.fortylove.presentation.views.booking.grid.BookingGridConfiguration;
 import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
 import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
 import ch.fortylove.security.AuthenticationService;
@@ -71,7 +72,8 @@ public class BookingComponent extends VerticalLayout {
         dateSelection.setVisible(!courts.isEmpty());
 
         if (!courts.isEmpty()) {
-            bookingGrid.setItems(courts);
+            final BookingGridConfiguration bookingGridConfiguration = new BookingGridConfiguration(getSelectedDate(), courts);
+            bookingGrid.refresh(bookingGridConfiguration);
         }
     }
 

@@ -11,6 +11,7 @@ import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
 import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
 import ch.fortylove.presentation.views.booking.grid.util.CourtUtil;
 import ch.fortylove.service.BookingSettingsService;
+import ch.fortylove.service.TimeSlotService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -22,6 +23,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,11 +33,16 @@ import java.util.Set;
 public class BookingGrid extends Grid<Court> {
 
     @Nonnull private final BookingSettingsService bookingSettingsService;
+    @Nonnull private final TimeSlotService timeSlotService;
+
+    @Nonnull private LocalDate date = LocalDate.now();
 
     @Autowired
-    public BookingGrid(@Nonnull final BookingSettingsService bookingSettingsService) {
+    public BookingGrid(@Nonnull final BookingSettingsService bookingSettingsService,
+                       @Nonnull final TimeSlotService timeSlotService) {
         super(Court.class, false);
         this.bookingSettingsService = bookingSettingsService;
+        this.timeSlotService = timeSlotService;
 
         addThemeVariants(GridVariant.LUMO_NO_BORDER);
         setSelectionMode(SelectionMode.NONE);
@@ -51,7 +59,7 @@ public class BookingGrid extends Grid<Court> {
                 .setFrozen(true);
 
         timeslots.forEach(timeslot ->
-                addComponentColumn(court -> createBookingComponent(court, timeslot))
+                addComponentColumn(court -> createBookingCell(court, timeslot))
                         .setHeader(timeslot.getStartTime().toString())
                         .setTextAlign(ColumnTextAlign.CENTER)
                         .setVisible(timeslot.getBookable())
@@ -59,16 +67,17 @@ public class BookingGrid extends Grid<Court> {
     }
 
     @Nonnull
-    private Cell createBookingComponent(@Nonnull final Court court,
-                                        @Nonnull final Timeslot timeslot) {
+    private Cell createBookingCell(@Nonnull final Court court,
+                                   @Nonnull final Timeslot timeslot) {
         final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeslot);
+        final boolean isInPast = timeSlotService.isInPast(LocalDateTime.now(), date, timeslot);
 
         if (booking.isPresent()) {
             final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeslot, booking.get()));
-            return new BookedCell(booking.get(), clickListener);
+            return new BookedCell(isInPast, booking.get(), clickListener);
         } else {
             final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener = event -> fireEvent(new FreeCellClickEvent(this, court, timeslot));
-            return new FreeCell(clickListener);
+            return new FreeCell(isInPast, clickListener);
         }
     }
 
@@ -78,5 +87,10 @@ public class BookingGrid extends Grid<Court> {
 
     public void addFreeCellClickListener(@Nonnull final ComponentEventListener<FreeCellClickEvent> listener) {
         addListener(FreeCellClickEvent.class, listener);
+    }
+
+    public void refresh(@Nonnull final BookingGridConfiguration bookingGridConfiguration) {
+        date = bookingGridConfiguration.getDate();
+        setItems(bookingGridConfiguration.getCourts());
     }
 }
