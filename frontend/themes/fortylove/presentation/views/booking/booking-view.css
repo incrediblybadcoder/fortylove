@@ -41,6 +41,9 @@
         width: 60px;
     }
 }
+.booking-grid-bookable-cell-in-past {
+    background-color: var(--lumo-contrast-5pct);
+}
 
 /* booking grid fonts */
 @media (max-width: 600px) {

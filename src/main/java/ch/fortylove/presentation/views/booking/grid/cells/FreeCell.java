@@ -5,13 +5,10 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class FreeCell extends Cell {
+public class FreeCell extends BookableCell {
 
-    public FreeCell(@Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
-        constructUI(clickListener);
-    }
-
-    private void constructUI(@Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
-        addClickListener(clickListener);
+    public FreeCell(final boolean isInPast,
+                    @Nonnull final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener) {
+        super(isInPast, clickListener);
     }
 }
