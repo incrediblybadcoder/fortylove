@@ -20,7 +20,6 @@ public class RoleSetupData {
     @Nonnull public static final String ROLE_ADMIN = "ROLE_ADMIN";
     @Nonnull public static final String ROLE_STAFF = "ROLE_STAFF";
     @Nonnull public static final String ROLE_USER = "ROLE_USER";
-
     @Nonnull private final RoleService roleService;
     @Nonnull private final PrivilegeService privilegeService;
 
@@ -34,6 +33,18 @@ public class RoleSetupData {
     @Nonnull
     public static List<String> getManagementRoles() {
         return List.of(ROLE_ADMIN, ROLE_STAFF);
+    }
+
+    public static List<String> getAdminRoles() {
+        return List.of(ROLE_ADMIN);
+    }
+
+    public static List<String> getUserRoles() {
+        return List.of(ROLE_USER);
+    }
+
+    public static List<String> getStaffRoles() {
+        return List.of(ROLE_STAFF);
     }
 
     public void createRoles() {
