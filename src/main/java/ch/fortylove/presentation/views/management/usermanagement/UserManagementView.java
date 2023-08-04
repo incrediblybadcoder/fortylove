@@ -1,6 +1,5 @@
 package ch.fortylove.presentation.views.management.usermanagement;
 
-import ch.fortylove.configuration.setupdata.data.DefaultUserSetupData;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
@@ -84,13 +83,9 @@ public class UserManagementView extends VerticalLayout {
     }
 
     private void updateUserList() {
-        List<User> allUsers = userService.findAll();
+        List<User> allVisibleUsers = userService.getAllVisibleUsers();
 
-        // Den DevUser soll nicht dargestellt werden
-        List<User> filteredUsers = allUsers.stream()
-                .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
-                .collect(Collectors.toList());
-        final GridListDataView<User> userGridListDataView = grid.setItems(filteredUsers);
+        final GridListDataView<User> userGridListDataView = grid.setItems(allVisibleUsers);
         userFilter.setDataView(userGridListDataView);
     }
 
