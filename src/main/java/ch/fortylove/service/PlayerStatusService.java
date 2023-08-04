@@ -16,9 +16,8 @@ import java.util.UUID;
 @Service
 @Transactional
 public class PlayerStatusService {
-
     @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = PlayerStatusSetupData.AKTIV;
-
+    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_ADMIN = PlayerStatusSetupData.AKTIV;
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
     public PlayerStatusService(@Nonnull final PlayerStatusRepository playerStatusRepository) {
@@ -65,5 +64,14 @@ public class PlayerStatusService {
     @Nonnull
     public List<PlayerStatus> findAll() {
         return playerStatusRepository.findAll();
+    }
+
+    @Nonnull
+    public PlayerStatus getDefaultAdminPlayerStatus() {
+        final Optional<PlayerStatus> playerStatus = this.findByName(DEFAULT_PLAYER_STATUS_FOR_ADMIN);
+        if (playerStatus.isPresent()) {
+            return playerStatus.get();
+        }
+        throw new RecordNotFoundException("PlayerStatus " + DEFAULT_PLAYER_STATUS_FOR_ADMIN + " not found");
     }
 }

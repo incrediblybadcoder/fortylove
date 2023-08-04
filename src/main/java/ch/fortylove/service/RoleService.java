@@ -46,16 +46,31 @@ public class RoleService {
     }
 
     @Nonnull
-    public Set<Role> getDefaultNewUserRoles() {
-        final Set<Role> roles = new HashSet<>();
-        final Optional<Role> role = this.findByName(RoleService.DEFAULT_ROLE_FOR_NEW_USER);
-        role.ifPresent(roles::add);
-        return roles;
+    public Set<Role> getDefaultUserRoles() {
+        @Nonnull final List<String> userRoles = RoleSetupData.getUserRoles();
+        final List<Role> rolesByNames = roleRepository.findRolesByNames(userRoles);
+        return new HashSet<>(rolesByNames);
     }
 
     @Nonnull
-    public List<Role> getManagementRoles() {
+    public Set<Role> getDefaultManagementRoles() {
         @Nonnull final List<String> managementRoles = RoleSetupData.getManagementRoles();
-        return roleRepository.findRolesByNames(managementRoles);
+        final List<Role> rolesByNames = roleRepository.findRolesByNames(managementRoles);
+        return new HashSet<>(rolesByNames);
+    }
+
+    @Nonnull
+    public Set<Role> getDefaultAdminRoles() {
+        @Nonnull final List<String> managementRoles = RoleSetupData.getAdminRoles();
+        final List<Role> rolesByNames = roleRepository.findRolesByNames(managementRoles);
+        return new HashSet<>(rolesByNames);
+    }
+
+    @Nonnull
+    public Set<Role> getDefaultStaffRoles() {
+        @Nonnull final List<String> staffRoles = RoleSetupData.getStaffRoles();
+        final List<Role> rolesByNames = roleRepository.findRolesByNames(staffRoles);
+        return new HashSet<>(rolesByNames);
+
     }
 }
