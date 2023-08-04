@@ -186,4 +186,3 @@ public class UserForm extends ManagementForm<User> {
         roleCheckboxGroup.setItems(roleService.findAll());
     }
 }
-
