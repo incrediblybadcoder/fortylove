@@ -44,7 +44,6 @@ public class RegistrationForm extends FormLayout {
     private Button register;
     private Button cancel;
     private final User user;
-    private String plainPasswordInput;
     private String confirmPlainPasswordInput;
 
     public RegistrationForm(@Nonnull final UserService userService,
@@ -72,7 +71,7 @@ public class RegistrationForm extends FormLayout {
                 if (userService.findByEmail(user.getEmail()).isPresent()) {
                     NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
                 } else {
-                    user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPasswordInput));
+                    user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
                     userService.create(user);
                     buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
                     NotificationUtil.infoNotification("Registration erfolgreich");
@@ -131,7 +130,7 @@ public class RegistrationForm extends FormLayout {
         firstName = InputFieldsUtil.createTextField("Vorname");
         lastName = new TextField("Nachname");
         email = new TextField("Email");
-        plainPassword = ButtonsUtil.createPasswordField("Passwort!");
+        plainPassword = ButtonsUtil.createPasswordField("Passwort");
         confirmPlainPassword = new PasswordField("Passwort bestätigen");
         register = new Button("Registrieren");
         cancel = new Button("Abbrechen");
