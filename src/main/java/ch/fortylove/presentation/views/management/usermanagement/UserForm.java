@@ -10,6 +10,7 @@ import ch.fortylove.service.RoleService;
 import ch.fortylove.util.fieldvalidators.FirstNameValidator;
 import ch.fortylove.util.fieldvalidators.LastNameValidator;
 import ch.fortylove.util.fieldvalidators.SetNotEmptyValidator;
+import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,7 +18,6 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
@@ -48,9 +48,9 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void instantiateFields() {
-        firstName = new TextField();
-        lastName = new TextField();
-        email = new TextField();
+        firstName = InputFieldsUtil.createTextField("Vorname");
+        lastName = InputFieldsUtil.createTextField("Nachname");
+        email = InputFieldsUtil.createTextField("Email");
         playerStatus = new Select<>();
         roleCheckboxGroup = new MultiSelectComboBox<>();
     }
@@ -90,30 +90,18 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     private TextField getFirstNameField() {
         firstName.setWidthFull();
-        firstName.setLabel("Vorname");
-        firstName.setValueChangeMode(ValueChangeMode.EAGER);
-        firstName.setRequiredIndicatorVisible(true);
-        firstName.setRequired(true);
         return firstName;
     }
 
     @Nonnull
     private TextField getLastNameField() {
         lastName.setWidthFull();
-        lastName.setLabel("Nachname");
-        lastName.setValueChangeMode(ValueChangeMode.EAGER);
-        lastName.setRequired(true);
-        lastName.setRequiredIndicatorVisible(true);
         return lastName;
     }
 
     @Nonnull
     private TextField getEmailField() {
         email.setWidthFull();
-        email.setLabel("Email");
-        email.setValueChangeMode(ValueChangeMode.EAGER);
-        email.setRequired(true);
-        email.setRequiredIndicatorVisible(true);
         return email;
     }
 

@@ -9,7 +9,6 @@ import ch.fortylove.util.fieldvalidators.LastNameValidator;
 import ch.fortylove.util.uielements.ButtonsUtil;
 import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -18,7 +17,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.validator.EmailValidator;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -128,22 +126,11 @@ public class RegistrationForm extends FormLayout {
     private void initUIElements() {
         title = new H2("Registrierung");
         firstName = InputFieldsUtil.createTextField("Vorname");
-        lastName = new TextField("Nachname");
-        email = new TextField("Email");
-        plainPassword = ButtonsUtil.createPasswordField("Passwort");
-        confirmPlainPassword = new PasswordField("Passwort bestätigen");
-        register = new Button("Registrieren");
-        cancel = new Button("Abbrechen");
-        register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        lastName.setValueChangeMode(ValueChangeMode.EAGER);
-        email.setValueChangeMode(ValueChangeMode.EAGER);
-        confirmPlainPassword.setValueChangeMode(ValueChangeMode.EAGER);
-        lastName.setRequired(true);
-        lastName.setRequiredIndicatorVisible(true);
-        email.setRequired(true);
-        email.setRequiredIndicatorVisible(true);
-        confirmPlainPassword.setRequired(true);
-        confirmPlainPassword.setRequiredIndicatorVisible(true);
+        lastName = InputFieldsUtil.createTextField("Nachname");
+        email = InputFieldsUtil.createTextField("Email");
+        plainPassword = InputFieldsUtil.createPasswordField("Passwort");
+        confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
+        register = ButtonsUtil.registrationButton();
+        cancel = ButtonsUtil.cancelButton("Abbrechen");
     }
 }
