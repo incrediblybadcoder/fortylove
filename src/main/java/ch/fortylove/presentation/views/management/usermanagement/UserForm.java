@@ -9,22 +9,19 @@ import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.util.fieldvalidators.FirstNameValidator;
 import ch.fortylove.util.fieldvalidators.LastNameValidator;
+import ch.fortylove.util.fieldvalidators.SetNotEmptyValidator;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationResult;
-import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Set;
 
 @SpringComponent
 @UIScope
@@ -78,12 +75,7 @@ public class UserForm extends ManagementForm<User> {
         binder.forField(playerStatus).bind(User::getPlayerStatus, User::setPlayerStatus);
 
         binder.forField(roleCheckboxGroup)
-                .withValidator((Validator<Set<Role>>) (value, context) -> {
-                    if (value == null || value.isEmpty()) {
-                        return ValidationResult.error("Mindestens eine Rolle muss ausgewählt sein");
-                    }
-                    return ValidationResult.ok();
-                })
+                .withValidator(new SetNotEmptyValidator<>("Bitte wählen Sie mindestens eine Rolle aus"))
                 .bind(User::getRoles, User::setRoles);
 
         return binder;
