@@ -4,12 +4,12 @@ import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
+import ch.fortylove.util.uielements.ButtonsUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -83,26 +83,15 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     @Nonnull
     private VerticalLayout getButtons() {
-        save = new Button("Speichern");
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.setWidthFull();
-        save.addClickListener(click -> saveClick());
 
-        update = new Button("Speichern");
-        update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        update.setWidthFull();
-        update.addClickListener(click -> updateClick());
+        save = ButtonsUtil.createPrimaryButton("Speichern", this::saveClick);
 
-        delete = new Button("Löschen");
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        delete.setWidthFull();
-        delete.addClickListener(click -> deleteClick());
+        update = ButtonsUtil.createPrimaryButton("Updaten", this::updateClick);
 
-        close = new Button("Abbrechen");
-        close.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        close.setWidthFull();
+        delete = ButtonsUtil.createDangerButton("Löschen", this::deleteClick);
+
+        close = ButtonsUtil.createNeutralButton("Abbrechen", this::closeClick);
         close.addClickShortcut(Key.ESCAPE);
-        close.addClickListener(click -> closeClick());
 
         buttonContainer = new VerticalLayout();
         return buttonContainer;

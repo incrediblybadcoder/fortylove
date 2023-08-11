@@ -2,6 +2,7 @@ package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
+import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -9,7 +10,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
@@ -24,9 +24,9 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
 
     @Override
     protected void instantiateFields() {
-        nameField = new TextField();
-        bookingsPerDayField = new IntegerField();
-        bookableDaysInAdvanceField = new IntegerField();
+        nameField = InputFieldsUtil.createTextField("Name");
+        bookingsPerDayField = InputFieldsUtil.createBasicIntegerField("Buchungen pro Tag");
+        bookableDaysInAdvanceField = InputFieldsUtil.createBasicIntegerField("Buchbare Tage in die Zukunft");
     }
 
     @Nonnull
@@ -50,7 +50,7 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     @Nonnull
     @Override
     protected VerticalLayout getContent() {
-        return new VerticalLayout(getNameField(), getBookingsPerDayField(), getBookableDaysInAdvanceField());
+        return new VerticalLayout(getNameField(), bookingsPerDayField, bookableDaysInAdvanceField);
     }
 
     @Nonnull
@@ -80,30 +80,6 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     @Nonnull
     private TextField getNameField() {
         nameField.setWidthFull();
-        nameField.setLabel("Name");
-        nameField.setValueChangeMode(ValueChangeMode.EAGER);
-        nameField.setRequired(true);
-        nameField.setRequiredIndicatorVisible(true);
         return nameField;
-    }
-
-    @Nonnull
-    private IntegerField getBookingsPerDayField() {
-        bookingsPerDayField.setLabel("Buchungen pro Tag");
-        bookingsPerDayField.setWidthFull();
-        bookingsPerDayField.setMin(0);
-        bookingsPerDayField.setStep(1);
-        bookingsPerDayField.setStepButtonsVisible(true);
-        return bookingsPerDayField;
-    }
-
-    @Nonnull
-    private IntegerField getBookableDaysInAdvanceField() {
-        bookableDaysInAdvanceField.setLabel("Buchbare Tage in die Zukunft");
-        bookableDaysInAdvanceField.setWidthFull();
-        bookableDaysInAdvanceField.setMin(0);
-        bookableDaysInAdvanceField.setStep(1);
-        bookableDaysInAdvanceField.setStepButtonsVisible(true);
-        return bookableDaysInAdvanceField;
     }
 }
