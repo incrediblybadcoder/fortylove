@@ -8,6 +8,7 @@ import ch.fortylove.util.fieldvalidators.FirstNameValidator;
 import ch.fortylove.util.fieldvalidators.LastNameValidator;
 import ch.fortylove.util.uielements.ButtonsUtil;
 import ch.fortylove.util.uielements.InputFieldsUtil;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -55,59 +56,10 @@ public class RegistrationForm extends FormLayout {
 
         user = userFactory.newEmptyDefaultUser();
         binder.setBean(user);
+        binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 
         constructUI();
         defineValidators();
-        defineListeners();
-    }
-
-    private void defineListeners() {
-        binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
-
-        register.addClickListener(buttonClickEvent -> {
-            if (binder.writeBeanIfValid(user)) {
-                if (userService.findByEmail(user.getEmail()).isPresent()) {
-                    NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
-                } else {
-                    user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
-                    userService.create(user);
-                    buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
-                    NotificationUtil.infoNotification("Registration erfolgreich");
-                }
-            }
-        });
-
-        cancel.addClickListener(buttonClickEvent -> buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login")));
-    }
-
-    private void defineValidators() {
-        binder.forField(firstName)
-                .withValidator(FirstNameValidator::validateFirstName)
-                .bind(User::getFirstName, User::setFirstName);
-
-        binder.forField(lastName)
-                .withValidator(LastNameValidator::validateLastName)
-                .bind(User::getLastName, User::setLastName);
-
-        binder.forField(email)
-                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
-                .bind(User::getEmail, User::setEmail);
-
-        binder.forField(confirmPlainPassword)
-                .withValidator(this::validateConfirmationPassword)
-                        .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
-    }
-    @Nonnull
-    private ValidationResult validateConfirmationPassword(String confirmPlainPasswordValue, ValueContext context) {
-        if (confirmPlainPasswordValue != null && !confirmPlainPasswordValue.equals(plainPassword.getValue())) {
-            return ValidationResult.error("Passwörter stimmen nicht überein");
-        }
-        return ValidationResult.ok();
-    }
-
-    private void updateButtonState() {
-        final boolean valid = binder.isValid();
-        register.setEnabled(valid);
     }
 
     private void constructUI() {
@@ -130,7 +82,55 @@ public class RegistrationForm extends FormLayout {
         email = InputFieldsUtil.createTextField("Email");
         plainPassword = InputFieldsUtil.createPasswordField("Passwort");
         confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
-        register = ButtonsUtil.registrationButton();
-        cancel = ButtonsUtil.cancelButton("Abbrechen");
+        register = ButtonsUtil.createPrimaryButton("Registrieren", this::registerClick);
+        cancel = ButtonsUtil.createNeutralButton("Abbrechen", this::gotToLoginPage);
+    }
+
+    private void gotToLoginPage(final ClickEvent<Button> buttonClickEvent) {
+        buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
+    }
+
+    private void registerClick(final ClickEvent<Button> buttonClickEvent) {
+        if (binder.writeBeanIfValid(user)) {
+            if (userService.findByEmail(user.getEmail()).isPresent()) {
+                NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
+            } else {
+                user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
+                userService.create(user);
+                gotToLoginPage(buttonClickEvent);
+                NotificationUtil.infoNotification("Registration erfolgreich");
+            }
+        }
+    }
+
+    private void defineValidators() {
+        binder.forField(firstName)
+                .withValidator(FirstNameValidator::validateFirstName)
+                .bind(User::getFirstName, User::setFirstName);
+
+        binder.forField(lastName)
+                .withValidator(LastNameValidator::validateLastName)
+                .bind(User::getLastName, User::setLastName);
+
+        binder.forField(email)
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .bind(User::getEmail, User::setEmail);
+
+        binder.forField(confirmPlainPassword)
+                .withValidator(this::validateConfirmationPassword)
+                .bind(user -> confirmPlainPasswordInput, (user, value) -> confirmPlainPasswordInput = value);
+    }
+
+    @Nonnull
+    private ValidationResult validateConfirmationPassword(String confirmPlainPasswordValue, ValueContext context) {
+        if (confirmPlainPasswordValue != null && !confirmPlainPasswordValue.equals(plainPassword.getValue())) {
+            return ValidationResult.error("Passwörter stimmen nicht überein");
+        }
+        return ValidationResult.ok();
+    }
+
+    private void updateButtonState() {
+        final boolean valid = binder.isValid();
+        register.setEnabled(valid);
     }
 }
