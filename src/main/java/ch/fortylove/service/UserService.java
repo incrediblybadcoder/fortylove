@@ -30,6 +30,9 @@ public class UserService {
         if (userRepository.findById(user.getId()).isPresent()) {
             throw new DuplicateRecordException(user);
         }
+        // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
+        // der Aktivierungslink generiert und dem User mitgeteilt werden
+        System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
         return userRepository.save(user);
     }
 
@@ -79,9 +82,28 @@ public class UserService {
         return removeDevelopUser(allUsers);
     }
 
-    @Nonnull private List<User> removeDevelopUser(List<User> userList) {
+    @Nonnull
+    private List<User> removeDevelopUser(List<User> userList) {
         return userList.stream()
                 .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
                 .toList();
+    }
+
+    /**
+     * Aktiviert einen Benutzer anhand eines gegebenen Aktivierungscodes.
+     *
+     * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
+     * @return {@code true} wenn der Benutzer erfolgreich aktiviert wurde, {@code false} wenn kein Benutzer mit dem gegebenen Aktivierungscode gefunden wurde.
+     */
+    public boolean activate(String activationCode) {
+        User user = userRepository.findByActivationCode(activationCode);
+        if (user != null) {
+            user.setEnabled(true);
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

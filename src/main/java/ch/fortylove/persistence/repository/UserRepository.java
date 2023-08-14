@@ -5,6 +5,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT u FROM users u WHERE u.playerStatus.bookingsPerDay > 0 AND u.enabled = true")
     List<User> findAllEnabledWithAvailableBookingsPerDay();
+
+    @Query("SELECT u FROM users u JOIN u.authenticationDetails ad WHERE ad.activationCode = :activationCode")
+    User findByActivationCode(@Param("activationCode") String activationCode);
 }

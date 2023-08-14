@@ -98,7 +98,6 @@ public class RegistrationForm extends FormLayout {
                 user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
                 userService.create(user);
                 gotToLoginPage(buttonClickEvent);
-                NotificationUtil.infoNotification("Registration erfolgreich");
             }
         }
     }

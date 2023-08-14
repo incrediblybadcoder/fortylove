@@ -25,18 +25,36 @@ public class UserFactory {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Erstellt einen neuen Standardbenutzer. Nachdem dieser Benutzer erstellt wurde,
+     * muss sichergestellt werden, dass eine E-Mail an diesen Benutzer gesendet wird,
+     * welche einen Aktivierungscode enthält.
+     *
+     * @return Ein neuer User-Objekt mit Standardwerten
+     */
     @Nonnull
     public User newEmptyDefaultUser() {
         return newDefaultUser("", "", "", "");
     }
 
+    /**
+     * Erstellt einen neuen Standardbenutzer. Nachdem dieser Benutzer erstellt wurde,
+     * muss sichergestellt werden, dass eine E-Mail an diesen Benutzer gesendet wird,
+     * welche einen Aktivierungscode enthält.
+     *
+     * @param firstName Vorname des Benutzers
+     * @param lastName Nachname des Benutzers
+     * @param email E-Mail-Adresse des Benutzers
+     * @param plainPassword Klartext-Passwort des Benutzers
+     * @return Ein neuer User-Objekt mit Standardwerten
+     */
     @Nonnull
     public User newDefaultUser(@Nonnull final String firstName,
                                @Nonnull final String lastName,
                                @Nonnull final String email,
                                @Nonnull final String plainPassword) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, false, roleService.getDefaultUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
     }
 
     @Nonnull
