@@ -1,5 +1,7 @@
 package ch.fortylove.util;
 
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import jakarta.annotation.Nonnull;
@@ -18,9 +20,10 @@ public class NotificationUtil {
         });
     }
 
-    public static void infoNotification(@Nonnull final String text) {
+    public static void informationNotification(@Nonnull final String text) {
         getDefaultNotification(text).ifPresent(Notification::open);
     }
+
 
     @Nonnull
     private static Optional<Notification> getDefaultNotification(@Nonnull final String text) {
@@ -28,4 +31,19 @@ public class NotificationUtil {
                 Optional.empty() :
                 Optional.of(new Notification(text, DURATION, POSITION));
     }
+
+
+    public static void persistentInformationNotification(String message) {
+        Notification notification = new Notification();
+        notification.setDuration(0);
+        notification.setPosition((POSITION));
+        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+
+        Div content = new Div(new Text(message));
+        content.addClickListener(event -> notification.close());
+
+        notification.add(content);
+        notification.open();
+    }
+
 }

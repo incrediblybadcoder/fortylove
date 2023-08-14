@@ -184,7 +184,7 @@ public class UserManagementView extends VerticalLayout {
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
         updateUserList();
-        NotificationUtil.infoNotification("Benutzer wurde erfolgreich angelegt: Passwort = newpassword");
+        NotificationUtil.persistentInformationNotification("Benutzer wurde erfolgreich angelegt:\nPasswort = newpassword");
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
@@ -198,7 +198,7 @@ public class UserManagementView extends VerticalLayout {
         if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
             userService.delete(user.getId());
             updateUserList();
-            NotificationUtil.infoNotification("Benutzer wurde erfolgreich gelöscht");
+            NotificationUtil.informationNotification("Benutzer wurde erfolgreich gelöscht");
         } else {
             NotificationUtil.errorNotification("Benutzer kann nicht gelöscht werden, da er noch Buchungen hat");
         }

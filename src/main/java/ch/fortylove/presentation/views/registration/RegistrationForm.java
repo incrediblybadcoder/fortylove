@@ -79,7 +79,7 @@ public class RegistrationForm extends FormLayout {
         title = new H2("Registrierung");
         firstName = InputFieldsUtil.createTextField("Vorname");
         lastName = InputFieldsUtil.createTextField("Nachname");
-        email = InputFieldsUtil.createTextField("Email");
+        email = InputFieldsUtil.createTextField("E-Mail");
         plainPassword = InputFieldsUtil.createPasswordField("Passwort");
         confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
         register = ButtonsUtil.createPrimaryButton("Registrieren", this::registerClick);
@@ -93,12 +93,12 @@ public class RegistrationForm extends FormLayout {
     private void registerClick(final ClickEvent<Button> buttonClickEvent) {
         if (binder.writeBeanIfValid(user)) {
             if (userService.findByEmail(user.getEmail()).isPresent()) {
-                NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
+                NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
             } else {
                 user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
                 userService.create(user, true);
                 gotToLoginPage(buttonClickEvent);
-                NotificationUtil.infoNotification("Überprüfe deine Emails um deine Registrierung abzuschliessen.");
+                NotificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
             }
         }
     }
@@ -113,7 +113,7 @@ public class RegistrationForm extends FormLayout {
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(email)
-                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige E-Mail-Adresse ein"))
                 .bind(User::getEmail, User::setEmail);
 
         binder.forField(confirmPlainPassword)
