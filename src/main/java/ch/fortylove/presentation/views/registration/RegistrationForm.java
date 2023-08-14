@@ -96,8 +96,9 @@ public class RegistrationForm extends FormLayout {
                 NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser Email-Adresse.");
             } else {
                 user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
-                userService.create(user);
+                userService.create(user, true);
                 gotToLoginPage(buttonClickEvent);
+                NotificationUtil.infoNotification("Überprüfe deine Emails um deine Registrierung abzuschliessen.");
             }
         }
     }

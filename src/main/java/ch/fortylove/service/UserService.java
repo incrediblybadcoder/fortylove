@@ -8,6 +8,8 @@ import ch.fortylove.persistence.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +22,38 @@ public class UserService {
 
     @Nonnull private final UserRepository userRepository;
 
+    @Nonnull private final MailSender mailSender;
+
     @Autowired
-    public UserService(@Nonnull final UserRepository userRepository) {
+    public UserService(@Nonnull final UserRepository userRepository,
+                       @Nonnull final MailSender mailSender) {
         this.userRepository = userRepository;
+        this.mailSender = mailSender;
     }
 
     @Nonnull
     public User create(@Nonnull final User user) {
+        return this.create(user, false);
+    }
+
+    @Nonnull
+    public User create(@Nonnull final User user, boolean sendActivationMail) {
         if (userRepository.findById(user.getId()).isPresent()) {
             throw new DuplicateRecordException(user);
         }
         // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
         // der Aktivierungslink generiert und dem User mitgeteilt werden
-        System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
+        if (sendActivationMail) {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("noreply@fortylove.ch");
+            message.setSubject("Aktivierung Ihres fortylove Kontos");
+            message.setText("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
+            message.setTo(user.getEmail());
+            mailSender.send(message);
+        }
+        else {
+            System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
+        }
         return userRepository.save(user);
     }
 
