@@ -11,3 +11,11 @@
 * Server name: fortylove.database.windows.net
 * User: fortylove
 * Password: non-standard
+
+[Gmail Adresse](www.gmail.com)
+* User: fortylove.untervaz@gmail.com
+* Password: standard (siehe private Nachricht in Discord)
+
+[mailtrap](https://mailtrap.io/)
+* User: fortylove.untervaz@gmail.com
+* SMTP Username und Password: siehe EmailTesting/Inboxes/MyInbox/SMTP Settings -> Show Credentials
