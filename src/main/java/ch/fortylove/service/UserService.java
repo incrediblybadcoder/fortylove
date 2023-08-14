@@ -6,10 +6,12 @@ import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
 import jakarta.annotation.Nonnull;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +24,11 @@ public class UserService {
 
     @Nonnull private final UserRepository userRepository;
 
-    @Nonnull private final MailSender mailSender;
+    @Nonnull private final JavaMailSender mailSender;
 
     @Autowired
     public UserService(@Nonnull final UserRepository userRepository,
-                       @Nonnull final MailSender mailSender) {
+                       @Nonnull final JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
     }
@@ -44,12 +46,22 @@ public class UserService {
         // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
         // der Aktivierungslink generiert und dem User mitgeteilt werden
         if (sendActivationMail) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("noreply@fortylove.ch");
-            message.setSubject("Aktivierung Ihres fortylove Kontos");
-            message.setText("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
-            message.setTo(user.getEmail());
-            mailSender.send(message);
+            try {
+                String activationLink = "http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode();
+                String htmlContent = "Bitte klicken Sie auf den folgenden <a href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren.";
+
+                MimeMessage mimeMessage = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+
+                helper.setFrom("noreply@fortylove.ch");
+                helper.setTo(user.getEmail());
+                helper.setSubject("Aktivierung Ihres fortylove Kontos");
+                helper.setText(htmlContent, true);
+
+                mailSender.send(mimeMessage);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
         else {
             System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
