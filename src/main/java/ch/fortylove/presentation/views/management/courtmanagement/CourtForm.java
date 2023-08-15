@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
+import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -15,7 +16,6 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
@@ -31,10 +31,10 @@ public class CourtForm extends ManagementForm<Court> {
 
     @Override
     protected void instantiateFields() {
-        numberField = new IntegerField();
+        numberField = InputFieldsUtil.createBasicIntegerField("Nummer", true, 1, 99);
         iconSelection = new Select<>();
         courtTypeSelection = new Select<>();
-        nameField = new TextField();
+        nameField = InputFieldsUtil.createTextField("Name", false);
     }
 
     @Nonnull
@@ -54,7 +54,7 @@ public class CourtForm extends ManagementForm<Court> {
     @Nonnull
     @Override
     protected VerticalLayout getContent() {
-        return new VerticalLayout(getNumberField(), getIconSelection(), getCourtTypeSelection(), getNameField());
+        return new VerticalLayout(numberField, getIconSelection(), getCourtTypeSelection(), getNameField());
     }
 
     @Nonnull
@@ -78,16 +78,6 @@ public class CourtForm extends ManagementForm<Court> {
     @Nonnull
     @Override
     protected Focusable<IntegerField> getFocusOnOpen() {
-        return numberField;
-    }
-
-    @Nonnull
-    private IntegerField getNumberField() {
-        numberField.setLabel("Nummer");
-        numberField.setWidthFull();
-        numberField.setMin(1);
-        numberField.setStep(1);
-        numberField.setStepButtonsVisible(true);
         return numberField;
     }
 
@@ -122,8 +112,6 @@ public class CourtForm extends ManagementForm<Court> {
     @Nonnull
     private TextField getNameField() {
         nameField.setWidthFull();
-        nameField.setLabel("Name");
-        nameField.setValueChangeMode(ValueChangeMode.EAGER);
         return nameField;
     }
 }
