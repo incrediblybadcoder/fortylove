@@ -7,6 +7,11 @@ In den WebApps des Azure App Services müssen folgende Environment Variablen fü
 * SPRING_DATASOURCE_USERNAME
 * SPRING_DATASOURCE_PASSWORD
 
+Um E-Mail Versand zu ermöglichen, müssen folgende Environment Variablen gesetzt werden:
+* MAIL_USERNAME
+* MAIL_PASSWORD
+* BASE_URL
+
 ## Azure SQL
 * [Use Java and JDBC with Azure SQL Database](https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-query-java?view=azuresql)
 
