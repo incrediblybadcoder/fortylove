@@ -21,8 +21,14 @@
 
 [mailtrap](https://mailtrap.io/)
 * User: fortylove.untervaz@gmail.com
-* SMTP Username und Password: siehe EmailTesting/Inboxes/MyInbox/SMTP Settings -> Show Credentials
+* Password: siehe app.keeweb.info
+* Infos für Environment Variables:
+* * MAIL_USERNAME: siehe mailtraop.io -> EmailTesting -> Inboxes -> MyInbox -> SMTP Settings -> Show Credentials -> hier steht der Username
+* * MAIL_PASSWORD: siehe mailtraop.io -> EmailTesting -> Inboxes -> MyInbox -> SMTP Settings -> Show Credentials -> hier steht das Passwort
 
 [SendGrid](https://app.sendgrid.com/)
 * User: fortylove.untervaz@gmail.com
 * Password: siehe app.keeweb.info
+* * Infos für Environment Variables:
+* * MAIL_USERNAME: siehe app.keeweb.info unter "SendGrid"
+* * MAIL_PASSWORD: siehe app.keeweb.info unter "SendGrid" 

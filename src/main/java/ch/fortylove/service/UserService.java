@@ -132,4 +132,20 @@ public class UserService {
         }
 
     }
+
+    /**
+     * Überprüft ob ein Benutzer aktiviert ist anhand eines gegebenen Aktivierungscodes.
+     *
+     * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
+     * @return {@code true} wenn der Benutzer bereits aktiv ist, {@code false} wenn der Benutzer nicht aktiv ist.
+     */
+    public boolean checkIfActive(String activationCode) {
+        User user = userRepository.findByActivationCode(activationCode);
+        if (user != null) {
+            return user.isEnabled();
+        } else {
+            return false;
+        }
+
+    }
 }
