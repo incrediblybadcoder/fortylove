@@ -153,7 +153,7 @@ public class BookingComponent extends VerticalLayout {
         final ValidationResult validationResult = bookingService.isUserBookingAllowedOnDate(booking.getOwner(), booking.getDate());
         if (validationResult.isSuccessful()) {
             bookingService.create(booking);
-            NotificationUtil.infoNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
+            NotificationUtil.informationNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
             refresh();
         } else {
             NotificationUtil.errorNotification(validationResult.getMessage());
@@ -162,7 +162,7 @@ public class BookingComponent extends VerticalLayout {
 
     private void modifyBookingAction(final @Nonnull Booking booking) {
         bookingService.update(booking);
-        NotificationUtil.infoNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        NotificationUtil.informationNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
         refresh();
     }
 
@@ -176,7 +176,7 @@ public class BookingComponent extends VerticalLayout {
                 "Buchung wirklich Löschen?",
                 () -> {
                     bookingService.delete(booking.getId());
-                    NotificationUtil.infoNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
+                    NotificationUtil.informationNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
                     refresh();
                 }
         ).open();

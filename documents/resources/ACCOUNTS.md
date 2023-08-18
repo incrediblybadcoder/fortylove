@@ -1,3 +1,6 @@
+[Passwort und Account Manager](https://app.keeweb.info/)
+* Das PW-File ist auf G-Drive von Account fortylove.untervaz@gmail.com gespeichert
+
 [New Relic APM](https://rpm.newrelic.com/accounts/3898097)
 * User: m.solombrino@hotmail.ch
 * Password: standard
@@ -11,3 +14,15 @@
 * Server name: fortylove.database.windows.net
 * User: fortylove
 * Password: non-standard
+
+[Gmail Adresse](www.gmail.com)
+* User: fortylove.untervaz@gmail.com
+* Password: standard (siehe private Nachricht in Discord)
+
+[mailtrap](https://mailtrap.io/)
+* User: fortylove.untervaz@gmail.com
+* SMTP Username und Password: siehe EmailTesting/Inboxes/MyInbox/SMTP Settings -> Show Credentials
+
+[SendGrid](https://app.sendgrid.com/)
+* User: fortylove.untervaz@gmail.com
+* Password: siehe app.keeweb.info

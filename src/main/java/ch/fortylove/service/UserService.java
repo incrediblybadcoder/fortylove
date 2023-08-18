@@ -8,6 +8,8 @@ import ch.fortylove.persistence.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +20,44 @@ import java.util.UUID;
 @Transactional
 public class UserService {
 
+    @Value("${BASE_URL}")
+    private String baseUrl;
+
+    private final EmailServiceProvider emailServiceProvider;
+
     @Nonnull private final UserRepository userRepository;
 
     @Autowired
-    public UserService(@Nonnull final UserRepository userRepository) {
+    public UserService(@Nonnull final UserRepository userRepository,
+                       @Value("${email.service}") String emailProvider,
+                       ApplicationContext context) {
         this.userRepository = userRepository;
+        this.emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
     }
 
     @Nonnull
     public User create(@Nonnull final User user) {
+        return this.create(user, false);
+    }
+
+    @Nonnull
+    public User create(@Nonnull final User user, boolean sendActivationMail) {
         if (userRepository.findById(user.getId()).isPresent()) {
             throw new DuplicateRecordException(user);
+        }
+        // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
+        // der Aktivierungslink generiert und dem User mitgeteilt werden
+        if (sendActivationMail) {
+            String activationLink = baseUrl + "activate?code=" + user.getAuthenticationDetails().getActivationCode();
+            String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren.";
+
+            try {
+                emailServiceProvider.sendEmail(user.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
         }
         return userRepository.save(user);
     }
@@ -79,9 +108,28 @@ public class UserService {
         return removeDevelopUser(allUsers);
     }
 
-    @Nonnull private List<User> removeDevelopUser(List<User> userList) {
+    @Nonnull
+    private List<User> removeDevelopUser(List<User> userList) {
         return userList.stream()
                 .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
                 .toList();
+    }
+
+    /**
+     * Aktiviert einen Benutzer anhand eines gegebenen Aktivierungscodes.
+     *
+     * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
+     * @return {@code true} wenn der Benutzer erfolgreich aktiviert wurde, {@code false} wenn kein Benutzer mit dem gegebenen Aktivierungscode gefunden wurde.
+     */
+    public boolean activate(String activationCode) {
+        User user = userRepository.findByActivationCode(activationCode);
+        if (user != null) {
+            user.setEnabled(true);
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
