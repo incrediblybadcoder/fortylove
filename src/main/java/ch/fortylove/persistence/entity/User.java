@@ -66,7 +66,7 @@ public class User extends AbstractEntity {
                 @Nonnull final String lastName,
                 @Nonnull final String email,
                 @Nonnull final AuthenticationDetails authenticationDetails,
-                @Nonnull final boolean enabled,
+                final boolean enabled,
                 @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
         super(UUID.randomUUID());
@@ -75,6 +75,7 @@ public class User extends AbstractEntity {
         this.email = email;
         this.authenticationDetails = authenticationDetails;
         authenticationDetails.setUser(this);
+        authenticationDetails.setActivationCode(UUID.randomUUID().toString());
         this.enabled = enabled;
         this.roles = roles;
         this.playerStatus = playerStatus;

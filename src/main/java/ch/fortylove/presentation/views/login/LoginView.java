@@ -31,7 +31,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginForm = new LoginForm();
         final LoginI18n loginFormInternational = LoginI18n.createDefault();
         final LoginI18n.Form form = loginFormInternational.getForm();
-        form.setUsername("Email");
+        form.setUsername("E-Mail");
 
         loginForm.setI18n(loginFormInternational);
         loginForm.setAction("login");
