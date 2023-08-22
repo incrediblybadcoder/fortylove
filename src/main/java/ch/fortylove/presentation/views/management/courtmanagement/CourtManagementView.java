@@ -86,7 +86,7 @@ public class CourtManagementView extends VerticalLayout {
                 .setSortable(true);
 
         final Grid.Column<Court> typeColumn = grid.addColumn(court -> court.getCourtType().getMaterial())
-                .setHeader("Material")
+                .setHeader("Belag")
                 .setSortable(true);
 
         final Grid.Column<Court> nameColumn = grid.addColumn(Court::getName)
