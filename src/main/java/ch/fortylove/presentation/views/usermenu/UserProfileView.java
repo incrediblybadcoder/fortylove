@@ -15,6 +15,6 @@ public class UserProfileView extends VerticalLayout {
     @Nonnull public static final String ROUTE = "userprofile";
     @Nonnull public static final String PAGE_TITLE = "Benutzerprofil";
 
-    public UserProfileView(){
+    public UserProfileView() {
     }
 }
