@@ -2,7 +2,7 @@ plugins {
 	id "java"
 	id "org.springframework.boot" version "3.1.0"
 	id "io.spring.dependency-management" version "1.1.0"
-	id "com.vaadin" version "24.0.4"
+	id "com.vaadin" version "24.1.6"
 	id "org.flywaydb.flyway" version "9.20.1"
 }
 
@@ -16,7 +16,7 @@ repositories {
 }
 
 ext {
-	set("vaadinVersion", "24.0.4")
+	set("vaadinVersion", "24.1.6")
 }
 
 dependencyManagement {
@@ -28,7 +28,7 @@ dependencyManagement {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
-	implementation("com.vaadin:vaadin-spring-boot-starter:24.0.0")
+	implementation("com.vaadin:vaadin-spring-boot-starter:24.1.6")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.flywaydb:flyway-core")
 	implementation("com.sendgrid:sendgrid-java:4.9.3")
