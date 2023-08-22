@@ -3,22 +3,23 @@ package ch.fortylove.presentation.views;
 import ch.fortylove.FortyloveApplication;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.presentation.views.booking.BookingView;
+import ch.fortylove.presentation.views.feedback.FeedbackView;
+import ch.fortylove.presentation.views.logout.LogoutView;
 import ch.fortylove.presentation.views.management.ManagementView;
+import ch.fortylove.presentation.views.sitenotice.SiteNoticeView;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.RoleService;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.html.Footer;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.TabVariant;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 
@@ -31,43 +32,56 @@ public class MainLayout extends AppLayout {
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final RoleService roleService;
 
+    private H2 viewTitle;
+
     public MainLayout(@Nonnull final AuthenticationService authenticationService,
                       @Nonnull final RoleService roleService) {
         this.authenticationService = authenticationService;
         this.roleService = roleService;
 
-        setDrawerOpened(false);
+        createHeader();
+        createDrawer();
+        setPrimarySection(Section.DRAWER);
+    }
 
-        final H3 appName = new H3(FortyloveApplication.APP_NAME);
-        appName.addClassNames(LumoUtility.Margin.Left.MEDIUM, LumoUtility.Margin.Right.MEDIUM);
+    private void createHeader() {
+        final DrawerToggle toggle = new DrawerToggle();
 
-        final Tabs menu = createMenuTabs();
+        viewTitle = new H2();
+        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-        addToNavbar(appName);
-        addToNavbar(true, menu);
+        addToNavbar(true, toggle, viewTitle);
+    }
+
+    private void createDrawer() {
+        final H1 applicationName = new H1(FortyloveApplication.APP_NAME);
+        applicationName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+        final Header header = new Header(applicationName);
+
+        final Scroller scroller = new Scroller(createNavigation());
+
+        addToDrawer(header, scroller, createFooter());
     }
 
     @Nonnull
-    private Tabs createMenuTabs() {
-        final Tabs tabs = new Tabs();
-        tabs.setOrientation(Tabs.Orientation.HORIZONTAL);
-        getAvailableTabs().forEach(tabs::add);
-        return tabs;
+    private SideNav createNavigation() {
+        final SideNav navigation = new SideNav();
+
+        // general views
+        navigation.addItem(new SideNavItem(BookingView.PAGE_TITLE, BookingView.class, VaadinIcon.CALENDAR.create()));
+
+        // privileged views
+        getPrivilegedViews().forEach(navigation::addItem);
+
+        // logout
+        navigation.addItem(new SideNavItem(LogoutView.PAGE_TITLE, LogoutView.class, VaadinIcon.SIGN_OUT.create()));
+
+        return navigation;
     }
 
     @Nonnull
-    private List<Tab> getAvailableTabs() {
-        final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab(VaadinIcon.CALENDAR, BookingView.PAGE_TITLE, BookingView.class));
-        tabs.addAll(getPrivilegedTabs());
-        tabs.add(getLogoutTab());
-
-        return tabs;
-    }
-
-    @Nonnull
-    private List<Tab> getPrivilegedTabs() {
-        final List<Tab> privilegedTabs = new ArrayList<>();
+    private List<SideNavItem> getPrivilegedViews() {
+        final List<SideNavItem> privilegedViews = new ArrayList<>();
 
         authenticationService.getAuthenticatedUser().ifPresent(authenticatedUser -> {
             final Set<Role> managementRoles = roleService.getDefaultManagementRoles();
@@ -75,50 +89,35 @@ public class MainLayout extends AppLayout {
 
             for (final Role userRole : userRoles) {
                 if (managementRoles.contains(userRole)) {
-                    privilegedTabs.add(createTab(VaadinIcon.COG, ManagementView.PAGE_TITLE, ManagementView.class));
+                    privilegedViews.add(new SideNavItem(ManagementView.PAGE_TITLE, ManagementView.class, VaadinIcon.COG.create()));
                     break;
                 }
             }
         });
 
-        return privilegedTabs;
+        return privilegedViews;
     }
 
     @Nonnull
-    private Tab getLogoutTab() {
-        final Icon logoutIcon = VaadinIcon.SIGN_OUT.create();
-        final Label logoutLabel = new Label("Logout");
-        final VerticalLayout layout = new VerticalLayout(logoutIcon, logoutLabel);
-        layout.setSpacing(false);
-        layout.setPadding(false);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+    private Footer createFooter() {
+        final SideNav footerNavigation = new SideNav();
+        footerNavigation.addItem(new SideNavItem(FeedbackView.PAGE_TITLE, FeedbackView.class));
+        footerNavigation.addItem(new SideNavItem(SiteNoticeView.PAGE_TITLE, SiteNoticeView.class));
 
-        layout.addClickListener(event -> authenticationService.logout());
+        final Footer layout = new Footer();
+        layout.add(footerNavigation);
 
-        final Tab logoutTab = new Tab();
-        logoutTab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
-        logoutTab.add(layout);
-        return logoutTab;
+        return layout;
     }
 
-    @Nonnull
-    private Tab createTab(@Nonnull final VaadinIcon icon,
-                          @Nonnull final String title,
-                          @Nonnull final Class<? extends Component> viewClass) {
-        final RouterLink content = populateLink(new RouterLink("", viewClass), icon, title);
-
-        final Tab tab = new Tab();
-        tab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
-        tab.add(content);
-        return tab;
+    @Override
+    protected void afterNavigation() {
+        super.afterNavigation();
+        viewTitle.setText(getCurrentPageTitle());
     }
 
-    @Nonnull
-    private <T extends HasComponents> T populateLink(@Nonnull final T link,
-                                                     @Nonnull final VaadinIcon icon,
-                                                     @Nonnull final String title) {
-        link.add(icon.create());
-        link.add(title);
-        return link;
+    private String getCurrentPageTitle() {
+        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
+        return title == null ? "" : title.value();
     }
 }
