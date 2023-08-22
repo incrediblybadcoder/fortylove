@@ -108,6 +108,7 @@ public class BookingDialog extends CancelableDialog {
         if (selection.size() > StaticConfiguration.MAX_AMOUNT_OF_OPPONENTS_PER_BOOKING) {
             opponentComboBox.setValue(previousSelection);
         }
+        opponentComboBox.setOpened(false);
     }
 
     private void validateOpponentSelection(@Nonnull final Set<User> user) {
