@@ -16,6 +16,9 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Route(value = ManagementView.ROUTE, layout = MainLayout.class)
 @PageTitle(ManagementView.PAGE_TITLE)
 @RolesAllowed({RoleSetupData.ROLE_ADMIN, RoleSetupData.ROLE_STAFF})
@@ -24,33 +27,31 @@ public class ManagementView extends VerticalLayout {
     @Nonnull public static final String ROUTE = "management";
     @Nonnull public static final String PAGE_TITLE = "Verwaltung";
 
-    @Nonnull private final CourtManagementView courtManagementView;
-    @Nonnull private final PlayerStatusManagementView playerStatusManagementView;
-    @Nonnull private final UserManagementView userManagementView;
-
     public ManagementView(@Nonnull final CourtManagementView courtManagementView,
                           @Nonnull final PlayerStatusManagementView playerStatusManagementView,
                           @Nonnull final UserManagementView userManagementView) {
-        this.courtManagementView = courtManagementView;
-        this.playerStatusManagementView = playerStatusManagementView;
-        this.userManagementView = userManagementView;
-
         addClassName("management-view");
         setSizeFull();
 
-        constructUI();
+        constructUI(courtManagementView, playerStatusManagementView, userManagementView);
     }
 
-    private void constructUI() {
-        final Tab courtManagement = createTab(VaadinIcon.LIST_OL.create(), "Plätze");
-        final Tab playerStatusManagement = createTab(VaadinIcon.STAR.create(), "Status");
-        final Tab userManagement = createTab(VaadinIcon.USERS.create(), "Benutzer");
+    private void constructUI(@Nonnull final CourtManagementView courtManagementView,
+                             @Nonnull final PlayerStatusManagementView playerStatusManagementView,
+                             @Nonnull final UserManagementView userManagementView) {
+        final Map<Tab, ManagementViewTab> tabs = new LinkedHashMap<>();
+        tabs.put(createTab(VaadinIcon.LIST_OL.create(), "Plätze"), courtManagementView);
+        tabs.put(createTab(VaadinIcon.STAR.create(), "Status"), playerStatusManagementView);
+        tabs.put(createTab(VaadinIcon.USERS.create(), "Benutzer"), userManagementView);
 
         final TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
-        tabSheet.add(courtManagement, courtManagementView);
-        tabSheet.add(playerStatusManagement, playerStatusManagementView);
-        tabSheet.add(userManagement, userManagementView);
+        tabSheet.addSelectedChangeListener(selectedChangeEvent-> {
+            final Tab selectedTab = selectedChangeEvent.getSelectedTab();
+            final ManagementViewTab managementViewTab = tabs.get(selectedTab);
+            managementViewTab.refresh();
+        });
+        tabs.forEach(tabSheet::add);
 
         add(tabSheet);
     }
