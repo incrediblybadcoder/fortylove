@@ -18,9 +18,4 @@ public class TimeSlotService {
         final LocalDateTime bookingDateTime = LocalDateTime.of(date, timeslot.getStartTime());
         return bookingDateTime.isBefore(currentDateTime);
     }
-
-    public boolean isInPast(@Nonnull final Timeslot timeslot) {
-        final LocalDateTime timeSlotDateTime = LocalDateTime.of(LocalDate.now(), timeslot.getStartTime());
-        return timeSlotDateTime.isBefore(LocalDateTime.now());
-    }
 }

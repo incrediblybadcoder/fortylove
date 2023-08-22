@@ -136,7 +136,7 @@ class TestBookingService extends ServiceTest {
         final LocalDate bookingDate = localDate.plusDays(1);
         final LocalDateTime currentDateTime = LocalDateTime.of(localDate, LocalTime.now());
 
-        final ValidationResult validationResult = testee.isBookingCreatableOnDateInternal(court, getTimeslotIterator().next(), bookingDate, currentDateTime);
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, owner, getTimeslotIterator().next(), bookingDate, currentDateTime);
 
         Assertions.assertTrue(validationResult.isSuccessful());
     }
@@ -147,7 +147,7 @@ class TestBookingService extends ServiceTest {
         final LocalDate bookingDate = localDate.minusDays(1);
         final LocalDateTime currentDateTime = LocalDateTime.of(localDate, LocalTime.now());
 
-        final ValidationResult validationResult = testee.isBookingCreatableOnDateInternal(court, getTimeslotIterator().next(), bookingDate, currentDateTime);
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, owner, getTimeslotIterator().next(), bookingDate, currentDateTime);
 
         Assertions.assertFalse(validationResult.isSuccessful());
     }
@@ -160,7 +160,7 @@ class TestBookingService extends ServiceTest {
 
         final LocalDate localDate = LocalDate.now();
         final LocalDateTime currentDateTime = LocalDateTime.of(localDate, LocalTime.now());
-        final ValidationResult validationResult = testee.isBookingCreatableOnDateInternal(court, getTimeslotIterator().next(), localDate, currentDateTime);
+        final ValidationResult validationResult = testee.isBookingCreatableOnDate(court, owner, getTimeslotIterator().next(), localDate, currentDateTime);
 
         Assertions.assertFalse(validationResult.isSuccessful());
     }

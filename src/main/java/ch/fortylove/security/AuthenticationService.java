@@ -37,5 +37,4 @@ public class AuthenticationService {
     public void logout() {
         authenticationContext.logout();
     }
-
 }
