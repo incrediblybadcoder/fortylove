@@ -55,8 +55,6 @@ public class UserService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
         }
         return userRepository.save(user);
     }
