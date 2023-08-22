@@ -5,9 +5,9 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
+import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -18,7 +18,6 @@ import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -36,9 +35,10 @@ import java.util.stream.Collectors;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UserManagementView extends VerticalLayout {
+public class UserManagementView extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
+
     @Nonnull private final UserForm userForm;
     @Nonnull private final PasswordEncoder passwordEncoder;
 
@@ -71,8 +71,7 @@ public class UserManagementView extends VerticalLayout {
     }
 
     @Override
-    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
+    public void refresh() {
         updateUserList();
     }
 
@@ -183,21 +182,21 @@ public class UserManagementView extends VerticalLayout {
         final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         userService.create(user);
-        updateUserList();
+        refresh();
         NotificationUtil.persistentInformationNotification("Benutzer wurde erfolgreich angelegt:\nPasswort = newpassword");
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
         final User user = managementFormModifyEvent.getItem();
         userService.update(user);
-        updateUserList();
+        refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
         final User user = managementFormDeleteEvent.getItem();
         if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
             userService.delete(user.getId());
-            updateUserList();
+            refresh();
             NotificationUtil.informationNotification("Benutzer wurde erfolgreich gelöscht");
         } else {
             NotificationUtil.errorNotification("Benutzer kann nicht gelöscht werden, da er noch Buchungen hat");
