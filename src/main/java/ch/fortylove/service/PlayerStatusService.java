@@ -3,6 +3,7 @@ package ch.fortylove.service;
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordDeleteException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
 import jakarta.annotation.Nonnull;
@@ -46,6 +47,11 @@ public class PlayerStatusService {
                        @Nonnull final UUID replacementPlayerStatusId) {
         final PlayerStatus playerStatusToDelete = playerStatusRepository.findById(playerStatusToDeleteId)
                 .orElseThrow(() -> new RecordNotFoundException(playerStatusToDeleteId));
+
+        if (playerStatusRepository.findAll().size() == 1) {
+            throw new RecordDeleteException("Last PlayerStatus can not be deleted: " + playerStatusToDelete);
+        }
+
         final PlayerStatus replacementPlayerStatus = playerStatusRepository.findById(replacementPlayerStatusId)
                 .orElseThrow(() -> new RecordNotFoundException(replacementPlayerStatusId));
 

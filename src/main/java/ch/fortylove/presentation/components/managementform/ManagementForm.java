@@ -1,7 +1,7 @@
 package ch.fortylove.presentation.components.managementform;
 
-import ch.fortylove.presentation.components.dialog.CancelableDialog;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
@@ -74,6 +74,11 @@ public abstract class ManagementForm<T> extends FormLayout {
         final boolean isEnabled = isValid && hasChanges;
         save.setEnabled(isEnabled);
         update.setEnabled(isEnabled);
+        delete.setEnabled(isDeleteEnabled());
+    }
+
+    protected boolean isDeleteEnabled() {
+        return true;
     }
 
     @Nonnull
@@ -117,7 +122,7 @@ public abstract class ManagementForm<T> extends FormLayout {
     }
 
     @Nonnull
-    protected CancelableDialog getDeleteConfirmationDialog() {
+    protected Dialog getDeleteConfirmationDialog() {
         return new DeleteConfirmationDialog(
                 getItemIdentifier(currentItem),
                 getItemName() + " wirklich löschen?",

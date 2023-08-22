@@ -2,6 +2,7 @@ package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
+import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.util.uielements.InputFieldsUtil;
@@ -100,19 +101,25 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
         return nameField;
     }
 
+    @Override
+    protected boolean isDeleteEnabled() {
+        return playerStatusService.findAll().size() > 1;
+    }
+
     @Nonnull
     @Override
-    protected CancelableDialog getDeleteConfirmationDialog() {
+    protected Dialog getDeleteConfirmationDialog() {
         final CancelableDialog deleteDialog = new CancelableDialog();
         deleteDialog.setHeaderTitle(currentItem.getIdentifier());
 
         final Html text = new Html("<div>Status wirklich löschen?<br><br>Jedem Benutzer mit diesem Status<br>wird ein neuer Status zugewiesen.</div>");
 
+        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAll().stream().filter(playerStatus -> !playerStatus.equals(currentItem)).toList();
         final Select<PlayerStatus> replacementPlayerStatusSelect = new Select<>();
         replacementPlayerStatusSelect.setLabel("Neuer Status");
         replacementPlayerStatusSelect.setItemLabelGenerator(PlayerStatus::getIdentifier);
-        final List<PlayerStatus> playerStatuses = playerStatusService.findAll().stream().filter(playerStatus -> !playerStatus.equals(currentItem)).toList();
-        replacementPlayerStatusSelect.setItems(playerStatuses);
+        replacementPlayerStatusSelect.setItems(remainingPlayerStatus);
+        remainingPlayerStatus.stream().findFirst().ifPresent(replacementPlayerStatusSelect::setValue);
 
         final Button deleteButton = new Button("Löschen");
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
