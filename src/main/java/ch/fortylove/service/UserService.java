@@ -5,6 +5,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
+import ch.fortylove.service.email.EmailServiceProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,17 @@ import java.util.UUID;
 @Transactional
 public class UserService {
 
-    @Value("${BASE_URL}")
-    private String baseUrl;
-
-    private final EmailServiceProvider emailServiceProvider;
-
     @Nonnull private final UserRepository userRepository;
+    @Nonnull private final String baseUrl;
+    @Nonnull private final EmailServiceProvider emailServiceProvider;
 
     @Autowired
     public UserService(@Nonnull final UserRepository userRepository,
                        @Value("${email.service}") String emailProvider,
-                       ApplicationContext context) {
+                       @Nonnull final ApplicationContext context) {
         this.userRepository = userRepository;
-        this.emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
+        baseUrl = System.getenv("BASE_URL");
+        emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
     }
 
     @Nonnull
@@ -73,11 +72,6 @@ public class UserService {
     @Nonnull
     public Optional<User> findByEmail(@Nonnull final String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
-    }
-
-    @Nonnull
-    public Optional<User> findById(@Nonnull final UUID id) {
-        return userRepository.findById(id);
     }
 
     @Nonnull
@@ -130,7 +124,6 @@ public class UserService {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -146,6 +139,5 @@ public class UserService {
         } else {
             return false;
         }
-
     }
 }
