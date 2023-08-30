@@ -7,6 +7,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name ="authenticationdetails")
@@ -23,6 +24,13 @@ public class AuthenticationDetails extends AbstractEntity {
     @NotNull
     @OneToOne(mappedBy = "authenticationDetails")
     private User user;
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expire_date")
+    private LocalDateTime tokenExpiryDate;
+
 
     protected AuthenticationDetails() {
     }
@@ -59,6 +67,22 @@ public class AuthenticationDetails extends AbstractEntity {
 
     public void setActivationCode(@Nonnull final String activationCode) {
         this.activationCode = activationCode;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(final String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public LocalDateTime getTokenExpiryDate() {
+        return tokenExpiryDate;
+    }
+
+    public void setTokenExpiryDate(final LocalDateTime tokenExpiryDate) {
+        this.tokenExpiryDate = tokenExpiryDate;
     }
 
     @Override

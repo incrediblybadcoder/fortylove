@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -137,5 +138,50 @@ public class UserService {
         } else {
             return false;
         }
+    }
+
+    public boolean generateAndSaveResetToken(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        String resetToken = UUID.randomUUID().toString();
+        LocalDateTime tokenExpiryDate = LocalDateTime.now().plusHours(1); // Token soll nur eine Stunde gültig sein
+
+        user.getAuthenticationDetails().setResetToken(resetToken);
+        user.getAuthenticationDetails().setTokenExpiryDate(tokenExpiryDate);
+        userRepository.save(user);
+
+
+        String resetLink = baseUrl + "resetpassword?token=" + user.getAuthenticationDetails().getResetToken();
+        String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + resetLink + "'>Link</a>, um Ihr Passwort zu ändern.";
+
+        try {
+            emailServiceProvider.sendEmail(user.getEmail(), "Passwort zurückrücksetzen", htmlContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userRepository.save(user);
+        return true;
+
+    }
+
+    public boolean resetPasswordUsingToken(String token, String newPasswordEncrypted) {
+        User user = userRepository.findByResetToken(token);
+        if (user != null && isTokenValid(user.getAuthenticationDetails().getTokenExpiryDate())) {
+            user.getAuthenticationDetails().setEncryptedPassword(newPasswordEncrypted);
+            // Token und Expiry Date sollen nach dem erfolgreichen Zurücksetzen des Passworts gelöscht werden
+            // damit der Token nicht mehrfach verwendet werden kann
+            user.getAuthenticationDetails().setResetToken(null);
+            user.getAuthenticationDetails().setTokenExpiryDate(null);
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isTokenValid(LocalDateTime tokenExpiryDate) {
+        return tokenExpiryDate.isAfter(LocalDateTime.now());
     }
 }
