@@ -137,7 +137,7 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         final SideNav navigation = new SideNav();
 
-        // general views
+        // general views test
         navigation.addItem(new SideNavItem(BookingView.PAGE_TITLE, BookingView.class, VaadinIcon.CALENDAR.create()));
 
         // privileged views

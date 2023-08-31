@@ -44,6 +44,7 @@ public class RegistrationForm extends FormLayout {
     private Button cancel;
     private final User user;
     private String confirmPlainPasswordInput;
+    private String plainPasswordInput;
 
     public RegistrationForm(@Nonnull final UserService userService,
                             @Nonnull final PasswordEncoder passwordEncoder,
@@ -60,6 +61,8 @@ public class RegistrationForm extends FormLayout {
 
         constructUI();
         defineValidators();
+
+        updateButtonState();
     }
 
     private void constructUI() {
@@ -81,6 +84,7 @@ public class RegistrationForm extends FormLayout {
         lastName = InputFieldsUtil.createTextField("Nachname");
         email = InputFieldsUtil.createTextField("E-Mail");
         plainPassword = InputFieldsUtil.createPasswordField("Passwort");
+        plainPassword.addValueChangeListener(event -> binder.validate());
         confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
         register = ButtonsUtil.createPrimaryButton("Registrieren", this::registerClick);
         cancel = ButtonsUtil.createNeutralButton("Abbrechen", this::gotToLoginPage);
@@ -115,6 +119,12 @@ public class RegistrationForm extends FormLayout {
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige E-Mail-Adresse ein"))
                 .bind(User::getEmail, User::setEmail);
+
+
+        binder.forField(plainPassword)
+                .withValidator(password -> password != null && !password.trim().isEmpty(), "Passwort darf nicht leer sein.")
+                .bind(instance -> plainPasswordInput, (instance, value) -> plainPasswordInput = value);
+
 
         binder.forField(confirmPlainPassword)
                 .withValidator(this::validateConfirmationPassword)
