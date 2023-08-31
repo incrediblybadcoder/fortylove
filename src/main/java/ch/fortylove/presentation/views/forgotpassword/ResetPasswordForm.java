@@ -1,12 +1,10 @@
 package ch.fortylove.presentation.views.forgotpassword;
 
-import ch.fortylove.presentation.views.login.LoginView;
-import ch.fortylove.service.UserService;
-import ch.fortylove.util.NotificationUtil;
+import ch.fortylove.presentation.views.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
 import ch.fortylove.util.uielements.ButtonsUtil;
 import ch.fortylove.util.uielements.InputFieldsUtil;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -15,21 +13,16 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @AnonymousAllowed
 public class ResetPasswordForm extends FormLayout {
-
-    @Nonnull private final UserService userService;
-    @Nonnull private final PasswordEncoder passwordEncoder;
-
-    private String resetToken;
     private PasswordField plainPassword;
     private PasswordField confirmPlainPassword;
     private String confirmPlainPasswordInput;
@@ -37,10 +30,7 @@ public class ResetPasswordForm extends FormLayout {
     private final Binder<String> binder;
 
 
-    public ResetPasswordForm(@Nonnull final UserService userService,
-                             @Nonnull final PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
+    public ResetPasswordForm() {
 
         this.binder = new Binder<>();
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
@@ -75,16 +65,11 @@ public class ResetPasswordForm extends FormLayout {
     }
 
     private void setNewPassword() {
-        if(resetToken == null || resetToken.trim().isEmpty()) {
-            NotificationUtil.errorNotification("Ungültiger Token");
-            return;
-        }
-        if (userService.resetPasswordUsingToken(resetToken, passwordEncoder.encode(plainPassword.getValue()))) {
-            NotificationUtil.informationNotification("Neues Passwort wurde gesetzt");
-            UI.getCurrent().navigate(LoginView.class);
-        } else {
-            NotificationUtil.errorNotification("Fehler beim Setzen des neuen Passworts");
-        }
+        fireEvent(new ResetPasswordFormSetPasswordEvent(this, plainPassword.getValue()));
+    }
+
+    public Registration addResetPasswordFormSetPasswordEventListener(final ComponentEventListener<ResetPasswordFormSetPasswordEvent> listener) {
+        return addListener(ResetPasswordFormSetPasswordEvent.class, listener);
     }
 
     private void bindFields() {
@@ -103,10 +88,6 @@ public class ResetPasswordForm extends FormLayout {
             return ValidationResult.error("Passwörter stimmen nicht überein");
         }
         return ValidationResult.ok();
-    }
-
-    public void setToken(final String resetToken) {
-        this.resetToken = resetToken;
     }
 }
 
