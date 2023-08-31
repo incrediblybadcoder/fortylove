@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.login;
 
 import ch.fortylove.FortyloveApplication;
+import ch.fortylove.presentation.views.forgotpassword.ForgotPasswordView;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
@@ -36,10 +37,19 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginForm.setI18n(loginFormInternational);
         loginForm.setAction("login");
 
+        loginForm.addForgotPasswordListener(event -> {
+            loginForm.getUI().ifPresent(ui -> ui.navigate(ForgotPasswordView.class));
+        });
+
+
         final Anchor registrationLink = new Anchor("registration", "Noch kein Account? Hier registrieren!");
 
         add(new H1(FortyloveApplication.APP_NAME), loginForm, registrationLink);
     }
+
+
+
+
 
     @Override
     public void beforeEnter(@Nonnull final BeforeEnterEvent beforeEnterEvent) {

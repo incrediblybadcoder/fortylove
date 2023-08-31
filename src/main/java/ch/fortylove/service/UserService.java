@@ -5,6 +5,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
+import ch.fortylove.service.email.EmailServiceProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,19 +22,17 @@ import java.util.UUID;
 @Transactional
 public class UserService {
 
-    @Value("${BASE_URL}")
-    private String baseUrl;
-
-    private final EmailServiceProvider emailServiceProvider;
-
     @Nonnull private final UserRepository userRepository;
+    @Nonnull private final String baseUrl;
+    @Nonnull private final EmailServiceProvider emailServiceProvider;
 
     @Autowired
     public UserService(@Nonnull final UserRepository userRepository,
                        @Value("${email.service}") String emailProvider,
-                       ApplicationContext context) {
+                       @Nonnull final ApplicationContext context) {
         this.userRepository = userRepository;
-        this.emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
+        baseUrl = System.getenv("BASE_URL");
+        emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
     }
 
     @Nonnull
@@ -56,8 +56,6 @@ public class UserService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("http://localhost:8080/activate?code=" + user.getAuthenticationDetails().getActivationCode());
         }
         return userRepository.save(user);
     }
@@ -73,11 +71,6 @@ public class UserService {
     @Nonnull
     public Optional<User> findByEmail(@Nonnull final String email) {
         return Optional.ofNullable(userRepository.findByEmail(email));
-    }
-
-    @Nonnull
-    public Optional<User> findById(@Nonnull final UUID id) {
-        return userRepository.findById(id);
     }
 
     @Nonnull
@@ -130,6 +123,65 @@ public class UserService {
         } else {
             return false;
         }
+    }
 
+    /**
+     * Überprüft ob ein Benutzer aktiviert ist anhand eines gegebenen Aktivierungscodes.
+     *
+     * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
+     * @return {@code true} wenn der Benutzer bereits aktiv ist, {@code false} wenn der Benutzer nicht aktiv ist.
+     */
+    public boolean checkIfActive(String activationCode) {
+        User user = userRepository.findByActivationCode(activationCode);
+        if (user != null) {
+            return user.isEnabled();
+        } else {
+            return false;
+        }
+    }
+
+    public boolean generateAndSaveResetToken(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        String resetToken = UUID.randomUUID().toString();
+        LocalDateTime tokenExpiryDate = LocalDateTime.now().plusHours(1); // Token soll nur eine Stunde gültig sein
+
+        user.getAuthenticationDetails().setResetToken(resetToken);
+        user.getAuthenticationDetails().setTokenExpiryDate(tokenExpiryDate);
+        userRepository.save(user);
+
+
+        String resetLink = baseUrl + "resetpassword?token=" + user.getAuthenticationDetails().getResetToken();
+        String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + resetLink + "'>Link</a>, um Ihr Passwort zu ändern.";
+
+        try {
+            emailServiceProvider.sendEmail(user.getEmail(), "Passwort zurückrücksetzen", htmlContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userRepository.save(user);
+        return true;
+
+    }
+
+    public boolean resetPasswordUsingToken(String token, String newPasswordEncrypted) {
+        User user = userRepository.findByResetToken(token);
+        if (user != null && isTokenValid(user.getAuthenticationDetails().getTokenExpiryDate())) {
+            user.getAuthenticationDetails().setEncryptedPassword(newPasswordEncrypted);
+            // Token und Expiry Date sollen nach dem erfolgreichen Zurücksetzen des Passworts gelöscht werden
+            // damit der Token nicht mehrfach verwendet werden kann
+            user.getAuthenticationDetails().setResetToken(null);
+            user.getAuthenticationDetails().setTokenExpiryDate(null);
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isTokenValid(LocalDateTime tokenExpiryDate) {
+        return tokenExpiryDate.isAfter(LocalDateTime.now());
     }
 }

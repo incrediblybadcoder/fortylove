@@ -1,10 +1,18 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.presentation.components.dialog.CancelableDialog;
+import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
+import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.util.uielements.InputFieldsUtil;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -13,14 +21,24 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @SpringComponent
 @UIScope
 public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
 
+    @Nonnull private final PlayerStatusService playerStatusService;
+
     private TextField nameField;
     private IntegerField bookingsPerDayField;
     private IntegerField bookableDaysInAdvanceField;
+
+    @Autowired
+    public PlayerStatusForm(@Nonnull final PlayerStatusService playerStatusService) {
+        this.playerStatusService = playerStatusService;
+    }
 
     @Override
     protected void instantiateFields() {
@@ -81,5 +99,44 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     private TextField getNameField() {
         nameField.setWidthFull();
         return nameField;
+    }
+
+    @Override
+    protected boolean isDeleteEnabled() {
+        return playerStatusService.findAll().size() > 1;
+    }
+
+    @Nonnull
+    @Override
+    protected Dialog getDeleteConfirmationDialog() {
+        final CancelableDialog deleteDialog = new CancelableDialog();
+        deleteDialog.setHeaderTitle(currentItem.getIdentifier());
+
+        final Html text = new Html("<div>Status wirklich löschen?<br><br>Jedem Benutzer mit diesem Status<br>wird ein neuer Status zugewiesen.</div>");
+
+        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAll().stream().filter(playerStatus -> !playerStatus.equals(currentItem)).toList();
+        final Select<PlayerStatus> replacementPlayerStatusSelect = new Select<>();
+        replacementPlayerStatusSelect.setLabel("Neuer Status");
+        replacementPlayerStatusSelect.setItemLabelGenerator(PlayerStatus::getIdentifier);
+        replacementPlayerStatusSelect.setItems(remainingPlayerStatus);
+        remainingPlayerStatus.stream().findFirst().ifPresent(replacementPlayerStatusSelect::setValue);
+
+        final Button deleteButton = new Button("Löschen");
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        deleteButton.addClickListener(event -> {
+            fireEvent(new PlayerStatusFormDeleteEvent(this, currentItem, replacementPlayerStatusSelect.getValue()));
+            deleteDialog.close();
+        });
+
+        final VerticalLayout content = new VerticalLayout();
+        content.add(text, replacementPlayerStatusSelect);
+        deleteDialog.add(content);
+        deleteDialog.getFooter().add(deleteButton);
+
+        return deleteDialog;
+    }
+
+    public void addDeleteEventListenerCustom(@Nonnull final ComponentEventListener<PlayerStatusFormDeleteEvent> listener) {
+        addListener(PlayerStatusFormDeleteEvent.class, listener);
     }
 }

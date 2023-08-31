@@ -5,8 +5,8 @@ import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
+import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.CourtService;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -16,7 +16,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
@@ -26,7 +25,7 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CourtManagementView extends VerticalLayout {
+public class CourtManagementView extends ManagementViewTab {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final CourtForm courtForm;
@@ -57,8 +56,7 @@ public class CourtManagementView extends VerticalLayout {
     }
 
     @Override
-    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
+    public void refresh() {
         updateCourtList();
     }
 
@@ -86,7 +84,7 @@ public class CourtManagementView extends VerticalLayout {
                 .setSortable(true);
 
         final Grid.Column<Court> typeColumn = grid.addColumn(court -> court.getCourtType().getMaterial())
-                .setHeader("Material")
+                .setHeader("Belag")
                 .setSortable(true);
 
         final Grid.Column<Court> nameColumn = grid.addColumn(Court::getName)
@@ -137,18 +135,18 @@ public class CourtManagementView extends VerticalLayout {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<Court> managementFormSaveEvent) {
         final Court court = managementFormSaveEvent.getItem();
         courtService.create(court);
-        updateCourtList();
+        refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<Court> managementFormModifyEvent) {
         final Court court = managementFormModifyEvent.getItem();
         courtService.update(court);
-        updateCourtList();
+        refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<Court> managementFormDeleteEvent) {
         final Court court = managementFormDeleteEvent.getItem();
         courtService.delete(court.getId());
-        updateCourtList();
+        refresh();
     }
 }

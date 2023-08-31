@@ -2,6 +2,7 @@ package ch.fortylove.presentation.views.booking;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
+import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
@@ -131,26 +132,25 @@ public class BookingComponent extends VerticalLayout {
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
-            final ValidationResult validationResult = bookingService.isBookingCreatableOnDate(event.getCourt(), event.getTimeSlot(), getSelectedDate());
-            if (validationResult.isSuccessful()) {
-                final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
-                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
-                bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-                bookingDialog.openFree();
-            }
+            final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
+            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
+            bookingDialog.addDialogBookingListener(this::handleDialogBooking);
+            bookingDialog.openFree();
         });
     }
 
     private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
         switch (dialogBookingEvent.getType()) {
-            case NEW -> newBookingAction(dialogBookingEvent.getBooking());
+            case NEW -> newBookingAction(dialogBookingEvent.getCourt(), dialogBookingEvent.getTimeSlot(), dialogBookingEvent.getBooking());
             case MODIFY -> modifyBookingAction(dialogBookingEvent.getBooking());
             case DELETE -> deleteBookingAction(dialogBookingEvent.getBooking());
         }
     }
 
-    private void newBookingAction(final @Nonnull Booking booking) {
-        final ValidationResult validationResult = bookingService.isUserBookingAllowedOnDate(booking.getOwner(), booking.getDate());
+    private void newBookingAction(@Nonnull final Court court,
+                                  @Nonnull final Timeslot timeslot,
+                                  @Nonnull final Booking booking) {
+        final ValidationResult validationResult = bookingService.isUserBookingAllowedOnDate(court, timeslot, booking);
         if (validationResult.isSuccessful()) {
             bookingService.create(booking);
             NotificationUtil.informationNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));

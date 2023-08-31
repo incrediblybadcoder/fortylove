@@ -102,7 +102,7 @@ public class CourtForm extends ManagementForm<Court> {
     @Nonnull
     private Select<CourtType> getCourtTypeSelection() {
         courtTypeSelection.setWidthFull();
-        courtTypeSelection.setLabel("Typ");
+        courtTypeSelection.setLabel("Belag");
         courtTypeSelection.setItems(CourtType.values());
         courtTypeSelection.setItemLabelGenerator(CourtType::getMaterial);
 

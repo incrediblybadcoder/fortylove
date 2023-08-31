@@ -3,6 +3,7 @@ package ch.fortylove.service;
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.persistence.error.RecordDeleteException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
 import jakarta.annotation.Nonnull;
@@ -16,8 +17,10 @@ import java.util.UUID;
 @Service
 @Transactional
 public class PlayerStatusService {
+
     @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = PlayerStatusSetupData.AKTIV;
     @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_ADMIN = PlayerStatusSetupData.AKTIV;
+
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
     public PlayerStatusService(@Nonnull final PlayerStatusRepository playerStatusRepository) {
@@ -40,11 +43,25 @@ public class PlayerStatusService {
         return playerStatusRepository.save(playerStatus);
     }
 
-    public void delete(@Nonnull final UUID id) {
-        final PlayerStatus playerStatus = playerStatusRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+    public void delete(@Nonnull final UUID playerStatusToDeleteId,
+                       @Nonnull final UUID replacementPlayerStatusId) {
+        final PlayerStatus playerStatusToDelete = playerStatusRepository.findById(playerStatusToDeleteId)
+                .orElseThrow(() -> new RecordNotFoundException(playerStatusToDeleteId));
 
-        playerStatusRepository.delete(playerStatus);
+        if (playerStatusRepository.findAll().size() == 1) {
+            throw new RecordDeleteException("Last PlayerStatus can not be deleted: " + playerStatusToDelete);
+        }
+
+        final PlayerStatus replacementPlayerStatus = playerStatusRepository.findById(replacementPlayerStatusId)
+                .orElseThrow(() -> new RecordNotFoundException(replacementPlayerStatusId));
+
+        playerStatusToDelete.getUsers().forEach(user -> {
+            user.setPlayerStatus(replacementPlayerStatus);
+            replacementPlayerStatus.getUsers().add(user);
+        });
+
+        playerStatusToDelete.getUsers().clear();
+        playerStatusRepository.delete(playerStatusToDelete);
     }
 
     @Nonnull

@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.components.managementform;
 
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
@@ -33,7 +34,7 @@ public abstract class ManagementForm<T> extends FormLayout {
     private Button close;
     private VerticalLayout buttonContainer;
 
-    private T currentItem;
+    protected T currentItem;
 
     public ManagementForm() {
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
@@ -73,6 +74,11 @@ public abstract class ManagementForm<T> extends FormLayout {
         final boolean isEnabled = isValid && hasChanges;
         save.setEnabled(isEnabled);
         update.setEnabled(isEnabled);
+        delete.setEnabled(isDeleteEnabled());
+    }
+
+    protected boolean isDeleteEnabled() {
+        return true;
     }
 
     @Nonnull
@@ -112,14 +118,19 @@ public abstract class ManagementForm<T> extends FormLayout {
     }
 
     private void deleteClick() {
-        new DeleteConfirmationDialog(
+        getDeleteConfirmationDialog().open();
+    }
+
+    @Nonnull
+    protected Dialog getDeleteConfirmationDialog() {
+        return new DeleteConfirmationDialog(
                 getItemIdentifier(currentItem),
                 getItemName() + " wirklich löschen?",
                 () -> {
                     fireEvent(new ManagementFormDeleteEvent<>(this, currentItem));
                     closeForm();
                 }
-        ).open();
+        );
     }
 
     private void closeClick() {

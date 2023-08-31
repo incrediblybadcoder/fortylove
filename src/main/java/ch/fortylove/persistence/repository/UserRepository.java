@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT u FROM users u JOIN u.authenticationDetails ad WHERE ad.activationCode = :activationCode")
     User findByActivationCode(@Param("activationCode") String activationCode);
+
+    @Query("SELECT u FROM users u JOIN u.authenticationDetails ad WHERE ad.resetToken = :resetToken")
+    User findByResetToken(@Param("resetToken") String resetToken);
 }

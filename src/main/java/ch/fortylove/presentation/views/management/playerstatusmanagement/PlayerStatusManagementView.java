@@ -1,12 +1,10 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
+import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.PlayerStatusService;
-import ch.fortylove.util.NotificationUtil;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -15,7 +13,6 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
@@ -25,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PlayerStatusManagementView extends VerticalLayout {
+public class PlayerStatusManagementView extends ManagementViewTab {
 
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PlayerStatusForm playerStatusForm;
@@ -56,15 +53,14 @@ public class PlayerStatusManagementView extends VerticalLayout {
     }
 
     @Override
-    protected void onAttach(@Nonnull final AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
+    public void refresh() {
         updateCourtList();
     }
 
     private void configureForm() {
         playerStatusForm.addSaveEventListener(this::saveEvent);
         playerStatusForm.addModifyEventListener(this::updateEvent);
-        playerStatusForm.addDeleteEventListener(this::deleteEvent);
+        playerStatusForm.addDeleteEventListenerCustom(this::deleteEvent);
     }
 
     private void updateCourtList() {
@@ -124,19 +120,19 @@ public class PlayerStatusManagementView extends VerticalLayout {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<PlayerStatus> managementFormSaveEvent) {
         final PlayerStatus playerStatus = managementFormSaveEvent.getItem();
         playerStatusService.create(playerStatus);
-        updateCourtList();
+        refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<PlayerStatus> managementFormModifyEvent) {
         final PlayerStatus playerStatus = managementFormModifyEvent.getItem();
         playerStatusService.update(playerStatus);
-        updateCourtList();
+        refresh();
     }
 
-    public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<PlayerStatus> managementFormDeleteEvent) {
-//        final PlayerStatus playerStatus = managementFormDeleteEvent.getItem();
-//        playerStatusService.delete(playerStatus.getId());
-//        updateCourtList();
-        NotificationUtil.errorNotification("Löschen von Status noch nicht implementiert.");
+    public void deleteEvent(@Nonnull final PlayerStatusFormDeleteEvent playerStatusFormDeleteEvent) {
+        final PlayerStatus playerStatusToDelete = playerStatusFormDeleteEvent.getItem();
+        final PlayerStatus replacementPlayerStatus = playerStatusFormDeleteEvent.getReplacementPlayerStatus();
+        playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
+        refresh();
     }
 }
