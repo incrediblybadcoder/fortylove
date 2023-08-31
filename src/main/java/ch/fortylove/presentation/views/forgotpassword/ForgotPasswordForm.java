@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.views.forgotpassword;
 
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import ch.fortylove.util.uielements.ButtonsUtil;
@@ -17,6 +18,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.Optional;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -67,9 +70,18 @@ public class ForgotPasswordForm extends FormLayout {
     }
 
     private void sendPasswordResetEmail() {
-        NotificationUtil.informationNotification("Password reset email sent");
+        final Optional<User> byEmail = userService.findByEmail(email.getValue());
+
+        // Aus Sicherheitsgründen in beiden Fällen die gleiche Meldung ausgeben
+        if (byEmail.isEmpty() || !byEmail.get().isEnabled())  {
+            NotificationUtil.errorNotification("Kein aktiver Benutzer mit dieser E-Mail-Adresse gefunden");
+            return;
+        }
+
         userService.generateAndSaveResetToken(email.getValue());
+        NotificationUtil.informationNotification("Password reset email sent");
     }
+
 
     private void bindFields() {
         binder.forField(email)
