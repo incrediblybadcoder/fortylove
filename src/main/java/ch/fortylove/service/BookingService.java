@@ -120,6 +120,7 @@ public class BookingService {
         return ValidationResult.success();
     }
 
+    @Nonnull
     private ValidationResult isOnlyUserBookingInTimeslot(@Nonnull final List<User> users,
                                                          @Nonnull final Timeslot timeslot,
                                                          @Nonnull final LocalDate date) {

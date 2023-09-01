@@ -66,8 +66,10 @@ public class BookingGrid extends Grid<Court> {
                 .setFlexGrow(0)
                 .setFrozen(true);
 
+        final Optional<User> currentUser = authenticationService.getAuthenticatedUser();
+
         timeslots.forEach(timeslot ->
-                addComponentColumn(court -> createBookingCell(court, timeslot))
+                addComponentColumn(court -> currentUser.isPresent() ? createBookingCell(court, timeslot, currentUser.get()) : FreeCell.inActive())
                         .setHeader(timeslot.getStartTime().toString())
                         .setTextAlign(ColumnTextAlign.CENTER)
                         .setVisible(timeslot.getBookable())
@@ -76,19 +78,15 @@ public class BookingGrid extends Grid<Court> {
 
     @Nonnull
     private Cell createBookingCell(@Nonnull final Court court,
-                                   @Nonnull final Timeslot timeslot) {
-        final Optional<User> currentUser = authenticationService.getAuthenticatedUser();
-        if (currentUser.isEmpty()) {
-            return FreeCell.inActive();
-        }
-
+                                   @Nonnull final Timeslot timeslot,
+                                   @Nonnull final User user) {
         final Optional<Booking> booking = CourtUtil.getBookingForTimeSlot(court.getBookings(), timeslot);
         final boolean bookingExists = booking.isPresent();
-        final boolean isActive = bookingService.isBookingSlotActive(timeslot, date, currentUser.get(), bookingExists ? booking.get() : null);
+        final boolean isActive = bookingService.isBookingSlotActive(timeslot, date, user, bookingExists ? booking.get() : null);
 
         if (bookingExists) {
             if (isActive) {
-                final boolean isOwner = currentUser.get().equals(booking.get().getOwner());
+                final boolean isOwner = user.equals(booking.get().getOwner());
                 final ComponentEventListener<ClickEvent<VerticalLayout>> clickListener = event -> fireEvent(new BookedCellClickEvent(this, court, timeslot, booking.get()));
                 return BookedCell.active(isOwner, booking.get(), clickListener);
             } else {
