@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "bookings")
-public class Booking extends AbstractEntity implements Comparable<Booking> {
+public class Booking extends AbstractEntity implements HasIdentifier {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -123,15 +123,12 @@ public class Booking extends AbstractEntity implements Comparable<Booking> {
         opponents.clear();
     }
 
-    @Override
-    public int compareTo(final Booking otherBooking) {
-        return date.compareTo(otherBooking.getDate());
-    }
-
+    @Nonnull
     public String getDateFormatted() {
         return date.format(FormatUtil.getDateTextFormatter());
     }
 
+    @Nonnull
     public String getIdentifier() {
         return court.getIdentifier() + ": " + timeslot.getTimeIntervalText() + " / " + getDateFormatted();
     }

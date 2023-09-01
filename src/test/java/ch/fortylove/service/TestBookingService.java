@@ -7,6 +7,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.error.DuplicateRecordException;
+import ch.fortylove.service.util.ValidationResult;
 import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class TestBookingService extends ServiceTest {
     public void testCreate() {
         final Booking booking = new Booking(court, owner, Set.of(opponent), getTimeslotIterator().next(), LocalDate.now());
 
-        final Booking createdBooking = testee.create(booking);
+        final Booking createdBooking = testee.create(booking).getData().get();
 
         final Optional<Booking> foundBooking = testee.findById(createdBooking.getId());
         Assertions.assertFalse(foundBooking.isEmpty());
@@ -68,9 +69,9 @@ class TestBookingService extends ServiceTest {
         final Court court1 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Court court2 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Iterator<Timeslot> timeslotIterator = getTimeslotIterator();
-        final Booking booking1 = testee.create(new Booking(court1, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now()));
-        final Booking booking2 = testee.create(new Booking(court2, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now().plusDays(1)));
-        final Booking booking3 = testee.create(new Booking(court2, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now().plusDays(2)));
+        final Booking booking1 = testee.create(new Booking(court1, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now())).getData().get();
+        final Booking booking2 = testee.create(new Booking(court2, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now().plusDays(1))).getData().get();
+        final Booking booking3 = testee.create(new Booking(court2, owner, Set.of(opponent), timeslotIterator.next(), LocalDate.now().plusDays(2))).getData().get();
 
         final List<Booking> foundBookings = testee.findAllByCourtId(court2.getId());
 

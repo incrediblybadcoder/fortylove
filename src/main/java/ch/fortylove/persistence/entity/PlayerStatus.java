@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "playerstatus")
-public class PlayerStatus extends AbstractEntity implements Comparable<PlayerStatus> {
+public class PlayerStatus extends AbstractEntity implements Comparable<PlayerStatus>, HasIdentifier {
 
     @NotBlank
     @Column(name = "name")

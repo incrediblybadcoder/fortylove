@@ -1,9 +1,8 @@
 package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.Privilege;
-import ch.fortylove.persistence.error.DuplicateRecordException;
-import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PrivilegeRepository;
+import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +33,22 @@ public class PrivilegeService {
     }
 
     @Nonnull
-    public Privilege create(@Nonnull final Privilege privilege) {
+    public DatabaseResult<Privilege> create(@Nonnull final Privilege privilege) {
         if (privilegeRepository.findById(privilege.getId()).isPresent()) {
-            throw new DuplicateRecordException(privilege);
+            return new DatabaseResult<>("Privilege existiert bereits: " + privilege.getIdentifier());
         }
-        return privilegeRepository.save(privilege);
+        return new DatabaseResult<>(privilegeRepository.save(privilege));
     }
 
-    public void delete(@Nonnull final UUID id) {
-        final Privilege privilege = privilegeRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
+        final Optional<Privilege> privilegeOptional = privilegeRepository.findById(id);
+        if (privilegeOptional.isEmpty()) {
+            return new DatabaseResult<>("Privileg existiert nicht: " + id);
+        }
+
+        final Privilege privilege = privilegeOptional.get();
         privilegeRepository.delete(privilege);
+        return new DatabaseResult<>(id);
     }
 }

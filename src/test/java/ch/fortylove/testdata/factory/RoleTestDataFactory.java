@@ -28,7 +28,7 @@ public class RoleTestDataFactory {
     @Nonnull
     public Role createRole(@Nonnull final String name) {
         final Set<Privilege> privileges = Set.of(privilegeTestDataFactory.getDefault());
-        return roleService.create(new Role(name, privileges));
+        return roleService.create(new Role(name, privileges)).getData().get();
     }
 
     @Nonnull
