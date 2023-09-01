@@ -22,7 +22,7 @@ public class PrivilegeTestDataFactory {
 
     @Nonnull
     public Privilege createPrivilege(@Nonnull final String name) {
-        return privilegeService.create(new Privilege(name));
+        return privilegeService.create(new Privilege(name)).getData().get();
     }
 
     @Nonnull

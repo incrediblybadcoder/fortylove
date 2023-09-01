@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements HasIdentifier {
 
     @NotBlank
     @Column(name = "first_name")

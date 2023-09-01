@@ -2,10 +2,9 @@ package ch.fortylove.service;
 
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.persistence.error.DuplicateRecordException;
-import ch.fortylove.persistence.error.RecordDeleteException;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
+import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -28,32 +27,41 @@ public class PlayerStatusService {
     }
 
     @Nonnull
-    public PlayerStatus create(@Nonnull final PlayerStatus playerStatus) {
+    public DatabaseResult<PlayerStatus> create(@Nonnull final PlayerStatus playerStatus) {
         if (playerStatusRepository.findById(playerStatus.getId()).isPresent()) {
-            throw new DuplicateRecordException(playerStatus);
+            return new DatabaseResult<>("Status existiert bereits: " + playerStatus.getIdentifier());
         }
-        return playerStatusRepository.save(playerStatus);
+        return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
     }
 
     @Nonnull
-    public PlayerStatus update(@Nonnull final PlayerStatus playerStatus) {
+    public DatabaseResult<PlayerStatus> update(@Nonnull final PlayerStatus playerStatus) {
         if (playerStatusRepository.findById(playerStatus.getId()).isEmpty()) {
-            throw new RecordNotFoundException(playerStatus);
+            return new DatabaseResult<>("Status existiert nicht: " + playerStatus.getIdentifier());
         }
-        return playerStatusRepository.save(playerStatus);
+        return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
     }
 
-    public void delete(@Nonnull final UUID playerStatusToDeleteId,
-                       @Nonnull final UUID replacementPlayerStatusId) {
-        final PlayerStatus playerStatusToDelete = playerStatusRepository.findById(playerStatusToDeleteId)
-                .orElseThrow(() -> new RecordNotFoundException(playerStatusToDeleteId));
-
-        if (playerStatusRepository.findAll().size() == 1) {
-            throw new RecordDeleteException("Last PlayerStatus can not be deleted: " + playerStatusToDelete);
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID playerStatusToDeleteId,
+                                       @Nonnull final UUID replacementPlayerStatusId) {
+        final Optional<PlayerStatus> playerStatusToDeleteOptional = playerStatusRepository.findById(playerStatusToDeleteId);
+        if (playerStatusToDeleteOptional.isEmpty()) {
+            return new DatabaseResult<>("Status existiert nicht: " + playerStatusToDeleteId);
         }
 
-        final PlayerStatus replacementPlayerStatus = playerStatusRepository.findById(replacementPlayerStatusId)
-                .orElseThrow(() -> new RecordNotFoundException(replacementPlayerStatusId));
+        final Optional<PlayerStatus> replacementPlayerStatusOptional = playerStatusRepository.findById(replacementPlayerStatusId);
+        if (replacementPlayerStatusOptional.isEmpty()) {
+            return new DatabaseResult<>("Status existiert nicht: " + replacementPlayerStatusId);
+        }
+
+        final PlayerStatus playerStatusToDelete = playerStatusToDeleteOptional.get();
+
+        if (playerStatusRepository.findAll().size() == 1) {
+            return new DatabaseResult<>("Letzter Status kann nicht gelöscht werden: " + playerStatusToDelete);
+        }
+
+        final PlayerStatus replacementPlayerStatus = replacementPlayerStatusOptional.get();
 
         playerStatusToDelete.getUsers().forEach(user -> {
             user.setPlayerStatus(replacementPlayerStatus);
@@ -62,6 +70,8 @@ public class PlayerStatusService {
 
         playerStatusToDelete.getUsers().clear();
         playerStatusRepository.delete(playerStatusToDelete);
+
+        return new DatabaseResult<>(playerStatusToDeleteId);
     }
 
     @Nonnull

@@ -35,7 +35,7 @@ public class UserTestDataFactory {
         final Set<Role> roles = Set.of(roleTestDataFactory.getDefault());
         final PlayerStatus playerStatus = playerStatusTestDataFactory.getDefault();
         final AuthenticationDetails authenticationDetails = new AuthenticationDetails("password", "activationCode");
-        return userService.create(new User("firstName", "lastName", email, authenticationDetails, true, roles, playerStatus));
+        return userService.create(new User("firstName", "lastName", email, authenticationDetails, true, roles, playerStatus)).getData().get();
     }
 
     @Nonnull

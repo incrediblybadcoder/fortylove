@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "roles")
-public class Role extends AbstractEntity implements Comparable<Role> {
+public class Role extends AbstractEntity implements Comparable<Role>, HasIdentifier {
 
     @NotBlank
     @Column(name = "name")
@@ -76,5 +76,10 @@ public class Role extends AbstractEntity implements Comparable<Role> {
     @Override
     public int compareTo(final Role o) {
         return this.getName().compareTo(o.getName());
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
     }
 }

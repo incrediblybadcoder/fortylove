@@ -5,6 +5,8 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.PlayerStatusService;
+import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -19,6 +21,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.UUID;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -119,20 +123,23 @@ public class PlayerStatusManagementView extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<PlayerStatus> managementFormSaveEvent) {
         final PlayerStatus playerStatus = managementFormSaveEvent.getItem();
-        playerStatusService.create(playerStatus);
+        final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.create(playerStatus);
+        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s erstellt", playerStatus.getIdentifier()));
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<PlayerStatus> managementFormModifyEvent) {
         final PlayerStatus playerStatus = managementFormModifyEvent.getItem();
-        playerStatusService.update(playerStatus);
+        final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.update(playerStatus);
+        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gespeichert", playerStatus.getIdentifier()));
         refresh();
     }
 
     public void deleteEvent(@Nonnull final PlayerStatusFormDeleteEvent playerStatusFormDeleteEvent) {
         final PlayerStatus playerStatusToDelete = playerStatusFormDeleteEvent.getItem();
         final PlayerStatus replacementPlayerStatus = playerStatusFormDeleteEvent.getReplacementPlayerStatus();
-        playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
+        final DatabaseResult<UUID> playerStatusDatabaseResult = playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
+        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gelöscht und mit Status %s ersetzt", playerStatusToDelete.getIdentifier(), replacementPlayerStatus.getIdentifier()));
         refresh();
     }
 }

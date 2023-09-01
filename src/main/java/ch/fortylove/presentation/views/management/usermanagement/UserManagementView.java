@@ -7,6 +7,7 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.UserService;
+import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -181,25 +183,22 @@ public class UserManagementView extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
-        userService.create(user);
+        final DatabaseResult<User> userDatabaseResult = userService.create(user);
+        NotificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
         refresh();
-        NotificationUtil.persistentInformationNotification("Benutzer wurde erfolgreich angelegt:\nPasswort = newpassword");
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
         final User user = managementFormModifyEvent.getItem();
-        userService.update(user);
+        final DatabaseResult<User> userDatabaseResult = userService.update(user);
+        NotificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
         final User user = managementFormDeleteEvent.getItem();
-        if (user.getOwnerBookings().size() == 0 && user.getOpponentBookings().size() == 0) {
-            userService.delete(user.getId());
-            refresh();
-            NotificationUtil.informationNotification("Benutzer wurde erfolgreich gelöscht");
-        } else {
-            NotificationUtil.errorNotification("Benutzer kann nicht gelöscht werden, da er noch Buchungen hat");
-        }
+        final DatabaseResult<UUID> userDatabaseResult = userService.delete(user.getId());
+        NotificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s wurde gelöscht", user.getIdentifier()));
+        refresh();
     }
 }

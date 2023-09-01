@@ -2,10 +2,9 @@ package ch.fortylove.service;
 
 import ch.fortylove.configuration.setupdata.data.DefaultUserSetupData;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.error.DuplicateRecordException;
-import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.UserRepository;
 import ch.fortylove.service.email.EmailServiceProvider;
+import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +35,22 @@ public class UserService {
     }
 
     @Nonnull
-    public User create(@Nonnull final User user) {
+    public DatabaseResult<User> create(@Nonnull final User user) {
         return this.create(user, false);
     }
 
     @Nonnull
-    public User create(@Nonnull final User user, boolean sendActivationMail) {
+    public DatabaseResult<User> create(@Nonnull final User user,
+                                       boolean sendActivationMail) {
         if (userRepository.findById(user.getId()).isPresent()) {
-            throw new DuplicateRecordException(user);
+            return new DatabaseResult<>("Benutzer existiert bereits: " + user.getIdentifier());
         }
+
         // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
         // der Aktivierungslink generiert und dem User mitgeteilt werden
         if (sendActivationMail) {
-            String activationLink = baseUrl + "activate?code=" + user.getAuthenticationDetails().getActivationCode();
-            String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren.";
+            final String activationLink = baseUrl + "activate?code=" + user.getAuthenticationDetails().getActivationCode();
+            final String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren.";
 
             try {
                 emailServiceProvider.sendEmail(user.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);
@@ -57,15 +58,15 @@ public class UserService {
                 e.printStackTrace();
             }
         }
-        return userRepository.save(user);
+        return new DatabaseResult<>(userRepository.save(user));
     }
 
     @Nonnull
-    public User update(@Nonnull final User user) {
+    public DatabaseResult<User> update(@Nonnull final User user) {
         if (userRepository.findById(user.getId()).isEmpty()) {
-            throw new RecordNotFoundException(user);
+            return new DatabaseResult<>("Benutzer existiert nicht: " + user.getIdentifier());
         }
-        return userRepository.save(user);
+        return new DatabaseResult<>(userRepository.save(user));
     }
 
     @Nonnull
@@ -78,10 +79,23 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void delete(@Nonnull final UUID id) {
-        final User user = userRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
+        final Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return new DatabaseResult<>("Benutzer existiert nicht: " + id);
+        }
+
+        final User user = userOptional.get();
+
+        if (user.getOwnerBookings().size() != 0 ||
+                user.getOpponentBookings().size() != 0) {
+            return new DatabaseResult<>("Benutzer kann nicht gelöscht werden, da er noch Buchungen hat");
+        }
+
         userRepository.delete(user);
+
+        return new DatabaseResult<>(id);
     }
 
     @Nonnull
@@ -102,7 +116,7 @@ public class UserService {
     }
 
     @Nonnull
-    private List<User> removeDevelopUser(List<User> userList) {
+    private List<User> removeDevelopUser(@Nonnull final List<User> userList) {
         return userList.stream()
                 .filter(user -> !user.getEmail().equalsIgnoreCase(DefaultUserSetupData.DEVELOP_USER))
                 .toList();
@@ -114,7 +128,7 @@ public class UserService {
      * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
      * @return {@code true} wenn der Benutzer erfolgreich aktiviert wurde, {@code false} wenn kein Benutzer mit dem gegebenen Aktivierungscode gefunden wurde.
      */
-    public boolean activate(String activationCode) {
+    public boolean activate(@Nonnull final String activationCode) {
         User user = userRepository.findByActivationCode(activationCode);
         if (user != null) {
             user.setEnabled(true);
@@ -131,7 +145,7 @@ public class UserService {
      * @param activationCode Der Aktivierungscode, der verwendet wird, um den spezifischen Benutzer zu finden.
      * @return {@code true} wenn der Benutzer bereits aktiv ist, {@code false} wenn der Benutzer nicht aktiv ist.
      */
-    public boolean checkIfActive(String activationCode) {
+    public boolean checkIfActive(@Nonnull final String activationCode) {
         User user = userRepository.findByActivationCode(activationCode);
         if (user != null) {
             return user.isEnabled();
@@ -140,7 +154,7 @@ public class UserService {
         }
     }
 
-    public boolean generateAndSaveResetToken(String email) {
+    public boolean generateAndSaveResetToken(@Nonnull final String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             return false;
@@ -166,7 +180,8 @@ public class UserService {
 
     }
 
-    public boolean resetPasswordUsingToken(String token, String newPasswordEncrypted) {
+    public boolean resetPasswordUsingToken(@Nonnull final String token,
+                                           @Nonnull final String newPasswordEncrypted) {
         User user = userRepository.findByResetToken(token);
         if (user != null && isTokenValid(user.getAuthenticationDetails().getTokenExpiryDate())) {
             user.getAuthenticationDetails().setEncryptedPassword(newPasswordEncrypted);
@@ -181,7 +196,7 @@ public class UserService {
         }
     }
 
-    private boolean isTokenValid(LocalDateTime tokenExpiryDate) {
+    private boolean isTokenValid(@Nonnull final LocalDateTime tokenExpiryDate) {
         return tokenExpiryDate.isAfter(LocalDateTime.now());
     }
 }
