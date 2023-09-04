@@ -21,6 +21,7 @@ import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,10 +31,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
 
-
     @Nonnull private final UserService userService;
+    @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final PasswordEncoder passwordEncoder;
+
     @Nonnull final private Binder<User> binder;
+
     private H2 title;
     private TextField firstName;
     private TextField lastName;
@@ -47,12 +50,14 @@ public class RegistrationForm extends FormLayout {
     private String plainPasswordInput;
 
     public RegistrationForm(@Nonnull final UserService userService,
+                            @Nonnull final NotificationUtil notificationUtil,
                             @Nonnull final PasswordEncoder passwordEncoder,
                             @Nonnull final UserFactory userFactory) {
         this.userService = userService;
+        this.notificationUtil = notificationUtil;
         this.passwordEncoder = passwordEncoder;
 
-        this.binder = new Binder<>(User.class);
+        binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
         user = userFactory.newEmptyDefaultUser();
@@ -90,19 +95,19 @@ public class RegistrationForm extends FormLayout {
         cancel = ButtonFactory.createNeutralButton("Abbrechen", this::gotToLoginPage);
     }
 
-    private void gotToLoginPage(final ClickEvent<Button> buttonClickEvent) {
+    private void gotToLoginPage(@Nonnull final ClickEvent<Button> buttonClickEvent) {
         buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
     }
 
-    private void registerClick(final ClickEvent<Button> buttonClickEvent) {
+    private void registerClick(@Nonnull final ClickEvent<Button> buttonClickEvent) {
         if (binder.writeBeanIfValid(user)) {
             if (userService.findByEmail(user.getEmail()).isPresent()) {
-                NotificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
+                notificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
             } else {
                 user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(plainPassword.getValue()));
                 userService.create(user, true);
                 gotToLoginPage(buttonClickEvent);
-                NotificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
+                notificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
             }
         }
     }
@@ -132,7 +137,8 @@ public class RegistrationForm extends FormLayout {
     }
 
     @Nonnull
-    private ValidationResult validateConfirmationPassword(String confirmPlainPasswordValue, ValueContext context) {
+    private ValidationResult validateConfirmationPassword(@Nullable final String confirmPlainPasswordValue,
+                                                          @Nonnull final ValueContext context) {
         if (confirmPlainPasswordValue != null && !confirmPlainPasswordValue.equals(plainPassword.getValue())) {
             return ValidationResult.error("Passwörter stimmen nicht überein");
         }

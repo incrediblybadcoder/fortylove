@@ -8,6 +8,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.BookingRepository;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.service.util.ValidationResult;
+import ch.fortylove.util.DateTimeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
@@ -27,12 +28,15 @@ public class BookingService {
 
     @Nonnull private final BookingRepository bookingRepository;
     @Nonnull private final TimeSlotService timeSlotService;
+    @Nonnull private final DateTimeUtil dateTimeUtil;
 
     @Autowired
     public BookingService(@Nonnull final BookingRepository bookingRepository,
-                          @Nonnull final TimeSlotService timeSlotService) {
+                          @Nonnull final TimeSlotService timeSlotService,
+                          @Nonnull final DateTimeUtil dateTimeUtil) {
         this.bookingRepository = bookingRepository;
         this.timeSlotService = timeSlotService;
+        this.dateTimeUtil = dateTimeUtil;
     }
 
     @Nonnull
@@ -90,7 +94,7 @@ public class BookingService {
 
     @Nonnull
     public ValidationResult isBookingModifiableOnDate(@Nonnull final Booking booking) {
-        return isBookingModifiableOnDateInternal(booking, LocalDateTime.now());
+        return isBookingModifiableOnDateInternal(booking, dateTimeUtil.getLocalDateTime());
     }
 
     @Nonnull
@@ -108,7 +112,7 @@ public class BookingService {
         final LocalDate date = booking.getDate();
         final User owner = booking.getOwner();
 
-        ValidationResult validationResult = isBookingCreatableOnDate(booking.getCourt(), booking.getOwner(), booking.getTimeslot(), date, LocalDateTime.now());
+        ValidationResult validationResult = isBookingCreatableOnDate(booking.getId(), booking.getCourt(), booking.getOwner(), booking.getTimeslot(), date, dateTimeUtil.getLocalDateTime());
         if (!validationResult.isSuccessful()) {
             return validationResult;
         }
@@ -147,12 +151,14 @@ public class BookingService {
     }
 
     @Nonnull
-    protected ValidationResult isBookingCreatableOnDate(@Nonnull final Court court,
+    protected ValidationResult isBookingCreatableOnDate(@Nonnull final UUID bookingId,
+                                                        @Nonnull final Court court,
                                                         @Nonnull final User user,
                                                         @Nonnull final Timeslot timeslot,
                                                         @Nonnull final LocalDate date,
                                                         @Nonnull final LocalDateTime currentDateTime) {
-        if (bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).size() != 0) {
+        if (bookingRepository.findById(bookingId).isPresent() ||
+                !bookingRepository.findAllByCourtAndTimeslotAndDate(court, timeslot, date).isEmpty()) {
             return ValidationResult.failure("Duplikate Buchung");
         }
 
@@ -169,7 +175,7 @@ public class BookingService {
 
     private boolean isOutsideOfBookableDaysInAdvance(@Nonnull final PlayerStatus playerStatus,
                                                      @Nonnull final LocalDate date) {
-        final LocalDate maxAllowedDateInAdvance = LocalDate.now().plusDays(playerStatus.getBookableDaysInAdvance());
+        final LocalDate maxAllowedDateInAdvance = dateTimeUtil.getLocalDate().plusDays(playerStatus.getBookableDaysInAdvance());
         return date.isAfter(maxAllowedDateInAdvance);
     }
 
@@ -198,7 +204,7 @@ public class BookingService {
         }
 
         // is free cell and in past
-        if (booking == null && timeSlotService.isInPast(LocalDateTime.now(), date, timeslot)) {
+        if (booking == null && timeSlotService.isInPast(dateTimeUtil.getLocalDateTime(), date, timeslot)) {
             return false;
         }
 

@@ -2,12 +2,14 @@ package ch.fortylove.presentation.views.booking.grid.cells;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import jakarta.annotation.Nonnull;
 
 public class CourtInfoCell extends Cell {
 
     public CourtInfoCell(@Nonnull final Court court) {
+        addClassName("booking-grid-cell-court-info");
         constructUI(court);
     }
 
@@ -16,6 +18,10 @@ public class CourtInfoCell extends Cell {
         final Image icon = new Image(courtIcon.getResource(), court.getIdentifier());
         icon.setWidth("2.5em");
 
-        add(icon);
+        final Div text = new Div();
+        text.addClassName("booking-grid-cell-court-info-text");
+        text.setText(String.valueOf(court.getNumber()));
+
+        add(icon, text);
     }
 }

@@ -22,7 +22,7 @@
     border-left: 0px;
 }
 
-/* booking grid cells sizing and padding*/
+/* booking grid cells sizing and padding */
 .booking-view vaadin-grid-cell-content {
     padding: 0px;
 }
@@ -42,7 +42,23 @@
     }
 }
 
-/* booking cell shading on date*/
+/* court info cell */
+.booking-grid-cell-court-info {
+    position: relative;
+}
+.booking-grid-cell-court-info-text {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--lumo-base-color);
+    font-weight: bold;
+}
+
+/* booking cell shading on date */
 .booking-grid-bookable-cell-inactive {
     background-color: var(--lumo-contrast-5pct);
 }
