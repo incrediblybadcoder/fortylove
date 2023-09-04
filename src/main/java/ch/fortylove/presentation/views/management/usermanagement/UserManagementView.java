@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 public class UserManagementView extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
+    @Nonnull private final NotificationUtil notificationUtil;
 
     @Nonnull private final UserForm userForm;
     @Nonnull private final PasswordEncoder passwordEncoder;
@@ -48,8 +49,10 @@ public class UserManagementView extends ManagementViewTab {
     private UserFilter userFilter;
 
     public UserManagementView(@Nonnull final UserService userService,
+                              @Nonnull final NotificationUtil notificationUtil,
                               @Nonnull final UserForm userForm,
                               @Nonnull final PasswordEncoder passwordEncoder) {
+        this.notificationUtil = notificationUtil;
         this.userForm = userForm;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
@@ -184,21 +187,21 @@ public class UserManagementView extends ManagementViewTab {
         final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         final DatabaseResult<User> userDatabaseResult = userService.create(user);
-        NotificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
+        notificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
         final User user = managementFormModifyEvent.getItem();
         final DatabaseResult<User> userDatabaseResult = userService.update(user);
-        NotificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
+        notificationUtil.databaseNotification(userDatabaseResult, "Benutzer wurde erfolgreich erstellt:\nPasswort = newpassword");
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
         final User user = managementFormDeleteEvent.getItem();
         final DatabaseResult<UUID> userDatabaseResult = userService.delete(user.getId());
-        NotificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s wurde gelöscht", user.getIdentifier()));
+        notificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s wurde gelöscht", user.getIdentifier()));
         refresh();
     }
 }

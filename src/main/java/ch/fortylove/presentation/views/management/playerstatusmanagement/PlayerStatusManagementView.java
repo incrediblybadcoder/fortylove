@@ -30,13 +30,16 @@ public class PlayerStatusManagementView extends ManagementViewTab {
 
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PlayerStatusForm playerStatusForm;
+    @Nonnull private final NotificationUtil notificationUtil;
 
     private Grid<PlayerStatus> grid;
 
     public PlayerStatusManagementView(@Nonnull final PlayerStatusService playerStatusService,
-                                      @Nonnull final PlayerStatusForm playerStatusForm) {
+                                      @Nonnull final PlayerStatusForm playerStatusForm,
+                                      @Nonnull final NotificationUtil notificationUtil) {
         this.playerStatusService = playerStatusService;
         this.playerStatusForm = playerStatusForm;
+        this.notificationUtil = notificationUtil;
 
         setSizeFull();
         setPadding(false);
@@ -124,14 +127,14 @@ public class PlayerStatusManagementView extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<PlayerStatus> managementFormSaveEvent) {
         final PlayerStatus playerStatus = managementFormSaveEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.create(playerStatus);
-        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s erstellt", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s erstellt", playerStatus.getIdentifier()));
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<PlayerStatus> managementFormModifyEvent) {
         final PlayerStatus playerStatus = managementFormModifyEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.update(playerStatus);
-        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gespeichert", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gespeichert", playerStatus.getIdentifier()));
         refresh();
     }
 
@@ -139,7 +142,7 @@ public class PlayerStatusManagementView extends ManagementViewTab {
         final PlayerStatus playerStatusToDelete = playerStatusFormDeleteEvent.getItem();
         final PlayerStatus replacementPlayerStatus = playerStatusFormDeleteEvent.getReplacementPlayerStatus();
         final DatabaseResult<UUID> playerStatusDatabaseResult = playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
-        NotificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gelöscht und mit Status %s ersetzt", playerStatusToDelete.getIdentifier(), replacementPlayerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gelöscht und mit Status %s ersetzt", playerStatusToDelete.getIdentifier(), replacementPlayerStatus.getIdentifier()));
         refresh();
     }
 }

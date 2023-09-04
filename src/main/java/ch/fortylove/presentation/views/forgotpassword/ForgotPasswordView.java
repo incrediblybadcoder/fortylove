@@ -10,6 +10,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.shared.Registration;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -17,15 +18,21 @@ import java.util.Optional;
 @PageTitle(ForgotPasswordView.PAGE_TITLE)
 @AnonymousAllowed
 public class ForgotPasswordView extends VerticalLayout {
+
     @Nonnull private final UserService userService;
+    @Nonnull private final NotificationUtil notificationUtil;
+
     private Registration registration;
 
     @Nonnull public static final String ROUTE = "forgotpassword";
     @Nonnull public static final String PAGE_TITLE = "Password Reset";
 
-    public ForgotPasswordView(@Nonnull final ForgotPasswordForm forgotPasswordForm,
-                              @Nonnull final UserService userService) {
+    @Autowired
+    public ForgotPasswordView(@Nonnull final UserService userService,
+                              @Nonnull final NotificationUtil notificationUtil,
+                              @Nonnull final ForgotPasswordForm forgotPasswordForm) {
         this.userService = userService;
+        this.notificationUtil = notificationUtil;
 
         registration = forgotPasswordForm.addForgotPasswordFormSendEventListener(this::sendPasswordResetEmail);
         setHorizontalComponentAlignment(Alignment.CENTER, forgotPasswordForm);
@@ -35,16 +42,16 @@ public class ForgotPasswordView extends VerticalLayout {
         addDetachListener(event -> onDetach());
     }
 
-    private void sendPasswordResetEmail(ForgotPasswordFormSendEvent forgotPasswordFormSendEvent) {
+    private void sendPasswordResetEmail(@Nonnull final ForgotPasswordFormSendEvent forgotPasswordFormSendEvent) {
         final String email = forgotPasswordFormSendEvent.getEmail();
         final Optional<User> byEmail = userService.findByEmail(email);
         // Aus Sicherheitsgründen in beiden Fällen die gleiche Meldung ausgeben
         if (byEmail.isEmpty() || !byEmail.get().isEnabled())  {
-            NotificationUtil.errorNotification("Kein aktiver Benutzer mit dieser E-Mail-Adresse gefunden");
+            notificationUtil.errorNotification("Kein aktiver Benutzer mit dieser E-Mail-Adresse gefunden");
             return;
         }
         userService.generateAndSaveResetToken(email);
-        NotificationUtil.informationNotification("Password reset email sent");
+        notificationUtil.informationNotification("Password reset email sent");
     }
 
     private void onDetach() {
