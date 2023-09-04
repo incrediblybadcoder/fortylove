@@ -1,11 +1,11 @@
 package ch.fortylove.presentation.components.managementform;
 
+import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
-import ch.fortylove.util.uielements.ButtonsUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
@@ -90,13 +90,13 @@ public abstract class ManagementForm<T> extends FormLayout {
     @Nonnull
     private VerticalLayout getButtons() {
 
-        save = ButtonsUtil.createPrimaryButton("Speichern", this::saveClick);
+        save = ButtonFactory.createPrimaryButton("Speichern", this::saveClick);
 
-        update = ButtonsUtil.createPrimaryButton("Updaten", this::updateClick);
+        update = ButtonFactory.createPrimaryButton("Updaten", this::updateClick);
 
-        delete = ButtonsUtil.createDangerButton("Löschen", this::deleteClick);
+        delete = ButtonFactory.createDangerButton("Löschen", this::deleteClick);
 
-        close = ButtonsUtil.createNeutralButton("Abbrechen", this::closeClick);
+        close = ButtonFactory.createNeutralButton("Abbrechen", this::closeClick);
         close.addClickShortcut(Key.ESCAPE);
 
         buttonContainer = new VerticalLayout();

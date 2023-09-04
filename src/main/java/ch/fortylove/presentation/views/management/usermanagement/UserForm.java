@@ -4,13 +4,13 @@ import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
+import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
+import ch.fortylove.presentation.fieldvalidators.LastNameValidator;
+import ch.fortylove.presentation.fieldvalidators.SetNotEmptyValidator;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
-import ch.fortylove.util.fieldvalidators.FirstNameValidator;
-import ch.fortylove.util.fieldvalidators.LastNameValidator;
-import ch.fortylove.util.fieldvalidators.SetNotEmptyValidator;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -48,9 +48,9 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void instantiateFields() {
-        firstName = InputFieldsUtil.createTextField("Vorname");
-        lastName = InputFieldsUtil.createTextField("Nachname");
-        email = InputFieldsUtil.createTextField("Email");
+        firstName = InputFieldFactory.createTextField("Vorname");
+        lastName = InputFieldFactory.createTextField("Nachname");
+        email = InputFieldFactory.createTextField("Email");
         playerStatus = new Select<>();
         roleCheckboxGroup = new MultiSelectComboBox<>();
     }

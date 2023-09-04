@@ -1,11 +1,11 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.service.PlayerStatusService;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Html;
@@ -42,9 +42,9 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
 
     @Override
     protected void instantiateFields() {
-        nameField = InputFieldsUtil.createTextField("Name");
-        bookingsPerDayField = InputFieldsUtil.createBasicIntegerField("Buchungen pro Tag");
-        bookableDaysInAdvanceField = InputFieldsUtil.createBasicIntegerField("Buchbare Tage in die Zukunft");
+        nameField = InputFieldFactory.createTextField("Name");
+        bookingsPerDayField = InputFieldFactory.createBasicIntegerField("Buchungen pro Tag");
+        bookableDaysInAdvanceField = InputFieldFactory.createBasicIntegerField("Buchbare Tage in die Zukunft");
     }
 
     @Nonnull
