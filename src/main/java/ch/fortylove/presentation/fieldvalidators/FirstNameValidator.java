@@ -1,4 +1,4 @@
-package ch.fortylove.util.fieldvalidators;
+package ch.fortylove.presentation.fieldvalidators;
 
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;

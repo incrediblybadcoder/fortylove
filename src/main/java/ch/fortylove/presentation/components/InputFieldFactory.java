@@ -1,11 +1,11 @@
-package ch.fortylove.util.uielements;
+package ch.fortylove.presentation.components;
 
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
-public class InputFieldsUtil {
+public class InputFieldFactory {
     private static final int MIN_PASSWORD_LENGTH = 8;
     public static TextField createTextField(String label) {
         TextField textField = new TextField(label);

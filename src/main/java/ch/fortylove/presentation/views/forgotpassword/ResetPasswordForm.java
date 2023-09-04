@@ -1,8 +1,8 @@
 package ch.fortylove.presentation.views.forgotpassword;
 
+import ch.fortylove.presentation.components.ButtonFactory;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.views.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
-import ch.fortylove.util.uielements.ButtonsUtil;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -48,10 +48,10 @@ public class ResetPasswordForm extends FormLayout {
 
     private void constructUI() {
         H2 title = new H2("Neues Passwort setzten");
-        plainPassword = InputFieldsUtil.createPasswordField("Passwort");
+        plainPassword = InputFieldFactory.createPasswordField("Passwort");
         plainPassword.addValueChangeListener(event -> binder.validate());
-        confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
-        setNewPassword = ButtonsUtil.createPrimaryButton("Ok", this::setNewPassword);
+        confirmPlainPassword = InputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
+        setNewPassword = ButtonFactory.createPrimaryButton("Ok", this::setNewPassword);
         setNewPassword.addClickShortcut(Key.ENTER);
         add(title, plainPassword, confirmPlainPassword, setNewPassword);
         setMaxWidth("1000px");

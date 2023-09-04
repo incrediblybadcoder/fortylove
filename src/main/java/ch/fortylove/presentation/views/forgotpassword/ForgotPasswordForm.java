@@ -1,8 +1,8 @@
 package ch.fortylove.presentation.views.forgotpassword;
 
+import ch.fortylove.presentation.components.ButtonFactory;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.views.forgotpassword.events.ForgotPasswordFormSendEvent;
-import ch.fortylove.util.uielements.ButtonsUtil;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -44,10 +44,10 @@ public class ForgotPasswordForm extends FormLayout {
 
     private void constructUI() {
         H2 title = new H2("Link zum Zurücksetzen des Passworts anfordern");
-        email = InputFieldsUtil.createTextField("E-Mail");
-        sendButton = ButtonsUtil.createPrimaryButton("Senden", this::sendPasswordResetEmail);
+        email = InputFieldFactory.createTextField("E-Mail");
+        sendButton = ButtonFactory.createPrimaryButton("Senden", this::sendPasswordResetEmail);
         sendButton.addClickShortcut(Key.ENTER);
-        Button cancel = ButtonsUtil.createNeutralButton("Abbrechen", this::gotToLoginPage);
+        Button cancel = ButtonFactory.createNeutralButton("Abbrechen", this::gotToLoginPage);
         add(title, email, sendButton, cancel);
         setMaxWidth("1000px");
         setResponsiveSteps(new ResponsiveStep("0", 1, ResponsiveStep.LabelsPosition.TOP),
