@@ -2,7 +2,6 @@ package ch.fortylove.presentation.views.booking;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
@@ -17,7 +16,8 @@ import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
 import ch.fortylove.service.UserService;
-import ch.fortylove.service.ValidationResult;
+import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.service.util.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @SpringComponent
 @UIScope
@@ -141,28 +142,21 @@ public class BookingComponent extends VerticalLayout {
 
     private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
         switch (dialogBookingEvent.getType()) {
-            case NEW -> newBookingAction(dialogBookingEvent.getCourt(), dialogBookingEvent.getTimeSlot(), dialogBookingEvent.getBooking());
+            case NEW -> newBookingAction(dialogBookingEvent.getBooking());
             case MODIFY -> modifyBookingAction(dialogBookingEvent.getBooking());
             case DELETE -> deleteBookingAction(dialogBookingEvent.getBooking());
         }
     }
 
-    private void newBookingAction(@Nonnull final Court court,
-                                  @Nonnull final Timeslot timeslot,
-                                  @Nonnull final Booking booking) {
-        final ValidationResult validationResult = bookingService.isUserBookingAllowedOnDate(court, timeslot, booking);
-        if (validationResult.isSuccessful()) {
-            bookingService.create(booking);
-            NotificationUtil.informationNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
-            refresh();
-        } else {
-            NotificationUtil.errorNotification(validationResult.getMessage());
-        }
+    private void newBookingAction(@Nonnull final Booking booking) {
+        final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
+        NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        refresh();
     }
 
     private void modifyBookingAction(final @Nonnull Booking booking) {
-        bookingService.update(booking);
-        NotificationUtil.informationNotification(String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        final DatabaseResult<Booking> bookingDatabaseResult = bookingService.update(booking);
+        NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
         refresh();
     }
 
@@ -175,8 +169,8 @@ public class BookingComponent extends VerticalLayout {
                 booking.getIdentifier(),
                 "Buchung wirklich Löschen?",
                 () -> {
-                    bookingService.delete(booking.getId());
-                    NotificationUtil.informationNotification(String.format("Buchung %s gelöscht", booking.getIdentifier()));
+                    final DatabaseResult<UUID> bookingDatabaseResult = bookingService.delete(booking.getId());
+                    NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gelöscht", booking.getIdentifier()));
                     refresh();
                 }
         ).open();

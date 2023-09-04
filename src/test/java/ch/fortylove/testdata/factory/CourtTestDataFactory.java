@@ -25,7 +25,7 @@ public class CourtTestDataFactory {
 
     @Nonnull
     public Court createCourt() {
-        return courtService.create(new Court(CourtType.CLAY, CourtIcon.ORANGE, 1, "name"));
+        return courtService.create(new Court(CourtType.CLAY, CourtIcon.ORANGE, 1, "name")).getData().get();
     }
 
     @Nonnull

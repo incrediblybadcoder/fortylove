@@ -2,8 +2,8 @@ package ch.fortylove.service;
 
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
-import ch.fortylove.persistence.error.DuplicateRecordException;
 import ch.fortylove.persistence.repository.RoleRepository;
+import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,6 @@ import java.util.Set;
 @Transactional
 public class RoleService {
 
-    @Nonnull public static final String DEFAULT_ROLE_FOR_NEW_USER = RoleSetupData.ROLE_USER;
-
     @Nonnull private final RoleRepository roleRepository;
 
     @Autowired
@@ -28,11 +26,11 @@ public class RoleService {
     }
 
     @Nonnull
-    public Role create(@Nonnull final Role role) {
+    public DatabaseResult<Role> create(@Nonnull final Role role) {
         if (roleRepository.findById(role.getId()).isPresent()) {
-            throw new DuplicateRecordException(role);
+            return new DatabaseResult<>("Rolle existiert bereits: " + role.getIdentifier());
         }
-        return roleRepository.save(role);
+        return new DatabaseResult<>(roleRepository.save(role));
     }
 
     @Nonnull
@@ -71,6 +69,5 @@ public class RoleService {
         @Nonnull final List<String> staffRoles = RoleSetupData.getStaffRoles();
         final List<Role> rolesByNames = roleRepository.findRolesByNames(staffRoles);
         return new HashSet<>(rolesByNames);
-
     }
 }

@@ -5,9 +5,9 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.error.DuplicateRecordException;
-import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.BookingRepository;
+import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.service.util.ValidationResult;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
@@ -36,12 +36,18 @@ public class BookingService {
     }
 
     @Nonnull
-    public Booking create(@Nonnull final Booking booking) {
+    public DatabaseResult<Booking> create(@Nonnull final Booking booking) {
+        final ValidationResult validationResult = isUserBookingAllowedOnDate(booking);
+        if (!validationResult.isSuccessful()) {
+            return new DatabaseResult<>(validationResult.getMessage());
+        }
+
         if (bookingRepository.findById(booking.getId()).isPresent() ||
                 !bookingRepository.findAllByCourtAndTimeslotAndDate(booking.getCourt(), booking.getTimeslot(), booking.getDate()).isEmpty()) {
-            throw new DuplicateRecordException(booking);
+            return new DatabaseResult<>("Buchung existiert bereits: " + booking.getIdentifier());
         }
-        return bookingRepository.save(booking);
+
+        return new DatabaseResult<>(bookingRepository.save(booking));
     }
 
     private int getUserBookingsOnDay(@Nonnull final User user,
@@ -50,11 +56,11 @@ public class BookingService {
     }
 
     @Nonnull
-    public Booking update(@Nonnull final Booking booking) {
+    public DatabaseResult<Booking> update(@Nonnull final Booking booking) {
         if (bookingRepository.findById(booking.getId()).isEmpty()) {
-            throw new RecordNotFoundException(booking);
+            return new DatabaseResult<>("Buchung existiert nicht: " + booking.getIdentifier());
         }
-        return bookingRepository.save(booking);
+        return new DatabaseResult<>(bookingRepository.save(booking));
     }
 
     @Nonnull
@@ -67,14 +73,19 @@ public class BookingService {
         return bookingRepository.findAllByCourtId(id);
     }
 
-    public void delete(@Nonnull final UUID id) {
-        final Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
+        final Optional<Booking> bookingOptional = bookingRepository.findById(id);
+        if (bookingOptional.isEmpty()) {
+            return new DatabaseResult<>("Buchung existiert nicht: " + id);
+        }
 
+        final Booking booking = bookingOptional.get();
         booking.getOwner().getOwnerBookings().remove(booking);
         booking.removeAllOpponents();
-
         bookingRepository.delete(booking);
+
+        return new DatabaseResult<>(id);
     }
 
     @Nonnull
@@ -93,13 +104,11 @@ public class BookingService {
     }
 
     @Nonnull
-    public ValidationResult isUserBookingAllowedOnDate(@Nonnull final Court court,
-                                                       @Nonnull final Timeslot timeslot,
-                                                       @Nonnull final Booking booking) {
+    public ValidationResult isUserBookingAllowedOnDate(@Nonnull final Booking booking) {
         final LocalDate date = booking.getDate();
         final User owner = booking.getOwner();
 
-        ValidationResult validationResult = isBookingCreatableOnDate(court, booking.getOwner(), timeslot, date, LocalDateTime.now());
+        ValidationResult validationResult = isBookingCreatableOnDate(booking.getCourt(), booking.getOwner(), booking.getTimeslot(), date, LocalDateTime.now());
         if (!validationResult.isSuccessful()) {
             return validationResult;
         }
@@ -107,7 +116,7 @@ public class BookingService {
         final List<User> users = new ArrayList<>(booking.getOpponents());
         users.add(owner);
 
-        validationResult = isOnlyUserBookingInTimeslot(users, timeslot, date);
+        validationResult = isOnlyUserBookingInTimeslot(users, booking.getTimeslot(), date);
         if (!validationResult.isSuccessful()) {
             return validationResult;
         }
@@ -129,7 +138,7 @@ public class BookingService {
         for (final User user : users) {
             for (final Booking booking : bookings) {
                 if (booking.getOwner().equals(user) || booking.getOpponents().contains(user)) {
-                    return ValidationResult.failure(user.getIdentifier() + " hat bereits eine Buchung im selben Zeitinterval");
+                    return ValidationResult.failure(user.getIdentifier() + " hat bereits eine Buchung im selben Zeitraum");
                 }
             }
         }

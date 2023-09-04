@@ -24,7 +24,7 @@ public class TestPlayerStatusService extends ServiceTest {
         //Arrange
         final String name = "playerStatusName";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
+        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7)).getData().get();
         //Assert
         final Optional<PlayerStatus> foundPlayerStatus = testee.findByName(name);
         Assertions.assertTrue(foundPlayerStatus.isPresent());
@@ -47,7 +47,7 @@ public class TestPlayerStatusService extends ServiceTest {
         //Arrange
         final String name = "playerStatusName";
         //Act
-        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7));
+        final PlayerStatus createdPlayerStatus = testee.create(new PlayerStatus(name, 2, 7)).getData().get();
         final Optional<PlayerStatus> foundPlayerStatus = testee.findByName(name);
         //Assert
         Assertions.assertTrue(foundPlayerStatus.isPresent());

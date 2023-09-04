@@ -1,9 +1,8 @@
 package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.error.DuplicateRecordException;
-import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.CourtRepository;
+import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -35,29 +34,34 @@ public class CourtService {
     }
 
     @Nonnull
-    public Court create(@Nonnull final Court court) {
+    public DatabaseResult<Court> create(@Nonnull final Court court) {
         if (courtRepository.findById(court.getId()).isPresent()) {
-            throw new DuplicateRecordException(court);
+            return new DatabaseResult<>("Court existiert bereits: " + court.getIdentifier());
         }
-        return courtRepository.save(court);
+        return new DatabaseResult<>(courtRepository.save(court));
     }
 
     @Nonnull
-    public Court update(@Nonnull final Court court) {
+    public DatabaseResult<Court> update(@Nonnull final Court court) {
         if (courtRepository.findById(court.getId()).isEmpty()) {
-            throw new RecordNotFoundException(court);
+            return new DatabaseResult<>("Court existiert nicht: " + court.getIdentifier());
         }
-        return courtRepository.save(court);
+        return new DatabaseResult<>(courtRepository.save(court));
     }
 
-    public void delete(@Nonnull final UUID id) {
-        final Court court = courtRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
+        final Optional<Court> courtOptional = courtRepository.findById(id);
+        if (courtOptional.isEmpty()) {
+            return new DatabaseResult<>("Court existiert nicht: " + id);
+        }
 
+        final Court court = courtOptional.get();
         court.getBookings().forEach(booking -> bookingService.delete(booking.getId()));
         court.getBookings().clear();
-
         courtRepository.delete(court);
+
+        return new DatabaseResult<>(id);
     }
 
     @Nonnull

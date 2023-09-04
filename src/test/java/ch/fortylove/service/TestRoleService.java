@@ -33,7 +33,7 @@ class TestRoleService extends ServiceTest {
     public void testCreate() {
         final String roleName = "roleName";
 
-        final Role createdRole = testee.create(new Role(roleName, Set.of(privilege)));
+        final Role createdRole = testee.create(new Role(roleName, Set.of(privilege))).getData().get();
 
         final Optional<Role> foundRole = testee.findByName(roleName);
         Assertions.assertTrue(foundRole.isPresent());
@@ -54,7 +54,7 @@ class TestRoleService extends ServiceTest {
     public void testFindByName_exists() {
         final String roleName2 = "roleName2";
         testee.create(new Role("roleName1", Set.of(privilege)));
-        final Role createdRole = testee.create(new Role(roleName2, Set.of(privilege)));
+        final Role createdRole = testee.create(new Role(roleName2, Set.of(privilege))).getData().get();
         testee.create(new Role("roleName3", Set.of(privilege)));
 
         final Optional<Role> foundRole = testee.findByName(roleName2);

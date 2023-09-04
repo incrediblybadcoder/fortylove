@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "privileges")
-public class Privilege extends AbstractEntity {
+public class Privilege extends AbstractEntity implements HasIdentifier {
 
     @NotBlank
     @Column(name = "name")
@@ -52,5 +52,10 @@ public class Privilege extends AbstractEntity {
         return "Privilege{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
     }
 }

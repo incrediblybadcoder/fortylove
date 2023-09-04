@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Entity(name = "courts")
 @FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "booking_date = :date")
-public class Court extends AbstractEntity {
+public class Court extends AbstractEntity implements HasIdentifier {
 
     @NotNull
     @Column(name = "court_type")

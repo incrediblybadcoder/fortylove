@@ -21,7 +21,7 @@ class TestPrivilegeService extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final Privilege createdPrivilege = testee.create(new Privilege("name"));
+        final Privilege createdPrivilege = testee.create(new Privilege("name")).getData().get();
 
         final Optional<Privilege> foundPrivilege = testee.findById(createdPrivilege.getId());
         Assertions.assertTrue(foundPrivilege.isPresent());
@@ -42,7 +42,7 @@ class TestPrivilegeService extends ServiceTest {
     public void testFindByName_exists() {
         final String name2 = "name2";
         testee.create(new Privilege("name1"));
-        final Privilege createdPrivilege = testee.create(new Privilege(name2));
+        final Privilege createdPrivilege = testee.create(new Privilege(name2)).getData().get();
         testee.create(new Privilege("name3"));
 
         final Optional<Privilege> foundPrivilege = testee.findByName(name2);
@@ -54,7 +54,7 @@ class TestPrivilegeService extends ServiceTest {
     @Test
     public void testDelete() {
         testee.create(new Privilege("name1"));
-        final Privilege createdPrivilege = testee.create(new Privilege("name2"));
+        final Privilege createdPrivilege = testee.create(new Privilege("name2")).getData().get();
         testee.create(new Privilege("name3"));
 
         testee.delete(createdPrivilege.getId());

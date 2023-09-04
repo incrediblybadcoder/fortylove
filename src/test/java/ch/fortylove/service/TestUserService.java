@@ -36,7 +36,7 @@ class TestUserService extends ServiceTest {
 
     @Test
     public void testCreate() {
-        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName", "lastName", "email@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus)).getData().get();
 
         final List<User> foundUser = testee.findAll();
         Assertions.assertEquals(1, foundUser.size());
@@ -56,7 +56,7 @@ class TestUserService extends ServiceTest {
     @Test
     public void testFindByEmail_exists() {
         testee.create(new User("firstName1", "lastName1", "email1@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
-        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
+        final User createdUser = testee.create(new User("firstName2", "lastName2", "email2@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus)).getData().get();
         testee.create(new User("firstName3", "lastName3", "email3@fortylove.ch", getAuthenticationDetails(), true, Set.of(role), playerStatus));
 
         final Optional<User> foundUser = testee.findByEmail("email2@fortylove.ch");

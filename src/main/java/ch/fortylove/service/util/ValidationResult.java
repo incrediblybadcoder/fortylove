@@ -1,4 +1,4 @@
-package ch.fortylove.service;
+package ch.fortylove.service.util;
 
 import jakarta.annotation.Nonnull;
 

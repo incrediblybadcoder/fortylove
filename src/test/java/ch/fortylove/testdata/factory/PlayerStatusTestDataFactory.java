@@ -22,7 +22,7 @@ public class PlayerStatusTestDataFactory {
 
     @Nonnull
     public PlayerStatus createPlayerStatus(@Nonnull final String name) {
-        return playerStatusService.create(new PlayerStatus(name, 1, 1));
+        return playerStatusService.create(new PlayerStatus(name, 1, 1)).getData().get();
     }
 
     @Nonnull

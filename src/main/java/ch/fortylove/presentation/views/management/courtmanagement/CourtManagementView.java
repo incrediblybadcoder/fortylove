@@ -7,6 +7,8 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.CourtService;
+import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -22,6 +24,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.UUID;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -134,19 +138,22 @@ public class CourtManagementView extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<Court> managementFormSaveEvent) {
         final Court court = managementFormSaveEvent.getItem();
-        courtService.create(court);
+        final DatabaseResult<Court> courtDatabaseResult = courtService.create(court);
+        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s erstellt", court.getIdentifier()));
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<Court> managementFormModifyEvent) {
         final Court court = managementFormModifyEvent.getItem();
-        courtService.update(court);
+        final DatabaseResult<Court> courtDatabaseResult = courtService.update(court);
+        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gespeichert", court.getIdentifier()));
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<Court> managementFormDeleteEvent) {
         final Court court = managementFormDeleteEvent.getItem();
-        courtService.delete(court.getId());
+        final DatabaseResult<UUID> courtDatabaseResult = courtService.delete(court.getId());
+        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gelöscht", court.getIdentifier()));
         refresh();
     }
 }
