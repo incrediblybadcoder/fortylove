@@ -1,4 +1,4 @@
-package ch.fortylove.util.uielements;
+package ch.fortylove.presentation.components;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
@@ -6,7 +6,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 
 import java.util.function.Consumer;
 
-public class ButtonsUtil {
+public class ButtonFactory {
     /**
      * Erstellt einen Button für positive Aktionen.
      * Dieser Button-Stil eignet sich für Hauptaktionen wie "Ok", "Registrieren", "Bestätigen" oder "Speichern".

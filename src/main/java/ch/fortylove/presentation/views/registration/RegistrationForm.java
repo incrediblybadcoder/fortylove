@@ -2,12 +2,12 @@ package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.presentation.components.ButtonFactory;
+import ch.fortylove.presentation.components.InputFieldFactory;
+import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
+import ch.fortylove.presentation.fieldvalidators.LastNameValidator;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
-import ch.fortylove.util.fieldvalidators.FirstNameValidator;
-import ch.fortylove.util.fieldvalidators.LastNameValidator;
-import ch.fortylove.util.uielements.ButtonsUtil;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -80,14 +80,14 @@ public class RegistrationForm extends FormLayout {
 
     private void initUIElements() {
         title = new H2("Registrierung");
-        firstName = InputFieldsUtil.createTextField("Vorname");
-        lastName = InputFieldsUtil.createTextField("Nachname");
-        email = InputFieldsUtil.createTextField("E-Mail");
-        plainPassword = InputFieldsUtil.createPasswordField("Passwort");
+        firstName = InputFieldFactory.createTextField("Vorname");
+        lastName = InputFieldFactory.createTextField("Nachname");
+        email = InputFieldFactory.createTextField("E-Mail");
+        plainPassword = InputFieldFactory.createPasswordField("Passwort");
         plainPassword.addValueChangeListener(event -> binder.validate());
-        confirmPlainPassword = InputFieldsUtil.createConfirmationPasswordField("Passwort bestätigen");
-        register = ButtonsUtil.createPrimaryButton("Registrieren", this::registerClick);
-        cancel = ButtonsUtil.createNeutralButton("Abbrechen", this::gotToLoginPage);
+        confirmPlainPassword = InputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
+        register = ButtonFactory.createPrimaryButton("Registrieren", this::registerClick);
+        cancel = ButtonFactory.createNeutralButton("Abbrechen", this::gotToLoginPage);
     }
 
     private void gotToLoginPage(final ClickEvent<Button> buttonClickEvent) {

@@ -3,8 +3,8 @@ package ch.fortylove.presentation.views.management.courtmanagement;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
-import ch.fortylove.util.uielements.InputFieldsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -31,10 +31,10 @@ public class CourtForm extends ManagementForm<Court> {
 
     @Override
     protected void instantiateFields() {
-        numberField = InputFieldsUtil.createBasicIntegerField("Nummer", true, 1, 99);
+        numberField = InputFieldFactory.createBasicIntegerField("Nummer", true, 1, 99);
         iconSelection = new Select<>();
         courtTypeSelection = new Select<>();
-        nameField = InputFieldsUtil.createTextField("Name", false);
+        nameField = InputFieldFactory.createTextField("Name", false);
     }
 
     @Nonnull
