@@ -6,6 +6,10 @@ plugins {
 	id "org.flywaydb.flyway" version "9.20.1"
 }
 
+ext {
+	set("vaadinVersion", "24.2.0.alpha7")
+}
+
 group = "ch.fortylove"
 version = "0.0.1-SNAPSHOT"
 sourceCompatibility = "17"
@@ -13,10 +17,17 @@ targetCompatibility = "17"
 
 repositories {
 	mavenCentral()
-}
 
-ext {
-	set("vaadinVersion", "24.1.6")
+	// vaadin pre-release repositories (not needed if stable version is used)
+	maven {
+		url = uri('https://maven.vaadin.com/vaadin-prereleases')
+	}
+	maven {
+		url = uri('https://maven.vaadin.com/vaadin-addons')
+	}
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
 }
 
 dependencyManagement {
@@ -28,8 +39,9 @@ dependencyManagement {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
-	implementation("com.vaadin:vaadin-spring-boot-starter:24.1.6")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("com.vaadin:vaadin:${vaadinVersion}")
+	implementation("com.vaadin:vaadin-spring-boot-starter:${vaadinVersion}")
 	implementation("org.flywaydb:flyway-core")
 	implementation("com.sendgrid:sendgrid-java:4.9.3")
 
@@ -38,14 +50,8 @@ dependencies {
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools:3.0.4")
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.0')
-}
-
-// for com.microsoft.sqlserver:mssql-jdbc_auth dependency
-configurations {
-	developmentOnly {
-		exclude group: 'com.microsoft.sqlserver', module: 'mssql-jdbc_auth'
-	}
+	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
+	testImplementation("com.vaadin:vaadin-testbench-junit5:${vaadinVersion}")
 }
 
 vaadin {
