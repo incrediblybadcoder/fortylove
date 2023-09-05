@@ -3,9 +3,11 @@ package ch.fortylove.presentation.views.forgotpassword;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.views.forgotpassword.events.ForgotPasswordFormSendEvent;
+import ch.fortylove.presentation.views.login.LoginView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -62,7 +64,7 @@ public class ForgotPasswordForm extends FormLayout {
     }
 
     private void gotToLoginPage(final ClickEvent<Button> buttonClickEvent) {
-        buttonClickEvent.getSource().getUI().ifPresent(ui -> ui.navigate("login"));
+        UI.getCurrent().navigate(LoginView.ROUTE);
     }
 
     private void bindFields() {
