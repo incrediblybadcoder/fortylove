@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
@@ -44,12 +45,12 @@ public class RegistrationForm extends FormLayout {
     private String confirmPlainPasswordInput;
     private String plainPasswordInput;
 
-    public RegistrationForm(@Nonnull final User user) {
-        this.user = user;
+    public RegistrationForm(@Nonnull final UserFactory userFactory) {
 
         binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
+        user = userFactory.newEmptyDefaultUser();
         binder.setBean(user);
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 

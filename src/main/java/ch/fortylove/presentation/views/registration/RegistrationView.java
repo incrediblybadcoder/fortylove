@@ -1,7 +1,6 @@
 package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.views.login.LoginView;
 import ch.fortylove.presentation.views.registration.events.CancelRegistrationEvent;
 import ch.fortylove.presentation.views.registration.events.RegistrationEvent;
@@ -35,16 +34,13 @@ public class RegistrationView extends VerticalLayout {
 
 
 
-    public RegistrationView(@Nonnull final UserService userService,
+    public RegistrationView(@Nonnull final RegistrationForm registrationForm,
+                            @Nonnull final UserService userService,
                             @Nonnull final NotificationUtil notificationUtil,
-                            @Nonnull final PasswordEncoder passwordEncoder,
-                            @Nonnull final UserFactory userFactory) {
+                            @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.notificationUtil = notificationUtil;
         this.passwordEncoder = passwordEncoder;
-
-        User newUser = userFactory.newEmptyDefaultUser();
-        RegistrationForm registrationForm = new RegistrationForm(newUser);
 
         registrations = new ArrayList<>();
         registrations.add(registrationForm.addRegistrationEventListener(this::registerUser));
