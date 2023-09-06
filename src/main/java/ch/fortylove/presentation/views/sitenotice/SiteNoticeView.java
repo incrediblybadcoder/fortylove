@@ -20,8 +20,6 @@ public class SiteNoticeView extends VerticalLayout {
     @Nonnull public static final String ROUTE = "sitenotice";
     @Nonnull public static final String PAGE_TITLE = "Impressum";
 
-    @Value("${siteNotice.title}")
-    private String title;
 
     @Value("${siteNotice.name}")
     private String name;
@@ -41,14 +39,8 @@ public class SiteNoticeView extends VerticalLayout {
     @Value("${siteNotice.email}")
     private String email;
 
-    @Value("${siteNotice.phone}")
-    private String phone;
-
     @Value("${siteNotice.website}")
     private String website;
-
-    @Value("${siteNotice.additionalInfo}")
-    private String additionalInfo;
 
     public SiteNoticeView() {
     }
@@ -60,9 +52,7 @@ public class SiteNoticeView extends VerticalLayout {
         add(new NativeLabel(plz + " " + city));
         add(new NativeLabel(country));
         add(new NativeLabel("E-Mail: " + email));
-        add(new NativeLabel("Telefon: " + phone));
         add(new NativeLabel("Website: " + website));
-        add(new NativeLabel(additionalInfo));
     }
 
 }
