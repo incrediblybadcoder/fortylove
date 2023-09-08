@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CourtManagementView extends ManagementViewTab {
+public class CourtManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final CourtForm courtForm;
@@ -37,16 +37,12 @@ public class CourtManagementView extends ManagementViewTab {
 
     private Grid<Court> grid;
 
-    public CourtManagementView(@Nonnull final CourtService courtService,
-                               @Nonnull final CourtForm courtForm,
-                               @Nonnull final NotificationUtil notificationUtil) {
+    public CourtManagementViewTab(@Nonnull final CourtService courtService,
+                                  @Nonnull final CourtForm courtForm,
+                                  @Nonnull final NotificationUtil notificationUtil) {
         this.courtService = courtService;
         this.courtForm = courtForm;
         this.notificationUtil = notificationUtil;
-
-        setSizeFull();
-        setPadding(false);
-        addClassName(LumoUtility.Padding.Top.MEDIUM);
 
         constructUI();
     }

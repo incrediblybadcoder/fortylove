@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UserManagementView extends ManagementViewTab {
+public class UserManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
@@ -48,18 +48,14 @@ public class UserManagementView extends ManagementViewTab {
     private Grid<User> grid;
     private UserFilter userFilter;
 
-    public UserManagementView(@Nonnull final UserService userService,
-                              @Nonnull final NotificationUtil notificationUtil,
-                              @Nonnull final UserForm userForm,
-                              @Nonnull final PasswordEncoder passwordEncoder) {
+    public UserManagementViewTab(@Nonnull final UserService userService,
+                                 @Nonnull final NotificationUtil notificationUtil,
+                                 @Nonnull final UserForm userForm,
+                                 @Nonnull final PasswordEncoder passwordEncoder) {
         this.notificationUtil = notificationUtil;
         this.userForm = userForm;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-
-        setSizeFull();
-        setPadding(false);
-        addClassName(LumoUtility.Padding.Top.MEDIUM);
 
         constructUI();
     }
