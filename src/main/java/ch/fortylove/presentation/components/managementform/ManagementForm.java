@@ -35,6 +35,7 @@ public abstract class ManagementForm<T> extends FormLayout {
     private VerticalLayout buttonContainer;
 
     protected T currentItem;
+    protected OpenMode openMode;
 
     public ManagementForm() {
 
@@ -104,7 +105,7 @@ public abstract class ManagementForm<T> extends FormLayout {
         return buttonContainer;
     }
 
-    private void saveClick() {
+    protected void saveClick() {
         if (binder.writeBeanIfValid(currentItem)) {
             fireEvent(new ManagementFormSaveEvent<>(this, currentItem));
             closeForm();
@@ -141,21 +142,23 @@ public abstract class ManagementForm<T> extends FormLayout {
     public void openCreate() {
         final String title = getItemName() + " erstellen";
         final Button[] buttons = {save, close};
-        open(title, getNewItem(), false, buttons);
+        open(OpenMode.CREATE, title, getNewItem(), false, buttons);
     }
 
     public void openModify(@Nonnull final T item) {
         final String title = getItemName() + " bearbeiten";
         final Button[] buttons = {update, delete, close};
-        open(title, item, true, buttons);
+        open(OpenMode.MODIFY, title, item, true, buttons);
     }
 
-    private void open(@Nonnull final String title,
+    private void open(@Nonnull final OpenMode openMode,
+                      @Nonnull final String title,
                       @Nonnull final T item,
                       final boolean checkChanges,
                       @Nonnull final Button... buttons) {
 
-        beforeOpen();
+        this.openMode = openMode;
+        beforeOpen(openMode);
 
         this.title.setText(title);
         currentItem = item;
@@ -164,7 +167,7 @@ public abstract class ManagementForm<T> extends FormLayout {
         updateButtonState(checkChanges);
         getFocusOnOpen().focus();
 
-        afterOpen();
+        afterOpen(openMode, currentItem);
 
         setVisible(true);
     }
@@ -174,7 +177,7 @@ public abstract class ManagementForm<T> extends FormLayout {
      * Can be used to do additional steps before loading the selected item.
      * For example filling comboboxes or radiogroups with selection items.
      */
-    protected void beforeOpen() {
+    protected void beforeOpen(@Nonnull final OpenMode openMode) {
     }
 
     /**
@@ -182,7 +185,8 @@ public abstract class ManagementForm<T> extends FormLayout {
      * Can be used to do additional steps after loading the selected item.
      * For example filling comboboxes or radiogroups with selection items.
      */
-    protected void afterOpen() {
+    protected void afterOpen(@Nonnull final OpenMode openMode,
+                             final T currentItem) {
     }
 
     public void closeForm() {
