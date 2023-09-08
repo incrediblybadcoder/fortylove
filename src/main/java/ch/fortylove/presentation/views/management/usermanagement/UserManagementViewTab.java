@@ -2,6 +2,8 @@ package ch.fortylove.presentation.views.management.usermanagement;
 
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
+import ch.fortylove.presentation.components.BadgeFactory;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
@@ -9,6 +11,8 @@ import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
@@ -16,16 +20,19 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +48,7 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
+    @Nonnull private final BadgeFactory badgeFactory;
 
     @Nonnull private final UserForm userForm;
     @Nonnull private final PasswordEncoder passwordEncoder;
@@ -48,11 +56,15 @@ public class UserManagementViewTab extends ManagementViewTab {
     private Grid<User> grid;
     private UserFilter userFilter;
 
+    @Autowired
     public UserManagementViewTab(@Nonnull final UserService userService,
                                  @Nonnull final NotificationUtil notificationUtil,
+                                 @Nonnull final BadgeFactory badgeFactory,
                                  @Nonnull final UserForm userForm,
                                  @Nonnull final PasswordEncoder passwordEncoder) {
+        super(VaadinIcon.USERS.create(), "Benutzer");
         this.notificationUtil = notificationUtil;
+        this.badgeFactory = badgeFactory;
         this.userForm = userForm;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
@@ -106,7 +118,21 @@ public class UserManagementViewTab extends ManagementViewTab {
                 .setHeader("Email")
                 .setSortable(true);
 
-        final Grid.Column<User> userStatusColumn = grid.addColumn(user -> user.getUserStatus().getIdentifier())
+        final Grid.Column<User> userStatusColumn = grid.addColumn(new ComponentRenderer<>(user -> {
+                    final UserStatus userStatus = user.getUserStatus();
+                    if (userStatus.equals(UserStatus.GUEST_PENDING)) {
+                        final Button pendingButton = new Button("Anfrage");
+                        pendingButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+                        pendingButton.addClassNames(LumoUtility.Padding.XSMALL, LumoUtility.FontSize.XXSMALL);
+                        pendingButton.addClickListener(handlePendingGuestRequest());
+
+                        final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(userStatus.getIdentifier()), pendingButton);
+                        userStatusLayout.setSpacing(true);
+                        userStatusLayout.setAlignItems(Alignment.CENTER);
+                        return userStatusLayout;
+                    }
+                    return new Span(userStatus.getIdentifier());
+                }))
                 .setHeader("Benutzerstatus")
                 .setSortable(true);
 
@@ -125,6 +151,14 @@ public class UserManagementViewTab extends ManagementViewTab {
         createGridFooter(lastNameColumn, firstNameColumn, emailColumn, userStatusColumn, playerStatusColumn, roleColumn);
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
+    }
+
+    @Nonnull
+    private ComponentEventListener<ClickEvent<Button>> handlePendingGuestRequest() {
+        return event -> {
+            userForm.closeForm();
+            notificationUtil.informationNotification("Öffne Anfrage-Prozess-Dialog");
+        };
     }
 
     private void createGridHeader(@Nonnull final Grid.Column<User> lastNameColumn,

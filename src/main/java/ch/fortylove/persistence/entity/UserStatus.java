@@ -4,7 +4,7 @@ import jakarta.annotation.Nonnull;
 
 public enum UserStatus implements HasIdentifier {
     GUEST("guest", "Gast"),
-    GUEST_PENDING("guestpending", "Gast, angefragt"),
+    GUEST_PENDING("guestpending", "Gast"),
     MEMBER("member", "Mitglied");
 
     @Nonnull private final String code;

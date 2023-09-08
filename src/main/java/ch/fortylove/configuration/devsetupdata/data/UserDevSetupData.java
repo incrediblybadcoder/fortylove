@@ -31,7 +31,9 @@ public class UserDevSetupData {
     @Nonnull public static final String PASSIVE = "passiv@fortylove.ch";
     @Nonnull public static final String TOURNAMENT = "turnier@fortylove.ch";
     @Nonnull public static final String INACTIVE = "inaktiv@fortylove.ch";
-    @Nonnull public static final String GUEST = "gast@fortylove.ch";
+    @Nonnull public static final String GUEST1 = "gast1@fortylove.ch";
+    @Nonnull public static final String GUEST2 = "gast2@fortylove.ch";
+    @Nonnull public static final String GUEST3 = "gast3@fortylove.ch";
 
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
@@ -60,7 +62,9 @@ public class UserDevSetupData {
         createUserIfNotFound(PASSIVE, "Passiv", "Passiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIVE), true);
         createUserIfNotFound(TOURNAMENT, "Turnier", "Turnier", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
         createUserIfNotFound(INACTIVE, "Inaktiv", "Inaktiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.INACTIVE), false);
-        createUserIfNotFound(GUEST, "Gast", "Gast", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST1, "Hans", "Wurst", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST2, "Ramsi", "Hartmann", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST3, "Pauli", "Paulson", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
     }
 
     @Nonnull

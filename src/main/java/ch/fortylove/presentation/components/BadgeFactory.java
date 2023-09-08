@@ -15,28 +15,29 @@ import org.springframework.context.annotation.Scope;
 public class BadgeFactory {
 
     @Nonnull
-    public Component createPrimary(@Nonnull final String text) {
-        return create(text, null,ColorType.PRIMARY, Size.SMALL, Form.SQUARE);
+    public Component newPrimaryEmptyBadge(@Nonnull final String text) {
+        return newPrimaryEmptyBadge(text, null);
     }
 
     @Nonnull
-    public Component createPrimary(@Nonnull final VaadinIcon vaadinIcon) {
-        return create(null, vaadinIcon, ColorType.PRIMARY, Size.SMALL, Form.SQUARE);
+    public Component newPrimaryEmptyBadge(@Nonnull final VaadinIcon vaadinIcon) {
+        return newPrimaryEmptyBadge(null, vaadinIcon);
     }
 
     @Nonnull
-    public Component createPrimary(@Nonnull final String text,
-                                   @Nonnull final VaadinIcon vaadinIcon) {
-        return create(text, vaadinIcon, ColorType.PRIMARY, Size.SMALL, Form.SQUARE);
+    public Component newPrimaryEmptyBadge(@Nonnull final String text,
+                                          @Nonnull final VaadinIcon vaadinIcon) {
+        return newBadge(text, vaadinIcon, ColorType.PRIMARY, Size.SMALL, Form.SQUARE, Fill.EMPTY);
     }
 
     @Nonnull
-    private Component create(@Nullable final String text,
-                             @Nullable final VaadinIcon vaadinIcon,
-                             @Nonnull final ColorType colorType,
-                             @Nonnull final Size size,
-                             @Nonnull final Form form) {
-        final String css = "badge" + colorType.css + size.css + form.css;
+    private Component newBadge(@Nullable final String text,
+                               @Nullable final VaadinIcon vaadinIcon,
+                               @Nonnull final ColorType colorType,
+                               @Nonnull final Size size,
+                               @Nonnull final Form form,
+                               @Nonnull final Fill fill) {
+        final String css = "badge" + colorType.css + size.css + form.css + fill.css;
 
         Icon icon = null;
         if (vaadinIcon != null) {
@@ -90,6 +91,17 @@ public class BadgeFactory {
         @Nonnull private final String css;
 
         Form(@Nonnull final String css) {
+            this.css = css;
+        }
+    }
+
+    enum Fill {
+        EMPTY(""),
+        FILL(" primary");
+
+        @Nonnull private final String css;
+
+        Fill(@Nonnull final String css) {
             this.css = css;
         }
     }

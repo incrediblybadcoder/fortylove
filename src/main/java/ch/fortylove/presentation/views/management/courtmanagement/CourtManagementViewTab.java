@@ -22,6 +22,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -37,9 +38,11 @@ public class CourtManagementViewTab extends ManagementViewTab {
 
     private Grid<Court> grid;
 
+    @Autowired
     public CourtManagementViewTab(@Nonnull final CourtService courtService,
                                   @Nonnull final CourtForm courtForm,
                                   @Nonnull final NotificationUtil notificationUtil) {
+        super(VaadinIcon.LIST_OL.create(), "Plätze");
         this.courtService = courtService;
         this.courtForm = courtForm;
         this.notificationUtil = notificationUtil;

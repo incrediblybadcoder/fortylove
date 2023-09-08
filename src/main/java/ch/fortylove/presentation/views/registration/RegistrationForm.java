@@ -50,7 +50,7 @@ public class RegistrationForm extends FormLayout {
         binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
-        user = userFactory.newEmptyDefaultUser();
+        user = userFactory.newGuestUser();
         binder.setBean(user);
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 
@@ -116,7 +116,7 @@ public class RegistrationForm extends FormLayout {
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(email)
-                .withValidator(new EmailValidator("Bitte geben Sie eine gültige E-Mail-Adresse ein"))
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige E-Mail-Adresse ein."))
                 .bind(User::getEmail, User::setEmail);
 
 
@@ -134,7 +134,7 @@ public class RegistrationForm extends FormLayout {
     private ValidationResult validateConfirmationPassword(@Nullable final String confirmPlainPasswordValue,
                                                           @Nonnull final ValueContext context) {
         if (confirmPlainPasswordValue != null && !confirmPlainPasswordValue.equals(plainPassword.getValue())) {
-            return ValidationResult.error("Passwörter stimmen nicht überein");
+            return ValidationResult.error("Passwörter stimmen nicht überein.");
         }
         return ValidationResult.ok();
     }

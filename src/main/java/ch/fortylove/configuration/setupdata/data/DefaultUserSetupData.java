@@ -13,7 +13,7 @@ import java.util.Optional;
 @SetupData
 public class DefaultUserSetupData {
 
-    public static final String DEVELOP_USER = "fortylove.untervaz@gmail.com";
+    @Nonnull public static final String DEVELOP_USER = "fortylove.untervaz@gmail.com";
 
     @Nonnull private final UserService userService;
     @Nonnull private final UserFactory userFactory;
@@ -42,7 +42,7 @@ public class DefaultUserSetupData {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {
-            final User user = userFactory.newDevAdmin(firstName, lastName, email, password);
+            final User user = userFactory.newDevAdminUser(firstName, lastName, email, password);
             userService.create(user);
         }
     }

@@ -108,7 +108,7 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     private Select<PlayerStatus> getPlayerStatusSelection() {
         playerStatus.setWidthFull();
-        playerStatus.setLabel("Status");
+        playerStatus.setLabel("Spielerstatus");
         playerStatus.setItemLabelGenerator(PlayerStatus::getName);
         return playerStatus;
     }
@@ -126,7 +126,7 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected User getNewItem() {
-        return userFactory.newEmptyDefaultUser();
+        return userFactory.newGuestUser();
     }
 
     @Nonnull

@@ -23,6 +23,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -39,10 +40,12 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
     private Grid<PlayerStatus> grid;
 
+    @Autowired
     public PlayerStatusManagementViewTab(@Nonnull final PlayerStatusService playerStatusService,
                                          @Nonnull final PlayerStatusForm playerStatusForm,
                                          @Nonnull final NotificationUtil notificationUtil,
                                          @Nonnull final BadgeFactory badgeFactory) {
+        super(VaadinIcon.STAR.create(), "Spielerstatus");
         this.playerStatusService = playerStatusService;
         this.playerStatusForm = playerStatusForm;
         this.notificationUtil = notificationUtil;
@@ -84,7 +87,7 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
         final Grid.Column<PlayerStatus> nameColumn = grid.addColumn(new ComponentRenderer<>(playerStatus -> {
                     if (playerStatusService.isProtectedName(playerStatus.getName())) {
-                        final Component lockBadge = badgeFactory.createPrimary(VaadinIcon.LOCK);
+                        final Component lockBadge = badgeFactory.newPrimaryEmptyBadge(VaadinIcon.LOCK);
                         final HorizontalLayout horizontalLayout = new HorizontalLayout(lockBadge, new Span(playerStatus.getName()));
                         horizontalLayout.setSpacing(true);
                         return horizontalLayout;

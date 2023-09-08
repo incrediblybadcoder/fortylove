@@ -5,9 +5,6 @@ import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.management.courtmanagement.CourtManagementViewTab;
 import ch.fortylove.presentation.views.management.playerstatusmanagement.PlayerStatusManagementViewTab;
 import ch.fortylove.presentation.views.management.usermanagement.UserManagementViewTab;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
@@ -40,9 +37,9 @@ public class ManagementView extends VerticalLayout {
                              @Nonnull final PlayerStatusManagementViewTab playerStatusManagementViewTab,
                              @Nonnull final UserManagementViewTab userManagementViewTab) {
         final Map<Tab, ManagementViewTab> tabs = new LinkedHashMap<>();
-        tabs.put(createTab(VaadinIcon.LIST_OL.create(), "Plätze"), courtManagementViewTab);
-        tabs.put(createTab(VaadinIcon.STAR.create(), "Status"), playerStatusManagementViewTab);
-        tabs.put(createTab(VaadinIcon.USERS.create(), "Benutzer"), userManagementViewTab);
+        tabs.put(courtManagementViewTab.createTab(), courtManagementViewTab);
+        tabs.put(playerStatusManagementViewTab.createTab(), playerStatusManagementViewTab);
+        tabs.put(userManagementViewTab.createTab(), userManagementViewTab);
 
         final TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
@@ -54,11 +51,5 @@ public class ManagementView extends VerticalLayout {
         tabs.forEach(tabSheet::add);
 
         add(tabSheet);
-    }
-
-    @Nonnull
-    private Tab createTab(@Nonnull final Icon icon,
-                          @Nonnull final String label) {
-        return new Tab(icon, new Span(label));
     }
 }
