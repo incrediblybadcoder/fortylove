@@ -7,15 +7,17 @@ import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 @SetupData
 public class PlayerStatusSetupData {
 
-    @Nonnull public static final String AKTIV = "aktiv";
-    @Nonnull public static final String PASSIV = "passiv";
-    @Nonnull public static final String TURNIER = "turnier";
-    @Nonnull public static final String INAKTIV = "inaktiv";
+    @Nonnull public static final String ACTIVE = "Aktiv";
+    @Nonnull public static final String PASSIVE = "Passiv";
+    @Nonnull public static final String INACTIVE = "Inaktiv";
+    @Nonnull public static final String TOURNAMENT = "Turnier";
+    @Nonnull public static final String GUEST = "Gast";
 
     @Nonnull private final PlayerStatusService playerStatusService;
 
@@ -25,10 +27,11 @@ public class PlayerStatusSetupData {
     }
 
     public void createPlayerStatus() {
-        createPlayerStatusIfNotFound(AKTIV, 2, 7);
-        createPlayerStatusIfNotFound(PASSIV, 1, 3);
-        createPlayerStatusIfNotFound(TURNIER, 3, 7);
-        createPlayerStatusIfNotFound(INAKTIV, 0, 0);
+        createPlayerStatusIfNotFound(ACTIVE, 2, 7);
+        createPlayerStatusIfNotFound(PASSIVE, 1, 3);
+        createPlayerStatusIfNotFound(INACTIVE, 0, 0);
+        createPlayerStatusIfNotFound(TOURNAMENT, 3, 7);
+        createPlayerStatusIfNotFound(GUEST, 2, 7);
     }
 
     @Transactional
@@ -39,5 +42,10 @@ public class PlayerStatusSetupData {
         if (playerStatus.isEmpty()) {
             playerStatusService.create(new PlayerStatus(name, bookingsPerDay, bookableDaysInAdvance));
         }
+    }
+
+    @Nonnull
+    public static List<String> getProtectedNames() {
+        return List.of(ACTIVE, PASSIVE, INACTIVE, TOURNAMENT, GUEST);
     }
 }

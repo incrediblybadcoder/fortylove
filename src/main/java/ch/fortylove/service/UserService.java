@@ -47,7 +47,7 @@ public class UserService {
         }
 
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            return new DatabaseResult<>("Benutzer mit folgdender E-Mail existiert bereits: " + user.getEmail());
+            return new DatabaseResult<>("Benutzer mit folgender E-Mail existiert bereits: " + user.getEmail());
         }
 
         // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle

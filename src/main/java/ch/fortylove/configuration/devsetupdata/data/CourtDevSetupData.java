@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @DevSetupData
-public class CourtSetupData {
+public class CourtDevSetupData {
 
     public static final int NUMBER_OF_COURTS = 4;
     private static final int[] NUMBERS = {1, 2, 3, 4};
@@ -22,7 +22,7 @@ public class CourtSetupData {
     @Nonnull private final CourtService courtService;
 
     @Autowired
-    public CourtSetupData(@Nonnull final CourtService courtService) {
+    public CourtDevSetupData(@Nonnull final CourtService courtService) {
         this.courtService = courtService;
     }
 

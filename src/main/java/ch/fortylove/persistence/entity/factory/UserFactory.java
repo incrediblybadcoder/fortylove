@@ -2,6 +2,7 @@ package ch.fortylove.persistence.entity.factory;
 
 import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -33,8 +34,8 @@ public class UserFactory {
      * @return Ein neuer User-Objekt mit Standardwerten
      */
     @Nonnull
-    public User newEmptyDefaultUser() {
-        return newDefaultUser("", "", "", "");
+    public User newGuestUser() {
+        return newGuestUser("", "", "", "");
     }
 
     /**
@@ -49,30 +50,30 @@ public class UserFactory {
      * @return Ein neuer User-Objekt mit Standardwerten
      */
     @Nonnull
-    public User newDefaultUser(@Nonnull final String firstName,
-                               @Nonnull final String lastName,
-                               @Nonnull final String email,
-                               @Nonnull final String plainPassword) {
+    public User newGuestUser(@Nonnull final String firstName,
+                             @Nonnull final String lastName,
+                             @Nonnull final String email,
+                             @Nonnull final String plainPassword) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, false, roleService.getDefaultUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.GUEST, false, roleService.getDefaultGuestRoles(), playerStatusService.getDefaultGuestPlayerStatus());
     }
 
     @Nonnull
-    public User newDefaultAdmin(@Nonnull final String firstName,
-                                @Nonnull final String lastName,
-                                @Nonnull final String email,
-                                @Nonnull final String plainPassword) {
+    public User newAdminUser(@Nonnull final String firstName,
+                             @Nonnull final String lastName,
+                             @Nonnull final String email,
+                             @Nonnull final String plainPassword) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull
-    public User newDevAdmin(@Nonnull final String firstName,
+    public User newDevAdminUser(@Nonnull final String firstName,
                                 @Nonnull final String lastName,
                                 @Nonnull final String email,
                                 @Nonnull final String encryptedPassword) {
         final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword, "");
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull

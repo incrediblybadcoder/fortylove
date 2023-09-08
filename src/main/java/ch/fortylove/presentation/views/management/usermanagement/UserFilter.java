@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Set;
 
@@ -13,6 +14,7 @@ public class UserFilter {
     private String firstName;
     private String lastName;
     private String email;
+    private String userStatus;
     private String playerStatus;
     private String roles;
 
@@ -36,6 +38,11 @@ public class UserFilter {
         this.dataView.refreshAll();
     }
 
+    public void setUserStatus(@Nonnull final String userStatus) {
+        this.userStatus = userStatus;
+        this.dataView.refreshAll();
+    }
+
     public void setPlayerStatus(@Nonnull final String playerStatus) {
         this.playerStatus = playerStatus;
         this.dataView.refreshAll();
@@ -50,14 +57,15 @@ public class UserFilter {
         boolean matchesFirstName = matches(user.getFirstName(), firstName);
         boolean matchesLastName = matches(user.getLastName(), lastName);
         boolean matchesEmail = matches(user.getEmail(), email);
+        boolean matchesUserStatus = matches(user.getUserStatus().getName(), userStatus);
         boolean matchesPlayerStatus = matches(user.getPlayerStatus().getName(), playerStatus);
         boolean matchesRole = matches(getRolesString(user.getRoles()), roles);
 
-        return matchesFirstName && matchesLastName && matchesEmail && matchesPlayerStatus & matchesRole;
+        return matchesFirstName && matchesLastName && matchesEmail && matchesUserStatus && matchesPlayerStatus & matchesRole;
     }
 
     private boolean matches(@Nonnull final String value,
-                            @Nonnull final String searchTerm) {
+                            @Nullable final String searchTerm) {
         return searchTerm == null ||
                 searchTerm.isEmpty() ||
                 value.toLowerCase().contains(searchTerm.toLowerCase());
