@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PlayerStatusManagementView extends ManagementViewTab {
+public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PlayerStatusForm playerStatusForm;
@@ -34,16 +34,12 @@ public class PlayerStatusManagementView extends ManagementViewTab {
 
     private Grid<PlayerStatus> grid;
 
-    public PlayerStatusManagementView(@Nonnull final PlayerStatusService playerStatusService,
-                                      @Nonnull final PlayerStatusForm playerStatusForm,
-                                      @Nonnull final NotificationUtil notificationUtil) {
+    public PlayerStatusManagementViewTab(@Nonnull final PlayerStatusService playerStatusService,
+                                         @Nonnull final PlayerStatusForm playerStatusForm,
+                                         @Nonnull final NotificationUtil notificationUtil) {
         this.playerStatusService = playerStatusService;
         this.playerStatusForm = playerStatusForm;
         this.notificationUtil = notificationUtil;
-
-        setSizeFull();
-        setPadding(false);
-        addClassName(LumoUtility.Padding.Top.MEDIUM);
 
         constructUI();
     }
