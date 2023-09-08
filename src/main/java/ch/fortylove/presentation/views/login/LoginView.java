@@ -2,7 +2,7 @@ package ch.fortylove.presentation.views.login;
 
 import ch.fortylove.FortyloveApplication;
 import ch.fortylove.presentation.views.forgotpassword.ForgotPasswordView;
-import ch.fortylove.presentation.views.legalnotice.LegalNoticeLoggedOutView;
+import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.login.support.SupportView;
 import ch.fortylove.presentation.views.registration.RegistrationView;
 import com.vaadin.flow.component.html.Anchor;
@@ -51,12 +51,12 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private HorizontalLayout getFooter() {
 
-        final Anchor supportLink = new Anchor(SupportView.ROUTE, "Support");
+        final Anchor supportLink = new Anchor(SupportView.ROUTE, SupportView.PAGE_TITLE);
         supportLink.getElement().getStyle()
                 .set("color", "grey")
                 .set("font-size", "small");
 
-        final Anchor impressumLink = new Anchor(LegalNoticeLoggedOutView.ROUTE, "Impressum");
+        final Anchor impressumLink = new Anchor(LegalNoticeView.ROUTE, LegalNoticeView.PAGE_TITLE);
         impressumLink.getElement().getStyle()
                 .set("color", "grey")
                 .set("font-size", "small");

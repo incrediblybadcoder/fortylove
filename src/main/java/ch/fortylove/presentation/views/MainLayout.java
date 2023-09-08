@@ -5,7 +5,7 @@ import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.feedback.FeedbackView;
-import ch.fortylove.presentation.views.legalnotice.LegalNoticeLoggedInView;
+import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.management.ManagementView;
 import ch.fortylove.presentation.views.usermenu.SettingsView;
 import ch.fortylove.presentation.views.usermenu.UserProfileView;
@@ -53,17 +53,21 @@ public class MainLayout extends AppLayout {
                       @Nonnull final RoleService roleService) {
         this.authenticationService = authenticationService;
         this.roleService = roleService;
+        initHeader();
+        if (authenticationService.getAuthenticatedUser().isPresent()) {
+            createHeader();
+            createDrawer();
+            setPrimarySection(Section.DRAWER);
+        }
+    }
 
-        createHeader();
-        createDrawer();
-        setPrimarySection(Section.DRAWER);
+    private void initHeader() {
+        viewTitle = new H2();
+        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
     }
 
     private void createHeader() {
         final DrawerToggle toggle = new DrawerToggle();
-
-        viewTitle = new H2();
-        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
         final HorizontalLayout headerContent = new HorizontalLayout();
         headerContent.setWidthFull();
@@ -169,7 +173,7 @@ public class MainLayout extends AppLayout {
     private Footer createFooter() {
         final SideNav footerNavigation = new SideNav();
         footerNavigation.addItem(new SideNavItem(FeedbackView.PAGE_TITLE, FeedbackView.class));
-        footerNavigation.addItem(new SideNavItem(LegalNoticeLoggedInView.PAGE_TITLE, LegalNoticeLoggedInView.class));
+        footerNavigation.addItem(new SideNavItem(LegalNoticeView.PAGE_TITLE, LegalNoticeView.class));
 
         final Footer layout = new Footer();
         layout.add(footerNavigation);
