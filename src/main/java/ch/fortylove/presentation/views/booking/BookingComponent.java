@@ -39,6 +39,7 @@ public class BookingComponent extends VerticalLayout {
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final CourtService courtService;
     @Nonnull private final UserService userService;
+    @Nonnull private final NotificationUtil notificationUtil;
 
     @Nonnull private final BookingGrid bookingGrid;
     @Nonnull private final DateSelection dateSelection;
@@ -50,12 +51,14 @@ public class BookingComponent extends VerticalLayout {
                             @Nonnull final AuthenticationService authenticationService,
                             @Nonnull final CourtService courtService,
                             @Nonnull final UserService userService,
+                            @Nonnull final NotificationUtil notificationUtil,
                             @Nonnull final BookingGrid bookingGrid,
                             @Nonnull final DateSelection dateSelectionComponent) {
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
         this.courtService = courtService;
         this.userService = userService;
+        this.notificationUtil = notificationUtil;
         this.bookingGrid = bookingGrid;
         this.dateSelection = dateSelectionComponent;
 
@@ -150,13 +153,13 @@ public class BookingComponent extends VerticalLayout {
 
     private void newBookingAction(@Nonnull final Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
-        NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
         refresh();
     }
 
     private void modifyBookingAction(final @Nonnull Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.update(booking);
-        NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
         refresh();
     }
 
@@ -170,7 +173,7 @@ public class BookingComponent extends VerticalLayout {
                 "Buchung wirklich Löschen?",
                 () -> {
                     final DatabaseResult<UUID> bookingDatabaseResult = bookingService.delete(booking.getId());
-                    NotificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gelöscht", booking.getIdentifier()));
+                    notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gelöscht", booking.getIdentifier()));
                     refresh();
                 }
         ).open();

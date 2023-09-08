@@ -33,13 +33,16 @@ public class CourtManagementView extends ManagementViewTab {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final CourtForm courtForm;
+    @Nonnull private final NotificationUtil notificationUtil;
 
     private Grid<Court> grid;
 
     public CourtManagementView(@Nonnull final CourtService courtService,
-                               @Nonnull final CourtForm courtForm) {
+                               @Nonnull final CourtForm courtForm,
+                               @Nonnull final NotificationUtil notificationUtil) {
         this.courtService = courtService;
         this.courtForm = courtForm;
+        this.notificationUtil = notificationUtil;
 
         setSizeFull();
         setPadding(false);
@@ -139,21 +142,21 @@ public class CourtManagementView extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<Court> managementFormSaveEvent) {
         final Court court = managementFormSaveEvent.getItem();
         final DatabaseResult<Court> courtDatabaseResult = courtService.create(court);
-        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s erstellt", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s erstellt", court.getIdentifier()));
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<Court> managementFormModifyEvent) {
         final Court court = managementFormModifyEvent.getItem();
         final DatabaseResult<Court> courtDatabaseResult = courtService.update(court);
-        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gespeichert", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gespeichert", court.getIdentifier()));
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<Court> managementFormDeleteEvent) {
         final Court court = managementFormDeleteEvent.getItem();
         final DatabaseResult<UUID> courtDatabaseResult = courtService.delete(court.getId());
-        NotificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gelöscht", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gelöscht", court.getIdentifier()));
         refresh();
     }
 }

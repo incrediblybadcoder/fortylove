@@ -25,15 +25,19 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
     @Nonnull public static final String ROUTE = "resetpassword";
     @Nonnull public static final String PAGE_TITLE = "New Password";
     @Nonnull private final UserService userService;
+    @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final PasswordEncoder passwordEncoder;
+
     private Registration registration;
     private String resetToken;
 
     public ResetPasswordView(@Nonnull final ResetPasswordForm resetPasswordForm,
                              @Nonnull final UserService userService,
+                             @Nonnull final NotificationUtil notificationUtil,
                              @Nonnull final PasswordEncoder passwordEncoder) {
 
         this.userService = userService;
+        this.notificationUtil = notificationUtil;
         this.passwordEncoder = passwordEncoder;
         registration = resetPasswordForm.addResetPasswordFormSetPasswordEventListener(this::setNewPassword);
         setHorizontalComponentAlignment(Alignment.CENTER, resetPasswordForm);
@@ -53,14 +57,14 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
 
     private void setNewPassword(ResetPasswordFormSetPasswordEvent resetPasswordFormSetPasswordEvent) {
         if (resetToken == null || resetToken.trim().isEmpty()) {
-            NotificationUtil.errorNotification("Ungültiger Token");
+            notificationUtil.errorNotification("Ungültiger Token");
             return;
         }
         if (userService.resetPasswordUsingToken(resetToken, passwordEncoder.encode(resetPasswordFormSetPasswordEvent.getPlainPassword()))) {
-            NotificationUtil.informationNotification("Neues Passwort wurde gesetzt");
+            notificationUtil.informationNotification("Neues Passwort wurde gesetzt");
             UI.getCurrent().navigate(LoginView.class);
         } else {
-            NotificationUtil.errorNotification("Fehler beim Setzen des neuen Passworts");
+            notificationUtil.errorNotification("Fehler beim Setzen des neuen Passworts");
         }
     }
     @Override
@@ -75,7 +79,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
     }
 
     private void handleMissingToken() {
-        NotificationUtil.errorNotification("Token fehlt");
+        notificationUtil.errorNotification("Token fehlt");
     }
 }
 
