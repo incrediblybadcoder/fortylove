@@ -123,11 +123,9 @@ public class UserManagementViewTab extends ManagementViewTab {
                     if (userStatus.equals(UserStatus.GUEST_PENDING)) {
                         final Button pendingButton = new Button("Anfrage");
                         pendingButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
-                        pendingButton.addClassNames(LumoUtility.Padding.XSMALL, LumoUtility.FontSize.XXSMALL);
                         pendingButton.addClickListener(handlePendingGuestRequest());
 
                         final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(userStatus.getIdentifier()), pendingButton);
-                        userStatusLayout.setSpacing(true);
                         userStatusLayout.setAlignItems(Alignment.CENTER);
                         return userStatusLayout;
                     }
@@ -222,8 +220,7 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
-        user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
-        final DatabaseResult<User> userDatabaseResult = userService.create(user);
+        final DatabaseResult<User> userDatabaseResult = userService.create(user, true);
         notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }
