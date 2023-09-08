@@ -1,8 +1,9 @@
 package ch.fortylove.configuration.devsetupdata;
 
-import ch.fortylove.configuration.devsetupdata.data.BookingSetupData;
-import ch.fortylove.configuration.devsetupdata.data.CourtSetupData;
-import ch.fortylove.configuration.devsetupdata.data.UserSetupData;
+import ch.fortylove.configuration.devsetupdata.data.BookingDevSetupData;
+import ch.fortylove.configuration.devsetupdata.data.CourtDevSetupData;
+import ch.fortylove.configuration.devsetupdata.data.PlayerStatusDevSetupData;
+import ch.fortylove.configuration.devsetupdata.data.UserDevSetupData;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,22 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DevSetupData
 public class DevSetupDataLoaderService {
 
-    @Nonnull private final CourtSetupData courtSetupData;
-    @Nonnull private final UserSetupData userSetupData;
-    @Nonnull private final BookingSetupData bookingSetupData;
+    @Nonnull private final CourtDevSetupData courtDevSetupData;
+    @Nonnull private final PlayerStatusDevSetupData playerStatusDevSetupData;
+    @Nonnull private final UserDevSetupData userDevSetupData;
+    @Nonnull private final BookingDevSetupData bookingDevSetupData;
 
     @Autowired
-    public DevSetupDataLoaderService(@Nonnull final CourtSetupData courtSetupData,
-                                     @Nonnull final UserSetupData userSetupData,
-                                     @Nonnull final BookingSetupData bookingSetupData) {
-        this.courtSetupData = courtSetupData;
-        this.userSetupData = userSetupData;
-        this.bookingSetupData = bookingSetupData;
+    public DevSetupDataLoaderService(@Nonnull final CourtDevSetupData courtDevSetupData,
+                                     @Nonnull final PlayerStatusDevSetupData playerStatusDevSetupData,
+                                     @Nonnull final UserDevSetupData userDevSetupData,
+                                     @Nonnull final BookingDevSetupData bookingDevSetupData) {
+        this.courtDevSetupData = courtDevSetupData;
+        this.playerStatusDevSetupData = playerStatusDevSetupData;
+        this.userDevSetupData = userDevSetupData;
+        this.bookingDevSetupData = bookingDevSetupData;
     }
 
     public void initData() {
-        courtSetupData.createCourts();
-        userSetupData.createUsers();
-        bookingSetupData.createBookings();
+        courtDevSetupData.createCourts();
+        playerStatusDevSetupData.createPlayerStatus();
+        userDevSetupData.createUsers();
+        bookingDevSetupData.createBookings();
     }
 }

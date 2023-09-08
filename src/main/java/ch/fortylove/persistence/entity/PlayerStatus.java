@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.HashSet;
@@ -18,6 +19,13 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     @NotBlank
     @Column(name = "name")
     private String name;
+
+    @NotNull
+    @Column(name = "playerstatus_type")
+    private PlayerStatusType playerStatusType;
+
+    @Column(name = "is_default")
+    private boolean isDefault;
 
     @PositiveOrZero
     @Column(name = "bookings_per_day")
@@ -34,10 +42,14 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     }
 
     public PlayerStatus(@Nonnull final String name,
+                        @Nonnull final PlayerStatusType playerStatusType,
+                        final boolean isDefault,
                         final int bookingsPerDay,
                         final int bookableDaysInAdvance) {
         super(UUID.randomUUID());
         this.name = name;
+        this.playerStatusType = playerStatusType;
+        this.isDefault = isDefault;
         this.bookingsPerDay = bookingsPerDay;
         this.bookableDaysInAdvance = bookableDaysInAdvance;
     }
@@ -49,6 +61,23 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
 
     public void setName(@Nonnull final String name) {
         this.name = name;
+    }
+
+    @Nonnull
+    public PlayerStatusType getPlayerStatusType() {
+        return playerStatusType;
+    }
+
+    public void setPlayerStatusType(@Nonnull final PlayerStatusType playerStatusType) {
+        this.playerStatusType = playerStatusType;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(final boolean aDefault) {
+        isDefault = aDefault;
     }
 
     @Nonnull
@@ -80,6 +109,8 @@ public class PlayerStatus extends AbstractEntity implements Comparable<PlayerSta
     public String toString() {
         return "PlayerStatus{" +
                 "name='" + name + '\'' +
+                "playerStatusType='" + playerStatusType + '\'' +
+                "isDefault='" + isDefault + '\'' +
                 '}';
     }
 

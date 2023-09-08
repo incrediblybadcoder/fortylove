@@ -9,12 +9,14 @@ import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
@@ -57,7 +59,7 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
     @Override
     public void refresh() {
-        updateCourtList();
+        updatePlayerStatusList();
     }
 
     private void configureForm() {
@@ -66,7 +68,7 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
         playerStatusForm.addDeleteEventListenerCustom(this::deleteEvent);
     }
 
-    private void updateCourtList() {
+    private void updatePlayerStatusList() {
         grid.setItems(playerStatusService.findAll());
     }
 
@@ -79,6 +81,19 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
                 .setHeader("Name")
                 .setSortable(true);
 
+        final Grid.Column<PlayerStatus> playerStatusTypeColumn = grid.addColumn(playerStatus -> playerStatus.getPlayerStatusType().getName())
+                .setHeader("Typ")
+                .setSortable(true);
+
+        final Grid.Column<PlayerStatus> isDefaultColumn = grid.addColumn(new ComponentRenderer<>(playerStatus -> {
+                    final Checkbox checkbox = new Checkbox();
+                    checkbox.setEnabled(false);
+                    checkbox.setValue(playerStatus.isDefault());
+                    return checkbox;
+                }))
+                .setHeader("Standard")
+                .setSortable(true);
+
         final Grid.Column<PlayerStatus> bookingsPerDayColumn = grid.addColumn(PlayerStatus::getBookingsPerDay)
                 .setHeader("Buchungen pro Tag")
                 .setSortable(true);
@@ -87,17 +102,19 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
                 .setHeader("Buchbare Tage in die Zukunft")
                 .setSortable(true);
 
-        createGridFooter(nameColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
+        createGridFooter(nameColumn, playerStatusTypeColumn, isDefaultColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
 
         grid.asSingleSelect().addValueChangeListener(event -> editPlayerStatus(event.getValue()));
     }
 
-    private void createGridFooter(@Nonnull final  Grid.Column<PlayerStatus> nameColumn,
-                                  @Nonnull final  Grid.Column<PlayerStatus> bookingsPerDayColumn,
-                                  @Nonnull final  Grid.Column<PlayerStatus> bookableDaysInAdvanceColumn) {
+    private void createGridFooter(@Nonnull final Grid.Column<PlayerStatus> nameColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> playerStatusTypeColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> isDefaultColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> bookingsPerDayColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> bookableDaysInAdvanceColumn) {
         grid.appendFooterRow();
         final FooterRow footerRow = grid.appendFooterRow();
-        final FooterRow.FooterCell footerCell = footerRow.join(nameColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
+        final FooterRow.FooterCell footerCell = footerRow.join(nameColumn, playerStatusTypeColumn, isDefaultColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
 
         final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE), click -> addPlayerStatus());
         addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -123,14 +140,14 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<PlayerStatus> managementFormSaveEvent) {
         final PlayerStatus playerStatus = managementFormSaveEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.create(playerStatus);
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s erstellt", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<PlayerStatus> managementFormModifyEvent) {
         final PlayerStatus playerStatus = managementFormModifyEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.update(playerStatus);
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gespeichert", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 
@@ -138,7 +155,7 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
         final PlayerStatus playerStatusToDelete = playerStatusFormDeleteEvent.getItem();
         final PlayerStatus replacementPlayerStatus = playerStatusFormDeleteEvent.getReplacementPlayerStatus();
         final DatabaseResult<UUID> playerStatusDatabaseResult = playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gelöscht und mit Status %s ersetzt", playerStatusToDelete.getIdentifier(), replacementPlayerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 }

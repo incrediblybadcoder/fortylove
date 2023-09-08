@@ -153,6 +153,7 @@ public abstract class ManagementForm<T> extends FormLayout {
                       @Nonnull final T item,
                       final boolean checkChanges,
                       @Nonnull final Button... buttons) {
+
         beforeOpen();
 
         this.title.setText(title);
@@ -161,6 +162,8 @@ public abstract class ManagementForm<T> extends FormLayout {
         addButtons(buttons);
         updateButtonState(checkChanges);
         getFocusOnOpen().focus();
+
+        afterOpen();
 
         setVisible(true);
     }
@@ -171,6 +174,14 @@ public abstract class ManagementForm<T> extends FormLayout {
      * For example filling comboboxes or radiogroups with selection items.
      */
     protected void beforeOpen() {
+    }
+
+    /**
+     * Is called after any open procedures are made.
+     * Can be used to do additional steps after loading the selected item.
+     * For example filling comboboxes or radiogroups with selection items.
+     */
+    protected void afterOpen() {
     }
 
     public void closeForm() {

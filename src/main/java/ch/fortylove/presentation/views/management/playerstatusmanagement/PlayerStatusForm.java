@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.persistence.entity.PlayerStatusType;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
@@ -11,6 +12,7 @@ import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -32,8 +34,10 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     @Nonnull private final PlayerStatusService playerStatusService;
 
     private TextField nameField;
+    private Select<PlayerStatusType> playerStatusTypeSelection;
     private IntegerField bookingsPerDayField;
     private IntegerField bookableDaysInAdvanceField;
+    private Checkbox isDefaultCheckbox;
 
     @Autowired
     public PlayerStatusForm(@Nonnull final PlayerStatusService playerStatusService) {
@@ -43,8 +47,10 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     @Override
     protected void instantiateFields() {
         nameField = InputFieldFactory.createTextField("Name");
+        playerStatusTypeSelection = new Select<>();
         bookingsPerDayField = InputFieldFactory.createBasicIntegerField("Buchungen pro Tag");
         bookableDaysInAdvanceField = InputFieldFactory.createBasicIntegerField("Buchbare Tage in die Zukunft");
+        isDefaultCheckbox = new Checkbox("Standard");
     }
 
     @Nonnull
@@ -53,8 +59,10 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
         final Binder<PlayerStatus> binder = new Binder<>(PlayerStatus.class);
 
         binder.forField(nameField).withValidator(getNameValidator()).bind(PlayerStatus::getName, PlayerStatus::setName);
+        binder.forField(playerStatusTypeSelection).bind(PlayerStatus::getPlayerStatusType, PlayerStatus::setPlayerStatusType);
         binder.forField(bookingsPerDayField).bind(PlayerStatus::getBookingsPerDay, PlayerStatus::setBookingsPerDay);
         binder.forField(bookableDaysInAdvanceField).bind(PlayerStatus::getBookableDaysInAdvance, PlayerStatus::setBookableDaysInAdvance);
+        binder.forField(isDefaultCheckbox).bind(PlayerStatus::isDefault, PlayerStatus::setDefault);
 
         binder.bindInstanceFields(this);
         return binder;
@@ -68,13 +76,13 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     @Nonnull
     @Override
     protected VerticalLayout getContent() {
-        return new VerticalLayout(getNameField(), bookingsPerDayField, bookableDaysInAdvanceField);
+        return new VerticalLayout(getNameField(), getPlayerStatusTypeSelection(), bookingsPerDayField, bookableDaysInAdvanceField, isDefaultCheckbox);
     }
 
     @Nonnull
     @Override
     protected PlayerStatus getNewItem() {
-        return new PlayerStatus("", 0, 0);
+        return new PlayerStatus("", PlayerStatusType.MEMBER, false,0, 0);
     }
 
     @Nonnull
@@ -101,9 +109,26 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
         return nameField;
     }
 
+    @Nonnull
+    private Select<PlayerStatusType> getPlayerStatusTypeSelection() {
+        playerStatusTypeSelection.setWidthFull();
+        playerStatusTypeSelection.setLabel("Typ");
+        playerStatusTypeSelection.setItems(PlayerStatusType.values());
+        playerStatusTypeSelection.setItemLabelGenerator(PlayerStatusType::getName);
+
+        return playerStatusTypeSelection;
+    }
+
+    @Override
+    protected void afterOpen() {
+        super.afterOpen();
+        final boolean isDefaultCheckboxEnabled = currentItem != null && !currentItem.isDefault();
+        isDefaultCheckbox.setEnabled(isDefaultCheckboxEnabled);
+    }
+
     @Override
     protected boolean isDeleteEnabled() {
-        return playerStatusService.findAll().size() > 1;
+        return currentItem == null || playerStatusService.findAllByPlayerStatusType(currentItem.getPlayerStatusType()).size() > 1;
     }
 
     @Nonnull
@@ -114,7 +139,11 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
 
         final Html text = new Html("<div>Status wirklich löschen?<br><br>Jedem Benutzer mit diesem Status<br>wird ein neuer Status zugewiesen.</div>");
 
-        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAll().stream().filter(playerStatus -> !playerStatus.equals(currentItem)).toList();
+        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAllByPlayerStatusType(currentItem.getPlayerStatusType())
+                .stream()
+                .filter(playerStatus -> !playerStatus.equals(currentItem))
+                .toList();
+
         final Select<PlayerStatus> replacementPlayerStatusSelect = new Select<>();
         replacementPlayerStatusSelect.setLabel("Neuer Status");
         replacementPlayerStatusSelect.setItemLabelGenerator(PlayerStatus::getIdentifier);

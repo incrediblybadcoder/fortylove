@@ -138,21 +138,21 @@ public class CourtManagementViewTab extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<Court> managementFormSaveEvent) {
         final Court court = managementFormSaveEvent.getItem();
         final DatabaseResult<Court> courtDatabaseResult = courtService.create(court);
-        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s erstellt", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult);
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<Court> managementFormModifyEvent) {
         final Court court = managementFormModifyEvent.getItem();
         final DatabaseResult<Court> courtDatabaseResult = courtService.update(court);
-        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gespeichert", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult);
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<Court> managementFormDeleteEvent) {
         final Court court = managementFormDeleteEvent.getItem();
         final DatabaseResult<UUID> courtDatabaseResult = courtService.delete(court.getId());
-        notificationUtil.databaseNotification(courtDatabaseResult, String.format("Platz %s gelöscht", court.getIdentifier()));
+        notificationUtil.databaseNotification(courtDatabaseResult);
         refresh();
     }
 }

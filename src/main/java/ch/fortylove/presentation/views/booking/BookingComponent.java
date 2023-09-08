@@ -153,13 +153,13 @@ public class BookingComponent extends VerticalLayout {
 
     private void newBookingAction(@Nonnull final Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
-        notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        notificationUtil.databaseNotification(bookingDatabaseResult);
         refresh();
     }
 
     private void modifyBookingAction(final @Nonnull Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.update(booking);
-        notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gespeichert", booking.getIdentifier()));
+        notificationUtil.databaseNotification(bookingDatabaseResult);
         refresh();
     }
 
@@ -173,7 +173,7 @@ public class BookingComponent extends VerticalLayout {
                 "Buchung wirklich Löschen?",
                 () -> {
                     final DatabaseResult<UUID> bookingDatabaseResult = bookingService.delete(booking.getId());
-                    notificationUtil.databaseNotification(bookingDatabaseResult, String.format("Buchung %s gelöscht", booking.getIdentifier()));
+                    notificationUtil.databaseNotification(bookingDatabaseResult);
                     refresh();
                 }
         ).open();

@@ -40,10 +40,9 @@ public class NotificationUtil {
         notification.open();
     }
 
-    public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult,
-                                            @Nonnull final String successMessage) {
+    public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult) {
         if (databaseResult.isSuccessful()) {
-            informationNotification(successMessage);
+            informationNotification("Erfolgreich");
         } else {
             errorNotification(databaseResult.getMessage());
         }

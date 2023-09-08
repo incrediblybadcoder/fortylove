@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @DevSetupData
-public class UserSetupData {
+public class UserDevSetupData {
 
     @Nonnull public static final String ADMIN = "admin@fortylove.ch";
     @Nonnull public static final String STAFF = "staff@fortylove.ch";
@@ -37,9 +37,9 @@ public class UserSetupData {
     @Nonnull private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserSetupData(@Nonnull final UserService userService,@Nonnull final RoleService roleService,
-                         @Nonnull final PlayerStatusService playerStatus,
-                         @Nonnull final PasswordEncoder passwordEncoder) {
+    public UserDevSetupData(@Nonnull final UserService userService, @Nonnull final RoleService roleService,
+                            @Nonnull final PlayerStatusService playerStatus,
+                            @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.playerStatusService = playerStatus;
@@ -47,17 +47,17 @@ public class UserSetupData {
     }
 
     public void createUsers() {
-        createUserIfNotFound(ADMIN, "Admin", "Admin", "password", getAdminRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
-        createUserIfNotFound(STAFF, "Staff", "Staff", "password", getStaffRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
+        createUserIfNotFound(ADMIN, "Admin", "Admin", "password", getAdminRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(STAFF, "Staff", "Staff", "password", getStaffRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
 
-        createUserIfNotFound(USER1, "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
-        createUserIfNotFound(USER2, "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
-        createUserIfNotFound(USER3, "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
+        createUserIfNotFound(USER1, "Marco", "Solombrino", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(USER2, "Jonas", "Cahenzli", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(USER3, "Daniel", "Tobler", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
 
-        createUserIfNotFound(AKTIV, "Aktiv", "Aktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.AKTIV), true);
-        createUserIfNotFound(PASSIV, "Passiv", "Passiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIV), true);
-        createUserIfNotFound(TURNIER, "Turnier", "Turnier", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.TURNIER), true);
-        createUserIfNotFound(INAKIV, "Inaktiv", "Inaktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.INAKTIV), false);
+        createUserIfNotFound(AKTIV, "Aktiv", "Aktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(PASSIV, "Passiv", "Passiv", "password", getUserRole(), getPlayerStatus(PlayerStatusDevSetupData.PASSIV), true);
+        createUserIfNotFound(TURNIER, "Turnier", "Turnier", "password", getUserRole(), getPlayerStatus(PlayerStatusDevSetupData.TURNIER), true);
+        createUserIfNotFound(INAKIV, "Inaktiv", "Inaktiv", "password", getUserRole(), getPlayerStatus(PlayerStatusDevSetupData.INAKTIV), false);
     }
 
     @Nonnull

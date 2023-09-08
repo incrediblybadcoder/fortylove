@@ -1,8 +1,7 @@
 package ch.fortylove.service;
 
-import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.persistence.error.RecordNotFoundException;
+import ch.fortylove.persistence.entity.PlayerStatusType;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
 import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
@@ -17,9 +16,6 @@ import java.util.UUID;
 @Transactional
 public class PlayerStatusService {
 
-    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_NEW_USER = PlayerStatusSetupData.AKTIV;
-    @Nonnull public static final String DEFAULT_PLAYER_STATUS_FOR_ADMIN = PlayerStatusSetupData.AKTIV;
-
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
     public PlayerStatusService(@Nonnull final PlayerStatusRepository playerStatusRepository) {
@@ -31,15 +27,41 @@ public class PlayerStatusService {
         if (playerStatusRepository.findById(playerStatus.getId()).isPresent()) {
             return new DatabaseResult<>("Status existiert bereits: " + playerStatus.getIdentifier());
         }
+
+        removeOtherDefaults(playerStatus);
+
         return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
     }
 
     @Nonnull
     public DatabaseResult<PlayerStatus> update(@Nonnull final PlayerStatus playerStatus) {
-        if (playerStatusRepository.findById(playerStatus.getId()).isEmpty()) {
+        final Optional<PlayerStatus> playerStatusToUpdate = playerStatusRepository.findById(playerStatus.getId());
+        if (playerStatusToUpdate.isEmpty()) {
             return new DatabaseResult<>("Status existiert nicht: " + playerStatus.getIdentifier());
         }
+
+        if (playerStatusToUpdate.get().isDefault() && !playerStatus.isDefault()) {
+            return new DatabaseResult<>(String.format("Es muss immer ein standard Status pro Typ (%s) geben.", playerStatus.getPlayerStatusType().getIdentifier()));
+        } else if (!playerStatusToUpdate.get().isDefault() && playerStatus.isDefault()) {
+            removeOtherDefaults(playerStatus);
+        }
+
         return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
+    }
+
+    private void removeOtherDefaults(final @Nonnull PlayerStatus playerStatus) {
+        final List<PlayerStatus> allDefaultPlayerStatusOfType = playerStatusRepository.findAllByPlayerStatusTypeAndIsDefaultIsTrue(playerStatus.getPlayerStatusType());
+
+        // there can only be one default playerStatus per playerStatusType
+        if (allDefaultPlayerStatusOfType.size() > 1) {
+            throw new IllegalStateException(String.format("There can't be more than one default playerStatus (%s) per playerStatusType (%s)", playerStatus, playerStatus.getPlayerStatusType()));
+        }
+
+        if (allDefaultPlayerStatusOfType.size() < 1 && !playerStatus.isDefault()) {
+            playerStatus.setDefault(true);
+        } else if (allDefaultPlayerStatusOfType.size() == 1 && playerStatus.isDefault()) {
+            allDefaultPlayerStatusOfType.forEach(currentDefaultPlayerStatus -> currentDefaultPlayerStatus.setDefault(false));
+        }
     }
 
     @Nonnull
@@ -71,6 +93,10 @@ public class PlayerStatusService {
         playerStatusToDelete.getUsers().clear();
         playerStatusRepository.delete(playerStatusToDelete);
 
+        if (playerStatusToDelete.isDefault()) {
+            replacementPlayerStatus.setDefault(true);
+        }
+
         return new DatabaseResult<>(playerStatusToDeleteId);
     }
 
@@ -80,25 +106,35 @@ public class PlayerStatusService {
     }
 
     @Nonnull
-    public PlayerStatus getDefaultNewUserPlayerStatus() {
-        final Optional<PlayerStatus> playerStatus = this.findByName(DEFAULT_PLAYER_STATUS_FOR_NEW_USER);
-        if (playerStatus.isPresent()) {
-            return playerStatus.get();
-        }
-        throw new RecordNotFoundException("PlayerStatus " + DEFAULT_PLAYER_STATUS_FOR_NEW_USER + " not found");
-    }
-
-    @Nonnull
     public List<PlayerStatus> findAll() {
         return playerStatusRepository.findAll();
     }
 
     @Nonnull
-    public PlayerStatus getDefaultAdminPlayerStatus() {
-        final Optional<PlayerStatus> playerStatus = this.findByName(DEFAULT_PLAYER_STATUS_FOR_ADMIN);
-        if (playerStatus.isPresent()) {
-            return playerStatus.get();
+    public List<PlayerStatus> findAllByPlayerStatusType(@Nonnull final PlayerStatusType playerStatusType) {
+        return playerStatusRepository.findAllByPlayerStatusType(playerStatusType);
+    }
+
+    @Nonnull
+    public Optional<PlayerStatus> getDefaultPlayerStatusOfType(@Nonnull final PlayerStatusType playerStatusType) {
+        final List<PlayerStatus> allDefaultPlayerStatusOfType = playerStatusRepository.findAllByPlayerStatusTypeAndIsDefaultIsTrue(playerStatusType);
+
+        if (allDefaultPlayerStatusOfType.size() > 1) {
+            throw new IllegalStateException(String.format("There can't be more than one default playerStatus per playerStatusType (%s)", playerStatusType));
         }
-        throw new RecordNotFoundException("PlayerStatus " + DEFAULT_PLAYER_STATUS_FOR_ADMIN + " not found");
+
+        return allDefaultPlayerStatusOfType.size() == 1 ?
+                Optional.of(allDefaultPlayerStatusOfType.get(0)) :
+                Optional.empty();
+    }
+
+    @Nonnull
+    public PlayerStatus getDefaultNewUserPlayerStatus() {
+        return getDefaultPlayerStatusOfType(PlayerStatusType.GUEST).orElseThrow(() -> new IllegalStateException(String.format("No default playerStatus of playerStatusType (%s)", PlayerStatusType.GUEST)));
+    }
+
+    @Nonnull
+    public PlayerStatus getDefaultAdminPlayerStatus() {
+        return getDefaultPlayerStatusOfType(PlayerStatusType.MEMBER).orElseThrow(() -> new IllegalStateException(String.format("No default playerStatus of playerStatus per playerStatusType (%s)", PlayerStatusType.MEMBER)));
     }
 }

@@ -183,21 +183,21 @@ public class UserManagementViewTab extends ManagementViewTab {
         final User user = managementFormSaveEvent.getItem();
         user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode("newpassword"));
         final DatabaseResult<User> userDatabaseResult = userService.create(user);
-        notificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s erstellt:\nPasswort = newpassword", user.getIdentifier()));
+        notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<User> managementFormModifyEvent) {
         final User user = managementFormModifyEvent.getItem();
         final DatabaseResult<User> userDatabaseResult = userService.update(user);
-        notificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s gespeichert", user.getIdentifier()));
+        notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }
 
     public void deleteEvent(@Nonnull final ManagementFormDeleteEvent<User> managementFormDeleteEvent) {
         final User user = managementFormDeleteEvent.getItem();
         final DatabaseResult<UUID> userDatabaseResult = userService.delete(user.getId());
-        notificationUtil.databaseNotification(userDatabaseResult, String.format("Benutzer %s wurde gelöscht", user.getIdentifier()));
+        notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }
 }
