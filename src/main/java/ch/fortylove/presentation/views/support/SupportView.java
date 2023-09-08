@@ -1,6 +1,6 @@
-package ch.fortylove.presentation.views.legalnotice;
+package ch.fortylove.presentation.views.support;
 
-import ch.fortylove.presentation.components.LegalNoticeComponent;
+import ch.fortylove.presentation.components.managementform.SupportComponent;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.login.LoginView;
 import ch.fortylove.security.AuthenticationService;
@@ -14,26 +14,25 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = LegalNoticeView.ROUTE, layout = MainLayout.class)
-@PageTitle(LegalNoticeView.PAGE_TITLE)
+@Route(value = SupportView.ROUTE, layout = MainLayout.class)
+@PageTitle(SupportView.PAGE_TITLE)
 @PermitAll
 @AnonymousAllowed
-public class LegalNoticeView extends VerticalLayout {
+public class SupportView extends VerticalLayout {
 
-    @Nonnull public static final String ROUTE = "legalnotice";
-    @Nonnull public static final String PAGE_TITLE = "Impressum";
+    @Nonnull public static final String ROUTE = "support";
+    @Nonnull public static final String PAGE_TITLE = "Support";
 
-    public LegalNoticeView(@Nonnull final LegalNoticeComponent legalNoticeComponent,
-                           @Nonnull final AuthenticationService authenticationService) {
-        add(legalNoticeComponent);
+    public SupportView(@Nonnull final SupportComponent supportComponent,
+                       @Nonnull final AuthenticationService authenticationService) {
+        add(supportComponent);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSpacing(true);
 
-
         if (authenticationService.getAuthenticatedUser().isEmpty()) {
             removeAll();
-            add(new H2(PAGE_TITLE), legalNoticeComponent, new Button("Zurück zur Login Seite", e -> UI.getCurrent().navigate(LoginView.ROUTE)));
+            add(new H2(PAGE_TITLE), supportComponent, new Button("Zurück zur Login Seite", e -> UI.getCurrent().navigate(LoginView.ROUTE)));
         }
     }
 }
