@@ -2,12 +2,14 @@ package ch.fortylove.presentation.views.login;
 
 import ch.fortylove.FortyloveApplication;
 import ch.fortylove.presentation.views.forgotpassword.ForgotPasswordView;
+import ch.fortylove.presentation.views.legalnotice.LegalNoticeLoggedOutView;
 import ch.fortylove.presentation.views.login.support.SupportView;
 import ch.fortylove.presentation.views.registration.RegistrationView;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -39,21 +41,30 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginForm.setI18n(loginFormInternational);
         loginForm.setAction("login");
 
-        loginForm.addForgotPasswordListener(event -> {
-            loginForm.getUI().ifPresent(ui -> ui.navigate(ForgotPasswordView.class));
-        });
+        loginForm.addForgotPasswordListener(event -> loginForm.getUI().ifPresent(ui -> ui.navigate(ForgotPasswordView.class)));
 
         final Anchor registrationLink = new Anchor(RegistrationView.ROUTE, "Noch kein Account? Hier registrieren!");
-        final Anchor supportLink = new Anchor(SupportView.ROUTE, "Support");
-        supportLink.getElement().getStyle()
-                        .set("color", "grey")
-                        .set("font-size", "small");
 
-        add(new H1(FortyloveApplication.APP_NAME), loginForm, registrationLink, supportLink);
+
+        add(new H1(FortyloveApplication.APP_NAME), loginForm, registrationLink, getFooter());
     }
 
+    private HorizontalLayout getFooter() {
 
+        final Anchor supportLink = new Anchor(SupportView.ROUTE, "Support");
+        supportLink.getElement().getStyle()
+                .set("color", "grey")
+                .set("font-size", "small");
 
+        final Anchor impressumLink = new Anchor(LegalNoticeLoggedOutView.ROUTE, "Impressum");
+        impressumLink.getElement().getStyle()
+                .set("color", "grey")
+                .set("font-size", "small");
+        final HorizontalLayout footer = new HorizontalLayout(supportLink, impressumLink);
+        footer.setJustifyContentMode(JustifyContentMode.CENTER);
+        return footer;
+
+    }
 
 
     @Override
