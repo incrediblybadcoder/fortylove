@@ -8,15 +8,15 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = LegalNoticeView.ROUTE, layout = MainLayout.class)
-@PageTitle(LegalNoticeView.PAGE_TITLE)
+@Route(value = LegalNoticeLoggedInView.ROUTE, layout = MainLayout.class)
+@PageTitle(LegalNoticeLoggedInView.PAGE_TITLE)
 @PermitAll
-public class LegalNoticeView extends VerticalLayout {
+public class LegalNoticeLoggedInView extends VerticalLayout {
 
-    @Nonnull public static final String ROUTE = "legalnotice";
+    @Nonnull public static final String ROUTE = "legalnoticeloggedin";
     @Nonnull public static final String PAGE_TITLE = "Impressum";
 
-    public LegalNoticeView(@Nonnull final LegalNoticeComponent legalNoticeComponent) {
+    public LegalNoticeLoggedInView(@Nonnull final LegalNoticeComponent legalNoticeComponent) {
         add(legalNoticeComponent);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);

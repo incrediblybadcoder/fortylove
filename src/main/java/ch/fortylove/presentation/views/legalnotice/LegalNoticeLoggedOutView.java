@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.login.impressum;
+package ch.fortylove.presentation.views.legalnotice;
 
 import ch.fortylove.presentation.components.LegalNoticeComponent;
 import ch.fortylove.presentation.views.login.LoginView;
@@ -11,15 +11,15 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.annotation.Nonnull;
 
-@Route(ImpressumView.ROUTE)
-@PageTitle(ImpressumView.PAGE_TITLE)
+@Route(LegalNoticeLoggedOutView.ROUTE)
+@PageTitle(LegalNoticeLoggedOutView.PAGE_TITLE)
 @AnonymousAllowed
-public class ImpressumView extends VerticalLayout {
+public class LegalNoticeLoggedOutView extends VerticalLayout {
 
-    @Nonnull public static final String ROUTE = "impressum";
+    @Nonnull public static final String ROUTE = "legalnoticeloggedout";
     @Nonnull public static final String PAGE_TITLE = "Impressum";
 
-    public ImpressumView(@Nonnull final LegalNoticeComponent legalNoticeComponent) {
+    public LegalNoticeLoggedOutView(@Nonnull final LegalNoticeComponent legalNoticeComponent) {
 
         setAlignItems(Alignment.CENTER);
         H1 title = new H1(PAGE_TITLE);

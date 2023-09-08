@@ -5,8 +5,8 @@ import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.feedback.FeedbackView;
+import ch.fortylove.presentation.views.legalnotice.LegalNoticeLoggedInView;
 import ch.fortylove.presentation.views.management.ManagementView;
-import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.usermenu.SettingsView;
 import ch.fortylove.presentation.views.usermenu.UserProfileView;
 import ch.fortylove.security.AuthenticationService;
@@ -169,7 +169,7 @@ public class MainLayout extends AppLayout {
     private Footer createFooter() {
         final SideNav footerNavigation = new SideNav();
         footerNavigation.addItem(new SideNavItem(FeedbackView.PAGE_TITLE, FeedbackView.class));
-        footerNavigation.addItem(new SideNavItem(LegalNoticeView.PAGE_TITLE, LegalNoticeView.class));
+        footerNavigation.addItem(new SideNavItem(LegalNoticeLoggedInView.PAGE_TITLE, LegalNoticeLoggedInView.class));
 
         final Footer layout = new Footer();
         layout.add(footerNavigation);
