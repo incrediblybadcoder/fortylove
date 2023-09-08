@@ -1,7 +1,8 @@
 package ch.fortylove.service;
 
+import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
 import ch.fortylove.persistence.entity.PlayerStatus;
-import ch.fortylove.persistence.entity.PlayerStatusType;
+import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.persistence.repository.PlayerStatusRepository;
 import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
@@ -16,6 +17,10 @@ import java.util.UUID;
 @Transactional
 public class PlayerStatusService {
 
+    @Nonnull private static final String DEFAULT_PLAYER_STATUS_GUEST = PlayerStatusSetupData.GUEST;
+    @Nonnull private static final String DEFAULT_PLAYER_STATUS_MEMBER = PlayerStatusSetupData.ACTIVE;
+    @Nonnull private static final String DEFAULT_PLAYER_STATUS_ADMIN = PlayerStatusSetupData.ACTIVE;
+
     @Nonnull private final PlayerStatusRepository playerStatusRepository;
 
     public PlayerStatusService(@Nonnull final PlayerStatusRepository playerStatusRepository) {
@@ -28,7 +33,10 @@ public class PlayerStatusService {
             return new DatabaseResult<>("Status existiert bereits: " + playerStatus.getIdentifier());
         }
 
-        removeOtherDefaults(playerStatus);
+        final String playerStatusName = playerStatus.getName();
+        if (findByName(playerStatusName).isPresent() && isProtectedName(playerStatusName)) {
+            return new DatabaseResult<>("Geschützter Spielerstatus: " + playerStatusName);
+        }
 
         return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
     }
@@ -40,28 +48,12 @@ public class PlayerStatusService {
             return new DatabaseResult<>("Status existiert nicht: " + playerStatus.getIdentifier());
         }
 
-        if (playerStatusToUpdate.get().isDefault() && !playerStatus.isDefault()) {
-            return new DatabaseResult<>(String.format("Es muss immer ein standard Status pro Typ (%s) geben.", playerStatus.getPlayerStatusType().getIdentifier()));
-        } else if (!playerStatusToUpdate.get().isDefault() && playerStatus.isDefault()) {
-            removeOtherDefaults(playerStatus);
+        final String playerStatusToUpdateName = playerStatusToUpdate.get().getName();
+        if (isProtectedName(playerStatusToUpdateName) && !playerStatusToUpdateName.equals(playerStatus.getName())) {
+            return new DatabaseResult<>("Geschützter Spielerstatus: " + playerStatusToUpdateName);
         }
 
         return new DatabaseResult<>(playerStatusRepository.save(playerStatus));
-    }
-
-    private void removeOtherDefaults(final @Nonnull PlayerStatus playerStatus) {
-        final List<PlayerStatus> allDefaultPlayerStatusOfType = playerStatusRepository.findAllByPlayerStatusTypeAndIsDefaultIsTrue(playerStatus.getPlayerStatusType());
-
-        // there can only be one default playerStatus per playerStatusType
-        if (allDefaultPlayerStatusOfType.size() > 1) {
-            throw new IllegalStateException(String.format("There can't be more than one default playerStatus (%s) per playerStatusType (%s)", playerStatus, playerStatus.getPlayerStatusType()));
-        }
-
-        if (allDefaultPlayerStatusOfType.size() < 1 && !playerStatus.isDefault()) {
-            playerStatus.setDefault(true);
-        } else if (allDefaultPlayerStatusOfType.size() == 1 && playerStatus.isDefault()) {
-            allDefaultPlayerStatusOfType.forEach(currentDefaultPlayerStatus -> currentDefaultPlayerStatus.setDefault(false));
-        }
     }
 
     @Nonnull
@@ -72,12 +64,15 @@ public class PlayerStatusService {
             return new DatabaseResult<>("Status existiert nicht: " + playerStatusToDeleteId);
         }
 
+        final PlayerStatus playerStatusToDelete = playerStatusToDeleteOptional.get();
+        if (isProtectedName(playerStatusToDelete.getName())) {
+            return new DatabaseResult<>("Geschützter Spielerstatus: " + playerStatusToDelete.getName());
+        }
+
         final Optional<PlayerStatus> replacementPlayerStatusOptional = playerStatusRepository.findById(replacementPlayerStatusId);
         if (replacementPlayerStatusOptional.isEmpty()) {
             return new DatabaseResult<>("Status existiert nicht: " + replacementPlayerStatusId);
         }
-
-        final PlayerStatus playerStatusToDelete = playerStatusToDeleteOptional.get();
 
         if (playerStatusRepository.findAll().size() == 1) {
             return new DatabaseResult<>("Letzter Status kann nicht gelöscht werden: " + playerStatusToDelete);
@@ -93,10 +88,6 @@ public class PlayerStatusService {
         playerStatusToDelete.getUsers().clear();
         playerStatusRepository.delete(playerStatusToDelete);
 
-        if (playerStatusToDelete.isDefault()) {
-            replacementPlayerStatus.setDefault(true);
-        }
-
         return new DatabaseResult<>(playerStatusToDeleteId);
     }
 
@@ -111,30 +102,30 @@ public class PlayerStatusService {
     }
 
     @Nonnull
-    public List<PlayerStatus> findAllByPlayerStatusType(@Nonnull final PlayerStatusType playerStatusType) {
-        return playerStatusRepository.findAllByPlayerStatusType(playerStatusType);
+    public PlayerStatus getDefaultGuestPlayerStatus() {
+        return getDefaultPlayerStatus(DEFAULT_PLAYER_STATUS_GUEST);
     }
 
     @Nonnull
-    public Optional<PlayerStatus> getDefaultPlayerStatusOfType(@Nonnull final PlayerStatusType playerStatusType) {
-        final List<PlayerStatus> allDefaultPlayerStatusOfType = playerStatusRepository.findAllByPlayerStatusTypeAndIsDefaultIsTrue(playerStatusType);
-
-        if (allDefaultPlayerStatusOfType.size() > 1) {
-            throw new IllegalStateException(String.format("There can't be more than one default playerStatus per playerStatusType (%s)", playerStatusType));
-        }
-
-        return allDefaultPlayerStatusOfType.size() == 1 ?
-                Optional.of(allDefaultPlayerStatusOfType.get(0)) :
-                Optional.empty();
-    }
-
-    @Nonnull
-    public PlayerStatus getDefaultNewUserPlayerStatus() {
-        return getDefaultPlayerStatusOfType(PlayerStatusType.GUEST).orElseThrow(() -> new IllegalStateException(String.format("No default playerStatus of playerStatusType (%s)", PlayerStatusType.GUEST)));
+    public PlayerStatus getDefaultMemberPlayerStatus() {
+        return getDefaultPlayerStatus(DEFAULT_PLAYER_STATUS_MEMBER);
     }
 
     @Nonnull
     public PlayerStatus getDefaultAdminPlayerStatus() {
-        return getDefaultPlayerStatusOfType(PlayerStatusType.MEMBER).orElseThrow(() -> new IllegalStateException(String.format("No default playerStatus of playerStatus per playerStatusType (%s)", PlayerStatusType.MEMBER)));
+        return getDefaultPlayerStatus(DEFAULT_PLAYER_STATUS_ADMIN);
+    }
+
+    @Nonnull
+    private PlayerStatus getDefaultPlayerStatus(@Nonnull final String name) {
+        final Optional<PlayerStatus> playerStatus = this.findByName(name);
+        if (playerStatus.isPresent()) {
+            return playerStatus.get();
+        }
+        throw new RecordNotFoundException("PlayerStatus " + name + " not found");
+    }
+
+    public boolean isProtectedName(@Nonnull final String name) {
+        return PlayerStatusSetupData.getProtectedNames().contains(name);
     }
 }

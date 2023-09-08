@@ -4,7 +4,6 @@ import ch.fortylove.SpringTest;
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.BookingSettings;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.PlayerStatusType;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.service.util.DatabaseResult;
@@ -77,7 +76,7 @@ class TestBookingService extends ServiceTest {
 
     @Test
     public void testFindAllByCourtId_exists() {
-        owner.setPlayerStatus(getTestDataFactory().getPlayerStatusDataFactory().createPlayerStatus("test_playerStatus", PlayerStatusType.MEMBER, true, 1, 2));
+        owner.setPlayerStatus(getTestDataFactory().getPlayerStatusDataFactory().createPlayerStatus("test_playerStatus", 1, 2));
         final Court court1 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Court court2 = getTestDataFactory().getCourtDataFactory().createCourt();
         final Iterator<Timeslot> timeslotIterator = getTimeslotIterator();

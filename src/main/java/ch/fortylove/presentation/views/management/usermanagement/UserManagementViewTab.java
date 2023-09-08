@@ -106,8 +106,12 @@ public class UserManagementViewTab extends ManagementViewTab {
                 .setHeader("Email")
                 .setSortable(true);
 
-        final Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getName())
-                .setHeader("Status")
+        final Grid.Column<User> userStatusColumn = grid.addColumn(user -> user.getUserStatus().getIdentifier())
+                .setHeader("Benutzerstatus")
+                .setSortable(true);
+
+        final Grid.Column<User> playerStatusColumn = grid.addColumn(user -> user.getPlayerStatus().getIdentifier())
+                .setHeader("Spielerstatus")
                 .setSortable(true);
 
         final Grid.Column<User> roleColumn = grid.addColumn(user -> user.getRoles().stream()
@@ -117,8 +121,8 @@ public class UserManagementViewTab extends ManagementViewTab {
                 .setHeader("Rollen")
                 .setSortable(true);
 
-        createGridHeader(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
-        createGridFooter(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
+        createGridHeader(lastNameColumn, firstNameColumn, emailColumn, userStatusColumn, playerStatusColumn, roleColumn);
+        createGridFooter(lastNameColumn, firstNameColumn, emailColumn, userStatusColumn, playerStatusColumn, roleColumn);
 
         grid.asSingleSelect().addValueChangeListener(evt -> editUser(evt.getValue()));
     }
@@ -126,6 +130,7 @@ public class UserManagementViewTab extends ManagementViewTab {
     private void createGridHeader(@Nonnull final Grid.Column<User> lastNameColumn,
                                   @Nonnull final Grid.Column<User> firstNameColumn,
                                   @Nonnull final Grid.Column<User> emailColumn,
+                                  @Nonnull final Grid.Column<User> userStatusColumn,
                                   @Nonnull final Grid.Column<User> playerStatusColumn,
                                   @Nonnull final Grid.Column<User> roleColumn) {
         userFilter = new UserFilter();
@@ -133,6 +138,7 @@ public class UserManagementViewTab extends ManagementViewTab {
         headerRow.getCell(lastNameColumn).setComponent(createFilterHeader(userFilter::setLastName));
         headerRow.getCell(firstNameColumn).setComponent(createFilterHeader(userFilter::setFirstName));
         headerRow.getCell(emailColumn).setComponent(createFilterHeader(userFilter::setEmail));
+        headerRow.getCell(userStatusColumn).setComponent(createFilterHeader(userFilter::setUserStatus));
         headerRow.getCell(playerStatusColumn).setComponent(createFilterHeader(userFilter::setPlayerStatus));
         headerRow.getCell(roleColumn).setComponent(createFilterHeader(userFilter::setRoles));
     }
@@ -152,11 +158,12 @@ public class UserManagementViewTab extends ManagementViewTab {
     private void createGridFooter(@Nonnull final Grid.Column<User> lastNameColumn,
                                   @Nonnull final Grid.Column<User> firstNameColumn,
                                   @Nonnull final Grid.Column<User> emailColumn,
+                                  @Nonnull final Grid.Column<User> userStatusColumn,
                                   @Nonnull final Grid.Column<User> playerStatusColumn,
                                   @Nonnull final Grid.Column<User> roleColumn) {
         grid.appendFooterRow();
         final FooterRow footerRow = grid.appendFooterRow();
-        final FooterRow.FooterCell footerCell = footerRow.join(lastNameColumn, firstNameColumn, emailColumn, playerStatusColumn, roleColumn);
+        final FooterRow.FooterCell footerCell = footerRow.join(lastNameColumn, firstNameColumn, emailColumn, userStatusColumn, playerStatusColumn, roleColumn);
 
         final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE),click -> addUser());
         addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

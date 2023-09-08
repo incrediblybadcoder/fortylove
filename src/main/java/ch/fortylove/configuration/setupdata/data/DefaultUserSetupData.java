@@ -14,6 +14,7 @@ import java.util.Optional;
 public class DefaultUserSetupData {
 
     public static final String DEVELOP_USER = "fortylove.untervaz@gmail.com";
+
     @Nonnull private final UserService userService;
     @Nonnull private final UserFactory userFactory;
 

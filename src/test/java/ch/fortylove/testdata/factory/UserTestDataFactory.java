@@ -4,6 +4,7 @@ import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.service.UserService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -35,7 +36,7 @@ public class UserTestDataFactory {
         final Set<Role> roles = Set.of(roleTestDataFactory.getDefault());
         final PlayerStatus playerStatus = playerStatusTestDataFactory.getDefault();
         final AuthenticationDetails authenticationDetails = new AuthenticationDetails("password", "activationCode");
-        return userService.create(new User("firstName", "lastName", email, authenticationDetails, true, roles, playerStatus)).getData().get();
+        return userService.create(new User("firstName", "lastName", email, authenticationDetails, UserStatus.MEMBER, true, roles, playerStatus)).getData().get();
     }
 
     @Nonnull

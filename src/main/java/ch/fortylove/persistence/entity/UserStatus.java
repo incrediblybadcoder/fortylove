@@ -2,15 +2,16 @@ package ch.fortylove.persistence.entity;
 
 import jakarta.annotation.Nonnull;
 
-public enum PlayerStatusType implements HasIdentifier{
-    MEMBER("member", "Mitglied"),
-    GUEST("guest", "Gast");
+public enum UserStatus implements HasIdentifier {
+    GUEST("guest", "Gast"),
+    GUEST_PENDING("guestpending", "Gast, angefragt"),
+    MEMBER("member", "Mitglied");
 
     @Nonnull private final String code;
     @Nonnull private final String name;
 
-    PlayerStatusType(@Nonnull final String code,
-                     @Nonnull final String name) {
+    UserStatus(@Nonnull final String code,
+               @Nonnull final String name) {
         this.code = code;
         this.name = name;
     }

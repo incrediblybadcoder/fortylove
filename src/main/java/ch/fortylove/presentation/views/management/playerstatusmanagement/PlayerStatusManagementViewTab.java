@@ -1,18 +1,20 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.presentation.components.BadgeFactory;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -33,15 +35,18 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PlayerStatusForm playerStatusForm;
     @Nonnull private final NotificationUtil notificationUtil;
+    @Nonnull private final BadgeFactory badgeFactory;
 
     private Grid<PlayerStatus> grid;
 
     public PlayerStatusManagementViewTab(@Nonnull final PlayerStatusService playerStatusService,
                                          @Nonnull final PlayerStatusForm playerStatusForm,
-                                         @Nonnull final NotificationUtil notificationUtil) {
+                                         @Nonnull final NotificationUtil notificationUtil,
+                                         @Nonnull final BadgeFactory badgeFactory) {
         this.playerStatusService = playerStatusService;
         this.playerStatusForm = playerStatusForm;
         this.notificationUtil = notificationUtil;
+        this.badgeFactory = badgeFactory;
 
         constructUI();
     }
@@ -77,21 +82,16 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
-        final Grid.Column<PlayerStatus> nameColumn = grid.addColumn(PlayerStatus::getName)
-                .setHeader("Name")
-                .setSortable(true);
-
-        final Grid.Column<PlayerStatus> playerStatusTypeColumn = grid.addColumn(playerStatus -> playerStatus.getPlayerStatusType().getName())
-                .setHeader("Typ")
-                .setSortable(true);
-
-        final Grid.Column<PlayerStatus> isDefaultColumn = grid.addColumn(new ComponentRenderer<>(playerStatus -> {
-                    final Checkbox checkbox = new Checkbox();
-                    checkbox.setEnabled(false);
-                    checkbox.setValue(playerStatus.isDefault());
-                    return checkbox;
+        final Grid.Column<PlayerStatus> nameColumn = grid.addColumn(new ComponentRenderer<>(playerStatus -> {
+                    if (playerStatusService.isProtectedName(playerStatus.getName())) {
+                        final Component lockBadge = badgeFactory.createPrimary(VaadinIcon.LOCK);
+                        final HorizontalLayout horizontalLayout = new HorizontalLayout(lockBadge, new Span(playerStatus.getName()));
+                        horizontalLayout.setSpacing(true);
+                        return horizontalLayout;
+                    }
+                    return new Span(playerStatus.getName());
                 }))
-                .setHeader("Standard")
+                .setHeader("Name")
                 .setSortable(true);
 
         final Grid.Column<PlayerStatus> bookingsPerDayColumn = grid.addColumn(PlayerStatus::getBookingsPerDay)
@@ -102,19 +102,17 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
                 .setHeader("Buchbare Tage in die Zukunft")
                 .setSortable(true);
 
-        createGridFooter(nameColumn, playerStatusTypeColumn, isDefaultColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
+        createGridFooter(nameColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
 
         grid.asSingleSelect().addValueChangeListener(event -> editPlayerStatus(event.getValue()));
     }
 
     private void createGridFooter(@Nonnull final Grid.Column<PlayerStatus> nameColumn,
-                                  @Nonnull final Grid.Column<PlayerStatus> playerStatusTypeColumn,
-                                  @Nonnull final Grid.Column<PlayerStatus> isDefaultColumn,
                                   @Nonnull final Grid.Column<PlayerStatus> bookingsPerDayColumn,
                                   @Nonnull final Grid.Column<PlayerStatus> bookableDaysInAdvanceColumn) {
         grid.appendFooterRow();
         final FooterRow footerRow = grid.appendFooterRow();
-        final FooterRow.FooterCell footerCell = footerRow.join(nameColumn, playerStatusTypeColumn, isDefaultColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
+        final FooterRow.FooterCell footerCell = footerRow.join(nameColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
 
         final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE), click -> addPlayerStatus());
         addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

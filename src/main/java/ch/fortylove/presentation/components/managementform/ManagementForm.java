@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.components.managementform;
 
+import ch.fortylove.presentation.components.BadgeFactory;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
@@ -19,10 +20,13 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
 @UIScope
 public abstract class ManagementForm<T> extends FormLayout {
+
+    @Autowired private BadgeFactory badgeFactory;
 
     private Binder<T> binder;
 
@@ -37,6 +41,7 @@ public abstract class ManagementForm<T> extends FormLayout {
     protected T currentItem;
 
     public ManagementForm() {
+
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
 
         constructUI();
@@ -208,5 +213,10 @@ public abstract class ManagementForm<T> extends FormLayout {
     public void addDeleteEventListener(@Nonnull final ComponentEventListener<ManagementFormDeleteEvent<T>> listener) {
         //noinspection unchecked,rawtypes
         addListener(ManagementFormDeleteEvent.class, (ComponentEventListener) listener);
+    }
+
+    @Nonnull
+    protected BadgeFactory getBadgeFactory() {
+        return badgeFactory;
     }
 }

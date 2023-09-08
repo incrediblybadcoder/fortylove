@@ -2,6 +2,7 @@ package ch.fortylove.persistence.entity.factory;
 
 import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -54,7 +55,7 @@ public class UserFactory {
                                @Nonnull final String email,
                                @Nonnull final String plainPassword) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, false, roleService.getDefaultUserRoles(), playerStatusService.getDefaultNewUserPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.GUEST, false, roleService.getDefaultUserRoles(), playerStatusService.getDefaultMemberPlayerStatus());
     }
 
     @Nonnull
@@ -63,7 +64,7 @@ public class UserFactory {
                                 @Nonnull final String email,
                                 @Nonnull final String plainPassword) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull
@@ -72,7 +73,7 @@ public class UserFactory {
                                 @Nonnull final String email,
                                 @Nonnull final String encryptedPassword) {
         final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword, "");
-        return new User(firstName, lastName, email, authenticationDetails, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull
