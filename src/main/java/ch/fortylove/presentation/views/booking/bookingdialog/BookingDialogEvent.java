@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.dialog;
+package ch.fortylove.presentation.views.booking.bookingdialog;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;

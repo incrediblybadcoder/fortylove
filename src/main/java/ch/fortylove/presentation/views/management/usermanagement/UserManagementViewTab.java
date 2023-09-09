@@ -7,6 +7,9 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
+import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.AcceptAdmissionRequestDialogEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.AdmissionRequestDialog;
+import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.RejectAdmissionRequestDialogEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
@@ -80,7 +83,8 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     private void configureDialog() {
-        admissionRequestDialog.addAdmissionRequestDialogListener(this::handleAdmissionRequestDialogEvent);
+        admissionRequestDialog.addAcceptAdmissionRequestDialogListener(this::acceptAdmissionRequestDialogEvent);
+        admissionRequestDialog.addRejectAdmissionRequestDialogListener(this::rejectAdmissionRequestDialogEvent);
     }
 
     @Override
@@ -239,26 +243,26 @@ public class UserManagementViewTab extends ManagementViewTab {
         refresh();
     }
 
-    private void handleAdmissionRequestDialogEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
-        switch (admissionRequestDialogEvent.getType()) {
-            case ACCEPT -> acceptAdmissionEvent(admissionRequestDialogEvent);
-            case REJECT -> rejectAdmissionEvent(admissionRequestDialogEvent);
-        }
-    }
-
-    private void acceptAdmissionEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
-        final User user = admissionRequestDialogEvent.getUser();
+    private void acceptAdmissionRequestDialogEvent(@Nonnull final AcceptAdmissionRequestDialogEvent acceptAdmissionRequestDialogEvent) {
+        final User user = acceptAdmissionRequestDialogEvent.getUser();
         user.setUserStatus(UserStatus.MEMBER);
+        user.setPlayerStatus(acceptAdmissionRequestDialogEvent.getPlayerStatus());
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
         refresh();
+
+        //todo nachricht an neues member?
+        acceptAdmissionRequestDialogEvent.getMessage();
     }
 
-    private void rejectAdmissionEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
-        final User user = admissionRequestDialogEvent.getUser();
+    private void rejectAdmissionRequestDialogEvent(@Nonnull final RejectAdmissionRequestDialogEvent rejectAdmissionRequestDialogEvent) {
+        final User user = rejectAdmissionRequestDialogEvent.getUser();
         user.setUserStatus(UserStatus.GUEST);
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
         refresh();
+
+        //todo nachricht an neues member?
+        rejectAdmissionRequestDialogEvent.getMessage();
     }
 }

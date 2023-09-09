@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.dialog;
+package ch.fortylove.presentation.views.booking.bookingdialog;
 
 import ch.fortylove.configuration.setupdata.StaticConfiguration;
 import ch.fortylove.persistence.entity.Booking;
@@ -6,6 +6,7 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
+import ch.fortylove.service.UserService;
 import ch.fortylove.util.FormatUtil;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -29,6 +31,8 @@ import java.util.Set;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BookingDialog extends CancelableDialog {
+
+    @Nonnull private final UserService userService;
 
     @Nonnull private final MultiSelectComboBox<User> opponentComboBox = new MultiSelectComboBox<>("Gegenspieler");
     @Nonnull private final Button newButton = new Button("Speichern");
@@ -47,7 +51,9 @@ public class BookingDialog extends CancelableDialog {
 
     private Booking existingBooking;
 
-    public BookingDialog() {
+    @Autowired
+    public BookingDialog(@Nonnull final UserService userService) {
+        this.userService = userService;
         constructUI();
     }
 
@@ -155,11 +161,10 @@ public class BookingDialog extends CancelableDialog {
     public void openFree(@Nonnull final Court court,
                          @Nonnull final Timeslot timeslot,
                          @Nonnull final LocalDate date,
-                         @Nonnull final User owner,
-                         @Nonnull final List<User> possibleOpponents) {
+                         @Nonnull final User owner) {
         setHeaderTitle("Buchen");
         addButtons(newButton);
-        setValues(court, timeslot, date, owner, possibleOpponents);
+        setValues(court, timeslot, date, owner);
         open();
     }
 
@@ -167,7 +172,6 @@ public class BookingDialog extends CancelableDialog {
                              @Nonnull final Timeslot timeslot,
                              @Nonnull final LocalDate date,
                              @Nonnull final User owner,
-                             @Nonnull final List<User> possibleOpponents,
                              @Nonnull final Set<User> opponents,
                              @Nonnull final Booking existingBooking) {
         this.existingBooking = existingBooking;
@@ -175,7 +179,7 @@ public class BookingDialog extends CancelableDialog {
         final String title = "Bearbeiten";
         setHeaderTitle(title);
         addButtons(deleteButton, modifyButton);
-        setValues(court, timeslot, date, owner, possibleOpponents);
+        setValues(court, timeslot, date, owner);
         opponentComboBox.setValue(opponents);
         open();
     }
@@ -183,12 +187,13 @@ public class BookingDialog extends CancelableDialog {
     private void setValues(@Nonnull final Court court,
                            @Nonnull final Timeslot timeslot,
                            @Nonnull final LocalDate date,
-                           @Nonnull final User owner,
-                           @Nonnull final List<User> possibleOpponents) {
+                           @Nonnull final User owner) {
         currentCourt = court;
         currentTimeslot = timeslot;
         currentDate = date;
         currentOwner = owner;
+
+        final List<User> possibleOpponents = userService.getPossibleBookingOpponents(owner);
 
         courtField.setValue(court.getIdentifier());
         dateField.setValue(timeslot.getTimeIntervalText() + " / " + date.format(FormatUtil.getDateTextFormatter()));
