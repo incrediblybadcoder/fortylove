@@ -44,9 +44,9 @@ class TestBookingService extends ServiceTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.when(dateTimeUtil.getLocalDate()).thenReturn(DATE);
-        Mockito.when(dateTimeUtil.getLocalTime()).thenReturn(TIME);
-        Mockito.when(dateTimeUtil.getLocalDateTime()).thenReturn(LocalDateTime.of(DATE, TIME));
+        Mockito.when(dateTimeUtil.today()).thenReturn(DATE);
+        Mockito.when(dateTimeUtil.now()).thenReturn(TIME);
+        Mockito.when(dateTimeUtil.todayNow()).thenReturn(LocalDateTime.of(DATE, TIME));
 
         court = getTestDataFactory().getCourtDataFactory().getDefault();
         owner = getTestDataFactory().getUserDataFactory().createUser("owner@fortylove.ch");

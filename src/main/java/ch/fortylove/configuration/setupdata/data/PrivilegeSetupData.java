@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @SetupData
-public class PrivilegeSetupData {
+public class PrivilegeSetupData implements ch.fortylove.configuration.setupdata.data.SetupData {
 
     @Nonnull public final static String MANAGEMENT_USER_CREATE = "MANAGEMENT_USER_CREATE";
     @Nonnull public final static String MANAGEMENT_USER_DELETE = "MANAGEMENT_USER_DELETE";
@@ -27,7 +27,8 @@ public class PrivilegeSetupData {
         this.privilegeService = privilegeService;
     }
 
-    public void createPrivileges() {
+    @Override
+    public void createData() {
         createPrivilegeIfNotFound(MANAGEMENT_USER_CREATE);
         createPrivilegeIfNotFound(MANAGEMENT_USER_DELETE);
         createPrivilegeIfNotFound(MANAGEMENT_USER_MODIFY);
@@ -38,7 +39,7 @@ public class PrivilegeSetupData {
     }
 
     @Transactional
-    void createPrivilegeIfNotFound(@Nonnull final String name) {
+    private void createPrivilegeIfNotFound(@Nonnull final String name) {
         final Optional<Privilege> privilege = privilegeService.findByName(name);
         if (privilege.isEmpty()) {
             privilegeService.create(new Privilege(name));
