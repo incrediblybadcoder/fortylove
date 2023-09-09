@@ -74,7 +74,7 @@ public class CourtService {
         final Session session = entityManager.unwrap(Session.class);
         final Filter filter = session.enableFilter("bookingDateFilter");
         filter.setParameter("date", date);
-        final List<Court> courts = courtRepository.findAll();
+        final List<Court> courts = findAll();
         session.disableFilter("bookingDateFilter");
 
         return courts;
@@ -82,6 +82,6 @@ public class CourtService {
 
     @Nonnull
     public List<Court> findAll() {
-        return courtRepository.findAll();
+        return courtRepository.findByOrderByNumberAsc();
     }
 }
