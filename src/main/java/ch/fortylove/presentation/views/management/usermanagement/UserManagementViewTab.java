@@ -7,9 +7,9 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
-import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.AcceptAdmissionRequestDialogEvent;
-import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.AdmissionRequestDialog;
-import ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog.RejectAdmissionRequestDialogEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.AcceptAdmissionDialogEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.AdmissionDialog;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.RejectAdmissionDialogEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
@@ -49,7 +49,7 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
-    @Nonnull private final AdmissionRequestDialog admissionRequestDialog;
+    @Nonnull private final AdmissionDialog admissionDialog;
 
     @Nonnull private final UserForm userForm;
 
@@ -59,11 +59,11 @@ public class UserManagementViewTab extends ManagementViewTab {
     @Autowired
     public UserManagementViewTab(@Nonnull final UserService userService,
                                  @Nonnull final NotificationUtil notificationUtil,
-                                 @Nonnull final AdmissionRequestDialog admissionRequestDialog,
+                                 @Nonnull final AdmissionDialog admissionDialog,
                                  @Nonnull final UserForm userForm) {
         super(VaadinIcon.USERS.create(), "Benutzer");
         this.notificationUtil = notificationUtil;
-        this.admissionRequestDialog = admissionRequestDialog;
+        this.admissionDialog = admissionDialog;
         this.userForm = userForm;
         this.userService = userService;
 
@@ -83,8 +83,8 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     private void configureDialog() {
-        admissionRequestDialog.addAcceptAdmissionRequestDialogListener(this::acceptAdmissionRequestDialogEvent);
-        admissionRequestDialog.addRejectAdmissionRequestDialogListener(this::rejectAdmissionRequestDialogEvent);
+        admissionDialog.addAcceptAdmissionDialogListener(this::acceptAdmissionDialogEvent);
+        admissionDialog.addRejectAdmissionDialogListener(this::rejectAdmissionDialogEvent);
     }
 
     @Override
@@ -128,11 +128,11 @@ public class UserManagementViewTab extends ManagementViewTab {
                     final String displayName = isGuestPendingStatus ? UserStatus.GUEST.getIdentifier() : userStatus.getIdentifier();
 
                     if (isGuestPendingStatus) {
-                        final Button pendingButton = new Button("Anfrage");
-                        pendingButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
-                        pendingButton.addClickListener(handlePendingGuestRequest(user));
+                        final Button admissionButton = new Button("Anfrage");
+                        admissionButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
+                        admissionButton.addClickListener(handleAdmission(user));
 
-                        final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(displayName), pendingButton);
+                        final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(displayName), admissionButton);
                         userStatusLayout.setAlignItems(Alignment.CENTER);
                         return userStatusLayout;
                     }
@@ -159,10 +159,10 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     @Nonnull
-    private ComponentEventListener<ClickEvent<Button>> handlePendingGuestRequest(@Nonnull final User user) {
+    private ComponentEventListener<ClickEvent<Button>> handleAdmission(@Nonnull final User user) {
         return event -> {
             userForm.closeForm();
-            admissionRequestDialog.open(user);
+            admissionDialog.open(user);
         };
     }
 
@@ -246,17 +246,17 @@ public class UserManagementViewTab extends ManagementViewTab {
         refresh();
     }
 
-    private void acceptAdmissionRequestDialogEvent(@Nonnull final AcceptAdmissionRequestDialogEvent acceptAdmissionRequestDialogEvent) {
-        final User user = acceptAdmissionRequestDialogEvent.getUser();
+    private void acceptAdmissionDialogEvent(@Nonnull final AcceptAdmissionDialogEvent acceptAdmissionDialogEvent) {
+        final User user = acceptAdmissionDialogEvent.getUser();
         user.setUserStatus(UserStatus.MEMBER);
-        user.setPlayerStatus(acceptAdmissionRequestDialogEvent.getPlayerStatus());
+        user.setPlayerStatus(acceptAdmissionDialogEvent.getPlayerStatus());
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
         refresh();
     }
 
-    private void rejectAdmissionRequestDialogEvent(@Nonnull final RejectAdmissionRequestDialogEvent rejectAdmissionRequestDialogEvent) {
-        final User user = rejectAdmissionRequestDialogEvent.getUser();
+    private void rejectAdmissionDialogEvent(@Nonnull final RejectAdmissionDialogEvent rejectAdmissionDialogEvent) {
+        final User user = rejectAdmissionDialogEvent.getUser();
         user.setUserStatus(UserStatus.GUEST);
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
