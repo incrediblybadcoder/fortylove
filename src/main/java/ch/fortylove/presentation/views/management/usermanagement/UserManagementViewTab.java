@@ -50,11 +50,10 @@ public class UserManagementViewTab extends ManagementViewTab {
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final AdmissionDialog admissionDialog;
-
     @Nonnull private final UserForm userForm;
 
-    private Grid<User> grid;
-    private UserFilter userFilter;
+    @Nonnull private final Grid<User> grid = new Grid<>(User.class, false);
+    @Nonnull final private UserFilter userFilter = new UserFilter();
 
     @Autowired
     public UserManagementViewTab(@Nonnull final UserService userService,
@@ -106,7 +105,6 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     private void configureGrid() {
-        grid = new Grid<>(User.class, false);
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
@@ -172,7 +170,6 @@ public class UserManagementViewTab extends ManagementViewTab {
                                   @Nonnull final Grid.Column<User> userStatusColumn,
                                   @Nonnull final Grid.Column<User> playerStatusColumn,
                                   @Nonnull final Grid.Column<User> roleColumn) {
-        userFilter = new UserFilter();
         final HeaderRow headerRow = grid.appendHeaderRow();
         headerRow.getCell(lastNameColumn).setComponent(createFilterHeader(userFilter::setLastName));
         headerRow.getCell(firstNameColumn).setComponent(createFilterHeader(userFilter::setFirstName));
@@ -204,7 +201,7 @@ public class UserManagementViewTab extends ManagementViewTab {
         final FooterRow footerRow = grid.appendFooterRow();
         final FooterRow.FooterCell footerCell = footerRow.join(lastNameColumn, firstNameColumn, emailColumn, userStatusColumn, playerStatusColumn, roleColumn);
 
-        final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE),click -> addUser());
+        final Button addButton = new Button("Erstellen", new Icon(VaadinIcon.PLUS_CIRCLE), click -> addUser());
         addButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         final HorizontalLayout horizontalLayout = new HorizontalLayout(addButton);
@@ -227,7 +224,7 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
-        final DatabaseResult<User> userDatabaseResult = userService.create(user, true);
+        final DatabaseResult<User> userDatabaseResult = userService.create(user, false);
         notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }
@@ -248,18 +245,15 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     private void acceptAdmissionDialogEvent(@Nonnull final AcceptAdmissionDialogEvent acceptAdmissionDialogEvent) {
         final User user = acceptAdmissionDialogEvent.getUser();
-        user.setUserStatus(UserStatus.MEMBER);
-        user.setPlayerStatus(acceptAdmissionDialogEvent.getPlayerStatus());
-        final DatabaseResult<User> updateResult = userService.update(user);
-        notificationUtil.databaseNotification(updateResult);
+        final DatabaseResult<User> result = userService.changeUserStatusToMember(user, acceptAdmissionDialogEvent.getPlayerStatus());
+        notificationUtil.databaseNotification(result);
         refresh();
     }
 
     private void rejectAdmissionDialogEvent(@Nonnull final RejectAdmissionDialogEvent rejectAdmissionDialogEvent) {
         final User user = rejectAdmissionDialogEvent.getUser();
-        user.setUserStatus(UserStatus.GUEST);
-        final DatabaseResult<User> updateResult = userService.update(user);
-        notificationUtil.databaseNotification(updateResult);
+        final DatabaseResult<User> result = userService.changeUserStatusToGuest(user);
+        notificationUtil.databaseNotification(result);
         refresh();
     }
 }

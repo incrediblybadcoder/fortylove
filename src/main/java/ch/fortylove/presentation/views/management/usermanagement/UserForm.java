@@ -160,7 +160,7 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected User getNewItem() {
-        return userFactory.newGuestUser();
+        return userFactory.newEmptyGuestUser(true);
     }
 
     @Nonnull

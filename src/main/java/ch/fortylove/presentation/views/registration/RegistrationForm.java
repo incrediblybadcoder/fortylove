@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Scope;
 public class RegistrationForm extends FormLayout {
 
     @Nonnull final private Binder<User> binder;
+    @Nonnull private final User user;
 
     private H2 title;
     private TextField firstName;
@@ -41,7 +42,6 @@ public class RegistrationForm extends FormLayout {
     private PasswordField confirmPlainPassword;
     private Button register;
     private Button cancel;
-    private final User user;
     private String confirmPlainPasswordInput;
     private String plainPasswordInput;
 
@@ -50,7 +50,7 @@ public class RegistrationForm extends FormLayout {
         binder = new Binder<>(User.class);
         binder.bindInstanceFields(this);
 
-        user = userFactory.newGuestUser();
+        user = userFactory.newEmptyGuestUser(false);
         binder.setBean(user);
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 
