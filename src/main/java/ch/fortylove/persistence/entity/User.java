@@ -203,6 +203,7 @@ public class User extends AbstractEntity implements HasIdentifier {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
+                ", userStatus=" + userStatus +
                 ", playerStatus=" + playerStatus +
                 '}';
     }
