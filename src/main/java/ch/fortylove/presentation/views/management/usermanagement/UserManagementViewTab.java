@@ -253,9 +253,6 @@ public class UserManagementViewTab extends ManagementViewTab {
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
         refresh();
-
-        //todo nachricht an neues member?
-        acceptAdmissionRequestDialogEvent.getMessage();
     }
 
     private void rejectAdmissionRequestDialogEvent(@Nonnull final RejectAdmissionRequestDialogEvent rejectAdmissionRequestDialogEvent) {
@@ -264,8 +261,5 @@ public class UserManagementViewTab extends ManagementViewTab {
         final DatabaseResult<User> updateResult = userService.update(user);
         notificationUtil.databaseNotification(updateResult);
         refresh();
-
-        //todo nachricht an neues member?
-        rejectAdmissionRequestDialogEvent.getMessage();
     }
 }
