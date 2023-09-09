@@ -3,6 +3,7 @@ package ch.fortylove.presentation.views.management.usermanagement;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
@@ -26,6 +27,8 @@ import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @SpringComponent
 @UIScope
 public class UserForm extends ManagementForm<User> {
@@ -39,6 +42,7 @@ public class UserForm extends ManagementForm<User> {
     private TextField lastNameField;
     private TextField emailField;
     private PasswordField passwordField;
+    private Select<UserStatus> userStatusSelection;
     private Select<PlayerStatus> playerStatusSelection;
     private MultiSelectComboBox<Role> roleMultiSelectComboBox;
 
@@ -59,6 +63,7 @@ public class UserForm extends ManagementForm<User> {
         lastNameField = InputFieldFactory.createTextField("Nachname");
         emailField = InputFieldFactory.createTextField("Email");
         passwordField = InputFieldFactory.createPasswordField("Password");
+        userStatusSelection = new Select<>();
         playerStatusSelection = new Select<>();
         roleMultiSelectComboBox = new MultiSelectComboBox<>();
     }
@@ -83,7 +88,11 @@ public class UserForm extends ManagementForm<User> {
         binder.forField(passwordField)
                 .bind(user -> user.getAuthenticationDetails().getEncryptedPassword(), (user, value) -> user.getAuthenticationDetails().setEncryptedPassword(value));
 
-        binder.forField(playerStatusSelection).bind(User::getPlayerStatus, User::setPlayerStatus);
+        binder.forField(userStatusSelection)
+                .bind(User::getUserStatus, User::setUserStatus);
+
+        binder.forField(playerStatusSelection)
+                .bind(User::getPlayerStatus, User::setPlayerStatus);
 
         binder.forField(roleMultiSelectComboBox)
                 .withValidator(new SetNotEmptyValidator<>("Bitte wählen Sie mindestens eine Rolle aus"))
@@ -95,7 +104,7 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected VerticalLayout getContent() {
-        return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPasswordField(), getPlayerStatusSelection(), getRoleSelection());
+        return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPasswordField(), getUserStatusSelection(), getPlayerStatusSelection(), getRoleSelection());
     }
 
     @Nonnull
@@ -120,6 +129,14 @@ public class UserForm extends ManagementForm<User> {
     private PasswordField getPasswordField() {
         passwordField.setWidthFull();
         return passwordField;
+    }
+
+    @Nonnull
+    private Select<UserStatus> getUserStatusSelection() {
+        userStatusSelection.setWidthFull();
+        userStatusSelection.setLabel("Benutzerstatus");
+        userStatusSelection.setItemLabelGenerator(UserStatus::getName);
+        return userStatusSelection;
     }
 
     @Nonnull
@@ -165,8 +182,15 @@ public class UserForm extends ManagementForm<User> {
     }
 
     @Override
-    protected void beforeOpen(@Nonnull final OpenMode openMode) {
-        super.beforeOpen(openMode);
+    protected void beforeOpen(@Nonnull final OpenMode openMode,
+                              final User currentUser) {
+        super.beforeOpen(openMode, currentItem);
+
+        final List<UserStatus> manuallyManageableUserStatus = UserStatus.getManuallyManageableUserStatus();
+        final List<UserStatus> selectableUserStatus = manuallyManageableUserStatus.contains(currentUser.getUserStatus()) ?
+                manuallyManageableUserStatus :
+                List.of(UserStatus.values());
+        userStatusSelection.setItems(selectableUserStatus);
 
         playerStatusSelection.setItems(playerStatusService.findAll());
         roleMultiSelectComboBox.setItems(roleService.findAll());
@@ -174,8 +198,8 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void afterOpen(@Nonnull final OpenMode openMode,
-                             final User currentItem) {
-        super.afterOpen(openMode, currentItem);
+                             final User currentUser) {
+        super.afterOpen(openMode, currentUser);
 
         // on createMode show password field and clear it
         // on update/delete mode don't show password field to prevent changing of password

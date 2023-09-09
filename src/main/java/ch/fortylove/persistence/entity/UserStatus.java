@@ -2,9 +2,12 @@ package ch.fortylove.persistence.entity;
 
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
+
 public enum UserStatus implements HasIdentifier {
+
     GUEST("guest", "Gast"),
-    GUEST_PENDING("guestpending", "Gast"),
+    GUEST_PENDING("guestpending", "Gast (Anfrage)"),
     MEMBER("member", "Mitglied");
 
     @Nonnull private final String code;
@@ -26,10 +29,15 @@ public enum UserStatus implements HasIdentifier {
         return name;
     }
 
+    @Nonnull
+    public static List<UserStatus> getManuallyManageableUserStatus() {
+        return List.of(GUEST, MEMBER);
+    }
+
     @Override
+    @Nonnull
     public String toString() {
-        return "PlayerStatusType{" +
-                "code='" + code + '\'' +
+        return "UserStatus{" +
                 ", name='" + name + '\'' +
                 '}';
     }
