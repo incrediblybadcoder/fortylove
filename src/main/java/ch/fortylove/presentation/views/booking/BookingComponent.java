@@ -40,6 +40,7 @@ public class BookingComponent extends VerticalLayout {
     @Nonnull private final CourtService courtService;
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
+    @Nonnull private final BookingDialog bookingDialog;
 
     @Nonnull private final BookingGrid bookingGrid;
     @Nonnull private final DateSelection dateSelection;
@@ -52,6 +53,7 @@ public class BookingComponent extends VerticalLayout {
                             @Nonnull final CourtService courtService,
                             @Nonnull final UserService userService,
                             @Nonnull final NotificationUtil notificationUtil,
+                            @Nonnull final BookingDialog bookingDialog,
                             @Nonnull final BookingGrid bookingGrid,
                             @Nonnull final DateSelection dateSelectionComponent) {
         this.bookingService = bookingService;
@@ -59,6 +61,7 @@ public class BookingComponent extends VerticalLayout {
         this.courtService = courtService;
         this.userService = userService;
         this.notificationUtil = notificationUtil;
+        this.bookingDialog = bookingDialog;
         this.bookingGrid = bookingGrid;
         this.dateSelection = dateSelectionComponent;
 
@@ -83,6 +86,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void constructUI() {
+        bookingDialog.addDialogBookingListener(this::handleBookingDialogEvent);
         add(getEmptyCourtComponent());
         add(getBookingGridComponent());
         add(getDateSelectionComponent());
@@ -127,9 +131,7 @@ public class BookingComponent extends VerticalLayout {
             if (validationResult.isSuccessful()) {
                 final Booking booking = event.getBooking();
                 final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
-                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
-                bookingDialog.addDialogBookingListener(this::handleBookingDialogEvent);
-                bookingDialog.openExisting(booking.getOpponents(), booking);
+                bookingDialog.openExisting(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents, booking.getOpponents(), booking);
             }
         });
     }
@@ -137,9 +139,7 @@ public class BookingComponent extends VerticalLayout {
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
-            bookingDialog.addDialogBookingListener(this::handleBookingDialogEvent);
-            bookingDialog.openFree();
+            bookingDialog.openFree(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
         });
     }
 
