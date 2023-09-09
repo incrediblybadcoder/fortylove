@@ -26,7 +26,7 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     private Binder<T> binder;
 
-    private H3 title;
+    private H3 titleField;
 
     private Button save;
     private Button update;
@@ -47,21 +47,27 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     protected abstract void instantiateFields();
 
-    @Nonnull protected abstract Binder<T> getBinder();
+    @Nonnull
+    protected abstract Binder<T> getBinder();
 
-    @Nonnull protected abstract VerticalLayout getContent();
+    @Nonnull
+    protected abstract VerticalLayout getContent();
 
-    @Nonnull protected abstract T getNewItem();
+    @Nonnull
+    protected abstract T getNewItem();
 
-    @Nonnull protected abstract String getItemIdentifier(@Nonnull final T item);
+    @Nonnull
+    protected abstract String getItemIdentifier(@Nonnull final T item);
 
-    @Nonnull protected abstract String getItemName();
+    @Nonnull
+    protected abstract String getItemName();
 
-    @Nonnull protected abstract Focusable<? extends Component> getFocusOnOpen();
+    @Nonnull
+    protected abstract Focusable<? extends Component> getFocusOnOpen();
 
     private void constructUI() {
         initializeBinder();
-        add(getTitle(), getContent(), getButtons());
+        add(getTitleField(), getContent(), getButtons());
     }
 
     private void initializeBinder() {
@@ -84,9 +90,9 @@ public abstract class ManagementForm<T> extends FormLayout {
     }
 
     @Nonnull
-    private Component getTitle() {
-        title = new H3();
-        return new VerticalLayout(title);
+    private Component getTitleField() {
+        titleField = new H3();
+        return new VerticalLayout(titleField);
     }
 
     @Nonnull
@@ -158,10 +164,11 @@ public abstract class ManagementForm<T> extends FormLayout {
                       @Nonnull final Button... buttons) {
 
         this.openMode = openMode;
-        beforeOpen(openMode);
-
-        this.title.setText(title);
         currentItem = item;
+
+        beforeOpen(openMode, currentItem);
+
+        titleField.setText(title);
         binder.readBean(currentItem);
         addButtons(buttons);
         updateButtonState(checkChanges);
@@ -177,7 +184,8 @@ public abstract class ManagementForm<T> extends FormLayout {
      * Can be used to do additional steps before loading the selected item.
      * For example filling comboboxes or radiogroups with selection items.
      */
-    protected void beforeOpen(@Nonnull final OpenMode openMode) {
+    protected void beforeOpen(@Nonnull final OpenMode openMode,
+                              final T currentItem) {
     }
 
     /**

@@ -124,16 +124,19 @@ public class UserManagementViewTab extends ManagementViewTab {
 
         final Grid.Column<User> userStatusColumn = grid.addColumn(new ComponentRenderer<>(user -> {
                     final UserStatus userStatus = user.getUserStatus();
-                    if (userStatus.equals(UserStatus.GUEST_PENDING)) {
+                    final boolean isGuestPendingStatus = userStatus.equals(UserStatus.GUEST_PENDING);
+                    final String displayName = isGuestPendingStatus ? UserStatus.GUEST.getIdentifier() : userStatus.getIdentifier();
+
+                    if (isGuestPendingStatus) {
                         final Button pendingButton = new Button("Anfrage");
                         pendingButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
                         pendingButton.addClickListener(handlePendingGuestRequest(user));
 
-                        final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(userStatus.getIdentifier()), pendingButton);
+                        final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(displayName), pendingButton);
                         userStatusLayout.setAlignItems(Alignment.CENTER);
                         return userStatusLayout;
                     }
-                    return new Span(userStatus.getIdentifier());
+                    return new Span(displayName);
                 }))
                 .setHeader("Benutzerstatus")
                 .setSortable(true);

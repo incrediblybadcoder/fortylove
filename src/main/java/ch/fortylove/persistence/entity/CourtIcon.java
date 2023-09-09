@@ -3,6 +3,7 @@ package ch.fortylove.persistence.entity;
 import jakarta.annotation.Nonnull;
 
 public enum CourtIcon {
+
     ORANGE("orange", "Orange", "icons/icon-court-orange.svg"),
     GREEN("green", "Grün", "icons/icon-court-green.svg"),
     BLUE("grey", "Blau", "icons/icon-court-blue.svg"),
@@ -37,8 +38,8 @@ public enum CourtIcon {
 
     @Override
     public String toString() {
-        return "CourtType{" +
-                "code='" + code + '\'' +
+        return "CourtIcon{" +
+                "name='" + name + '\'' +
                 '}';
     }
 }
