@@ -25,6 +25,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -194,11 +196,13 @@ public class BookingDialog extends CancelableDialog {
         currentOwner = owner;
 
         final List<User> possibleOpponents = userService.getPossibleBookingOpponents(owner);
+        final List<User> mutablePossibleOpponentsList = new ArrayList<>(possibleOpponents);
+        Collections.sort(mutablePossibleOpponentsList);
 
         courtField.setValue(court.getIdentifier());
         dateField.setValue(timeslot.getTimeIntervalText() + " / " + date.format(FormatUtil.getDateTextFormatter()));
         ownerField.setValue(owner.getFullName());
-        opponentComboBox.setItems(possibleOpponents);
+        opponentComboBox.setItems(mutablePossibleOpponentsList);
     }
 
     private void addButtons(@Nonnull final Button... buttons) {

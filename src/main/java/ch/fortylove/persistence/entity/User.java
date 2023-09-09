@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
-public class User extends AbstractEntity implements HasIdentifier {
+public class User extends AbstractEntity implements HasIdentifier, Comparable<User>{
 
     @NotBlank
     @Column(name = "first_name")
@@ -206,5 +206,10 @@ public class User extends AbstractEntity implements HasIdentifier {
                 ", userStatus=" + userStatus +
                 ", playerStatus=" + playerStatus +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@Nonnull final User otherUser) {
+        return this.lastName.compareTo(otherUser.getLastName());
     }
 }
