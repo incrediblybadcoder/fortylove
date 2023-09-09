@@ -44,6 +44,13 @@ public class RoleService {
     }
 
     @Nonnull
+    public Set<Role> getDefaultGuestRoles() {
+        @Nonnull final List<String> guestRoles = RoleSetupData.getGuestRoles();
+        final List<Role> rolesByNames = roleRepository.findRolesByNames(guestRoles);
+        return new HashSet<>(rolesByNames);
+    }
+
+    @Nonnull
     public Set<Role> getDefaultUserRoles() {
         @Nonnull final List<String> userRoles = RoleSetupData.getUserRoles();
         final List<Role> rolesByNames = roleRepository.findRolesByNames(userRoles);

@@ -40,6 +40,10 @@ public class User extends AbstractEntity implements HasIdentifier {
     @JoinColumn(name = "authenticationdetails_id")
     private AuthenticationDetails authenticationDetails;
 
+    @NotNull
+    @Column(name = "userstatus")
+    private UserStatus userStatus;
+
     @Column(name = "enabled")
     private boolean enabled;
 
@@ -66,6 +70,7 @@ public class User extends AbstractEntity implements HasIdentifier {
                 @Nonnull final String lastName,
                 @Nonnull final String email,
                 @Nonnull final AuthenticationDetails authenticationDetails,
+                @Nonnull final UserStatus userStatus,
                 final boolean enabled,
                 @Nonnull final Set<Role> roles,
                 @Nonnull final PlayerStatus playerStatus) {
@@ -74,6 +79,7 @@ public class User extends AbstractEntity implements HasIdentifier {
         this.lastName = lastName;
         this.email = email;
         this.authenticationDetails = authenticationDetails;
+        this.userStatus = userStatus;
         authenticationDetails.setUser(this);
         authenticationDetails.setActivationCode(UUID.randomUUID().toString());
         this.enabled = enabled;
@@ -97,6 +103,15 @@ public class User extends AbstractEntity implements HasIdentifier {
 
     public void setUserAuthenticationDetails(@Nonnull final AuthenticationDetails authenticationDetails) {
         this.authenticationDetails = authenticationDetails;
+    }
+
+    @Nonnull
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(@Nonnull final UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     @Nonnull
@@ -188,6 +203,7 @@ public class User extends AbstractEntity implements HasIdentifier {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
+                ", userStatus=" + userStatus +
                 ", playerStatus=" + playerStatus +
                 '}';
     }

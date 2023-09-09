@@ -2,7 +2,7 @@ package ch.fortylove.persistence.entity;
 
 import jakarta.annotation.Nonnull;
 
-public enum CourtType {
+public enum CourtType implements HasIdentifier {
     CLAY("clay", "Sand"),
     GRASS("grass", "Grass"),
     SYNTHETIC("synthetic", "Teppich"),
@@ -34,5 +34,11 @@ public enum CourtType {
                 "code='" + code + '\'' +
                 ", material='" + material + '\'' +
                 '}';
+    }
+
+    @Nonnull
+    @Override
+    public String getIdentifier() {
+        return material;
     }
 }

@@ -6,6 +6,7 @@ import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
+import ch.fortylove.presentation.components.managementform.OpenMode;
 import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
 import ch.fortylove.presentation.fieldvalidators.LastNameValidator;
 import ch.fortylove.presentation.fieldvalidators.SetNotEmptyValidator;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
@@ -22,6 +24,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
 @UIScope
@@ -30,29 +33,34 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final UserFactory userFactory;
+    @Nonnull private final PasswordEncoder passwordEncoder;
 
-    private TextField firstName;
-    private TextField lastName;
-    private TextField email;
-    private Select<PlayerStatus> playerStatus;
-    private MultiSelectComboBox<Role> roleCheckboxGroup;
+    private TextField firstNameField;
+    private TextField lastNameField;
+    private TextField emailField;
+    private PasswordField passwordField;
+    private Select<PlayerStatus> playerStatusSelection;
+    private MultiSelectComboBox<Role> roleMultiSelectComboBox;
 
     @Autowired
     public UserForm(@Nonnull final PlayerStatusService playerStatusService,
                     @Nonnull final RoleService roleService,
-                    @Nonnull final UserFactory userFactory) {
+                    @Nonnull final UserFactory userFactory,
+                    @Nonnull final PasswordEncoder passwordEncoder) {
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;
         this.userFactory = userFactory;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     protected void instantiateFields() {
-        firstName = InputFieldFactory.createTextField("Vorname");
-        lastName = InputFieldFactory.createTextField("Nachname");
-        email = InputFieldFactory.createTextField("Email");
-        playerStatus = new Select<>();
-        roleCheckboxGroup = new MultiSelectComboBox<>();
+        firstNameField = InputFieldFactory.createTextField("Vorname");
+        lastNameField = InputFieldFactory.createTextField("Nachname");
+        emailField = InputFieldFactory.createTextField("Email");
+        passwordField = InputFieldFactory.createPasswordField("Password");
+        playerStatusSelection = new Select<>();
+        roleMultiSelectComboBox = new MultiSelectComboBox<>();
     }
 
     @Nonnull
@@ -60,21 +68,24 @@ public class UserForm extends ManagementForm<User> {
     protected Binder<User> getBinder() {
         final Binder<User> binder = new Binder<>(User.class);
 
-        binder.forField(email)
-                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
-                .bind(User::getEmail, User::setEmail);
-
-        binder.forField(firstName)
+        binder.forField(firstNameField)
                 .withValidator(FirstNameValidator::validateFirstName)
                 .bind(User::getFirstName, User::setFirstName);
 
-        binder.forField(lastName)
+        binder.forField(lastNameField)
                 .withValidator(LastNameValidator::validateLastName)
                 .bind(User::getLastName, User::setLastName);
 
-        binder.forField(playerStatus).bind(User::getPlayerStatus, User::setPlayerStatus);
+        binder.forField(emailField)
+                .withValidator(new EmailValidator("Bitte geben Sie eine gültige Email-Adresse ein"))
+                .bind(User::getEmail, User::setEmail);
 
-        binder.forField(roleCheckboxGroup)
+        binder.forField(passwordField)
+                .bind(user -> user.getAuthenticationDetails().getEncryptedPassword(), (user, value) -> user.getAuthenticationDetails().setEncryptedPassword(value));
+
+        binder.forField(playerStatusSelection).bind(User::getPlayerStatus, User::setPlayerStatus);
+
+        binder.forField(roleMultiSelectComboBox)
                 .withValidator(new SetNotEmptyValidator<>("Bitte wählen Sie mindestens eine Rolle aus"))
                 .bind(User::getRoles, User::setRoles);
 
@@ -84,49 +95,55 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected VerticalLayout getContent() {
-        return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPlayerStatusSelection(), getRoleSelection());
+        return new VerticalLayout(getFirstNameField(), getLastNameField(), getEmailField(), getPasswordField(), getPlayerStatusSelection(), getRoleSelection());
     }
 
     @Nonnull
     private TextField getFirstNameField() {
-        firstName.setWidthFull();
-        return firstName;
+        firstNameField.setWidthFull();
+        return firstNameField;
     }
 
     @Nonnull
     private TextField getLastNameField() {
-        lastName.setWidthFull();
-        return lastName;
+        lastNameField.setWidthFull();
+        return lastNameField;
     }
 
     @Nonnull
     private TextField getEmailField() {
-        email.setWidthFull();
-        return email;
+        emailField.setWidthFull();
+        return emailField;
+    }
+
+    @Nonnull
+    private PasswordField getPasswordField() {
+        passwordField.setWidthFull();
+        return passwordField;
     }
 
     @Nonnull
     private Select<PlayerStatus> getPlayerStatusSelection() {
-        playerStatus.setWidthFull();
-        playerStatus.setLabel("Status");
-        playerStatus.setItemLabelGenerator(PlayerStatus::getName);
-        return playerStatus;
+        playerStatusSelection.setWidthFull();
+        playerStatusSelection.setLabel("Spielerstatus");
+        playerStatusSelection.setItemLabelGenerator(PlayerStatus::getName);
+        return playerStatusSelection;
     }
 
     @Nonnull
     private MultiSelectComboBox<Role> getRoleSelection() {
-        roleCheckboxGroup.setWidthFull();
-        roleCheckboxGroup.setLabel("Rollen");
-        roleCheckboxGroup.setItemLabelGenerator(Role::getName);
-        roleCheckboxGroup.setRequired(true);
-        roleCheckboxGroup.setRequiredIndicatorVisible(true);
-        return roleCheckboxGroup;
+        roleMultiSelectComboBox.setWidthFull();
+        roleMultiSelectComboBox.setLabel("Rollen");
+        roleMultiSelectComboBox.setItemLabelGenerator(Role::getName);
+        roleMultiSelectComboBox.setRequired(true);
+        roleMultiSelectComboBox.setRequiredIndicatorVisible(true);
+        return roleMultiSelectComboBox;
     }
 
     @Nonnull
     @Override
     protected User getNewItem() {
-        return userFactory.newEmptyDefaultUser();
+        return userFactory.newGuestUser();
     }
 
     @Nonnull
@@ -144,13 +161,45 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected Focusable<TextField> getFocusOnOpen() {
-        return firstName;
+        return firstNameField;
     }
 
     @Override
-    protected void beforeOpen() {
-        super.beforeOpen();
-        playerStatus.setItems(playerStatusService.findAll());
-        roleCheckboxGroup.setItems(roleService.findAll());
+    protected void beforeOpen(@Nonnull final OpenMode openMode) {
+        super.beforeOpen(openMode);
+
+        playerStatusSelection.setItems(playerStatusService.findAll());
+        roleMultiSelectComboBox.setItems(roleService.findAll());
+    }
+
+    @Override
+    protected void afterOpen(@Nonnull final OpenMode openMode,
+                             final User currentItem) {
+        super.afterOpen(openMode, currentItem);
+
+        // on createMode show password field and clear it
+        // on update/delete mode don't show password field to prevent changing of password
+        // on update/delete mode binder writes password back as it was when loading it
+        final boolean isCreateMode = openMode.equals(OpenMode.CREATE);
+        passwordField.setVisible(isCreateMode);
+        if (isCreateMode) {
+            passwordField.clear();
+        }
+    }
+
+    @Override
+    protected void saveClick() {
+        // password is entered in plain form and needs to be encrypted before saving
+        // binder sets password from field directly into authenticationDetails, which expects an ecnrypted password
+        encryptPasswordOnCreateMode();
+        super.saveClick();
+    }
+
+    private void encryptPasswordOnCreateMode() {
+        if (openMode.equals(OpenMode.CREATE)) {
+            final String plainPassword = passwordField.getValue();
+            final String encryptedPassword = passwordEncoder.encode(plainPassword);
+            passwordField.setValue(encryptedPassword);
+        }
     }
 }

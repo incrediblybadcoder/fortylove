@@ -35,14 +35,22 @@ public class RoleSetupData {
         return List.of(ROLE_ADMIN, ROLE_STAFF);
     }
 
+    @Nonnull
     public static List<String> getAdminRoles() {
         return List.of(ROLE_ADMIN);
     }
 
+    @Nonnull
+    public static List<String> getGuestRoles() {
+        return List.of(ROLE_USER);
+    }
+
+    @Nonnull
     public static List<String> getUserRoles() {
         return List.of(ROLE_USER);
     }
 
+    @Nonnull
     public static List<String> getStaffRoles() {
         return List.of(ROLE_STAFF);
     }

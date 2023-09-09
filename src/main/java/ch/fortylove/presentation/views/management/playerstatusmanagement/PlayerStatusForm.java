@@ -114,7 +114,11 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
 
         final Html text = new Html("<div>Status wirklich löschen?<br><br>Jedem Benutzer mit diesem Status<br>wird ein neuer Status zugewiesen.</div>");
 
-        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAll().stream().filter(playerStatus -> !playerStatus.equals(currentItem)).toList();
+        final List<PlayerStatus> remainingPlayerStatus = playerStatusService.findAll()
+                .stream()
+                .filter(playerStatus -> !playerStatus.equals(currentItem))
+                .toList();
+
         final Select<PlayerStatus> replacementPlayerStatusSelect = new Select<>();
         replacementPlayerStatusSelect.setLabel("Neuer Status");
         replacementPlayerStatusSelect.setItemLabelGenerator(PlayerStatus::getIdentifier);

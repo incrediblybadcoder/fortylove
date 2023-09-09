@@ -46,6 +46,10 @@ public class UserService {
             return new DatabaseResult<>("Benutzer existiert bereits: " + user.getIdentifier());
         }
 
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            return new DatabaseResult<>("Benutzer mit folgender E-Mail existiert bereits: " + user.getEmail());
+        }
+
         // Hier, an der Stelle, wo der User erstellt wird, soll zentral an einer Stelle
         // der Aktivierungslink generiert und dem User mitgeteilt werden
         if (sendActivationMail) {

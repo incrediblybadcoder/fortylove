@@ -1,24 +1,29 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.presentation.components.BadgeFactory;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -26,24 +31,25 @@ import java.util.UUID;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PlayerStatusManagementView extends ManagementViewTab {
+public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final PlayerStatusForm playerStatusForm;
     @Nonnull private final NotificationUtil notificationUtil;
+    @Nonnull private final BadgeFactory badgeFactory;
 
     private Grid<PlayerStatus> grid;
 
-    public PlayerStatusManagementView(@Nonnull final PlayerStatusService playerStatusService,
-                                      @Nonnull final PlayerStatusForm playerStatusForm,
-                                      @Nonnull final NotificationUtil notificationUtil) {
+    @Autowired
+    public PlayerStatusManagementViewTab(@Nonnull final PlayerStatusService playerStatusService,
+                                         @Nonnull final PlayerStatusForm playerStatusForm,
+                                         @Nonnull final NotificationUtil notificationUtil,
+                                         @Nonnull final BadgeFactory badgeFactory) {
+        super(VaadinIcon.STAR.create(), "Spielerstatus");
         this.playerStatusService = playerStatusService;
         this.playerStatusForm = playerStatusForm;
         this.notificationUtil = notificationUtil;
-
-        setSizeFull();
-        setPadding(false);
-        addClassName(LumoUtility.Padding.Top.MEDIUM);
+        this.badgeFactory = badgeFactory;
 
         constructUI();
     }
@@ -61,7 +67,7 @@ public class PlayerStatusManagementView extends ManagementViewTab {
 
     @Override
     public void refresh() {
-        updateCourtList();
+        updatePlayerStatusList();
     }
 
     private void configureForm() {
@@ -70,7 +76,7 @@ public class PlayerStatusManagementView extends ManagementViewTab {
         playerStatusForm.addDeleteEventListenerCustom(this::deleteEvent);
     }
 
-    private void updateCourtList() {
+    private void updatePlayerStatusList() {
         grid.setItems(playerStatusService.findAll());
     }
 
@@ -79,7 +85,15 @@ public class PlayerStatusManagementView extends ManagementViewTab {
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
-        final Grid.Column<PlayerStatus> nameColumn = grid.addColumn(PlayerStatus::getName)
+        final Grid.Column<PlayerStatus> nameColumn = grid.addColumn(new ComponentRenderer<>(playerStatus -> {
+                    if (playerStatusService.isProtectedName(playerStatus.getName())) {
+                        final Component lockBadge = badgeFactory.newPrimaryEmptyBadge(VaadinIcon.LOCK);
+                        final HorizontalLayout horizontalLayout = new HorizontalLayout(lockBadge, new Span(playerStatus.getName()));
+                        horizontalLayout.setSpacing(true);
+                        return horizontalLayout;
+                    }
+                    return new Span(playerStatus.getName());
+                }))
                 .setHeader("Name")
                 .setSortable(true);
 
@@ -96,9 +110,9 @@ public class PlayerStatusManagementView extends ManagementViewTab {
         grid.asSingleSelect().addValueChangeListener(event -> editPlayerStatus(event.getValue()));
     }
 
-    private void createGridFooter(@Nonnull final  Grid.Column<PlayerStatus> nameColumn,
-                                  @Nonnull final  Grid.Column<PlayerStatus> bookingsPerDayColumn,
-                                  @Nonnull final  Grid.Column<PlayerStatus> bookableDaysInAdvanceColumn) {
+    private void createGridFooter(@Nonnull final Grid.Column<PlayerStatus> nameColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> bookingsPerDayColumn,
+                                  @Nonnull final Grid.Column<PlayerStatus> bookableDaysInAdvanceColumn) {
         grid.appendFooterRow();
         final FooterRow footerRow = grid.appendFooterRow();
         final FooterRow.FooterCell footerCell = footerRow.join(nameColumn, bookingsPerDayColumn, bookableDaysInAdvanceColumn);
@@ -127,14 +141,14 @@ public class PlayerStatusManagementView extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<PlayerStatus> managementFormSaveEvent) {
         final PlayerStatus playerStatus = managementFormSaveEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.create(playerStatus);
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s erstellt", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 
     public void updateEvent(@Nonnull final ManagementFormModifyEvent<PlayerStatus> managementFormModifyEvent) {
         final PlayerStatus playerStatus = managementFormModifyEvent.getItem();
         final DatabaseResult<PlayerStatus> playerStatusDatabaseResult = playerStatusService.update(playerStatus);
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gespeichert", playerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 
@@ -142,7 +156,7 @@ public class PlayerStatusManagementView extends ManagementViewTab {
         final PlayerStatus playerStatusToDelete = playerStatusFormDeleteEvent.getItem();
         final PlayerStatus replacementPlayerStatus = playerStatusFormDeleteEvent.getReplacementPlayerStatus();
         final DatabaseResult<UUID> playerStatusDatabaseResult = playerStatusService.delete(playerStatusToDelete.getId(), replacementPlayerStatus.getId());
-        notificationUtil.databaseNotification(playerStatusDatabaseResult, String.format("Status %s gelöscht und mit Status %s ersetzt", playerStatusToDelete.getIdentifier(), replacementPlayerStatus.getIdentifier()));
+        notificationUtil.databaseNotification(playerStatusDatabaseResult);
         refresh();
     }
 }

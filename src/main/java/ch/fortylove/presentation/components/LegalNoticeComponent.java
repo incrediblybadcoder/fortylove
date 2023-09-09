@@ -23,10 +23,9 @@ public class LegalNoticeComponent extends VerticalLayout {
         add(new NativeLabel("6006 Luzern"));
         add(new NativeLabel("Schweiz"));
         add(new NativeLabel("jonas.cahenzli@gmail.com"));
-        add(new NativeLabel("www.fortylove.ch"));
+        add(new NativeLabel("www.fortylove.ch seit 2023"));
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSpacing(true);
-
     }
 }

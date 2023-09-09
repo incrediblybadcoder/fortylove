@@ -40,10 +40,9 @@ public class NotificationUtil {
         notification.open();
     }
 
-    public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult,
-                                            @Nonnull final String successMessage) {
+    public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult) {
         if (databaseResult.isSuccessful()) {
-            informationNotification(successMessage);
+            informationNotification("Erfolgreich");
         } else {
             errorNotification(databaseResult.getMessage());
         }
@@ -51,8 +50,12 @@ public class NotificationUtil {
 
     @Nonnull
     private Optional<Notification> getDefaultNotification(@Nonnull final String text) {
-        return text.isBlank() ?
-                Optional.empty() :
-                Optional.of(new Notification(text, DURATION, POSITION));
+        if (text.isBlank()) {
+            return Optional.empty();
+        } else {
+            final Notification notification = new Notification(text, DURATION, POSITION);
+            notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+            return Optional.of(notification);
+        }
     }
 }
