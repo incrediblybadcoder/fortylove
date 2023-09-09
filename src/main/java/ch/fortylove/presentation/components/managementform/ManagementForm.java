@@ -16,12 +16,13 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 @SpringComponent
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public abstract class ManagementForm<T> extends FormLayout {
 
     private Binder<T> binder;
@@ -166,15 +167,15 @@ public abstract class ManagementForm<T> extends FormLayout {
         this.openMode = openMode;
         currentItem = item;
 
-        beforeOpen(openMode, currentItem);
+        beforeOpen(openMode, item);
 
         titleField.setText(title);
-        binder.readBean(currentItem);
+        binder.readBean(item);
         addButtons(buttons);
         updateButtonState(checkChanges);
         getFocusOnOpen().focus();
 
-        afterOpen(openMode, currentItem);
+        afterOpen(openMode, item);
 
         setVisible(true);
     }
@@ -185,7 +186,7 @@ public abstract class ManagementForm<T> extends FormLayout {
      * For example filling comboboxes or radiogroups with selection items.
      */
     protected void beforeOpen(@Nonnull final OpenMode openMode,
-                              final T currentItem) {
+                              @Nonnull final T currentItem) {
     }
 
     /**
@@ -194,7 +195,7 @@ public abstract class ManagementForm<T> extends FormLayout {
      * For example filling comboboxes or radiogroups with selection items.
      */
     protected void afterOpen(@Nonnull final OpenMode openMode,
-                             final T currentItem) {
+                             @Nonnull final T currentItem) {
     }
 
     public void closeForm() {
