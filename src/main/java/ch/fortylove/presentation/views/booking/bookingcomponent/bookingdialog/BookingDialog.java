@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.bookingdialog;
+package ch.fortylove.presentation.views.booking.bookingcomponent.bookingdialog;
 
 import ch.fortylove.configuration.setupdata.StaticConfiguration;
 import ch.fortylove.persistence.entity.Booking;
