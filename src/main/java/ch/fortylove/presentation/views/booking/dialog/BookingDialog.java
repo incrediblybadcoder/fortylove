@@ -6,7 +6,6 @@ import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
-import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.util.FormatUtil;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
@@ -101,7 +100,7 @@ public class BookingDialog extends CancelableDialog {
         add(dialogLayout);
     }
 
-    private void restrictMaximumOpponentSelection(final AbstractField.ComponentValueChangeEvent<MultiSelectComboBox<User>, Set<User>> event) {
+    private void restrictMaximumOpponentSelection(@Nonnull final AbstractField.ComponentValueChangeEvent<MultiSelectComboBox<User>, Set<User>> event) {
         final Set<User> previousSelection = event.getOldValue();
         final Set<User> selection = event.getValue();
 
@@ -119,7 +118,7 @@ public class BookingDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> newButtonClickListener() {
         return event -> {
-            fireEvent(DialogBookingEvent.newBooking(this, court, timeslot, createNewBooking()));
+            fireEvent(BookingDialogEvent.newBooking(this, court, timeslot, createNewBooking()));
             close();
         };
     }
@@ -127,7 +126,7 @@ public class BookingDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> modifyButtonClickListener() {
         return event -> {
-            fireEvent(DialogBookingEvent.modifyBooking(this, court, timeslot, getModifyBooking()));
+            fireEvent(BookingDialogEvent.modifyBooking(this, court, timeslot, getModifyBooking()));
             close();
         };
     }
@@ -135,7 +134,7 @@ public class BookingDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> deleteButtonClickListener() {
         return event -> {
-            fireEvent(DialogBookingEvent.deleteBooking(this, court, timeslot, getDeleteBooking()));
+            fireEvent(BookingDialogEvent.deleteBooking(this, court, timeslot, getDeleteBooking()));
             close();
         };
     }
@@ -192,7 +191,7 @@ public class BookingDialog extends CancelableDialog {
         buttonContainer.add(buttons);
     }
 
-    public void addDialogBookingListener(@Nonnull final ComponentEventListener<DialogBookingEvent> listener) {
-        addListener(DialogBookingEvent.class, listener);
+    public void addDialogBookingListener(@Nonnull final ComponentEventListener<BookingDialogEvent> listener) {
+        addListener(BookingDialogEvent.class, listener);
     }
 }

@@ -1,13 +1,12 @@
-package ch.fortylove.presentation.views.booking.dialog.events;
+package ch.fortylove.presentation.views.booking.dialog;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
 import com.vaadin.flow.component.ComponentEvent;
 import jakarta.annotation.Nonnull;
 
-public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
+public class BookingDialogEvent extends ComponentEvent<BookingDialog> {
 
     @Nonnull private final Court court;
     @Nonnull private final Timeslot timeslot;
@@ -20,7 +19,7 @@ public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
         DELETE
     }
 
-    protected DialogBookingEvent(@Nonnull final BookingDialog source,
+    protected BookingDialogEvent(@Nonnull final BookingDialog source,
                                  @Nonnull final Court court,
                                  @Nonnull final Timeslot timeslot,
                                  @Nonnull final Booking booking,
@@ -32,25 +31,28 @@ public class DialogBookingEvent extends ComponentEvent<BookingDialog> {
         this.type = type;
     }
 
-    public static DialogBookingEvent newBooking(@Nonnull final BookingDialog source,
+    @Nonnull
+    public static BookingDialogEvent newBooking(@Nonnull final BookingDialog source,
                                                 @Nonnull final Court court,
                                                 @Nonnull final Timeslot timeslot,
                                                 @Nonnull final Booking booking) {
-        return new DialogBookingEvent(source, court, timeslot, booking, Type.NEW);
+        return new BookingDialogEvent(source, court, timeslot, booking, Type.NEW);
     }
 
-    public static DialogBookingEvent modifyBooking(@Nonnull final BookingDialog source,
+    @Nonnull
+    public static BookingDialogEvent modifyBooking(@Nonnull final BookingDialog source,
                                                    @Nonnull final Court court,
                                                    @Nonnull final Timeslot timeslot,
                                                    @Nonnull final Booking booking) {
-        return new DialogBookingEvent(source, court, timeslot, booking, Type.MODIFY);
+        return new BookingDialogEvent(source, court, timeslot, booking, Type.MODIFY);
     }
 
-    public static DialogBookingEvent deleteBooking(@Nonnull final BookingDialog source,
+    @Nonnull
+    public static BookingDialogEvent deleteBooking(@Nonnull final BookingDialog source,
                                                    @Nonnull final Court court,
                                                    @Nonnull final Timeslot timeslot,
                                                    @Nonnull final Booking booking) {
-        return new DialogBookingEvent(source, court, timeslot, booking, Type.DELETE);
+        return new BookingDialogEvent(source, court, timeslot, booking, Type.DELETE);
     }
 
     @Nonnull

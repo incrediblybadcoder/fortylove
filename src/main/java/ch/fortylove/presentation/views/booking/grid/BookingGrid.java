@@ -14,7 +14,6 @@ import ch.fortylove.presentation.views.booking.grid.util.CourtUtil;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.BookingSettingsService;
-import ch.fortylove.service.TimeSlotService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -35,7 +34,6 @@ import java.util.Set;
 public class BookingGrid extends Grid<Court> {
 
     @Nonnull private final BookingSettingsService bookingSettingsService;
-    @Nonnull private final TimeSlotService timeSlotService;
     @Nonnull private final BookingService bookingService;
     @Nonnull private final AuthenticationService authenticationService;
 
@@ -43,12 +41,10 @@ public class BookingGrid extends Grid<Court> {
 
     @Autowired
     public BookingGrid(@Nonnull final BookingSettingsService bookingSettingsService,
-                       @Nonnull final TimeSlotService timeSlotService,
                        @Nonnull final BookingService bookingService,
                        @Nonnull final AuthenticationService authenticationService) {
         super(Court.class, false);
         this.bookingSettingsService = bookingSettingsService;
-        this.timeSlotService = timeSlotService;
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
 

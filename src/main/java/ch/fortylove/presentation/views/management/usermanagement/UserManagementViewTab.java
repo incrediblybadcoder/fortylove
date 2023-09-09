@@ -3,7 +3,6 @@ package ch.fortylove.presentation.views.management.usermanagement;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
-import ch.fortylove.presentation.components.BadgeFactory;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
@@ -35,7 +34,6 @@ import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.UUID;
@@ -48,10 +46,9 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
-    @Nonnull private final BadgeFactory badgeFactory;
+    @Nonnull private final AdmissionRequestDialog admissionRequestDialog;
 
     @Nonnull private final UserForm userForm;
-    @Nonnull private final PasswordEncoder passwordEncoder;
 
     private Grid<User> grid;
     private UserFilter userFilter;
@@ -59,14 +56,12 @@ public class UserManagementViewTab extends ManagementViewTab {
     @Autowired
     public UserManagementViewTab(@Nonnull final UserService userService,
                                  @Nonnull final NotificationUtil notificationUtil,
-                                 @Nonnull final BadgeFactory badgeFactory,
-                                 @Nonnull final UserForm userForm,
-                                 @Nonnull final PasswordEncoder passwordEncoder) {
+                                 @Nonnull final AdmissionRequestDialog admissionRequestDialog,
+                                 @Nonnull final UserForm userForm) {
         super(VaadinIcon.USERS.create(), "Benutzer");
         this.notificationUtil = notificationUtil;
-        this.badgeFactory = badgeFactory;
+        this.admissionRequestDialog = admissionRequestDialog;
         this.userForm = userForm;
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
 
         constructUI();
@@ -75,12 +70,17 @@ public class UserManagementViewTab extends ManagementViewTab {
     private void constructUI() {
         configureGrid();
         configureForm();
+        configureDialog();
 
         final HorizontalLayout content = new HorizontalLayout(grid, userForm);
         content.addClassName("content");
         content.setSizeFull();
 
         add(content);
+    }
+
+    private void configureDialog() {
+        admissionRequestDialog.addAdmissionRequestDialogListener(this::handleAdmissionRequestDialogEvent);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class UserManagementViewTab extends ManagementViewTab {
                     if (userStatus.equals(UserStatus.GUEST_PENDING)) {
                         final Button pendingButton = new Button("Anfrage");
                         pendingButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
-                        pendingButton.addClickListener(handlePendingGuestRequest());
+                        pendingButton.addClickListener(handlePendingGuestRequest(user));
 
                         final HorizontalLayout userStatusLayout = new HorizontalLayout(new Span(userStatus.getIdentifier()), pendingButton);
                         userStatusLayout.setAlignItems(Alignment.CENTER);
@@ -152,10 +152,10 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     @Nonnull
-    private ComponentEventListener<ClickEvent<Button>> handlePendingGuestRequest() {
+    private ComponentEventListener<ClickEvent<Button>> handlePendingGuestRequest(@Nonnull final User user) {
         return event -> {
             userForm.closeForm();
-            notificationUtil.informationNotification("Öffne Anfrage-Prozess-Dialog");
+            admissionRequestDialog.open(user);
         };
     }
 
@@ -236,6 +236,29 @@ public class UserManagementViewTab extends ManagementViewTab {
         final User user = managementFormDeleteEvent.getItem();
         final DatabaseResult<UUID> userDatabaseResult = userService.delete(user.getId());
         notificationUtil.databaseNotification(userDatabaseResult);
+        refresh();
+    }
+
+    private void handleAdmissionRequestDialogEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
+        switch (admissionRequestDialogEvent.getType()) {
+            case ACCEPT -> acceptAdmissionEvent(admissionRequestDialogEvent);
+            case REJECT -> rejectAdmissionEvent(admissionRequestDialogEvent);
+        }
+    }
+
+    private void acceptAdmissionEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
+        final User user = admissionRequestDialogEvent.getUser();
+        user.setUserStatus(UserStatus.MEMBER);
+        final DatabaseResult<User> updateResult = userService.update(user);
+        notificationUtil.databaseNotification(updateResult);
+        refresh();
+    }
+
+    private void rejectAdmissionEvent(@Nonnull final AdmissionRequestDialogEvent admissionRequestDialogEvent) {
+        final User user = admissionRequestDialogEvent.getUser();
+        user.setUserStatus(UserStatus.GUEST);
+        final DatabaseResult<User> updateResult = userService.update(user);
+        notificationUtil.databaseNotification(updateResult);
         refresh();
     }
 }
