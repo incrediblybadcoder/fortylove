@@ -2,12 +2,11 @@ package ch.fortylove.presentation.views.booking;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
-import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.views.booking.bookingdialog.BookingDialog;
+import ch.fortylove.presentation.views.booking.bookingdialog.BookingDialogEvent;
 import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
 import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
-import ch.fortylove.presentation.views.booking.dialog.BookingDialog;
-import ch.fortylove.presentation.views.booking.dialog.events.DialogBookingEvent;
 import ch.fortylove.presentation.views.booking.grid.BookingGrid;
 import ch.fortylove.presentation.views.booking.grid.BookingGridConfiguration;
 import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
@@ -15,7 +14,6 @@ import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
-import ch.fortylove.service.UserService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.service.util.ValidationResult;
 import ch.fortylove.util.NotificationUtil;
@@ -38,8 +36,8 @@ public class BookingComponent extends VerticalLayout {
     @Nonnull private final BookingService bookingService;
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final CourtService courtService;
-    @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
+    @Nonnull private final BookingDialog bookingDialog;
 
     @Nonnull private final BookingGrid bookingGrid;
     @Nonnull private final DateSelection dateSelection;
@@ -50,15 +48,15 @@ public class BookingComponent extends VerticalLayout {
     public BookingComponent(@Nonnull final BookingService bookingService,
                             @Nonnull final AuthenticationService authenticationService,
                             @Nonnull final CourtService courtService,
-                            @Nonnull final UserService userService,
                             @Nonnull final NotificationUtil notificationUtil,
+                            @Nonnull final BookingDialog bookingDialog,
                             @Nonnull final BookingGrid bookingGrid,
                             @Nonnull final DateSelection dateSelectionComponent) {
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
         this.courtService = courtService;
-        this.userService = userService;
         this.notificationUtil = notificationUtil;
+        this.bookingDialog = bookingDialog;
         this.bookingGrid = bookingGrid;
         this.dateSelection = dateSelectionComponent;
 
@@ -83,6 +81,7 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void constructUI() {
+        bookingDialog.addDialogBookingListener(this::handleBookingDialogEvent);
         add(getEmptyCourtComponent());
         add(getBookingGridComponent());
         add(getDateSelectionComponent());
@@ -126,44 +125,38 @@ public class BookingComponent extends VerticalLayout {
             final ValidationResult validationResult = bookingService.isBookingModifiableOnDate(event.getBooking());
             if (validationResult.isSuccessful()) {
                 final Booking booking = event.getBooking();
-                final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
-                final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), possibleOpponents);
-                bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-                bookingDialog.openExisting(booking.getOpponents(), booking);
+                bookingDialog.openExisting(event.getCourt(), event.getTimeSlot(), getSelectedDate(), booking.getOwner(), booking.getOpponents(), booking);
             }
         });
     }
 
     private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
-            final List<User> possibleOpponents = userService.getPossibleBookingOpponents(currentUser);
-            final BookingDialog bookingDialog = new BookingDialog(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser, possibleOpponents);
-            bookingDialog.addDialogBookingListener(this::handleDialogBooking);
-            bookingDialog.openFree();
+            bookingDialog.openFree(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser);
         });
     }
 
-    private void handleDialogBooking(@Nonnull final DialogBookingEvent dialogBookingEvent) {
-        switch (dialogBookingEvent.getType()) {
-            case NEW -> newBookingAction(dialogBookingEvent.getBooking());
-            case MODIFY -> modifyBookingAction(dialogBookingEvent.getBooking());
-            case DELETE -> deleteBookingAction(dialogBookingEvent.getBooking());
+    private void handleBookingDialogEvent(@Nonnull final BookingDialogEvent bookingDialogEvent) {
+        switch (bookingDialogEvent.getType()) {
+            case NEW -> newBookingEvent(bookingDialogEvent.getBooking());
+            case MODIFY -> modifyBookingEvent(bookingDialogEvent.getBooking());
+            case DELETE -> deleteBookingEvent(bookingDialogEvent.getBooking());
         }
     }
 
-    private void newBookingAction(@Nonnull final Booking booking) {
+    private void newBookingEvent(@Nonnull final Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
         notificationUtil.databaseNotification(bookingDatabaseResult);
         refresh();
     }
 
-    private void modifyBookingAction(final @Nonnull Booking booking) {
+    private void modifyBookingEvent(final @Nonnull Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.update(booking);
         notificationUtil.databaseNotification(bookingDatabaseResult);
         refresh();
     }
 
-    private void deleteBookingAction(final @Nonnull Booking booking) {
+    private void deleteBookingEvent(final @Nonnull Booking booking) {
         openConfirmDialog(booking);
     }
 
