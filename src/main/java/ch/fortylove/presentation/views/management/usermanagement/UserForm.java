@@ -22,15 +22,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @SpringComponent
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserForm extends ManagementForm<User> {
 
     @Nonnull private final PlayerStatusService playerStatusService;
@@ -187,7 +188,7 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void beforeOpen(@Nonnull final OpenMode openMode,
-                              final User currentUser) {
+                              @Nonnull final User currentUser) {
         super.beforeOpen(openMode, currentItem);
 
         final List<UserStatus> manuallyManageableUserStatus = UserStatus.getManuallyManageableUserStatus();
@@ -202,7 +203,7 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void afterOpen(@Nonnull final OpenMode openMode,
-                             final User currentUser) {
+                             @Nonnull final User currentUser) {
         super.afterOpen(openMode, currentUser);
 
         // on createMode show password field and clear it

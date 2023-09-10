@@ -50,8 +50,8 @@ public class ForgotPasswordView extends VerticalLayout {
             notificationUtil.errorNotification("Kein aktiver Benutzer mit dieser E-Mail-Adresse gefunden");
             return;
         }
-        userService.generateAndSaveResetToken(email);
-        notificationUtil.informationNotification("Password reset email sent");
+        userService.generateAndSaveResetToken(email, 2);
+        notificationUtil.informationNotification("E-Mail mit Link zum Zurücksetzen des Passworts wurde versendet");
     }
 
     private void onDetach() {

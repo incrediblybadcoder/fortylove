@@ -224,8 +224,10 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
-        final DatabaseResult<User> userDatabaseResult = userService.create(user, false);
+        final DatabaseResult<User> userDatabaseResult = userService.create(user);
+        userService.generateAndSaveResetToken(user.getEmail(), 10000);
         notificationUtil.databaseNotification(userDatabaseResult);
+        notificationUtil.persistentInformationNotification(String.format("Der Benutzer %s wurde erstellt.\n Ein Link um das Passwort zu ändern wurde an %s gesendet.", user.getIdentifier(), user.getEmail()));
         refresh();
     }
 
