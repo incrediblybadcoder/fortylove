@@ -1,8 +1,8 @@
-package ch.fortylove.presentation.views.booking.grid.events;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid.events;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
-import ch.fortylove.presentation.views.booking.grid.BookingGrid;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.BookingGrid;
 import jakarta.annotation.Nonnull;
 
 public class FreeCellClickEvent extends BookingGridEvent {

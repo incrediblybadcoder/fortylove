@@ -1,16 +1,16 @@
-package ch.fortylove.presentation.views.booking;
+package ch.fortylove.presentation.views.booking.bookingcomponent;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
-import ch.fortylove.presentation.views.booking.bookingdialog.BookingDialog;
-import ch.fortylove.presentation.views.booking.bookingdialog.BookingDialogEvent;
-import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
-import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
-import ch.fortylove.presentation.views.booking.grid.BookingGrid;
-import ch.fortylove.presentation.views.booking.grid.BookingGridConfiguration;
-import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
-import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.bookingdialog.BookingDialog;
+import ch.fortylove.presentation.views.booking.bookingcomponent.bookingdialog.BookingDialogEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.DateSelection;
+import ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.events.DateChangeEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.BookingGrid;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.BookingGridConfiguration;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.BookedCellClickEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.FreeCellClickEvent;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
@@ -60,6 +60,7 @@ public class BookingComponent extends VerticalLayout {
         this.bookingGrid = bookingGrid;
         this.dateSelection = dateSelectionComponent;
 
+        addClassName("booking-component");
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setPadding(false);

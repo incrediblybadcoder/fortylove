@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SetupData
-public class PlayerStatusSetupData {
+public class PlayerStatusSetupData implements ch.fortylove.configuration.setupdata.data.SetupData {
 
     @Nonnull public static final String ACTIVE = "Aktiv";
     @Nonnull public static final String PASSIVE = "Passiv";
@@ -26,12 +26,18 @@ public class PlayerStatusSetupData {
         this.playerStatusService = playerStatusService;
     }
 
-    public void createPlayerStatus() {
+    @Override
+    public void createData() {
         createPlayerStatusIfNotFound(ACTIVE, 2, 7);
         createPlayerStatusIfNotFound(PASSIVE, 1, 3);
         createPlayerStatusIfNotFound(INACTIVE, 0, 0);
         createPlayerStatusIfNotFound(TOURNAMENT, 3, 7);
         createPlayerStatusIfNotFound(GUEST, 2, 7);
+    }
+
+    @Nonnull
+    public static List<String> getProtectedNames() {
+        return List.of(ACTIVE, PASSIVE, INACTIVE, TOURNAMENT, GUEST);
     }
 
     @Transactional
@@ -42,10 +48,5 @@ public class PlayerStatusSetupData {
         if (playerStatus.isEmpty()) {
             playerStatusService.create(new PlayerStatus(name, bookingsPerDay, bookableDaysInAdvance));
         }
-    }
-
-    @Nonnull
-    public static List<String> getProtectedNames() {
-        return List.of(ACTIVE, PASSIVE, INACTIVE, TOURNAMENT, GUEST);
     }
 }

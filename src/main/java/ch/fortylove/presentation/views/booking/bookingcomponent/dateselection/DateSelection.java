@@ -1,6 +1,6 @@
-package ch.fortylove.presentation.views.booking.dateselection;
+package ch.fortylove.presentation.views.booking.bookingcomponent.dateselection;
 
-import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.events.DateChangeEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;

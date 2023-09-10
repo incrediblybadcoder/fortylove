@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.grid.util;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid.util;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Timeslot;

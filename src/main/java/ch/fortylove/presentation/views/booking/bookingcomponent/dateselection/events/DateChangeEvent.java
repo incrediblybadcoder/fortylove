@@ -1,6 +1,6 @@
-package ch.fortylove.presentation.views.booking.dateselection.events;
+package ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.events;
 
-import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
+import ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.DateSelection;
 import com.vaadin.flow.component.ComponentEvent;
 import jakarta.annotation.Nonnull;
 

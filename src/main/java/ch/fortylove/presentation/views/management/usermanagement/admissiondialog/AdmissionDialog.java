@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.management.usermanagement.admissionrequestdialog;
+package ch.fortylove.presentation.views.management.usermanagement.admissiondialog;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.User;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AdmissionRequestDialog extends CancelableDialog {
+public class AdmissionDialog extends CancelableDialog {
 
     @Nonnull private final PlayerStatusService playerStatusService;
 
@@ -35,7 +35,7 @@ public class AdmissionRequestDialog extends CancelableDialog {
     private User currentUser;
 
     @Autowired
-    public AdmissionRequestDialog(@Nonnull final PlayerStatusService playerStatusService) {
+    public AdmissionDialog(@Nonnull final PlayerStatusService playerStatusService) {
         this.playerStatusService = playerStatusService;
 
         constructUI();
@@ -79,7 +79,7 @@ public class AdmissionRequestDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> acceptButtonClickListener() {
         return event -> {
-            fireEvent(new AcceptAdmissionRequestDialogEvent(this, currentUser, playerStatusSelection.getValue(), messageTextArea.getValue()));
+            fireEvent(new AcceptAdmissionDialogEvent(this, currentUser, playerStatusSelection.getValue(), messageTextArea.getValue()));
             close();
         };
     }
@@ -87,7 +87,7 @@ public class AdmissionRequestDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> rejectButtonClickListener() {
         return event -> {
-            fireEvent(new RejectAdmissionRequestDialogEvent(this, currentUser, messageTextArea.getValue()));
+            fireEvent(new RejectAdmissionDialogEvent(this, currentUser, messageTextArea.getValue()));
             close();
         };
     }
@@ -106,11 +106,11 @@ public class AdmissionRequestDialog extends CancelableDialog {
         open();
     }
 
-    public void addAcceptAdmissionRequestDialogListener(@Nonnull final ComponentEventListener<AcceptAdmissionRequestDialogEvent> listener) {
-        addListener(AcceptAdmissionRequestDialogEvent.class, listener);
+    public void addAcceptAdmissionDialogListener(@Nonnull final ComponentEventListener<AcceptAdmissionDialogEvent> listener) {
+        addListener(AcceptAdmissionDialogEvent.class, listener);
     }
 
-    public void addRejectAdmissionRequestDialogListener(@Nonnull final ComponentEventListener<RejectAdmissionRequestDialogEvent> listener) {
-        addListener(RejectAdmissionRequestDialogEvent.class, listener);
+    public void addRejectAdmissionDialogListener(@Nonnull final ComponentEventListener<RejectAdmissionDialogEvent> listener) {
+        addListener(RejectAdmissionDialogEvent.class, listener);
     }
 }

@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @DevSetupData
-public class UserDevSetupData {
+public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata.data.DevSetupData {
 
     @Nonnull public static final String ADMIN = "admin@fortylove.ch";
     @Nonnull public static final String STAFF = "staff@fortylove.ch";
@@ -50,7 +50,8 @@ public class UserDevSetupData {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUsers() {
+    @Override
+    public void createDevData() {
         createUserIfNotFound(ADMIN, "Admin", "Admin", "password", UserStatus.MEMBER, getAdminRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
         createUserIfNotFound(STAFF, "Staff", "Staff", "password", UserStatus.MEMBER, getStaffRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
 
@@ -92,14 +93,14 @@ public class UserDevSetupData {
     }
 
     @Transactional
-    void createUserIfNotFound(@Nonnull final String email,
-                              @Nonnull final String firstName,
-                              @Nonnull final String lastName,
-                              @Nonnull final String password,
-                              @Nonnull final UserStatus userStatus,
-                              @Nonnull final Set<Role> Roles,
-                              @Nonnull final PlayerStatus playerStatus,
-                              final boolean activationStatus) {
+    private void createUserIfNotFound(@Nonnull final String email,
+                                      @Nonnull final String firstName,
+                                      @Nonnull final String lastName,
+                                      @Nonnull final String password,
+                                      @Nonnull final UserStatus userStatus,
+                                      @Nonnull final Set<Role> Roles,
+                                      @Nonnull final PlayerStatus playerStatus,
+                                      final boolean activationStatus) {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {

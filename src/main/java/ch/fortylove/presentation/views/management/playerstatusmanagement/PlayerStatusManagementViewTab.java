@@ -38,7 +38,7 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
     @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final BadgeFactory badgeFactory;
 
-    private Grid<PlayerStatus> grid;
+    @Nonnull final private Grid<PlayerStatus> grid = new Grid<>(PlayerStatus.class, false);
 
     @Autowired
     public PlayerStatusManagementViewTab(@Nonnull final PlayerStatusService playerStatusService,
@@ -81,7 +81,6 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
     }
 
     private void configureGrid() {
-        grid = new Grid<>(PlayerStatus.class, false);
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 

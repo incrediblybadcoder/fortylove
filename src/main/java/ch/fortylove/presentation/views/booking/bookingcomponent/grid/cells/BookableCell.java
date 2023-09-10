@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.grid.cells;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;

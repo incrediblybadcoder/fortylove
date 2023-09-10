@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @SetupData
-public class RoleSetupData {
+public class RoleSetupData implements ch.fortylove.configuration.setupdata.data.SetupData {
 
     @Nonnull public static final String ROLE_ADMIN = "ROLE_ADMIN";
     @Nonnull public static final String ROLE_STAFF = "ROLE_STAFF";
@@ -55,7 +55,8 @@ public class RoleSetupData {
         return List.of(ROLE_STAFF);
     }
 
-    public void createRoles() {
+    @Override
+    public void createData() {
         createRoleIfNotFound(ROLE_ADMIN, getAdminPrivileges());
         createRoleIfNotFound(ROLE_STAFF, getStaffPrivileges());
         createRoleIfNotFound(ROLE_USER, getUserPrivileges());

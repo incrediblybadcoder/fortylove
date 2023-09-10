@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.grid.cells;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells;
 
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
