@@ -17,7 +17,7 @@ public class UnvalidatedUserFactory {
     }
 
     @Nonnull
-    public UnvalidatedUser newUnvalidatedUser() {
+    public UnvalidatedUser newEmptyUnvalidatedUser() {
         return newUnvalidatedUser("", "", "", "" );
     }
     @Nonnull

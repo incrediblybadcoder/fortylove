@@ -54,7 +54,10 @@ public class UnvalidatedUserService {
         // der Aktivierungslink generiert und dem User mitgeteilt werden
         if (sendActivationMail) {
             final String activationLink = baseUrl + "activate?code=" + unvalidatedUser.getActivationCode();
-            final String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren.";
+            final String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + activationLink + "'>Link</a>, um Ihr Konto zu aktivieren. "
+                    + "Falls der Link auf Ihrem Gerät nicht ordnungsgemäss funktioniert, können Sie den folgenden Link kopieren und in Ihren Webbrowser einfügen: <br><br>"
+                    + activationLink;
+
 
             try {
                 emailServiceProvider.sendEmail(unvalidatedUser.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);

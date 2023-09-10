@@ -50,7 +50,7 @@ public class RegistrationForm extends FormLayout {
         binder = new Binder<>(UnvalidatedUser.class);
         binder.bindInstanceFields(this);
 
-        unvalidatedUser = unvalidatedUserFactory.newUnvalidatedUser();
+        unvalidatedUser = unvalidatedUserFactory.newEmptyUnvalidatedUser();
         binder.setBean(unvalidatedUser);
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 

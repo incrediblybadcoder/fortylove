@@ -2,7 +2,6 @@ package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.presentation.views.login.LoginView;
 import ch.fortylove.service.UnvalidatedUserService;
-import ch.fortylove.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Html;
@@ -21,13 +20,9 @@ import java.util.List;
 @AnonymousAllowed
 public class ActivationView extends Composite implements BeforeEnterObserver {
     private VerticalLayout layout;
-
-    @Nonnull private final UserService userService;
     @Nonnull private final UnvalidatedUserService unvalidatedUserService;
 
-    public ActivationView(UserService userService,
-                          @Nonnull final UnvalidatedUserService unvalidatedUserService) {
-        this.userService = userService;
+    public ActivationView(@Nonnull final UnvalidatedUserService unvalidatedUserService) {
         this.unvalidatedUserService = unvalidatedUserService;
     }
 
@@ -49,20 +44,24 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
         final String activationCode = codes.get(0);
 
         if (checkActivationStatusOfUnvalidatedUser(activationCode)) {
+            // There is a user with the given activation code in the unvalidated users table.
             handleActivation(activationCode);
         } else {
+            // There is no user with the given activation code in the unvalidated users table.
+            // This means that the user has already been activated.
+            // Or there is just no user with the given activation code, due to some error.
             handleNotReady();
         }
     }
 
     private void handleNotReady() {
         layout.add(
-                new Text("Konto wurde bereits aktiviert."), // Todo Sicher? Könnte auch sein, dass kein UnvalidatedUser gefunden wurde.
+                new Text("Konto wurde bereits aktiviert."),
                 createLoginLink()
         );
     }
 
-    private void handleActivation(String activationCode) {
+    private void handleActivation(@Nonnull String activationCode) {
         if (unvalidatedUserService.activate(activationCode).isSuccessful()) {
             layout.add(
                     new Text("Konto wurde erfolgreich aktiviert."),
@@ -89,12 +88,13 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
         layout.add(content);
     }
 
+    @Nonnull
     private RouterLink createLoginLink() {
         return new RouterLink("Login", LoginView.class);
     }
 
 
-    private boolean checkActivationStatusOfUnvalidatedUser(String activationCode) {
+    private boolean checkActivationStatusOfUnvalidatedUser(@Nonnull String activationCode) {
         return unvalidatedUserService.checkIfReadyToActivate(activationCode);
     }
 }
