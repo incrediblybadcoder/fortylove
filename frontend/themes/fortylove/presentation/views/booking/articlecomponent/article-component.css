@@ -1,8 +1,9 @@
 .article-component {
   display: block;
-  height: 400px;
   box-shadow: var(--lumo-box-shadow-s);
   padding: 12px;
+  flex-grow: 0;
+  max-height: 30%
 }
 
 @media (max-width: 800px){

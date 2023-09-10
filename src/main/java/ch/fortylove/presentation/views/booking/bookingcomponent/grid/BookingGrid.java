@@ -50,7 +50,6 @@ public class BookingGrid extends Grid<Court> {
 
         addThemeVariants(GridVariant.LUMO_NO_BORDER);
         setSelectionMode(SelectionMode.NONE);
-        setAllRowsVisible(true);
 
         constructGrid();
     }
