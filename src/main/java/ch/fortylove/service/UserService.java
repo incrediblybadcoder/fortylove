@@ -142,13 +142,13 @@ public class UserService {
                 .toList();
     }
 
-    public boolean generateAndSaveResetToken(@Nonnull final String email) {
+    public boolean generateAndSaveResetToken(@Nonnull final String email, @Nonnull int tokenExpiryHours) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             return false;
         }
         String resetToken = UUID.randomUUID().toString();
-        LocalDateTime tokenExpiryDate = LocalDateTime.now().plusHours(1); // Token soll nur eine Stunde gültig sein
+        LocalDateTime tokenExpiryDate = LocalDateTime.now().plusHours(tokenExpiryHours); // Token soll nur begrenz gültig sein
 
         user.getAuthenticationDetails().setResetToken(resetToken);
         user.getAuthenticationDetails().setTokenExpiryDate(tokenExpiryDate);
@@ -156,10 +156,12 @@ public class UserService {
 
 
         String resetLink = baseUrl + "resetpassword?token=" + user.getAuthenticationDetails().getResetToken();
-        String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + resetLink + "'>Link</a>, um Ihr Passwort zu ändern.";
+        String htmlContent = "Bitte klicken Sie auf den folgenden <a clicktracking=off href='" + resetLink + "'>Link</a>, um Ihr Passwort zu ändern."
+                + "Falls der Link auf Ihrem Gerät nicht ordnungsgemäss funktioniert, können Sie den folgenden Link kopieren und in Ihren Webbrowser einfügen: <br><br>"
+                + resetLink;
 
         try {
-            emailServiceProvider.sendEmail(user.getEmail(), "Passwort zurückrücksetzen", htmlContent);
+            emailServiceProvider.sendEmail(user.getEmail(), "Passwort zurücksetzen", htmlContent);
         } catch (Exception e) {
             e.printStackTrace();
         }
