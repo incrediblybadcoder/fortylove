@@ -34,8 +34,8 @@ public class UserFactory {
      * @return Ein neuer User-Objekt mit Standardwerten
      */
     @Nonnull
-    public User newGuestUser() {
-        return newGuestUser("", "", "", "");
+    public User newEmptyGuestUser(final boolean enabled) {
+        return newGuestUser("", "", "", "", enabled);
     }
 
     /**
@@ -53,9 +53,10 @@ public class UserFactory {
     public User newGuestUser(@Nonnull final String firstName,
                              @Nonnull final String lastName,
                              @Nonnull final String email,
-                             @Nonnull final String plainPassword) {
+                             @Nonnull final String plainPassword,
+                             final boolean enabled) {
         final AuthenticationDetails authenticationDetails = getAuthenticationDetailsWithEncryption(plainPassword);
-        return new User(firstName, lastName, email, authenticationDetails, UserStatus.GUEST, false, roleService.getDefaultGuestRoles(), playerStatusService.getDefaultGuestPlayerStatus());
+        return new User(firstName, lastName, email, authenticationDetails, UserStatus.GUEST, enabled, roleService.getDefaultGuestRoles(), playerStatusService.getDefaultGuestPlayerStatus());
     }
 
     @Nonnull
@@ -72,13 +73,13 @@ public class UserFactory {
                                 @Nonnull final String lastName,
                                 @Nonnull final String email,
                                 @Nonnull final String encryptedPassword) {
-        final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword, "");
+        final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword);
         return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull
     private AuthenticationDetails getAuthenticationDetailsWithEncryption(@Nonnull final String plainPassword) {
         final String encryptedPassword = passwordEncoder.encode(plainPassword);
-        return new AuthenticationDetails(encryptedPassword, "");
+        return new AuthenticationDetails(encryptedPassword);
     }
 }

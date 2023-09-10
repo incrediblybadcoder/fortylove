@@ -36,7 +36,7 @@ public class CourtManagementViewTab extends ManagementViewTab {
     @Nonnull private final CourtForm courtForm;
     @Nonnull private final NotificationUtil notificationUtil;
 
-    private Grid<Court> grid;
+    @Nonnull final private Grid<Court> grid = new Grid<>(Court.class, false);
 
     @Autowired
     public CourtManagementViewTab(@Nonnull final CourtService courtService,
@@ -77,7 +77,6 @@ public class CourtManagementViewTab extends ManagementViewTab {
     }
 
     private void configureGrid() {
-        grid = new Grid<>(Court.class, false);
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 

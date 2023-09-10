@@ -12,9 +12,9 @@ public class FirstNameValidator {
     public static ValidationResult validateFirstName(@Nonnull final String value,
                                                      @Nonnull final ValueContext context) {
         if (value.isEmpty()) {
-            return ValidationResult.error("Der Vorname darf nicht leer sein");
+            return ValidationResult.error("Vorname darf nicht leer sein");
         } else if (value.length() > MAX_FIRST_NAME_LENGTH) {
-            return ValidationResult.error("Der Vorname darf maximal "+ MAX_FIRST_NAME_LENGTH + " Zeichen haben");
+            return ValidationResult.error("Vorname darf maximal "+ MAX_FIRST_NAME_LENGTH + " Zeichen haben");
         }
         return ValidationResult.ok();
     }

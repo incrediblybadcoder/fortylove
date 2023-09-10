@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 @DevSetupData
-public class BookingDevSetupData {
+public class BookingDevSetupData implements ch.fortylove.configuration.devsetupdata.data.DevSetupData {
 
     @Nonnull private final CourtService courtService;
     @Nonnull private final BookingService bookingService;
@@ -42,7 +42,8 @@ public class BookingDevSetupData {
         this.bookingSettingsService = bookingSettingsService;
     }
 
-    public void createBookings() {
+    @Override
+    public void createDevData() {
         final SortedSet<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         final List<Court> courts = courtService.findAll();
         createBookingsToday(courts, timeslots);
@@ -207,21 +208,6 @@ public class BookingDevSetupData {
         return userService.findByEmail(owner).get();
     }
 
-    @Transactional
-    void createBookingIfNotFound(@Nonnull final Court court,
-                                 @Nonnull final User player,
-                                 @Nonnull final Set<User> partners,
-                                 @Nonnull final LocalDate date,
-                                 @Nonnull final Timeslot timeslot) {
-        final List<Booking> bookingDTOs = bookingService.findAllByCourtId(court.getId());
-
-        if (isNewBooking(bookingDTOs, date, timeslot)) {
-            final Booking booking = new Booking(court, player, partners, timeslot, date);
-            bookingService.create(booking);
-            court.addBooking(booking);
-        }
-    }
-
     private boolean isNewBooking(@Nonnull final List<Booking> bookings,
                                  @Nonnull final LocalDate date,
                                  @Nonnull final Timeslot timeslot) {
@@ -231,5 +217,20 @@ public class BookingDevSetupData {
             }
         }
         return true;
+    }
+
+    @Transactional
+    private void createBookingIfNotFound(@Nonnull final Court court,
+                                         @Nonnull final User player,
+                                         @Nonnull final Set<User> partners,
+                                         @Nonnull final LocalDate date,
+                                         @Nonnull final Timeslot timeslot) {
+        final List<Booking> bookingDTOs = bookingService.findAllByCourtId(court.getId());
+
+        if (isNewBooking(bookingDTOs, date, timeslot)) {
+            final Booking booking = new Booking(court, player, partners, timeslot, date);
+            bookingService.create(booking);
+            court.addBooking(booking);
+        }
     }
 }

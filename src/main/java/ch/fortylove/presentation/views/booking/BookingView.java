@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.booking;
 
 import ch.fortylove.presentation.views.MainLayout;
+import ch.fortylove.presentation.views.booking.bookingcomponent.BookingComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;

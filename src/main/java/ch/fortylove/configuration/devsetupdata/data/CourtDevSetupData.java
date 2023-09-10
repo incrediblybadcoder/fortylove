@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @DevSetupData
-public class CourtDevSetupData {
+public class CourtDevSetupData implements ch.fortylove.configuration.devsetupdata.data.DevSetupData {
 
     public static final int NUMBER_OF_COURTS = 4;
     private static final int[] NUMBERS = {1, 2, 3, 4};
@@ -26,7 +26,8 @@ public class CourtDevSetupData {
         this.courtService = courtService;
     }
 
-    public void createCourts() {
+    @Override
+    public void createDevData() {
         for (int i = 0; i < NUMBER_OF_COURTS; i++) {
             createCourt(COURT_TYPES[i], COURT_ICONS[i], NUMBERS[i], NAMES[i]);
         }

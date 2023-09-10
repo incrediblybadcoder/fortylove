@@ -11,17 +11,17 @@ import java.time.LocalTime;
 public class DateTimeUtil {
 
     @Nonnull
-    public LocalDate getLocalDate() {
+    public LocalDate today() {
         return LocalDate.now();
     }
 
     @Nonnull
-    public LocalTime getLocalTime() {
+    public LocalTime now() {
         return LocalTime.now();
     }
 
     @Nonnull
-    public LocalDateTime getLocalDateTime() {
-        return LocalDateTime.of(getLocalDate(), getLocalTime());
+    public LocalDateTime todayNow() {
+        return LocalDateTime.of(today(), now());
     }
 }

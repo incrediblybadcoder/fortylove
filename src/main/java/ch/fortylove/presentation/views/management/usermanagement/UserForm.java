@@ -17,6 +17,7 @@ import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.Autocomplete;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -123,12 +124,16 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     private TextField getEmailField() {
         emailField.setWidthFull();
+        // Autocomplete.OFF is ignored by most browsers, use Autocomplete.NEW_PASSWORD
+        emailField.setAutocomplete(Autocomplete.NEW_PASSWORD);
         return emailField;
     }
 
     @Nonnull
     private PasswordField getPasswordField() {
         passwordField.setWidthFull();
+        // Autocomplete.OFF is ignored by most browsers, use Autocomplete.NEW_PASSWORD
+        passwordField.setAutocomplete(Autocomplete.NEW_PASSWORD);
         return passwordField;
     }
 
@@ -161,7 +166,7 @@ public class UserForm extends ManagementForm<User> {
     @Nonnull
     @Override
     protected User getNewItem() {
-        return userFactory.newGuestUser();
+        return userFactory.newEmptyGuestUser(true);
     }
 
     @Nonnull

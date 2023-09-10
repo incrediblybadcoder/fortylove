@@ -13,7 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 @SetupData
-public class BookingSettingsSetupData {
+public class BookingSettingsSetupData implements ch.fortylove.configuration.setupdata.data.SetupData {
 
     @Nonnull private final BookingSettingsService bookingSettingsService;
 
@@ -22,7 +22,8 @@ public class BookingSettingsSetupData {
         this.bookingSettingsService = bookingSettingsService;
     }
 
-    public void createBookingSettings() {
+    @Override
+    public void createData() {
         final SortedSet<Timeslot> timeslots = new TreeSet<>(
                 List.of(
                         new Timeslot(false, 0),
@@ -55,7 +56,7 @@ public class BookingSettingsSetupData {
     }
 
     @Transactional
-    void createBookingSettingsIfNotFound(@Nonnull final SortedSet<Timeslot> timeslots) {
+    private void createBookingSettingsIfNotFound(@Nonnull final SortedSet<Timeslot> timeslots) {
         final BookingSettings bookingSettings = new BookingSettings(timeslots);
         bookingSettingsService.create(bookingSettings);
     }
