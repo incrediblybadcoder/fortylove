@@ -224,7 +224,7 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
-        final DatabaseResult<User> userDatabaseResult = userService.create(user, false);
+        final DatabaseResult<User> userDatabaseResult = userService.create(user);
         notificationUtil.databaseNotification(userDatabaseResult);
         refresh();
     }

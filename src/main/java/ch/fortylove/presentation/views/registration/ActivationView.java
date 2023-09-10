@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.registration;
 
 import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.service.UnvalidatedUserService;
 import ch.fortylove.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -22,9 +23,12 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
     private VerticalLayout layout;
 
     @Nonnull private final UserService userService;
+    @Nonnull private final UnvalidatedUserService unvalidatedUserService;
 
-    public ActivationView(UserService userService) {
+    public ActivationView(UserService userService,
+                          @Nonnull final UnvalidatedUserService unvalidatedUserService) {
         this.userService = userService;
+        this.unvalidatedUserService = unvalidatedUserService;
     }
 
     @Override
@@ -44,22 +48,22 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
 
         final String activationCode = codes.get(0);
 
-        if (checkActivationStatusOfUser(activationCode)) {
-            handleAlreadyActivated();
-        } else {
+        if (checkActivationStatusOfUnvalidatedUser(activationCode)) {
             handleActivation(activationCode);
+        } else {
+            handleNotReady();
         }
     }
 
-    private void handleAlreadyActivated() {
+    private void handleNotReady() {
         layout.add(
-                new Text("Konto wurde bereits aktiviert."),
+                new Text("Konto wurde bereits aktiviert."), // Todo Sicher? Könnte auch sein, dass kein UnvalidatedUser gefunden wurde.
                 createLoginLink()
         );
     }
 
     private void handleActivation(String activationCode) {
-        if (userService.activate(activationCode)) {
+        if (unvalidatedUserService.activate(activationCode).isSuccessful()) {
             layout.add(
                     new Text("Konto wurde erfolgreich aktiviert."),
                     createLoginLink()
@@ -90,7 +94,7 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
     }
 
 
-    private boolean checkActivationStatusOfUser(String activationCode) {
-        return userService.checkIfActive(activationCode);
+    private boolean checkActivationStatusOfUnvalidatedUser(String activationCode) {
+        return unvalidatedUserService.checkIfReadyToActivate(activationCode);
     }
 }

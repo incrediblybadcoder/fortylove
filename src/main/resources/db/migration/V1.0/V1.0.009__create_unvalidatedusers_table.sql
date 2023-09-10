@@ -12,3 +12,6 @@ CREATE TABLE fortylove.unvalidatedusers
     encrypted_password character varying(60) NOT NULL,
     activation_code    character varying(255) NOT NULL
 );
+
+ALTER TABLE fortylove.unvalidatedusers
+    ADD CONSTRAINT unvalidatedusers_pkey PRIMARY KEY (id);

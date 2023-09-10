@@ -1,9 +1,10 @@
 package ch.fortylove.presentation.views.registration;
 
-import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UnvalidatedUser;
 import ch.fortylove.presentation.views.login.LoginView;
 import ch.fortylove.presentation.views.registration.events.CancelRegistrationEvent;
 import ch.fortylove.presentation.views.registration.events.RegistrationEvent;
+import ch.fortylove.service.UnvalidatedUserService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.DetachEvent;
@@ -28,6 +29,7 @@ public class RegistrationView extends VerticalLayout {
     @Nonnull public static final String PAGE_TITLE = "Registration";
 
     @Nonnull private final UserService userService;
+    @Nonnull private final UnvalidatedUserService unvalidatedUserService;
     @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final PasswordEncoder passwordEncoder;
     @Nonnull private final List<Registration> registrations;
@@ -36,9 +38,11 @@ public class RegistrationView extends VerticalLayout {
 
     public RegistrationView(@Nonnull final RegistrationForm registrationForm,
                             @Nonnull final UserService userService,
+                            @Nonnull final UnvalidatedUserService unvalidatedUserService,
                             @Nonnull final NotificationUtil notificationUtil,
                             @Nonnull final PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.unvalidatedUserService = unvalidatedUserService;
         this.notificationUtil = notificationUtil;
         this.passwordEncoder = passwordEncoder;
 
@@ -55,14 +59,12 @@ public class RegistrationView extends VerticalLayout {
     }
 
     private void registerUser(RegistrationEvent registrationEvent) {
-        final User user = registrationEvent.getUser();
-        // Todo überprüfen ob der User in der User-Tabel existiert ODER in der neuen UnregisteredUser-Tabel
-            if (userService.findByEmail(user.getEmail()).isPresent()) {
+        final UnvalidatedUser unvalidatedUser = registrationEvent.getUnvalidatedUser();
+            if (userService.findByEmail(unvalidatedUser.getEmail()).isPresent() || unvalidatedUserService.findByEmail(unvalidatedUser.getEmail()).isPresent()) {
                 notificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
             } else {
-                user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(registrationEvent.getPlainPassword()));
-                // Todo: Hier muss der User in die UnregisteredUser-Tabel geschrieben werden
-                userService.create(user, true);
+                unvalidatedUser.setEncryptedPassword(passwordEncoder.encode(registrationEvent.getPlainPassword()));
+                unvalidatedUserService.create(unvalidatedUser, true);
                 gotToLoginPage();
                 notificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
         }
