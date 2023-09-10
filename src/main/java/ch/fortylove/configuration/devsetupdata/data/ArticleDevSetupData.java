@@ -39,14 +39,6 @@ public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupd
         articleService.create(new Article(title, text, dateTime));
     }
 
-    @Transactional
-    private void createArticle(@Nonnull final String title,
-                               @Nonnull final String text,
-                               @Nonnull final LocalDateTime dateTime,
-                               final byte[] picture) {
-        articleService.create(new Article(title, text, dateTime, picture));
-    }
-
     @Nonnull
     private LocalDateTime today() {
         return dateTimeUtil.todayNow();

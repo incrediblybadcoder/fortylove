@@ -4,8 +4,7 @@ CREATE TABLE fortylove.articles (
     date_time timestamp(6) without time zone NOT NULL,
     id uuid NOT NULL,
     text character varying(255) NOT NULL,
-    title character varying(255) NOT NULL,
-    picture bytea
+    title character varying(255) NOT NULL
 );
 
 ALTER TABLE fortylove.articles

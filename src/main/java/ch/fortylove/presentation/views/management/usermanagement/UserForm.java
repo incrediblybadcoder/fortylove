@@ -209,7 +209,7 @@ public class UserForm extends ManagementForm<User> {
         // on createMode show password field and clear it
         // on update/delete mode don't show password field to prevent changing of password
         // on update/delete mode binder writes password back as it was when loading it
-        final boolean isCreateMode = openMode.equals(OpenMode.CREATE);
+        final boolean isCreateMode = openMode.equals(OpenMode.NEW);
         passwordField.setVisible(isCreateMode);
         if (isCreateMode) {
             passwordField.clear();
@@ -225,7 +225,7 @@ public class UserForm extends ManagementForm<User> {
     }
 
     private void encryptPasswordOnCreateMode() {
-        if (openMode.equals(OpenMode.CREATE)) {
+        if (openMode.equals(OpenMode.NEW)) {
             final String plainPassword = passwordField.getValue();
             final String encryptedPassword = passwordEncoder.encode(plainPassword);
             passwordField.setValue(encryptedPassword);

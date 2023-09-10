@@ -7,9 +7,9 @@ import ch.fortylove.presentation.components.managementform.events.ManagementForm
 import ch.fortylove.presentation.components.managementform.events.ManagementFormModifyEvent;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormSaveEvent;
 import ch.fortylove.presentation.views.management.ManagementViewTab;
-import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.AcceptAdmissionDialogEvent;
 import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.AdmissionDialog;
-import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.RejectAdmissionDialogEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.AcceptAdmissionEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.RejectAdmissionEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
@@ -82,8 +82,8 @@ public class UserManagementViewTab extends ManagementViewTab {
     }
 
     private void configureDialog() {
-        admissionDialog.addAcceptAdmissionDialogListener(this::acceptAdmissionDialogEvent);
-        admissionDialog.addRejectAdmissionDialogListener(this::rejectAdmissionDialogEvent);
+        admissionDialog.addAcceptAdmissionListener(this::admissionDialogAcceptEvent);
+        admissionDialog.addRejectAdmissionListener(this::admissionDialogRejectEvent);
     }
 
     @Override
@@ -211,14 +211,14 @@ public class UserManagementViewTab extends ManagementViewTab {
 
     private void addUser() {
         grid.asSingleSelect().clear();
-        userForm.openCreate();
+        userForm.openNew();
     }
 
     private void editUser(@Nullable final User user) {
         if (user == null) {
             userForm.closeForm();
         } else {
-            userForm.openModify(user);
+            userForm.openEdit(user);
         }
     }
 
@@ -243,15 +243,15 @@ public class UserManagementViewTab extends ManagementViewTab {
         refresh();
     }
 
-    private void acceptAdmissionDialogEvent(@Nonnull final AcceptAdmissionDialogEvent acceptAdmissionDialogEvent) {
-        final User user = acceptAdmissionDialogEvent.getUser();
-        final DatabaseResult<User> result = userService.changeUserStatusToMember(user, acceptAdmissionDialogEvent.getPlayerStatus());
+    private void admissionDialogAcceptEvent(@Nonnull final AcceptAdmissionEvent acceptAdmissionEvent) {
+        final User user = acceptAdmissionEvent.getUser();
+        final DatabaseResult<User> result = userService.changeUserStatusToMember(user, acceptAdmissionEvent.getPlayerStatus());
         notificationUtil.databaseNotification(result);
         refresh();
     }
 
-    private void rejectAdmissionDialogEvent(@Nonnull final RejectAdmissionDialogEvent rejectAdmissionDialogEvent) {
-        final User user = rejectAdmissionDialogEvent.getUser();
+    private void admissionDialogRejectEvent(@Nonnull final RejectAdmissionEvent rejectAdmissionEvent) {
+        final User user = rejectAdmissionEvent.getUser();
         final DatabaseResult<User> result = userService.changeUserStatusToGuest(user);
         notificationUtil.databaseNotification(result);
         refresh();

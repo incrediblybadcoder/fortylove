@@ -125,7 +125,7 @@ public class Booking extends AbstractEntity implements HasIdentifier {
 
     @Nonnull
     public String getDateFormatted() {
-        return date.format(FormatUtil.getDateTextFormatter());
+        return FormatUtil.format(date);
     }
 
     @Nonnull

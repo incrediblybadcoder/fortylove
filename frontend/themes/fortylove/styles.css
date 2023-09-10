@@ -1,4 +1,7 @@
 @import url("./presentation/views/main-layout.css");
 
 @import url("./presentation/views/booking/booking-view.css");
+@import url("./presentation/views/booking/bookingcomponent/booking-component.css");
+@import url("./presentation/views/booking/articlecomponent/article-component.css");
+
 @import url("./presentation/views/management/management-view.css");

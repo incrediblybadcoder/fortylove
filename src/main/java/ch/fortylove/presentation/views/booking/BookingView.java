@@ -1,6 +1,8 @@
 package ch.fortylove.presentation.views.booking;
 
 import ch.fortylove.presentation.views.MainLayout;
+import ch.fortylove.presentation.views.booking.articlecomponent.ArticleComponent;
+import ch.fortylove.presentation.views.booking.articlecomponent.ArticleGrid;
 import ch.fortylove.presentation.views.booking.bookingcomponent.BookingComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -22,24 +24,30 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     @Nonnull public static final String PAGE_TITLE = "Plätze";
 
     @Nonnull private final BookingComponent bookingComponent;
+    @Nonnull private final ArticleComponent articleComponent;
+    @Nonnull private final ArticleGrid articleGrid;
 
     @Autowired
-    public BookingView(@Nonnull final BookingComponent bookingComponent) {
+    public BookingView(@Nonnull final BookingComponent bookingComponent,
+                       @Nonnull final ArticleComponent articleComponent,
+                       @Nonnull final ArticleGrid articleGrid) {
         this.bookingComponent = bookingComponent;
+        this.articleComponent = articleComponent;
+        this.articleGrid = articleGrid;
 
         addClassName("booking-view");
         setSizeFull();
-        setPadding(false);
 
         constructUI();
     }
 
     private void constructUI() {
-        add(bookingComponent);
+        add(articleGrid, bookingComponent);
     }
 
     @Override
     public void afterNavigation(@Nonnull final AfterNavigationEvent event) {
+        articleGrid.refresh();
         bookingComponent.refresh();
     }
 }

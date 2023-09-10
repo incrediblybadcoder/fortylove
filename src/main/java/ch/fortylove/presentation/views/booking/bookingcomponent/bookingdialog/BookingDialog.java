@@ -38,7 +38,7 @@ public class BookingDialog extends CancelableDialog {
 
     @Nonnull private final MultiSelectComboBox<User> opponentComboBox = new MultiSelectComboBox<>("Gegenspieler");
     @Nonnull private final Button newButton = new Button("Speichern");
-    @Nonnull private final Button modifyButton = new Button("Speichern");
+    @Nonnull private final Button editButton = new Button("Speichern");
     @Nonnull private final Button deleteButton = new Button("Löschen");
 
     private HorizontalLayout buttonContainer;
@@ -60,27 +60,28 @@ public class BookingDialog extends CancelableDialog {
     }
 
     private void constructUI() {
+        setWidth("350px");
+
         final VerticalLayout dialogLayout = new VerticalLayout();
         dialogLayout.setSpacing(false);
         dialogLayout.setPadding(false);
 
-        final String fieldWidth = "300px";
         courtField = new TextField("Platz");
         courtField.setReadOnly(true);
-        courtField.setWidth(fieldWidth);
+        courtField.setWidthFull();
 
         dateField = new TextField("Zeit / Datum");
         dateField.setReadOnly(true);
-        dateField.setWidth(fieldWidth);
+        dateField.setWidthFull();
 
         ownerField = new TextField("Spieler");
         ownerField.setReadOnly(true);
-        ownerField.setWidth(fieldWidth);
+        ownerField.setWidthFull();
 
         opponentComboBox.setItemLabelGenerator(User::getFullName);
         opponentComboBox.setRequired(true);
         opponentComboBox.setRequiredIndicatorVisible(true);
-        opponentComboBox.setWidth(fieldWidth);
+        opponentComboBox.setWidthFull();
         opponentComboBox.addFocusListener(event -> validateOpponentSelection(opponentComboBox.getValue()));
         opponentComboBox.addValueChangeListener(event -> validateOpponentSelection(event.getValue()));
         opponentComboBox.addValueChangeListener(this::restrictMaximumOpponentSelection);
@@ -88,8 +89,8 @@ public class BookingDialog extends CancelableDialog {
 
         newButton.addClickListener(newButtonClickListener());
         newButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        modifyButton.addClickListener(modifyButtonClickListener());
-        modifyButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        editButton.addClickListener(modifyButtonClickListener());
+        editButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         deleteButton.addClickListener(deleteButtonClickListener());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonContainer = new HorizontalLayout();
@@ -112,7 +113,7 @@ public class BookingDialog extends CancelableDialog {
 
     private void validateOpponentSelection(@Nonnull final Set<User> user) {
         newButton.setEnabled(!user.isEmpty());
-        modifyButton.setEnabled(!user.isEmpty());
+        editButton.setEnabled(!user.isEmpty());
     }
 
     @Nonnull
@@ -178,9 +179,8 @@ public class BookingDialog extends CancelableDialog {
                              @Nonnull final Booking existingBooking) {
         this.existingBooking = existingBooking;
 
-        final String title = "Bearbeiten";
-        setHeaderTitle(title);
-        addButtons(deleteButton, modifyButton);
+        setHeaderTitle("Bearbeiten");
+        addButtons(deleteButton, editButton);
         setValues(court, timeslot, date, owner);
         opponentComboBox.setValue(opponents);
         open();
@@ -200,7 +200,7 @@ public class BookingDialog extends CancelableDialog {
         Collections.sort(mutablePossibleOpponentsList);
 
         courtField.setValue(court.getIdentifier());
-        dateField.setValue(timeslot.getTimeIntervalText() + " / " + date.format(FormatUtil.getDateTextFormatter()));
+        dateField.setValue(timeslot.getTimeIntervalText() + " / " + FormatUtil.format(date));
         ownerField.setValue(owner.getFullName());
         opponentComboBox.setItems(mutablePossibleOpponentsList);
     }
@@ -210,7 +210,7 @@ public class BookingDialog extends CancelableDialog {
         buttonContainer.add(buttons);
     }
 
-    public void addDialogBookingListener(@Nonnull final ComponentEventListener<BookingDialogEvent> listener) {
+    public void addBookingDialogListener(@Nonnull final ComponentEventListener<BookingDialogEvent> listener) {
         addListener(BookingDialogEvent.class, listener);
     }
 }

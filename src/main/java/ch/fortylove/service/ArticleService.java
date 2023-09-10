@@ -8,6 +8,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @Transactional
 public class ArticleService {
@@ -26,5 +30,30 @@ public class ArticleService {
         }
 
         return new DatabaseResult<>(articleRepository.save(article));
+    }
+
+    @Nonnull
+    public DatabaseResult<Article> update(@Nonnull final Article article) {
+        if (articleRepository.findById(article.getId()).isEmpty()) {
+            return new DatabaseResult<>("Artikel existiert nicht: " + article.getIdentifier());
+        }
+        return new DatabaseResult<>(articleRepository.save(article));
+    }
+
+    @Nonnull
+    public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
+        final Optional<Article> articleOptional = articleRepository.findById(id);
+        if (articleOptional.isEmpty()) {
+            return new DatabaseResult<>("Artikel existiert nicht: " + id);
+        }
+        final Article article = articleOptional.get();
+        articleRepository.delete(article);
+
+        return new DatabaseResult<>(id);
+    }
+
+    @Nonnull
+    public List<Article> findAll() {
+        return articleRepository.findAll();
     }
 }
