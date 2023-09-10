@@ -208,7 +208,7 @@ public class BookingDevSetupData {
     }
 
     @Transactional
-    void createBookingIfNotFound(@Nonnull final Court court,
+    private void createBookingIfNotFound(@Nonnull final Court court,
                                  @Nonnull final User player,
                                  @Nonnull final Set<User> partners,
                                  @Nonnull final LocalDate date,

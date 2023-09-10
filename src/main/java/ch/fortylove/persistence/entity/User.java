@@ -81,7 +81,6 @@ public class User extends AbstractEntity implements HasIdentifier {
         this.authenticationDetails = authenticationDetails;
         this.userStatus = userStatus;
         authenticationDetails.setUser(this);
-        authenticationDetails.setActivationCode(UUID.randomUUID().toString());
         this.enabled = enabled;
         this.roles = roles;
         this.playerStatus = playerStatus;

@@ -56,10 +56,12 @@ public class RegistrationView extends VerticalLayout {
 
     private void registerUser(RegistrationEvent registrationEvent) {
         final User user = registrationEvent.getUser();
+        // Todo überprüfen ob der User in der User-Tabel existiert ODER in der neuen UnregisteredUser-Tabel
             if (userService.findByEmail(user.getEmail()).isPresent()) {
                 notificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
             } else {
                 user.getAuthenticationDetails().setEncryptedPassword(passwordEncoder.encode(registrationEvent.getPlainPassword()));
+                // Todo: Hier muss der User in die UnregisteredUser-Tabel geschrieben werden
                 userService.create(user, true);
                 gotToLoginPage();
                 notificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");

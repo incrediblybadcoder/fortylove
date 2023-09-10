@@ -39,6 +39,7 @@ public class UserService {
         return this.create(user, false);
     }
 
+    //Todo diese Methode muss in eine neue UnregisterdUserService Klasse verschoben werden
     @Nonnull
     public DatabaseResult<User> create(@Nonnull final User user,
                                        boolean sendActivationMail) {
@@ -63,6 +64,7 @@ public class UserService {
             }
         }
         return new DatabaseResult<>(userRepository.save(user));
+        return new DatabaseResult<>(user);
     }
 
     @Nonnull
@@ -126,6 +128,7 @@ public class UserService {
                 .toList();
     }
 
+    //Todo diese Methode muss in eine neue UnregisterdUserService Klasse verschoben werden
     /**
      * Aktiviert einen Benutzer anhand eines gegebenen Aktivierungscodes.
      *
@@ -133,16 +136,18 @@ public class UserService {
      * @return {@code true} wenn der Benutzer erfolgreich aktiviert wurde, {@code false} wenn kein Benutzer mit dem gegebenen Aktivierungscode gefunden wurde.
      */
     public boolean activate(@Nonnull final String activationCode) {
-        User user = userRepository.findByActivationCode(activationCode);
-        if (user != null) {
-            user.setEnabled(true);
-            userRepository.save(user);
-            return true;
-        } else {
-            return false;
-        }
+//        User user = userRepository.findByActivationCode(activationCode);
+//        if (user != null) {
+//            user.setEnabled(true);
+//            userRepository.save(user);
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
+    //Todo diese Methode muss in eine neue UnregisterdUserService Klasse verschoben werden
     /**
      * Überprüft ob ein Benutzer aktiviert ist anhand eines gegebenen Aktivierungscodes.
      *
@@ -150,12 +155,13 @@ public class UserService {
      * @return {@code true} wenn der Benutzer bereits aktiv ist, {@code false} wenn der Benutzer nicht aktiv ist.
      */
     public boolean checkIfActive(@Nonnull final String activationCode) {
-        User user = userRepository.findByActivationCode(activationCode);
-        if (user != null) {
-            return user.isEnabled();
-        } else {
-            return false;
-        }
+//        User user = userRepository.findByActivationCode(activationCode);
+//        if (user != null) {
+//            return user.isEnabled();
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
     public boolean generateAndSaveResetToken(@Nonnull final String email) {

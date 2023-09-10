@@ -103,7 +103,7 @@ public class UserDevSetupData {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {
-            final AuthenticationDetails authenticationDetails = new AuthenticationDetails(passwordEncoder.encode(password), "");
+            final AuthenticationDetails authenticationDetails = new AuthenticationDetails(passwordEncoder.encode(password));
             final User user = new User(firstName, lastName, email, authenticationDetails, userStatus, activationStatus, Roles, playerStatus);
             authenticationDetails.setUser(user);
             userService.create(user);
