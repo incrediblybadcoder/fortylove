@@ -54,6 +54,6 @@ public class ArticleService {
 
     @Nonnull
     public List<Article> findAll() {
-        return articleRepository.findAll();
+        return articleRepository.findByOrderByDateTimeAsc();
     }
 }

@@ -2,6 +2,7 @@ package ch.fortylove.presentation.views.booking.articlecomponent.articledialog;
 
 import ch.fortylove.persistence.entity.Article;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
+import ch.fortylove.presentation.fieldvalidators.NotBlankValidator;
 import ch.fortylove.util.DateTimeUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -13,7 +14,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -45,8 +45,8 @@ public class ArticleDialog extends CancelableDialog {
     }
 
     private void initBinder() {
-        binder.forField(titleField).withValidator((value, context) -> value.isBlank() ? ValidationResult.error("Eingabe Titel zwingend") : ValidationResult.ok()).bind(Article::getTitle, Article::setTitle);
-        binder.forField(textArea).withValidator((value, context) -> value.isBlank() ? ValidationResult.error("Eingabe Text zwingend") : ValidationResult.ok()).bind(Article::getText, Article::setText);
+        binder.forField(titleField).withValidator(new NotBlankValidator("Titel")).bind(Article::getTitle, Article::setTitle);
+        binder.forField(textArea).withValidator(new NotBlankValidator("Text")).bind(Article::getText, Article::setText);
         binder.bindInstanceFields(this);
         binder.addValueChangeListener(event -> updateButtonState(true));
     }

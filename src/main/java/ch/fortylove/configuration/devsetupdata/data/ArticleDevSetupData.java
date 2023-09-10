@@ -26,6 +26,13 @@ public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupd
     @Override
     public void createDevData() {
         createArticle("Cluberöffnung", "Good News Everybody! Der TCS Untervaz wurde soeben eröffnet!", yesterday());
+        createArticle("Sand im Clubhaus", "Bitte reinigt eure Schuhe nach dem Verlassen des Tennisplatzes" +
+                "und vor dem Betreten des Clubhauses gründlich. Unsere Böden sehen vermehrt aus wie die Strände vom Mallorca!", yesterday());
+        createArticle("Rücktritt Clubpresident", "Hanspeter Peterhans wird uns Ende Jahr nach nur kurzer Amtszeit" +
+                "leider verlassen. Es hat sich herausgestellt, dass er eine Allergie gegen Tennisballhaare entwickelt hat.", yesterday());
+        createArticle("Tennisschläger Aktion", "Wir dürfen euch mit Freude mitteilen, dass unser Partner " +
+                "\"Brackets105\" ihre neuste Kollektion an Profischläger zu vergünstigten Preisen anbietet. Der Flyer " +
+                "liegt in der Küche im Clubhaus aus.", yesterday());
         createArticle("Sommerturnier", "Soeben eröffnet findet auch gleich das erste Turnier statt!" +
                 " Alle sind herzlich eingeladen, an unserem Sommerturnier nächste Woche Samstag teilzunehmen", today());
         createArticle("Zukünftige Wartungsarbeiten", "Die Plätze 2 und 3 werden kommende Woche gewartet." +
@@ -46,6 +53,6 @@ public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupd
 
     @Nonnull
     private LocalDateTime yesterday() {
-        return dateTimeUtil.todayNow().minusDays(-1);
+        return dateTimeUtil.todayNow().minusDays(1);
     }
 }

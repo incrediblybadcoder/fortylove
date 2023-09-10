@@ -8,8 +8,7 @@ import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.presentation.components.managementform.OpenMode;
-import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
-import ch.fortylove.presentation.fieldvalidators.LastNameValidator;
+import ch.fortylove.presentation.fieldvalidators.NameValidator;
 import ch.fortylove.presentation.fieldvalidators.SetNotEmptyValidator;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
@@ -75,11 +74,11 @@ public class UserForm extends ManagementForm<User> {
         final Binder<User> binder = new Binder<>(User.class);
 
         binder.forField(firstNameField)
-                .withValidator(FirstNameValidator::validateFirstName)
+                .withValidator(new NameValidator("Vorname"))
                 .bind(User::getFirstName, User::setFirstName);
 
         binder.forField(lastNameField)
-                .withValidator(LastNameValidator::validateLastName)
+                .withValidator(new NameValidator("Nachname"))
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(emailField)

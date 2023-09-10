@@ -85,16 +85,15 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
     private void constructUI() {
         final Optional<User> authenticatedUser = authenticationService.getAuthenticatedUser();
         authenticatedUser.ifPresent(user -> {
-                    final boolean userHasManagementRole = roleService.hasManagementRole(user);
-                    addComponentColumn(article -> {
-                        if (article.equals(newArticleItem)) {
-                            return getNewArticleGridItem();
-                        } else {
-                            return getArticleGridItem(userHasManagementRole, article);
-                        }
-                    });
+            final boolean userHasManagementRole = roleService.hasManagementRole(user);
+            addComponentColumn(article -> {
+                if (article.equals(newArticleItem)) {
+                    return getNewArticleGridItem();
+                } else {
+                    return getArticleGridItem(userHasManagementRole, article);
                 }
-        );
+            });
+        });
     }
 
     @Nonnull

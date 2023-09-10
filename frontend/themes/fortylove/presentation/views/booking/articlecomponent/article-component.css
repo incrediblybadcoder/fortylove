@@ -1,24 +1,23 @@
 .article-component {
   display: block;
+  height: 400px;
   box-shadow: var(--lumo-box-shadow-s);
-  /*background-color: var(--lumo-contrast-10pct);*/
   padding: 12px;
 }
 
 @media (max-width: 800px){
     .article-component {
+        height: 100%;
         padding: 0px;
     }
 }
 
 .article-component vaadin-grid {
-  /*height: 100%;*/
   line-height: var(--lumo-line-height-m);
 }
 
 .article-component vaadin-grid,
 .article-component vaadin-grid-cell-content {
-  /*background-color: var(--lumo-contrast-10pct);*/
   padding: 5px 5px 5px 5px;
 }
 
