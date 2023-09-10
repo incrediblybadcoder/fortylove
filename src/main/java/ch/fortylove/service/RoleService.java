@@ -2,6 +2,7 @@ package ch.fortylove.service;
 
 import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import ch.fortylove.persistence.entity.Role;
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.repository.RoleRepository;
 import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
@@ -62,6 +63,18 @@ public class RoleService {
         @Nonnull final List<String> managementRoles = RoleSetupData.getManagementRoles();
         final List<Role> rolesByNames = roleRepository.findRolesByNames(managementRoles);
         return new HashSet<>(rolesByNames);
+    }
+
+    public boolean hasManagementRole(@Nonnull final User user) {
+        final Set<Role> managementRoles = getDefaultManagementRoles();
+        final Set<Role> userRoles = user.getRoles();
+
+        for (final Role userRole : userRoles) {
+            if (managementRoles.contains(userRole)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nonnull

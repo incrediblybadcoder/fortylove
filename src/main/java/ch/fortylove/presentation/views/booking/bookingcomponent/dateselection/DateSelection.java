@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.booking.bookingcomponent.dateselection;
 
 import ch.fortylove.presentation.views.booking.bookingcomponent.dateselection.events.DateChangeEvent;
+import ch.fortylove.util.DateTimeUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.Locale;
@@ -23,11 +25,11 @@ public class DateSelection extends VerticalLayout {
     private LocalDate date;
     private DatePicker datePicker;
 
-    public DateSelection() {
-        this.date = LocalDate.now();
+    @Autowired
+    public DateSelection(@Nonnull final DateTimeUtil dateTimeUtil) {
+        date = dateTimeUtil.today();
 
         setAlignItems(Alignment.CENTER);
-        setPadding(false);
 
         constructUI(date);
     }

@@ -11,6 +11,7 @@ import ch.fortylove.presentation.views.booking.bookingcomponent.grid.BookingGrid
 import ch.fortylove.presentation.views.booking.bookingcomponent.grid.BookingGridConfiguration;
 import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.BookedCellClickEvent;
 import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.FreeCellClickEvent;
+import ch.fortylove.presentation.views.management.Refreshable;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.CourtService;
@@ -31,7 +32,7 @@ import java.util.UUID;
 
 @SpringComponent
 @UIScope
-public class BookingComponent extends VerticalLayout {
+public class BookingComponent extends VerticalLayout implements Refreshable {
 
     @Nonnull private final BookingService bookingService;
     @Nonnull private final AuthenticationService authenticationService;
@@ -51,23 +52,21 @@ public class BookingComponent extends VerticalLayout {
                             @Nonnull final NotificationUtil notificationUtil,
                             @Nonnull final BookingDialog bookingDialog,
                             @Nonnull final BookingGrid bookingGrid,
-                            @Nonnull final DateSelection dateSelectionComponent) {
+                            @Nonnull final DateSelection dateSelection) {
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
         this.courtService = courtService;
         this.notificationUtil = notificationUtil;
         this.bookingDialog = bookingDialog;
         this.bookingGrid = bookingGrid;
-        this.dateSelection = dateSelectionComponent;
+        this.dateSelection = dateSelection;
 
         addClassName("booking-component");
-        setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setPadding(false);
 
         constructUI();
     }
 
+    @Override
     public void refresh() {
         final List<Court> courts = courtService.findAllWithBookingsByDate(getSelectedDate());
 
@@ -82,10 +81,10 @@ public class BookingComponent extends VerticalLayout {
     }
 
     private void constructUI() {
-        bookingDialog.addDialogBookingListener(this::handleBookingDialogEvent);
+        bookingDialog.addBookingDialogListener(this::bookingDialogEvent);
         add(getEmptyCourtComponent());
-        add(getBookingGridComponent());
-        add(getDateSelectionComponent());
+        add(getBookingGrid());
+        add(getDateSelection());
     }
 
     @Nonnull
@@ -101,14 +100,14 @@ public class BookingComponent extends VerticalLayout {
     }
 
     @Nonnull
-    private BookingGrid getBookingGridComponent() {
-        bookingGrid.addBookedCellClickListener(this::bookedCellClicked);
-        bookingGrid.addFreeCellClickListener(this::freeCellClicked);
+    private BookingGrid getBookingGrid() {
+        bookingGrid.addBookedCellClickListener(this::bookedCellClickEvent);
+        bookingGrid.addFreeCellClickListener(this::freeCellClickEvent);
         return bookingGrid;
     }
 
     @Nonnull
-    private DateSelection getDateSelectionComponent() {
+    private DateSelection getDateSelection() {
         dateSelection.addDateChangeListener(this::dateChanged);
         return dateSelection;
     }
@@ -117,7 +116,7 @@ public class BookingComponent extends VerticalLayout {
         refresh();
     }
 
-    private void bookedCellClicked(@Nonnull final BookedCellClickEvent event) {
+    private void bookedCellClickEvent(@Nonnull final BookedCellClickEvent event) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             if (!currentUser.equals(event.getBooking().getOwner())) {
                 return;
@@ -131,16 +130,16 @@ public class BookingComponent extends VerticalLayout {
         });
     }
 
-    private void freeCellClicked(@Nonnull final FreeCellClickEvent event) {
+    private void freeCellClickEvent(@Nonnull final FreeCellClickEvent event) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
             bookingDialog.openFree(event.getCourt(), event.getTimeSlot(), getSelectedDate(), currentUser);
         });
     }
 
-    private void handleBookingDialogEvent(@Nonnull final BookingDialogEvent bookingDialogEvent) {
+    private void bookingDialogEvent(@Nonnull final BookingDialogEvent bookingDialogEvent) {
         switch (bookingDialogEvent.getType()) {
             case NEW -> newBookingEvent(bookingDialogEvent.getBooking());
-            case MODIFY -> modifyBookingEvent(bookingDialogEvent.getBooking());
+            case EDIT -> modifyBookingEvent(bookingDialogEvent.getBooking());
             case DELETE -> deleteBookingEvent(bookingDialogEvent.getBooking());
         }
     }

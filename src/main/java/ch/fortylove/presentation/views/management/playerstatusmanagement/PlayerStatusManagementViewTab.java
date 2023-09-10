@@ -126,14 +126,14 @@ public class PlayerStatusManagementViewTab extends ManagementViewTab {
 
     private void addPlayerStatus() {
         grid.asSingleSelect().clear();
-        playerStatusForm.openCreate();
+        playerStatusForm.openNew();
     }
 
     private void editPlayerStatus(@Nullable final PlayerStatus playerStatus) {
         if (playerStatus == null) {
             playerStatusForm.closeForm();
         } else {
-            playerStatusForm.openModify(playerStatus);
+            playerStatusForm.openEdit(playerStatus);
         }
     }
 

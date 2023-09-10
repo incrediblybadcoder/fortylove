@@ -15,7 +15,7 @@ public class BookingDialogEvent extends ComponentEvent<BookingDialog> {
 
     public enum Type {
         NEW,
-        MODIFY,
+        EDIT,
         DELETE
     }
 
@@ -44,7 +44,7 @@ public class BookingDialogEvent extends ComponentEvent<BookingDialog> {
                                                    @Nonnull final Court court,
                                                    @Nonnull final Timeslot timeslot,
                                                    @Nonnull final Booking booking) {
-        return new BookingDialogEvent(source, court, timeslot, booking, Type.MODIFY);
+        return new BookingDialogEvent(source, court, timeslot, booking, Type.EDIT);
     }
 
     @Nonnull

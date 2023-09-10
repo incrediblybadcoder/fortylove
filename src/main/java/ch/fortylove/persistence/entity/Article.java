@@ -1,5 +1,6 @@
 package ch.fortylove.persistence.entity;
 
+import ch.fortylove.util.FormatUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,9 +25,6 @@ public class Article extends AbstractEntity implements HasIdentifier {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    @Column(name = "picture")
-    private byte[] picture;
-
     protected Article() {
     }
 
@@ -37,16 +35,6 @@ public class Article extends AbstractEntity implements HasIdentifier {
         this.title = title;
         this.text = text;
         this.dateTime = dateTime;
-    }
-
-    public Article(@Nonnull final String title,
-                   @Nonnull final String text,
-                   @Nonnull final LocalDateTime dateTime,
-                   final byte[] picture) {
-        this.title = title;
-        this.text = text;
-        this.dateTime = dateTime;
-        this.picture = picture;
     }
 
     @Nonnull
@@ -76,17 +64,9 @@ public class Article extends AbstractEntity implements HasIdentifier {
         this.dateTime = dateTime;
     }
 
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(final byte[] picture) {
-        this.picture = picture;
-    }
-
     @Nonnull
     @Override
     public String getIdentifier() {
-        return title + " " + dateTime;
+        return title + " " + FormatUtil.format(dateTime);
     }
 }

@@ -39,7 +39,6 @@ public abstract class ManagementForm<T> extends FormLayout {
     protected OpenMode openMode;
 
     public ManagementForm() {
-
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
 
         constructUI();
@@ -146,16 +145,16 @@ public abstract class ManagementForm<T> extends FormLayout {
         closeForm();
     }
 
-    public void openCreate() {
+    public void openNew() {
         final String title = getItemName() + " erstellen";
         final Button[] buttons = {save, close};
-        open(OpenMode.CREATE, title, getNewItem(), false, buttons);
+        open(OpenMode.NEW, title, getNewItem(), false, buttons);
     }
 
-    public void openModify(@Nonnull final T item) {
+    public void openEdit(@Nonnull final T item) {
         final String title = getItemName() + " bearbeiten";
         final Button[] buttons = {update, delete, close};
-        open(OpenMode.MODIFY, title, item, true, buttons);
+        open(OpenMode.EDIT, title, item, true, buttons);
     }
 
     private void open(@Nonnull final OpenMode openMode,
@@ -163,7 +162,6 @@ public abstract class ManagementForm<T> extends FormLayout {
                       @Nonnull final T item,
                       final boolean checkChanges,
                       @Nonnull final Button... buttons) {
-
         this.openMode = openMode;
         currentItem = item;
 
