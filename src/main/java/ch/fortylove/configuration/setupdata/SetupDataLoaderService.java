@@ -32,10 +32,10 @@ public class SetupDataLoaderService {
     }
 
     public void initData() {
-        bookingSettingsSetupData.createBookingSettings();
-        privilegeSetupData.createPrivileges();
-        roleSetupData.createRoles();
-        playerStatusSetupData.createPlayerStatus();
-        defaultUserSetupData.createDefaultUser();
+        bookingSettingsSetupData.createData();
+        privilegeSetupData.createData();
+        roleSetupData.createData();
+        playerStatusSetupData.createData();
+        defaultUserSetupData.createData();
     }
 }

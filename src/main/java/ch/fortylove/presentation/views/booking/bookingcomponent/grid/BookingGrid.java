@@ -1,16 +1,16 @@
-package ch.fortylove.presentation.views.booking.grid;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid;
 
 import ch.fortylove.persistence.entity.Booking;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.Timeslot;
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.views.booking.grid.cells.BookedCell;
-import ch.fortylove.presentation.views.booking.grid.cells.Cell;
-import ch.fortylove.presentation.views.booking.grid.cells.CourtInfoCell;
-import ch.fortylove.presentation.views.booking.grid.cells.FreeCell;
-import ch.fortylove.presentation.views.booking.grid.events.BookedCellClickEvent;
-import ch.fortylove.presentation.views.booking.grid.events.FreeCellClickEvent;
-import ch.fortylove.presentation.views.booking.grid.util.CourtUtil;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells.BookedCell;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells.Cell;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells.CourtInfoCell;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.cells.FreeCell;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.BookedCellClickEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.events.FreeCellClickEvent;
+import ch.fortylove.presentation.views.booking.bookingcomponent.grid.util.CourtUtil;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.BookingService;
 import ch.fortylove.service.BookingSettingsService;

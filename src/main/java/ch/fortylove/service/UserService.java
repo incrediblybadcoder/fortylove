@@ -1,10 +1,13 @@
 package ch.fortylove.service;
 
 import ch.fortylove.configuration.setupdata.data.DefaultUserSetupData;
+import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.persistence.repository.UserRepository;
 import ch.fortylove.service.email.EmailServiceProvider;
 import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.util.DateTimeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +25,21 @@ import java.util.UUID;
 public class UserService {
 
     @Nonnull private final UserRepository userRepository;
-    @Nonnull private final String baseUrl;
+    @Nonnull private final PlayerStatusService playerStatusService;
+    @Nonnull private final DateTimeUtil dateTimeUtil;
+
     @Nonnull private final EmailServiceProvider emailServiceProvider;
+    @Nonnull private final String baseUrl;
 
     @Autowired
     public UserService(@Nonnull final UserRepository userRepository,
+                       @Nonnull final PlayerStatusService playerStatusService,
+                       @Nonnull final DateTimeUtil dateTimeUtil,
                        @Value("${email.service}") String emailProvider,
                        @Nonnull final ApplicationContext context) {
         this.userRepository = userRepository;
+        this.playerStatusService = playerStatusService;
+        this.dateTimeUtil = dateTimeUtil;
         baseUrl = System.getenv("BASE_URL");
         emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
     }
@@ -133,7 +143,7 @@ public class UserService {
      * @return {@code true} wenn der Benutzer erfolgreich aktiviert wurde, {@code false} wenn kein Benutzer mit dem gegebenen Aktivierungscode gefunden wurde.
      */
     public boolean activate(@Nonnull final String activationCode) {
-        User user = userRepository.findByActivationCode(activationCode);
+        final User user = userRepository.findByActivationCode(activationCode);
         if (user != null) {
             user.setEnabled(true);
             userRepository.save(user);
@@ -150,7 +160,7 @@ public class UserService {
      * @return {@code true} wenn der Benutzer bereits aktiv ist, {@code false} wenn der Benutzer nicht aktiv ist.
      */
     public boolean checkIfActive(@Nonnull final String activationCode) {
-        User user = userRepository.findByActivationCode(activationCode);
+        final User user = userRepository.findByActivationCode(activationCode);
         if (user != null) {
             return user.isEnabled();
         } else {
@@ -186,7 +196,8 @@ public class UserService {
 
     public boolean resetPasswordUsingToken(@Nonnull final String token,
                                            @Nonnull final String newPasswordEncrypted) {
-        User user = userRepository.findByResetToken(token);
+        final User user = userRepository.findByResetToken(token);
+
         if (user != null && isTokenValid(user.getAuthenticationDetails().getTokenExpiryDate())) {
             user.getAuthenticationDetails().setEncryptedPassword(newPasswordEncrypted);
             // Token und Expiry Date sollen nach dem erfolgreichen Zurücksetzen des Passworts gelöscht werden
@@ -201,6 +212,21 @@ public class UserService {
     }
 
     private boolean isTokenValid(@Nonnull final LocalDateTime tokenExpiryDate) {
-        return tokenExpiryDate.isAfter(LocalDateTime.now());
+        return tokenExpiryDate.isAfter(dateTimeUtil.todayNow());
+    }
+
+    @Nonnull
+    public DatabaseResult<User> changeUserStatusToMember(@Nonnull final User user,
+                                                         @Nonnull final PlayerStatus playerStatus) {
+        user.setUserStatus(UserStatus.MEMBER);
+        user.setPlayerStatus(playerStatus);
+        return update(user);
+    }
+
+    @Nonnull
+    public DatabaseResult<User> changeUserStatusToGuest(@Nonnull final User user) {
+        user.setUserStatus(UserStatus.GUEST);
+        user.setPlayerStatus(playerStatusService.getDefaultGuestPlayerStatus());
+        return update(user);
     }
 }

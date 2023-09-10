@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.booking.grid;
+package ch.fortylove.presentation.views.booking.bookingcomponent.grid;
 
 import ch.fortylove.persistence.entity.Court;
 import jakarta.annotation.Nonnull;

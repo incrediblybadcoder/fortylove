@@ -94,7 +94,7 @@ public class BookingService {
 
     @Nonnull
     public ValidationResult isBookingModifiableOnDate(@Nonnull final Booking booking) {
-        return isBookingModifiableOnDateInternal(booking, dateTimeUtil.getLocalDateTime());
+        return isBookingModifiableOnDateInternal(booking, dateTimeUtil.todayNow());
     }
 
     @Nonnull
@@ -112,7 +112,7 @@ public class BookingService {
         final LocalDate date = booking.getDate();
         final User owner = booking.getOwner();
 
-        ValidationResult validationResult = isBookingCreatableOnDate(booking.getId(), booking.getCourt(), booking.getOwner(), booking.getTimeslot(), date, dateTimeUtil.getLocalDateTime());
+        ValidationResult validationResult = isBookingCreatableOnDate(booking.getId(), booking.getCourt(), booking.getOwner(), booking.getTimeslot(), date, dateTimeUtil.todayNow());
         if (!validationResult.isSuccessful()) {
             return validationResult;
         }
@@ -175,7 +175,7 @@ public class BookingService {
 
     private boolean isOutsideOfBookableDaysInAdvance(@Nonnull final PlayerStatus playerStatus,
                                                      @Nonnull final LocalDate date) {
-        final LocalDate maxAllowedDateInAdvance = dateTimeUtil.getLocalDate().plusDays(playerStatus.getBookableDaysInAdvance());
+        final LocalDate maxAllowedDateInAdvance = dateTimeUtil.today().plusDays(playerStatus.getBookableDaysInAdvance());
         return date.isAfter(maxAllowedDateInAdvance);
     }
 
@@ -204,7 +204,7 @@ public class BookingService {
         }
 
         // is free cell and in past
-        if (booking == null && timeSlotService.isInPast(dateTimeUtil.getLocalDateTime(), date, timeslot)) {
+        if (booking == null && timeSlotService.isInPast(dateTimeUtil.todayNow(), date, timeslot)) {
             return false;
         }
 

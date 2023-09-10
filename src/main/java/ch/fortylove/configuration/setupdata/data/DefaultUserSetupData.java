@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @SetupData
-public class DefaultUserSetupData {
+public class DefaultUserSetupData implements ch.fortylove.configuration.setupdata.data.SetupData {
 
     @Nonnull public static final String DEVELOP_USER = "fortylove.untervaz@gmail.com";
 
@@ -25,20 +25,22 @@ public class DefaultUserSetupData {
         this.userFactory = userFactory;
     }
 
+
     /**
      * Damit werden die Default User, welche es auf der App immer geben soll, erstellt.
      */
-    public void createDefaultUser() {
+    @Override
+    public void createData() {
         // Der DEVELOP_USER ist gedacht, um initial die App zu konfigurieren.
         // Der DEVELOP_USER soll in der App nicht sichtbar sein.
         createUserIfNotFound(DEVELOP_USER, "Forty", "Love", "$2a$10$lSFt1KQWpHLwCRyQaXjG3e16zkZu3tHCy1cv1LofhwWcYdGucj9xS");
     }
 
     @Transactional
-    void createUserIfNotFound(@Nonnull final String email,
-                              @Nonnull final String firstName,
-                              @Nonnull final String lastName,
-                              @Nonnull final String password) {
+    private void createUserIfNotFound(@Nonnull final String email,
+                                      @Nonnull final String firstName,
+                                      @Nonnull final String lastName,
+                                      @Nonnull final String password) {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {

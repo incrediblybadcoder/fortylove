@@ -12,9 +12,9 @@ public class LastNameValidator {
     public static ValidationResult validateLastName(@Nonnull final String value,
                                                     @Nonnull final ValueContext context) {
         if (value.isEmpty()) {
-            return ValidationResult.error("Der Nachname darf nicht leer sein");
+            return ValidationResult.error("Nachname darf nicht leer sein");
         } else if (value.length() > MAX_LAST_NAME_LENGTH) {
-            return ValidationResult.error("Der Nachname darf maximal "+ MAX_LAST_NAME_LENGTH +" Zeichen haben");
+            return ValidationResult.error("Nachname darf maximal "+ MAX_LAST_NAME_LENGTH +" Zeichen haben");
         }
         return ValidationResult.ok();
     }
