@@ -4,8 +4,7 @@ import ch.fortylove.persistence.entity.UnvalidatedUser;
 import ch.fortylove.persistence.entity.factory.UnvalidatedUserFactory;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
-import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
-import ch.fortylove.presentation.fieldvalidators.LastNameValidator;
+import ch.fortylove.presentation.fieldvalidators.NameValidator;
 import ch.fortylove.presentation.views.registration.events.CancelRegistrationEvent;
 import ch.fortylove.presentation.views.registration.events.RegistrationEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -108,11 +107,11 @@ public class RegistrationForm extends FormLayout {
 
     private void defineValidators() {
         binder.forField(firstName)
-                .withValidator(FirstNameValidator::validateFirstName)
+                .withValidator(new NameValidator("Vorname"))
                 .bind(UnvalidatedUser::getFirstName, UnvalidatedUser::setFirstName);
 
         binder.forField(lastName)
-                .withValidator(LastNameValidator::validateLastName)
+                .withValidator(new NameValidator("Nachname"))
                 .bind(UnvalidatedUser::getLastName, UnvalidatedUser::setLastName);
 
         binder.forField(email)
