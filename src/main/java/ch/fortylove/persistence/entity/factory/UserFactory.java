@@ -73,13 +73,13 @@ public class UserFactory {
                                 @Nonnull final String lastName,
                                 @Nonnull final String email,
                                 @Nonnull final String encryptedPassword) {
-        final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword, "");
+        final AuthenticationDetails authenticationDetails = new AuthenticationDetails(encryptedPassword);
         return new User(firstName, lastName, email, authenticationDetails, UserStatus.MEMBER, true, roleService.getDefaultAdminRoles(), playerStatusService.getDefaultAdminPlayerStatus());
     }
 
     @Nonnull
     private AuthenticationDetails getAuthenticationDetailsWithEncryption(@Nonnull final String plainPassword) {
         final String encryptedPassword = passwordEncoder.encode(plainPassword);
-        return new AuthenticationDetails(encryptedPassword, "");
+        return new AuthenticationDetails(encryptedPassword);
     }
 }

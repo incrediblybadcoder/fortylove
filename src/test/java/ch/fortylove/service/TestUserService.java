@@ -67,6 +67,6 @@ class TestUserService extends ServiceTest {
     }
 
     private AuthenticationDetails getAuthenticationDetails() {
-        return new AuthenticationDetails("password", "activationCode");
+        return new AuthenticationDetails("password");
     }
 }

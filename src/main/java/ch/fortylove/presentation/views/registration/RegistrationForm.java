@@ -1,7 +1,7 @@
 package ch.fortylove.presentation.views.registration;
 
-import ch.fortylove.persistence.entity.User;
-import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.persistence.entity.UnvalidatedUser;
+import ch.fortylove.persistence.entity.factory.UnvalidatedUserFactory;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.fieldvalidators.FirstNameValidator;
@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Scope;
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
 
-    @Nonnull final private Binder<User> binder;
-    @Nonnull private final User user;
+    @Nonnull final private Binder<UnvalidatedUser> binder;
+    @Nonnull private final UnvalidatedUser unvalidatedUser;
 
     private H2 title;
     private TextField firstName;
@@ -45,13 +45,13 @@ public class RegistrationForm extends FormLayout {
     private String confirmPlainPasswordInput;
     private String plainPasswordInput;
 
-    public RegistrationForm(@Nonnull final UserFactory userFactory) {
+    public RegistrationForm(@Nonnull final UnvalidatedUserFactory unvalidatedUserFactory) {
 
-        binder = new Binder<>(User.class);
+        binder = new Binder<>(UnvalidatedUser.class);
         binder.bindInstanceFields(this);
 
-        user = userFactory.newEmptyGuestUser(false);
-        binder.setBean(user);
+        unvalidatedUser = unvalidatedUserFactory.newEmptyUnvalidatedUser();
+        binder.setBean(unvalidatedUser);
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
 
         constructUI();
@@ -96,8 +96,8 @@ public class RegistrationForm extends FormLayout {
 
 
     private void registerClick() {
-        if (binder.writeBeanIfValid(user)) {
-            fireEvent(new RegistrationEvent(this, user, plainPassword.getValue()));
+        if (binder.writeBeanIfValid(unvalidatedUser)) {
+            fireEvent(new RegistrationEvent(this, unvalidatedUser, plainPassword.getValue()));
         }
     }
 
@@ -109,15 +109,15 @@ public class RegistrationForm extends FormLayout {
     private void defineValidators() {
         binder.forField(firstName)
                 .withValidator(FirstNameValidator::validateFirstName)
-                .bind(User::getFirstName, User::setFirstName);
+                .bind(UnvalidatedUser::getFirstName, UnvalidatedUser::setFirstName);
 
         binder.forField(lastName)
                 .withValidator(LastNameValidator::validateLastName)
-                .bind(User::getLastName, User::setLastName);
+                .bind(UnvalidatedUser::getLastName, UnvalidatedUser::setLastName);
 
         binder.forField(email)
                 .withValidator(new EmailValidator("Bitte geben Sie eine gültige E-Mail-Adresse ein."))
-                .bind(User::getEmail, User::setEmail);
+                .bind(UnvalidatedUser::getEmail, UnvalidatedUser::setEmail);
 
 
         binder.forField(plainPassword)

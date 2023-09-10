@@ -18,10 +18,6 @@ public class AuthenticationDetails extends AbstractEntity {
     private String encryptedPassword;
 
     @NotNull
-    @Column(name = "activation_code")
-    private String activationCode;
-
-    @NotNull
     @OneToOne(mappedBy = "authenticationDetails")
     private User user;
 
@@ -35,11 +31,9 @@ public class AuthenticationDetails extends AbstractEntity {
     protected AuthenticationDetails() {
     }
 
-    public AuthenticationDetails(@Nonnull final String encryptedPassword,
-                                 @Nonnull final String activationCode) {
+    public AuthenticationDetails(@Nonnull final String encryptedPassword) {
         super(UUID.randomUUID());
         this.encryptedPassword = encryptedPassword;
-        this.activationCode = activationCode;
     }
 
     @Nonnull
@@ -60,14 +54,6 @@ public class AuthenticationDetails extends AbstractEntity {
         this.encryptedPassword = encryptedPassword;
     }
 
-    @Nonnull
-    public String getActivationCode() {
-        return activationCode;
-    }
-
-    public void setActivationCode(@Nonnull final String activationCode) {
-        this.activationCode = activationCode;
-    }
 
     public String getResetToken() {
         return resetToken;

@@ -20,9 +20,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u FROM users u WHERE u.playerStatus.bookingsPerDay > 0 AND u.enabled = true")
     List<User> findAllEnabledWithAvailableBookingsPerDay();
 
-    @Query("SELECT u FROM users u JOIN u.authenticationDetails ad WHERE ad.activationCode = :activationCode")
-    User findByActivationCode(@Param("activationCode") String activationCode);
-
     @Query("SELECT u FROM users u JOIN u.authenticationDetails ad WHERE ad.resetToken = :resetToken")
     User findByResetToken(@Param("resetToken") String resetToken);
 }
