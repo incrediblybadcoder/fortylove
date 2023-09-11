@@ -1,5 +1,4 @@
 .article-grid {
-    display: flex;
     box-shadow: var(--lumo-box-shadow-xs);
     max-height: 30%
 }
