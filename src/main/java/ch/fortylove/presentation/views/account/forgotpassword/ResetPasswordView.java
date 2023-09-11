@@ -24,7 +24,7 @@ import java.util.List;
 public class ResetPasswordView extends VerticalLayout implements BeforeEnterObserver {
 
     @Nonnull public static final String ROUTE = "resetpassword";
-    @Nonnull public static final String PAGE_TITLE = "New Password";
+    @Nonnull public static final String PAGE_TITLE = "Neues Passwort";
 
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
