@@ -34,6 +34,7 @@ public class SupportView extends VerticalLayout {
 
     private void constructUI(final boolean isUserLoggedIn) {
         final Span description = new Span("Haben Sie Fragen oder Probleme? Wir sind hier, um Ihnen zu helfen!");
+        description.addClassName("center-text");
         final H3 clubContact = new H3("Clubkontakt");
         final Anchor homepageLink = new Anchor("https://www.tcuntervaz.ch/kontakt-1/", "TC Untervaz - Kontakte");
         homepageLink.setTarget("_blank");
