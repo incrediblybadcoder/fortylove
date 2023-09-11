@@ -4,10 +4,16 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import jakarta.annotation.Nonnull;
 
+@SpringComponent
 public class InputFieldFactory {
+
     private static final int MIN_PASSWORD_LENGTH = 8;
-    public static TextField createTextField(String label) {
+
+    @Nonnull
+    public TextField createTextField(String label) {
         TextField textField = new TextField(label);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         textField.setRequired(true);
@@ -15,7 +21,8 @@ public class InputFieldFactory {
         return textField;
     }
 
-    public static TextField createTextField(String label, boolean required) {
+    @Nonnull
+    public TextField createTextField(String label, boolean required) {
         TextField textField = new TextField(label);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         textField.setRequired(required);
@@ -23,7 +30,8 @@ public class InputFieldFactory {
         return textField;
     }
 
-    public static PasswordField createPasswordField(String label) {
+    @Nonnull
+    public PasswordField createPasswordField(String label) {
         PasswordField passwordField = new PasswordField(label);
         passwordField.setHelperText("Ein Passwort muss mindestens " + MIN_PASSWORD_LENGTH + " Zeichen lang sein. Es muss mindestens einen Buchstaben und eine Ziffer enthalten.");
         passwordField.setPattern("^(?=.*[0-9])(?=.*[a-zA-Z]).{8}.*$");
@@ -34,7 +42,8 @@ public class InputFieldFactory {
         return passwordField;
     }
 
-    public static PasswordField createConfirmationPasswordField(String label) {
+    @Nonnull
+    public PasswordField createConfirmationPasswordField(String label) {
         PasswordField passwordField = new PasswordField(label);
         passwordField.setValueChangeMode(ValueChangeMode.EAGER);
         passwordField.setRequired(true);
@@ -51,7 +60,8 @@ public class InputFieldFactory {
      * @param max       der maximale zulässige Wert für das Feld
      * @return ein projektspezifisches, konfiguriertes IntegerField-Objekt
      */
-    public static IntegerField createBasicIntegerField(String label, boolean required, int min, int max) {
+    @Nonnull
+    public IntegerField createBasicIntegerField(String label, boolean required, int min, int max) {
         IntegerField integerField = new IntegerField(label);
         integerField.setWidthFull();
         integerField.setStep(1);
@@ -72,7 +82,8 @@ public class InputFieldFactory {
      * @param required  gibt an, ob das Feld erforderlich ist oder nicht
      * @return ein konfiguriertes IntegerField-Objekt
      */
-    public static IntegerField createBasicIntegerField(String label, boolean required) {
+    @Nonnull
+    public IntegerField createBasicIntegerField(String label, boolean required) {
         return createBasicIntegerField(label, required, 0, Integer.MAX_VALUE);
     }
 
@@ -84,8 +95,8 @@ public class InputFieldFactory {
      * @param label das Label des Feldes
      * @return ein konfiguriertes IntegerField-Objekt
      */
-    public static IntegerField createBasicIntegerField(String label) {
+    @Nonnull
+    public IntegerField createBasicIntegerField(String label) {
         return createBasicIntegerField(label, false);
     }
-
 }

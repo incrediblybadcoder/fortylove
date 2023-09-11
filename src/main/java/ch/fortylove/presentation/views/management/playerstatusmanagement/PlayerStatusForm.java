@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.views.management.playerstatusmanagement;
 
 import ch.fortylove.persistence.entity.PlayerStatus;
+import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
@@ -37,15 +38,18 @@ public class PlayerStatusForm extends ManagementForm<PlayerStatus> {
     private IntegerField bookableDaysInAdvanceField;
 
     @Autowired
-    public PlayerStatusForm(@Nonnull final PlayerStatusService playerStatusService) {
+    public PlayerStatusForm(@Nonnull final ButtonFactory buttonFactory,
+                            @Nonnull final PlayerStatusService playerStatusService,
+                            @Nonnull final InputFieldFactory inputFieldFactory) {
+        super(buttonFactory, inputFieldFactory);
         this.playerStatusService = playerStatusService;
     }
 
     @Override
     protected void instantiateFields() {
-        nameField = InputFieldFactory.createTextField("Name");
-        bookingsPerDayField = InputFieldFactory.createBasicIntegerField("Buchungen pro Tag");
-        bookableDaysInAdvanceField = InputFieldFactory.createBasicIntegerField("Buchbare Tage in die Zukunft");
+        nameField = getInputFieldFactory().createTextField("Name");
+        bookingsPerDayField = getInputFieldFactory().createBasicIntegerField("Buchungen pro Tag");
+        bookableDaysInAdvanceField = getInputFieldFactory().createBasicIntegerField("Buchbare Tage in die Zukunft");
     }
 
     @Nonnull

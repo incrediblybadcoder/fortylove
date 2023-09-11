@@ -1,10 +1,8 @@
 package ch.fortylove.presentation.views.support;
 
+import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.views.MainLayout;
-import ch.fortylove.presentation.views.login.LoginView;
 import ch.fortylove.security.AuthenticationService;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
@@ -14,30 +12,26 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.security.PermitAll;
 
 @Route(value = SupportView.ROUTE, layout = MainLayout.class)
 @PageTitle(SupportView.PAGE_TITLE)
-@PermitAll
 @AnonymousAllowed
 public class SupportView extends VerticalLayout {
+
+    @Nonnull private final ButtonFactory buttonFactory;
 
     @Nonnull public static final String ROUTE = "support";
     @Nonnull public static final String PAGE_TITLE = "Support";
 
-    @Nonnull private final AuthenticationService authenticationService;
-
-    public SupportView(@Nonnull final AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-
+    public SupportView(@Nonnull final AuthenticationService authenticationService,
+                       @Nonnull final ButtonFactory buttonFactory) {
+        this.buttonFactory = buttonFactory;
         addClassName("support-view");
 
-        constructUI();
+        constructUI(authenticationService.getAuthenticatedUser().isPresent());
     }
 
-    private void constructUI() {
-        final boolean isUserLoggedIn = authenticationService.getAuthenticatedUser().isPresent();
-
+    private void constructUI(final boolean isUserLoggedIn) {
         final Span description = new Span("Haben Sie Fragen oder Probleme? Wir sind hier, um Ihnen zu helfen!");
         final H3 clubContact = new H3("Clubkontakt");
         final Anchor homepageLink = new Anchor("https://www.tcuntervaz.ch/kontakt-1/", "TC Untervaz - Kontakte");
@@ -50,9 +44,8 @@ public class SupportView extends VerticalLayout {
         } else {
             setAlignItems(Alignment.CENTER);
             final H2 pageTitle = new H2(PAGE_TITLE);
-            final Button backToLoginButton = new Button("Zurück zur Login Seite", event -> UI.getCurrent().navigate(LoginView.ROUTE));
 
-            add(pageTitle, description, clubContact, homepageLink, systemContact, supportEmail,backToLoginButton);
+            add(pageTitle, description, clubContact, homepageLink, systemContact, supportEmail, buttonFactory.createBackToLoginButton());
         }
     }
 }

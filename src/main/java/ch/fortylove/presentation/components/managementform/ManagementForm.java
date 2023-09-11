@@ -1,6 +1,7 @@
 package ch.fortylove.presentation.components.managementform;
 
 import ch.fortylove.presentation.components.ButtonFactory;
+import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
 import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.components.managementform.events.ManagementFormDeleteEvent;
@@ -25,6 +26,9 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public abstract class ManagementForm<T> extends FormLayout {
 
+    @Nonnull private final ButtonFactory buttonFactory;
+    @Nonnull private final InputFieldFactory inputFieldFactory;
+
     private Binder<T> binder;
 
     private H3 titleField;
@@ -38,7 +42,10 @@ public abstract class ManagementForm<T> extends FormLayout {
     protected T currentItem;
     protected OpenMode openMode;
 
-    public ManagementForm() {
+    public ManagementForm(@Nonnull final ButtonFactory buttonFactory,
+                          @Nonnull final InputFieldFactory inputFieldFactory) {
+        this.buttonFactory = buttonFactory;
+        this.inputFieldFactory = inputFieldFactory;
         addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_20);
 
         constructUI();
@@ -64,6 +71,16 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     @Nonnull
     protected abstract Focusable<? extends Component> getFocusOnOpen();
+
+    @Nonnull
+    protected ButtonFactory getButtonFactory() {
+        return buttonFactory;
+    }
+
+    @Nonnull
+    protected InputFieldFactory getInputFieldFactory() {
+        return inputFieldFactory;
+    }
 
     private void constructUI() {
         initializeBinder();
@@ -97,14 +114,10 @@ public abstract class ManagementForm<T> extends FormLayout {
 
     @Nonnull
     private VerticalLayout getButtons() {
-
-        save = ButtonFactory.createPrimaryButton("Speichern", this::saveClick);
-
-        update = ButtonFactory.createPrimaryButton("Updaten", this::updateClick);
-
-        delete = ButtonFactory.createDangerButton("Löschen", this::deleteClick);
-
-        close = ButtonFactory.createNeutralButton("Abbrechen", this::closeClick);
+        save = buttonFactory.createPrimaryButton("Speichern", this::saveClick);
+        update = buttonFactory.createPrimaryButton("Updaten", this::updateClick);
+        delete = buttonFactory.createDangerButton("Löschen", this::deleteClick);
+        close = buttonFactory.createNeutralButton("Abbrechen", this::closeClick);
         close.addClickShortcut(Key.ESCAPE);
 
         buttonContainer = new VerticalLayout();

@@ -23,14 +23,20 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @AnonymousAllowed
 public class ResetPasswordForm extends FormLayout {
+
+    @Nonnull private final ButtonFactory buttonFactory;
+    @Nonnull private final InputFieldFactory inputFieldFactory;
+
     private PasswordField plainPassword;
     private PasswordField confirmPlainPassword;
     private String confirmPlainPasswordInput;
     private Button setNewPassword;
     private final Binder<String> binder;
 
-
-    public ResetPasswordForm() {
+    public ResetPasswordForm(@Nonnull final ButtonFactory buttonFactory,
+                             @Nonnull final InputFieldFactory inputFieldFactory) {
+        this.buttonFactory = buttonFactory;
+        this.inputFieldFactory = inputFieldFactory;
 
         this.binder = new Binder<>();
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
@@ -47,11 +53,11 @@ public class ResetPasswordForm extends FormLayout {
     }
 
     private void constructUI() {
-        H2 title = new H2("Neues Passwort setzten");
-        plainPassword = InputFieldFactory.createPasswordField("Passwort");
+        final H2 title = new H2("Neues Passwort setzten");
+        plainPassword = inputFieldFactory.createPasswordField("Passwort");
         plainPassword.addValueChangeListener(event -> binder.validate());
-        confirmPlainPassword = InputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
-        setNewPassword = ButtonFactory.createPrimaryButton("Ok", this::setNewPassword);
+        confirmPlainPassword = inputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
+        setNewPassword = buttonFactory.createPrimaryButton("Ok", this::setNewPassword);
         setNewPassword.addClickShortcut(Key.ENTER);
         add(title, plainPassword, confirmPlainPassword, setNewPassword);
         setMaxWidth("1000px");

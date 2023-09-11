@@ -26,11 +26,17 @@ import org.springframework.context.annotation.Scope;
 @AnonymousAllowed
 public class ForgotPasswordForm extends FormLayout {
 
+    @Nonnull private final ButtonFactory buttonFactory;
+    @Nonnull private final InputFieldFactory inputFieldFactory;
+
     private TextField email;
     private Button sendButton;
     private final Binder<String> binder;
 
-    public ForgotPasswordForm() {
+    public ForgotPasswordForm(@Nonnull final ButtonFactory buttonFactory,
+                              @Nonnull final InputFieldFactory inputFieldFactory) {
+        this.buttonFactory = buttonFactory;
+        this.inputFieldFactory = inputFieldFactory;
 
         this.binder = new Binder<>();
         binder.addValueChangeListener(valueChangeEvent -> updateButtonState());
@@ -47,11 +53,11 @@ public class ForgotPasswordForm extends FormLayout {
     }
 
     private void constructUI() {
-        H2 title = new H2("Link zum Zurücksetzen des Passworts anfordern");
-        email = InputFieldFactory.createTextField("E-Mail");
-        sendButton = ButtonFactory.createPrimaryButton("Senden", this::sendPasswordResetEmail);
+        final H2 title = new H2("Link zum Zurücksetzen des Passworts anfordern");
+        email = inputFieldFactory.createTextField("E-Mail");
+        sendButton = buttonFactory.createPrimaryButton("Senden", this::sendPasswordResetEmail);
         sendButton.addClickShortcut(Key.ENTER);
-        Button cancel = ButtonFactory.createNeutralButton("Abbrechen", this::gotToLoginPage);
+        final Button cancel = buttonFactory.createNeutralButton("Abbrechen", this::gotToLoginPage);
         add(title, email, sendButton, cancel);
         setMaxWidth("1000px");
         setResponsiveSteps(new ResponsiveStep("0", 1, ResponsiveStep.LabelsPosition.TOP),
@@ -60,7 +66,6 @@ public class ForgotPasswordForm extends FormLayout {
         setColspan(email, 2);
         setColspan(sendButton, 2);
         setColspan(cancel, 2);
-
     }
 
     private void gotToLoginPage(final ClickEvent<Button> buttonClickEvent) {
