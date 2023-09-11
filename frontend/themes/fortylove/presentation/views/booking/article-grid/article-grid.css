@@ -14,7 +14,6 @@
 }
 
 .article-grid .item {
-  /*box-shadow: var(--lumo-box-shadow-xs);*/
   padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
 }
 
