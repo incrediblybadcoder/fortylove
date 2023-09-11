@@ -1,9 +1,10 @@
-package ch.fortylove.presentation.views.forgotpassword;
+package ch.fortylove.presentation.views.account.forgotpassword;
 
-import ch.fortylove.presentation.views.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
-import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.presentation.views.account.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
+import ch.fortylove.presentation.views.account.login.LoginView;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -24,6 +25,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
 
     @Nonnull public static final String ROUTE = "resetpassword";
     @Nonnull public static final String PAGE_TITLE = "New Password";
+
     @Nonnull private final UserService userService;
     @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final PasswordEncoder passwordEncoder;
@@ -35,7 +37,6 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
                              @Nonnull final UserService userService,
                              @Nonnull final NotificationUtil notificationUtil,
                              @Nonnull final PasswordEncoder passwordEncoder) {
-
         this.userService = userService;
         this.notificationUtil = notificationUtil;
         this.passwordEncoder = passwordEncoder;
@@ -43,11 +44,11 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
         setHorizontalComponentAlignment(Alignment.CENTER, resetPasswordForm);
 
         add(resetPasswordForm);
-
-        addDetachListener(event -> onDetach());
     }
 
-    private void onDetach() {
+    @Override
+    protected void onDetach(final DetachEvent detachEvent) {
+        super.onDetach(detachEvent);
         if (registration != null) {
             // Memory leaks verhindern
             registration.remove();
@@ -55,7 +56,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
         }
     }
 
-    private void setNewPassword(ResetPasswordFormSetPasswordEvent resetPasswordFormSetPasswordEvent) {
+    private void setNewPassword(@Nonnull final ResetPasswordFormSetPasswordEvent resetPasswordFormSetPasswordEvent) {
         if (resetToken == null || resetToken.trim().isEmpty()) {
             notificationUtil.errorNotification("Ungültiger Token");
             return;
@@ -68,7 +69,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
         }
     }
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(@Nonnull final BeforeEnterEvent event) {
         final List<String> token = event.getLocation().getQueryParameters().getParameters().get("token");
 
         if (token == null || token.isEmpty()) {

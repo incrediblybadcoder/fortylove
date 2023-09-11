@@ -1,6 +1,6 @@
-package ch.fortylove.presentation.views.forgotpassword.events;
+package ch.fortylove.presentation.views.account.forgotpassword.events;
 
-import ch.fortylove.presentation.views.forgotpassword.ResetPasswordForm;
+import ch.fortylove.presentation.views.account.forgotpassword.ResetPasswordForm;
 import com.vaadin.flow.component.ComponentEvent;
 
 public class ResetPasswordFormSetPasswordEvent extends ComponentEvent<ResetPasswordForm> {

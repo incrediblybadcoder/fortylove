@@ -1,8 +1,8 @@
-package ch.fortylove.presentation.views.forgotpassword;
+package ch.fortylove.presentation.views.account.forgotpassword;
 
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
-import ch.fortylove.presentation.views.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
+import ch.fortylove.presentation.views.account.forgotpassword.events.ResetPasswordFormSetPasswordEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -12,7 +12,6 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@AnonymousAllowed
 public class ResetPasswordForm extends FormLayout {
 
     @Nonnull private final ButtonFactory buttonFactory;

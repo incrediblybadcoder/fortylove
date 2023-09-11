@@ -1,9 +1,9 @@
-package ch.fortylove.presentation.views.forgotpassword;
+package ch.fortylove.presentation.views.account.forgotpassword;
 
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
-import ch.fortylove.presentation.views.forgotpassword.events.ForgotPasswordFormSendEvent;
-import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.presentation.views.account.forgotpassword.events.ForgotPasswordFormSendEvent;
+import ch.fortylove.presentation.views.account.login.LoginView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -14,7 +14,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@AnonymousAllowed
 public class ForgotPasswordForm extends FormLayout {
 
     @Nonnull private final ButtonFactory buttonFactory;

@@ -1,9 +1,9 @@
-package ch.fortylove.presentation.views.login;
+package ch.fortylove.presentation.views.account.login;
 
 import ch.fortylove.FortyloveApplication;
-import ch.fortylove.presentation.views.forgotpassword.ForgotPasswordView;
+import ch.fortylove.presentation.views.account.forgotpassword.ForgotPasswordView;
+import ch.fortylove.presentation.views.account.registration.RegistrationView;
 import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
-import ch.fortylove.presentation.views.registration.RegistrationView;
 import ch.fortylove.presentation.views.support.SupportView;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
@@ -45,10 +45,10 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         final Anchor registrationLink = new Anchor(RegistrationView.ROUTE, "Noch kein Account? Hier registrieren!");
 
-
         add(new H1(FortyloveApplication.APP_NAME), loginForm, registrationLink, getFooter());
     }
 
+    @Nonnull
     private HorizontalLayout getFooter() {
 
         final Anchor supportLink = new Anchor(SupportView.ROUTE, SupportView.PAGE_TITLE);
@@ -65,7 +65,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         return footer;
 
     }
-
 
     @Override
     public void beforeEnter(@Nonnull final BeforeEnterEvent beforeEnterEvent) {

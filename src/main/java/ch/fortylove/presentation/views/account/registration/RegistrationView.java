@@ -1,9 +1,9 @@
-package ch.fortylove.presentation.views.registration;
+package ch.fortylove.presentation.views.account.registration;
 
 import ch.fortylove.persistence.entity.UnvalidatedUser;
-import ch.fortylove.presentation.views.login.LoginView;
-import ch.fortylove.presentation.views.registration.events.CancelRegistrationEvent;
-import ch.fortylove.presentation.views.registration.events.RegistrationEvent;
+import ch.fortylove.presentation.views.account.login.LoginView;
+import ch.fortylove.presentation.views.account.registration.events.CancelRegistrationEvent;
+import ch.fortylove.presentation.views.account.registration.events.RegistrationEvent;
 import ch.fortylove.service.UnvalidatedUserService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
@@ -33,8 +33,6 @@ public class RegistrationView extends VerticalLayout {
     @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final PasswordEncoder passwordEncoder;
     @Nonnull private final List<Registration> registrations;
-
-
 
     public RegistrationView(@Nonnull final RegistrationForm registrationForm,
                             @Nonnull final UserService userService,

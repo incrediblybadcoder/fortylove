@@ -1,9 +1,10 @@
-package ch.fortylove.presentation.views.forgotpassword;
+package ch.fortylove.presentation.views.account.forgotpassword;
 
 import ch.fortylove.persistence.entity.User;
-import ch.fortylove.presentation.views.forgotpassword.events.ForgotPasswordFormSendEvent;
+import ch.fortylove.presentation.views.account.forgotpassword.events.ForgotPasswordFormSendEvent;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.NotificationUtil;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -38,8 +39,6 @@ public class ForgotPasswordView extends VerticalLayout {
         setHorizontalComponentAlignment(Alignment.CENTER, forgotPasswordForm);
 
         add(forgotPasswordForm);
-        
-        addDetachListener(event -> onDetach());
     }
 
     private void sendPasswordResetEmail(@Nonnull final ForgotPasswordFormSendEvent forgotPasswordFormSendEvent) {
@@ -54,7 +53,9 @@ public class ForgotPasswordView extends VerticalLayout {
         notificationUtil.informationNotification("E-Mail mit Link zum Zurücksetzen des Passworts wurde versendet");
     }
 
-    private void onDetach() {
+    @Override
+    protected void onDetach(final DetachEvent detachEvent) {
+        super.onDetach(detachEvent);
         if (registration != null) {
             // Memory leaks verhindern
             registration.remove();

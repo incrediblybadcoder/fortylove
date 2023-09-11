@@ -1,14 +1,14 @@
-package ch.fortylove.presentation.views.registration;
+package ch.fortylove.presentation.views.account.registration;
 
-import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.presentation.views.account.login.LoginView;
 import ch.fortylove.service.UnvalidatedUserService;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -16,24 +16,30 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-@Route("activate")
+@Route(value = ActivationView.ROUTE)
+@PageTitle(ActivationView.PAGE_TITLE)
 @AnonymousAllowed
-public class ActivationView extends Composite implements BeforeEnterObserver {
-    private VerticalLayout layout;
+public class ActivationView extends Composite<VerticalLayout> implements BeforeEnterObserver {
+
+    @Nonnull public static final String ROUTE = "activate";
+    @Nonnull public static final String PAGE_TITLE = "Aktivierung";
+
     @Nonnull private final UnvalidatedUserService unvalidatedUserService;
+
+    private VerticalLayout layout;
 
     public ActivationView(@Nonnull final UnvalidatedUserService unvalidatedUserService) {
         this.unvalidatedUserService = unvalidatedUserService;
     }
 
     @Override
-    protected Component initContent() {
+    protected VerticalLayout initContent() {
         layout = new VerticalLayout();
         return layout;
     }
 
     @Override
-    public void beforeEnter(final BeforeEnterEvent event) {
+    public void beforeEnter(@Nonnull final BeforeEnterEvent event) {
         final List<String> codes = event.getLocation().getQueryParameters().getParameters().get("code");
 
         if (codes == null || codes.isEmpty()) {
@@ -77,14 +83,14 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
     }
 
     private void handleMissingActivationCode() {
-        String htmlContent =
+        final String htmlContent =
                 "<div>" +
                         "<span>Upps da ist etwas schiefgelaufen. Versuchen Sie es erneut mit demselben Aktivierungslink aus der E-Mail.</span>" +
                         "<br>" +
                         "<span>Benötigen Sie Hilfe? Kontaktieren Sie uns unter fortylove.untervaz@gmail.com</span>" +
                         "</div>";
 
-        Html content = new Html(htmlContent);
+        final Html content = new Html(htmlContent);
         layout.add(content);
     }
 
@@ -94,7 +100,7 @@ public class ActivationView extends Composite implements BeforeEnterObserver {
     }
 
 
-    private boolean checkActivationStatusOfUnvalidatedUser(@Nonnull String activationCode) {
+    private boolean checkActivationStatusOfUnvalidatedUser(@Nonnull final String activationCode) {
         return unvalidatedUserService.checkIfReadyToActivate(activationCode);
     }
 }
