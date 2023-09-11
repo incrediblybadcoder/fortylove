@@ -66,6 +66,7 @@ flyway {
 	user = System.getenv("SPRING_DATASOURCE_USERNAME")
 	password = System.getenv("SPRING_DATASOURCE_PASSWORD")
 	schemas = ["fortylove"]
+	locations = ['classpath:db/migration/common, classpath:db/migration/postgresql']
 }
 
 test {
