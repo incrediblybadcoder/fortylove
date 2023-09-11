@@ -35,6 +35,10 @@ public enum Theme implements HasIdentifier {
         return lumoCode;
     }
 
+    public boolean isDarkTheme() {
+        return this.equals(Theme.DARK);
+    }
+
     @Override
     public String toString() {
         return "Theme{" +

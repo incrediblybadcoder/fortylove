@@ -1,11 +1,11 @@
-package ch.fortylove.presentation.views.usermenu;
+package ch.fortylove.presentation.views.usermenu.settingsview;
 
 import ch.fortylove.persistence.entity.Theme;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.UserService;
 import ch.fortylove.util.UserInterfaceUtil;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -35,14 +35,20 @@ public class SettingsView extends VerticalLayout {
     }
 
     private void constructUI() {
-        authenticationService.getAuthenticatedUser().ifPresent(user -> {
-            final Button toggleButton = new Button("Darkmode umschalten", click -> {
-                final Theme newTheme = user.getUserSettings().getTheme().equals(Theme.LIGHT) ? Theme.DARK : Theme.LIGHT;
+        authenticationService.getAuthenticatedUser().ifPresent(authenticatedUser -> {
+            final Theme currentTheme = authenticatedUser.getUserSettings().getTheme();
+
+            final Checkbox darkThemeCheckBox = new Checkbox("Darkmode", currentTheme.isDarkTheme());
+            darkThemeCheckBox.addValueChangeListener(event -> {
+                final Theme newTheme = event.getValue() ? Theme.DARK : Theme.LIGHT;
                 userInterfaceUtil.setTheme(newTheme);
-                user.getUserSettings().setTheme(newTheme);
-                userService.update(user);
+                userService.findById(authenticatedUser.getId()).ifPresent(user ->{
+                    user.getUserSettings().setTheme(newTheme);
+                    userService.update(user);
+                });
             });
-            add(toggleButton);
+
+            add(darkThemeCheckBox);
         });
     }
 }

@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.usermenu;
+package ch.fortylove.presentation.views.usermenu.userprofile;
 
 import ch.fortylove.presentation.views.MainLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

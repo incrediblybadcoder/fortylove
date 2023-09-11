@@ -52,7 +52,7 @@ public class UserService {
 
     @Nonnull
     public DatabaseResult<User> create(@Nonnull final User user) {
-        if (userRepository.findById(user.getId()).isPresent()) {
+        if (findById(user.getId()).isPresent()) {
             return new DatabaseResult<>("Benutzer existiert bereits: " + user.getIdentifier());
         }
 
@@ -64,7 +64,7 @@ public class UserService {
 
     @Nonnull
     public DatabaseResult<User> create(@Nonnull final UnvalidatedUser unvalidatedUser) {
-        if (userRepository.findById(unvalidatedUser.getId()).isPresent()) {
+        if (findById(unvalidatedUser.getId()).isPresent()) {
             return new DatabaseResult<>("Benutzer existiert bereits: " + unvalidatedUser.getIdentifier());
         }
 
@@ -83,7 +83,7 @@ public class UserService {
 
     @Nonnull
     public DatabaseResult<User> update(@Nonnull final User user) {
-        if (userRepository.findById(user.getId()).isEmpty()) {
+        if (findById(user.getId()).isEmpty()) {
             return new DatabaseResult<>("Benutzer existiert nicht: " + user.getIdentifier());
         }
         return new DatabaseResult<>(userRepository.save(user));
@@ -101,7 +101,7 @@ public class UserService {
 
     @Nonnull
     public DatabaseResult<UUID> delete(@Nonnull final UUID id) {
-        final Optional<User> userOptional = userRepository.findById(id);
+        final Optional<User> userOptional = findById(id);
         if (userOptional.isEmpty()) {
             return new DatabaseResult<>("Benutzer existiert nicht: " + id);
         }
@@ -204,5 +204,10 @@ public class UserService {
         user.setUserStatus(UserStatus.GUEST);
         user.setPlayerStatus(playerStatusService.getDefaultGuestPlayerStatus());
         return update(user);
+    }
+
+    @Nonnull
+    public Optional<User> findById(final UUID id) {
+        return userRepository.findById(id);
     }
 }
