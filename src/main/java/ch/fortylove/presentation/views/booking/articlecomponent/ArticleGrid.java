@@ -12,6 +12,8 @@ import ch.fortylove.presentation.views.management.Refreshable;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.ArticleService;
 import ch.fortylove.service.RoleService;
+import ch.fortylove.service.util.DatabaseResult;
+import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringComponent
 @UIScope
@@ -29,6 +32,7 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
     @Nonnull private final ArticleService articleService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final AuthenticationService authenticationService;
+    @Nonnull private final NotificationUtil notificationUtil;
     @Nonnull private final ArticleDialog articleDialog;
 
     private Article newArticleItem;
@@ -37,11 +41,13 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
     public ArticleGrid(@Nonnull final ArticleService articleService,
                        @Nonnull final RoleService roleService,
                        @Nonnull final AuthenticationService authenticationService,
+                       @Nonnull final NotificationUtil notificationUtil,
                        @Nonnull final ArticleDialog articleDialog) {
         super(Article.class, false);
         this.articleService = articleService;
         this.roleService = roleService;
         this.authenticationService = authenticationService;
+        this.notificationUtil = notificationUtil;
         this.articleDialog = articleDialog;
 
         addClassName("article-component");
@@ -127,7 +133,8 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
         final Article article = deleteArticleEvent.getArticle();
 
         new DeleteConfirmationDialog(article.getIdentifier(), "Artikel wirklich löschen?", () -> {
-            articleService.delete(article.getId());
+            final DatabaseResult<UUID> deleteResult = articleService.delete(article.getId());
+            notificationUtil.databaseNotification(deleteResult);
             refresh();
         }).open();
     }
@@ -136,8 +143,8 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
         final Article article = articleDialogEvent.getArticle();
 
         switch (articleDialogEvent.getType()) {
-            case NEW -> articleService.create(article);
-            case EDIT -> articleService.update(article);
+            case NEW -> notificationUtil.databaseNotification(articleService.create(article));
+            case EDIT -> notificationUtil.databaseNotification(articleService.update(article));
         }
         refresh();
     }
