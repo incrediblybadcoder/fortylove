@@ -3,6 +3,8 @@ package ch.fortylove.presentation.views.management.usermanagement.admissiondialo
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.CancelableDialog;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.AcceptAdmissionEvent;
+import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.RejectAdmissionEvent;
 import ch.fortylove.service.PlayerStatusService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -43,7 +45,7 @@ public class AdmissionDialog extends CancelableDialog {
 
     private void constructUI() {
         setHeaderTitle("Aufnahmeanfrage");
-        setWidth("300px");
+        setWidth("350px");
 
         final VerticalLayout dialogLayout = new VerticalLayout();
         dialogLayout.setSpacing(false);
@@ -79,7 +81,7 @@ public class AdmissionDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> acceptButtonClickListener() {
         return event -> {
-            fireEvent(new AcceptAdmissionDialogEvent(this, currentUser, playerStatusSelection.getValue(), messageTextArea.getValue()));
+            fireEvent(new AcceptAdmissionEvent(this, currentUser, playerStatusSelection.getValue(), messageTextArea.getValue()));
             close();
         };
     }
@@ -87,7 +89,7 @@ public class AdmissionDialog extends CancelableDialog {
     @Nonnull
     private ComponentEventListener<ClickEvent<Button>> rejectButtonClickListener() {
         return event -> {
-            fireEvent(new RejectAdmissionDialogEvent(this, currentUser, messageTextArea.getValue()));
+            fireEvent(new RejectAdmissionEvent(this, currentUser, messageTextArea.getValue()));
             close();
         };
     }
@@ -106,11 +108,11 @@ public class AdmissionDialog extends CancelableDialog {
         open();
     }
 
-    public void addAcceptAdmissionDialogListener(@Nonnull final ComponentEventListener<AcceptAdmissionDialogEvent> listener) {
-        addListener(AcceptAdmissionDialogEvent.class, listener);
+    public void addAcceptAdmissionListener(@Nonnull final ComponentEventListener<AcceptAdmissionEvent> listener) {
+        addListener(AcceptAdmissionEvent.class, listener);
     }
 
-    public void addRejectAdmissionDialogListener(@Nonnull final ComponentEventListener<RejectAdmissionDialogEvent> listener) {
-        addListener(RejectAdmissionDialogEvent.class, listener);
+    public void addRejectAdmissionListener(@Nonnull final ComponentEventListener<RejectAdmissionEvent> listener) {
+        addListener(RejectAdmissionEvent.class, listener);
     }
 }

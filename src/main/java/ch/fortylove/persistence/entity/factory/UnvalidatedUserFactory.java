@@ -18,13 +18,14 @@ public class UnvalidatedUserFactory {
 
     @Nonnull
     public UnvalidatedUser newEmptyUnvalidatedUser() {
-        return newUnvalidatedUser("", "", "", "" );
+        return newUnvalidatedUser("", "", "", "");
     }
+
     @Nonnull
     public UnvalidatedUser newUnvalidatedUser(@Nonnull final String firstName,
                                               @Nonnull final String lastName,
                                               @Nonnull final String email,
                                               @Nonnull final String plainPassword) {
-        return new UnvalidatedUser(firstName, lastName, email, passwordEncoder.encode(plainPassword) );
+        return new UnvalidatedUser(firstName, lastName, email, passwordEncoder.encode(plainPassword));
     }
 }

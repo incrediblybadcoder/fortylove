@@ -3,6 +3,7 @@ package ch.fortylove.presentation.views.management.courtmanagement;
 import ch.fortylove.persistence.entity.Court;
 import ch.fortylove.persistence.entity.CourtIcon;
 import ch.fortylove.persistence.entity.CourtType;
+import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import com.vaadin.flow.component.Focusable;
@@ -18,6 +19,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -30,12 +32,18 @@ public class CourtForm extends ManagementForm<Court> {
     private Select<CourtType> courtTypeSelection;
     private TextField nameField;
 
+    @Autowired
+    public CourtForm(@Nonnull final ButtonFactory buttonFactory,
+                     @Nonnull final InputFieldFactory inputFieldFactory) {
+        super(buttonFactory, inputFieldFactory);
+    }
+
     @Override
     protected void instantiateFields() {
-        numberField = InputFieldFactory.createBasicIntegerField("Nummer", true, 1, 99);
+        numberField = getInputFieldFactory().createBasicIntegerField("Nummer", true, 1, 99);
         iconSelection = new Select<>();
         courtTypeSelection = new Select<>();
-        nameField = InputFieldFactory.createTextField("Name", false);
+        nameField = getInputFieldFactory().createTextField("Name", false);
     }
 
     @Nonnull

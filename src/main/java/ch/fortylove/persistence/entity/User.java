@@ -63,6 +63,11 @@ public class User extends AbstractEntity implements HasIdentifier, Comparable<Us
     @JoinColumn(name = "playerstatus_id")
     private PlayerStatus playerStatus;
 
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usersettings_id")
+    private UserSettings userSettings;
+
     protected User() {
     }
 
@@ -73,17 +78,20 @@ public class User extends AbstractEntity implements HasIdentifier, Comparable<Us
                 @Nonnull final UserStatus userStatus,
                 final boolean enabled,
                 @Nonnull final Set<Role> roles,
-                @Nonnull final PlayerStatus playerStatus) {
+                @Nonnull final PlayerStatus playerStatus,
+                @Nonnull final UserSettings userSettings) {
         super(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.authenticationDetails = authenticationDetails;
-        this.userStatus = userStatus;
         authenticationDetails.setUser(this);
+        this.userStatus = userStatus;
         this.enabled = enabled;
         this.roles = roles;
         this.playerStatus = playerStatus;
+        this.userSettings = userSettings;
+        userSettings.setUser(this);
     }
 
     @Nonnull
@@ -100,7 +108,7 @@ public class User extends AbstractEntity implements HasIdentifier, Comparable<Us
         return authenticationDetails;
     }
 
-    public void setUserAuthenticationDetails(@Nonnull final AuthenticationDetails authenticationDetails) {
+    public void setAuthenticationDetails(@Nonnull final AuthenticationDetails authenticationDetails) {
         this.authenticationDetails = authenticationDetails;
     }
 
@@ -180,14 +188,13 @@ public class User extends AbstractEntity implements HasIdentifier, Comparable<Us
         this.playerStatus = playerStatus;
     }
 
-    public void addOpponentBooking(@Nonnull final Booking booking) {
-        opponentBookings.add(booking);
-        booking.getOpponents().add(this);
+    @Nonnull
+    public UserSettings getUserSettings() {
+        return userSettings;
     }
 
-    public void removeOpponentBooking(@Nonnull final Booking booking) {
-        opponentBookings.remove(booking);
-        booking.getOpponents().remove(this);
+    public void setUserSettings(@Nonnull final UserSettings userSettings) {
+        this.userSettings = userSettings;
     }
 
     @Nonnull

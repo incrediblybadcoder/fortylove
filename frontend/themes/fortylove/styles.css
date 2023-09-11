@@ -1,4 +1,12 @@
+@import url("./shared-styles.css");
 @import url("./presentation/views/main-layout.css");
 
 @import url("./presentation/views/booking/booking-view.css");
+@import url("./presentation/views/booking/booking-grid/booking-grid.css");
+@import url("./presentation/views/booking/article-grid/article-grid.css");
+
+@import url("./presentation/views/support/support-view.css");
+
+@import url("./presentation/views/legalnotice/legalnotice-view.css");
+
 @import url("./presentation/views/management/management-view.css");

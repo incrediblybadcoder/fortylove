@@ -1,14 +1,13 @@
 package ch.fortylove.presentation.views;
 
 import ch.fortylove.FortyloveApplication;
-import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.management.ManagementView;
 import ch.fortylove.presentation.views.support.SupportView;
-import ch.fortylove.presentation.views.usermenu.SettingsView;
-import ch.fortylove.presentation.views.usermenu.UserProfileView;
+import ch.fortylove.presentation.views.usermenu.settingsview.SettingsView;
+import ch.fortylove.presentation.views.usermenu.userprofile.UserProfileView;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.RoleService;
 import com.vaadin.flow.component.Component;
@@ -40,7 +39,6 @@ import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class MainLayout extends AppLayout {
 
@@ -155,14 +153,8 @@ public class MainLayout extends AppLayout {
         final List<SideNavItem> privilegedViews = new ArrayList<>();
 
         authenticationService.getAuthenticatedUser().ifPresent(authenticatedUser -> {
-            final Set<Role> managementRoles = roleService.getDefaultManagementRoles();
-            final Set<Role> userRoles = authenticatedUser.getRoles();
-
-            for (final Role userRole : userRoles) {
-                if (managementRoles.contains(userRole)) {
-                    privilegedViews.add(new SideNavItem(ManagementView.PAGE_TITLE, ManagementView.class, VaadinIcon.COG.create()));
-                    break;
-                }
+            if (roleService.hasManagementRole(authenticatedUser)) {
+                privilegedViews.add(new SideNavItem(ManagementView.PAGE_TITLE, ManagementView.class, VaadinIcon.COG.create()));
             }
         });
 

@@ -1,0 +1,75 @@
+.booking-grid {
+  box-shadow: var(--lumo-box-shadow-xs);
+}
+
+/* booking grid borders */
+.booking-grid::part(body-cell) {
+    border-right: 1px solid var(--lumo-contrast-20pct);
+}
+.booking-grid::part(last-column-cell) {
+    border-right: 0px;
+}
+.booking-grid::part(last-row-cell) {
+    border-bottom: 1px solid var(--lumo-contrast-20pct);
+}
+.booking-grid::part(header-cell) {
+    border-left: 0px;
+}
+
+/* booking grid cells sizing and padding */
+.booking-grid vaadin-grid-cell-content {
+    padding: 0px;
+}
+.booking-grid-cell {
+    padding: 8px;
+    height: 46px;
+}
+@media (max-width: 800px) {
+    .booking-grid-cell {
+        padding: 2px;
+        height: 36px;
+    }
+}
+@media (max-width: 800px) {
+    .booking-grid vaadin-grid::part(cell) {
+        width: 60px;
+    }
+}
+
+/* court info cell */
+.booking-grid-cell-court-info {
+    position: relative;
+}
+.booking-grid-cell-court-info-text {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--lumo-base-color);
+    font-weight: bold;
+}
+
+/* booking cell shading on date */
+.booking-grid-bookable-cell-inactive {
+    background-color: var(--lumo-contrast-5pct);
+}
+.booking-grid-bookable-cell-active {
+    background-color: var(--lumo-success-color-10pct);
+}
+.booking-grid-bookable-cell-active-owner {
+    background-color: var(--lumo-primary-color-10pct);
+}
+
+/* avatar group icons */
+.booking-grid vaadin-avatar-group::part(container) {
+    justify-content: center;
+}
+@media (max-width: 800px) {
+    .booking-grid vaadin-avatar {
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
+    }
+}

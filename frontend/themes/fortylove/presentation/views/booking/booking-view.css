@@ -1,88 +1,23 @@
 /* responsive view padding */
 .booking-view {
-    padding: 20px;
-}
-@media (max-width: 600px){
-    .booking-view {
-        padding: 8px;
-    }
-}
-
-/* booking grid borders */
-.booking-view vaadin-grid::part(body-cell) {
-    border-right: 1px solid var(--lumo-contrast-20pct);
-}
-.booking-view vaadin-grid::part(first-column-cell) {
-    border-left: 1px solid var(--lumo-contrast-20pct);
-}
-.booking-view vaadin-grid::part(last-row-cell) {
-    border-bottom: 1px solid var(--lumo-contrast-20pct);
-}
-.booking-view vaadin-grid::part(header-cell) {
-    border-left: 0px;
-}
-
-/* booking grid cells sizing and padding */
-.booking-view vaadin-grid-cell-content {
-    padding: 0px;
-}
-.booking-grid-cell {
-    padding: 8px;
-    height: 46px;
-}
-@media (max-width: 600px) {
-    .booking-grid-cell {
-        padding: 2px;
-        height: 36px;
-    }
-}
-@media (max-width: 600px) {
-    .booking-view vaadin-grid::part(cell) {
-        width: 60px;
-    }
-}
-
-/* court info cell */
-.booking-grid-cell-court-info {
-    position: relative;
-}
-.booking-grid-cell-court-info-text {
-    position: absolute;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--lumo-base-color);
-    font-weight: bold;
+    padding: 20px;
+    justify-content: flex-start;
 }
 
-/* booking cell shading on date */
-.booking-grid-bookable-cell-inactive {
-    background-color: var(--lumo-contrast-5pct);
-}
-.booking-grid-bookable-cell-active {
-    background-color: var(--lumo-success-color-10pct);
-}
-.booking-grid-bookable-cell-active-owner {
-    background-color: var(--lumo-primary-color-10pct);
+@media (max-width: 800px){
+    .booking-view {
+        padding: 0px;
+        justify-content: flex-end;
+    }
 }
 
-/* booking grid fonts */
-@media (max-width: 600px) {
+@media (max-width: 800px){
     .booking-view * {
         font-size: var(--lumo-font-size-xs);
     }
 }
 
-/* avatar group icons */
-.booking-view vaadin-avatar-group::part(container) {
-    justify-content: center;
-}
-@media (max-width: 600px) {
-    .booking-view vaadin-avatar {
-        width: var(--lumo-size-xs);
-        height: var(--lumo-size-xs);
-    }
+.booking-view vaadin-grid {
+    border: 0px;
 }

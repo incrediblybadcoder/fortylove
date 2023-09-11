@@ -126,14 +126,14 @@ public class CourtManagementViewTab extends ManagementViewTab {
 
     private void addCourt() {
         grid.asSingleSelect().clear();
-        courtForm.openCreate();
+        courtForm.openNew();
     }
 
     private void editCourt(@Nullable final Court court) {
         if (court == null) {
             courtForm.closeForm();
         } else {
-            courtForm.openModify(court);
+            courtForm.openEdit(court);
         }
     }
 
