@@ -2,18 +2,17 @@ package ch.fortylove.configuration.devsetupdata.data;
 
 import ch.fortylove.configuration.devsetupdata.DevSetupData;
 import ch.fortylove.configuration.setupdata.data.PlayerStatusSetupData;
-import ch.fortylove.persistence.entity.AuthenticationDetails;
 import ch.fortylove.persistence.entity.PlayerStatus;
 import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
+import ch.fortylove.persistence.entity.factory.UserFactory;
 import ch.fortylove.persistence.error.RecordNotFoundException;
 import ch.fortylove.service.PlayerStatusService;
 import ch.fortylove.service.RoleService;
 import ch.fortylove.service.UserService;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -38,16 +37,16 @@ public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PlayerStatusService playerStatusService;
-    @Nonnull private final PasswordEncoder passwordEncoder;
+    @Nonnull private final UserFactory userFactory;
 
     @Autowired
     public UserDevSetupData(@Nonnull final UserService userService, @Nonnull final RoleService roleService,
                             @Nonnull final PlayerStatusService playerStatus,
-                            @Nonnull final PasswordEncoder passwordEncoder) {
+                            @Nonnull final UserFactory userFactory) {
         this.userService = userService;
         this.roleService = roleService;
         this.playerStatusService = playerStatus;
-        this.passwordEncoder = passwordEncoder;
+        this.userFactory = userFactory;
     }
 
     @Override
@@ -96,17 +95,18 @@ public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata
     private void createUserIfNotFound(@Nonnull final String email,
                                       @Nonnull final String firstName,
                                       @Nonnull final String lastName,
-                                      @Nonnull final String password,
+                                      @Nonnull final String plainPassword,
                                       @Nonnull final UserStatus userStatus,
-                                      @Nonnull final Set<Role> Roles,
+                                      @Nonnull final Set<Role> roles,
                                       @Nonnull final PlayerStatus playerStatus,
                                       final boolean activationStatus) {
         final Optional<User> existingUser = userService.findByEmail(email);
 
         if (existingUser.isEmpty()) {
-            final AuthenticationDetails authenticationDetails = new AuthenticationDetails(passwordEncoder.encode(password));
-            final User user = new User(firstName, lastName, email, authenticationDetails, userStatus, activationStatus, Roles, playerStatus);
-            authenticationDetails.setUser(user);
+            final User user = userFactory.newGuestUser(firstName, lastName, email, plainPassword, activationStatus);
+            user.setRoles(roles);
+            user.setUserStatus(userStatus);
+            user.setPlayerStatus(playerStatus);
             userService.create(user);
         }
     }

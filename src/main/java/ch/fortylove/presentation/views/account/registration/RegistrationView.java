@@ -52,11 +52,11 @@ public class RegistrationView extends VerticalLayout {
         add(registrationForm);
     }
 
-    private void onCancel(CancelRegistrationEvent cancelRegistrationEvent) {
+    private void onCancel(@Nonnull final CancelRegistrationEvent cancelRegistrationEvent) {
         gotToLoginPage();
     }
 
-    private void registerUser(RegistrationEvent registrationEvent) {
+    private void registerUser(@Nonnull final RegistrationEvent registrationEvent) {
         final UnvalidatedUser unvalidatedUser = registrationEvent.getUnvalidatedUser();
             if (userService.findByEmail(unvalidatedUser.getEmail()).isPresent() || unvalidatedUserService.findByEmail(unvalidatedUser.getEmail()).isPresent()) {
                 notificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
@@ -73,7 +73,7 @@ public class RegistrationView extends VerticalLayout {
     }
 
     @Override
-    protected void onDetach(final DetachEvent detachEvent) {
+    protected void onDetach(@Nonnull final DetachEvent detachEvent) {
         super.onDetach(detachEvent);
         for (Registration registration : registrations) {
             registration.remove();
