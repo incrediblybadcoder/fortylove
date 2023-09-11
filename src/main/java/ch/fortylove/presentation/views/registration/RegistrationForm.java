@@ -30,6 +30,9 @@ import org.springframework.context.annotation.Scope;
 @AnonymousAllowed
 public class RegistrationForm extends FormLayout {
 
+    @Nonnull private final ButtonFactory buttonFactory;
+    @Nonnull private final InputFieldFactory inputFieldFactory;
+
     @Nonnull final private Binder<UnvalidatedUser> binder;
     @Nonnull private final UnvalidatedUser unvalidatedUser;
 
@@ -44,7 +47,11 @@ public class RegistrationForm extends FormLayout {
     private String confirmPlainPasswordInput;
     private String plainPasswordInput;
 
-    public RegistrationForm(@Nonnull final UnvalidatedUserFactory unvalidatedUserFactory) {
+    public RegistrationForm(@Nonnull final ButtonFactory buttonFactory,
+                            @Nonnull final InputFieldFactory inputFieldFactory,
+                            @Nonnull final UnvalidatedUserFactory unvalidatedUserFactory) {
+        this.buttonFactory = buttonFactory;
+        this.inputFieldFactory = inputFieldFactory;
 
         binder = new Binder<>(UnvalidatedUser.class);
         binder.bindInstanceFields(this);
@@ -74,14 +81,14 @@ public class RegistrationForm extends FormLayout {
 
     private void initUIElements() {
         title = new H2("Registrierung");
-        firstName = InputFieldFactory.createTextField("Vorname");
-        lastName = InputFieldFactory.createTextField("Nachname");
-        email = InputFieldFactory.createTextField("E-Mail");
-        plainPassword = InputFieldFactory.createPasswordField("Passwort");
+        firstName = inputFieldFactory.createTextField("Vorname");
+        lastName = inputFieldFactory.createTextField("Nachname");
+        email = inputFieldFactory.createTextField("E-Mail");
+        plainPassword = inputFieldFactory.createPasswordField("Passwort");
         plainPassword.addValueChangeListener(event -> binder.validate());
-        confirmPlainPassword = InputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
-        register = ButtonFactory.createPrimaryButton("Registrieren", this::registerClick);
-        cancel = ButtonFactory.createNeutralButton("Abbrechen", this::cancelClick);
+        confirmPlainPassword = inputFieldFactory.createConfirmationPasswordField("Passwort bestätigen");
+        register = buttonFactory.createPrimaryButton("Registrieren", this::registerClick);
+        cancel = buttonFactory.createNeutralButton("Abbrechen", this::cancelClick);
     }
 
     private void cancelClick() {

@@ -5,6 +5,7 @@ import ch.fortylove.persistence.entity.Role;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.components.managementform.ManagementForm;
 import ch.fortylove.presentation.components.managementform.OpenMode;
@@ -48,10 +49,13 @@ public class UserForm extends ManagementForm<User> {
     private MultiSelectComboBox<Role> roleMultiSelectComboBox;
 
     @Autowired
-    public UserForm(@Nonnull final PlayerStatusService playerStatusService,
+    public UserForm(@Nonnull final ButtonFactory buttonFactory,
+                    @Nonnull final PlayerStatusService playerStatusService,
                     @Nonnull final RoleService roleService,
                     @Nonnull final UserFactory userFactory,
-                    @Nonnull final PasswordEncoder passwordEncoder) {
+                    @Nonnull final PasswordEncoder passwordEncoder,
+                    @Nonnull final InputFieldFactory inputFieldFactory) {
+        super(buttonFactory, inputFieldFactory);
         this.playerStatusService = playerStatusService;
         this.roleService = roleService;
         this.userFactory = userFactory;
@@ -60,10 +64,10 @@ public class UserForm extends ManagementForm<User> {
 
     @Override
     protected void instantiateFields() {
-        firstNameField = InputFieldFactory.createTextField("Vorname");
-        lastNameField = InputFieldFactory.createTextField("Nachname");
-        emailField = InputFieldFactory.createTextField("Email");
-        passwordField = InputFieldFactory.createPasswordField("Password");
+        firstNameField = getInputFieldFactory().createTextField("Vorname");
+        lastNameField = getInputFieldFactory().createTextField("Nachname");
+        emailField = getInputFieldFactory().createTextField("Email");
+        passwordField = getInputFieldFactory().createPasswordField("Password");
         userStatusSelection = new Select<>();
         playerStatusSelection = new Select<>();
         roleMultiSelectComboBox = new MultiSelectComboBox<>();
