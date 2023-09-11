@@ -7,7 +7,7 @@
 
 @media (max-width: 800px){
     .booking-view {
-        padding: 8px;
+        padding: 0px;
         justify-content: flex-end;
     }
 }
@@ -16,4 +16,8 @@
     .booking-view * {
         font-size: var(--lumo-font-size-xs);
     }
+}
+
+.booking-view vaadin-grid {
+    border: 0px;
 }
