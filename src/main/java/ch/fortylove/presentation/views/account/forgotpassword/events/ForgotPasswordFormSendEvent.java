@@ -1,6 +1,6 @@
-package ch.fortylove.presentation.views.forgotpassword.events;
+package ch.fortylove.presentation.views.account.forgotpassword.events;
 
-import ch.fortylove.presentation.views.forgotpassword.ForgotPasswordForm;
+import ch.fortylove.presentation.views.account.forgotpassword.ForgotPasswordForm;
 import com.vaadin.flow.component.ComponentEvent;
 
 public class ForgotPasswordFormSendEvent extends ComponentEvent<ForgotPasswordForm> {

@@ -1,6 +1,6 @@
 package ch.fortylove.presentation.components;
 
-import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.presentation.views.account.login.LoginView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

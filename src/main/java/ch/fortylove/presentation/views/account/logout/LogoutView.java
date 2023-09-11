@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.logout;
+package ch.fortylove.presentation.views.account.logout;
 
 import ch.fortylove.security.AuthenticationService;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

@@ -1,12 +1,12 @@
-package ch.fortylove.presentation.views.registration;
+package ch.fortylove.presentation.views.account.registration;
 
 import ch.fortylove.persistence.entity.UnvalidatedUser;
 import ch.fortylove.persistence.entity.factory.UnvalidatedUserFactory;
 import ch.fortylove.presentation.components.ButtonFactory;
 import ch.fortylove.presentation.components.InputFieldFactory;
 import ch.fortylove.presentation.fieldvalidators.NameValidator;
-import ch.fortylove.presentation.views.registration.events.CancelRegistrationEvent;
-import ch.fortylove.presentation.views.registration.events.RegistrationEvent;
+import ch.fortylove.presentation.views.account.registration.events.CancelRegistrationEvent;
+import ch.fortylove.presentation.views.account.registration.events.RegistrationEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -17,7 +17,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.validator.EmailValidator;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
@@ -27,7 +26,6 @@ import org.springframework.context.annotation.Scope;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@AnonymousAllowed
 public class RegistrationForm extends FormLayout {
 
     @Nonnull private final ButtonFactory buttonFactory;

@@ -1,6 +1,6 @@
 package ch.fortylove.security;
 
-import ch.fortylove.presentation.views.login.LoginView;
+import ch.fortylove.presentation.views.account.login.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
