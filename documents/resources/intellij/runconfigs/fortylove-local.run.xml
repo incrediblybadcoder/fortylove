@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="fortylove-local" type="Application" factoryName="Application" folderName="fortylove-templates">
     <envs>
+      <env name="BASE_URL" value="http://localhost:8080/" />
+      <env name="MAIL_PASSWORD" value="" />
+      <env name="MAIL_USERNAME" value="" />
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
       <env name="SPRING_DATASOURCE_URL" value="" />
       <env name="SPRING_DATASOURCE_USERNAME" value="" />
       <env name="SPRING_PROFILE" value="local" />
-      <env name="MAIL_PASSWORD" value="" />
-      <env name="MAIL_USERNAME" value="" />
-      <env name="BASE_URL" value="" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="ch.fortylove.FortyloveApplication" />
     <module name="fortylove.main" />
