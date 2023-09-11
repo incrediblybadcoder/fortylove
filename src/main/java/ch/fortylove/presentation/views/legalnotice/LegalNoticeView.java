@@ -26,6 +26,7 @@ public class LegalNoticeView extends VerticalLayout {
         this.buttonFactory = buttonFactory;
 
         addClassName("legalnotice-view");
+        setSizeFull();
 
         constructUI(authenticationService.getAuthenticatedUser().isPresent());
     }

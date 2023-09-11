@@ -27,6 +27,7 @@ public class SupportView extends VerticalLayout {
                        @Nonnull final ButtonFactory buttonFactory) {
         this.buttonFactory = buttonFactory;
         addClassName("support-view");
+        setSizeFull();
 
         constructUI(authenticationService.getAuthenticatedUser().isPresent());
     }
