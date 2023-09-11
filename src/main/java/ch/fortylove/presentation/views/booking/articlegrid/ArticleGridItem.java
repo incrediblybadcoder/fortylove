@@ -16,7 +16,7 @@ public class ArticleGridItem extends HorizontalLayout {
 
     public ArticleGridItem(@Nonnull final Article article,
                            final boolean hasActions) {
-        addClassName("item");
+        addClassName("article-grid-item");
         setSpacing(false);
         getThemeList().add("spacing-s");
 

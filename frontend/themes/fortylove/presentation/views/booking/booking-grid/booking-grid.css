@@ -3,16 +3,16 @@
 }
 
 /* booking grid borders */
-vaadin-grid::part(body-cell) {
+.booking-grid::part(body-cell) {
     border-right: 1px solid var(--lumo-contrast-20pct);
 }
-vaadin-grid::part(last-column-cell) {
+.booking-grid::part(last-column-cell) {
     border-right: 0px;
 }
-vaadin-grid::part(last-row-cell) {
+.booking-grid::part(last-row-cell) {
     border-bottom: 1px solid var(--lumo-contrast-20pct);
 }
-vaadin-grid::part(header-cell) {
+.booking-grid::part(header-cell) {
     border-left: 0px;
 }
 

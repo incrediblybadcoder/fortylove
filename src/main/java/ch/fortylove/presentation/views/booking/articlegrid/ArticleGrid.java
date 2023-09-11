@@ -52,7 +52,7 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
 
         addClassName("article-grid");
         setSelectionMode(SelectionMode.NONE);
-        addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS);
 
         constructUI();
         initArticleDialog();

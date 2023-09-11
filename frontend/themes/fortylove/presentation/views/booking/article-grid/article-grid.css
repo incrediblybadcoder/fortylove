@@ -1,57 +1,58 @@
 .article-grid {
-  display: flex;
-  box-shadow: var(--lumo-box-shadow-xs);
-  max-height: 30%
+    display: flex;
+    box-shadow: var(--lumo-box-shadow-xs);
+    max-height: 30%
 }
 
 .article-grid vaadin-grid {
-  line-height: var(--lumo-line-height-m);
+    line-height: var(--lumo-line-height-m);
 }
 
 .article-grid vaadin-grid,
 .article-grid vaadin-grid-cell-content {
-  padding: 0px;
+    padding: 0px;
 }
-
-.article-grid .item {
-  padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+ /* article grid borders */
+.article-grid .article-grid-item {
+    padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+    border-bottom: 1px solid var(--lumo-contrast-20pct);
 }
 
 .article-grid .header {
-  align-items: baseline;
+    align-items: baseline;
 }
 
 .article-grid .title {
-  font-size: var(--lumo-font-size-s);
-  font-weight: bold;
-  margin-right: var(--lumo-space-s);
+    font-size: var(--lumo-font-size-s);
+    font-weight: bold;
+    margin-right: var(--lumo-space-s);
 }
 
 .article-grid .date {
-  color: var(--lumo-tertiary-text-color);
-  font-size: var(--lumo-font-size-xs);
+    color: var(--lumo-tertiary-text-color);
+    font-size: var(--lumo-font-size-xs);
 }
 
 .article-grid .text {
-  color: var(--lumo-secondary-text-color);
-  font-size: var(--lumo-font-size-s);
-  margin-bottom: var(--lumo-space-s);
-  white-space: normal;
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-s);
+    margin-bottom: var(--lumo-space-s);
+    white-space: normal;
 }
 
 .article-grid .actions {
-  align-items: center;
+    align-items: center;
 }
 
 .article-grid .icon {
-  color: var(--lumo-primary-color);
-  height: calc(var(--lumo-icon-size-s) * 0.8);
-  margin-right: var(--lumo-space-s);
-  width: calc(var(--lumo-icon-size-s) * 0.8);
+    color: var(--lumo-primary-color);
+    height: calc(var(--lumo-icon-size-s) * 0.8);
+    margin-right: var(--lumo-space-s);
+    width: calc(var(--lumo-icon-size-s) * 0.8);
 }
 
 .article-grid .new-icon {
-  color: var(--lumo-primary-color);
-  height: calc(var(--lumo-icon-size-s) * 1.2);
-  width: calc(var(--lumo-icon-size-s) * 1.2);
+    color: var(--lumo-primary-color);
+    height: calc(var(--lumo-icon-size-s) * 1.2);
+    width: calc(var(--lumo-icon-size-s) * 1.2);
 }

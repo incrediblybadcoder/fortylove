@@ -17,3 +17,7 @@
         font-size: var(--lumo-font-size-xs);
     }
 }
+
+.booking-view vaadin-grid {
+    border: 0px;
+}
