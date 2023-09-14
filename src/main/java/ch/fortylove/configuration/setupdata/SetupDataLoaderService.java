@@ -8,7 +8,6 @@ import ch.fortylove.configuration.setupdata.data.RoleSetupData;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 @SetupData
 public class SetupDataLoaderService {
 

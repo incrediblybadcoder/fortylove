@@ -1,4 +1,4 @@
-package ch.fortylove.presentation.views.management;
+package ch.fortylove.presentation.views;
 
 public interface Refreshable {
 

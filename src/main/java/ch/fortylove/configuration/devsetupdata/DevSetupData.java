@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringComponent
-@Profile({"!production"})
+@Profile({"develop"})
 public @interface DevSetupData {
 }
