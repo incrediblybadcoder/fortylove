@@ -30,7 +30,7 @@ public class DateSelection extends HorizontalLayout {
         date = dateTimeUtil.today();
 
         setWidthFull();
-        addClassNames(LumoUtility.Padding.Top.LARGE, LumoUtility.Gap.MEDIUM);
+        addClassName(LumoUtility.Gap.MEDIUM);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 

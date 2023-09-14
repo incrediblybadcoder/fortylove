@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface ArticleRepository extends JpaRepository<Article, UUID> {
 
     @Nonnull
-    List<Article> findByOrderByDateTimeAsc();
+    List<Article> findByOrderByDateTimeDesc();
 }

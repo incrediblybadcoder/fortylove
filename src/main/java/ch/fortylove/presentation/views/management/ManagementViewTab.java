@@ -1,5 +1,6 @@
 package ch.fortylove.presentation.views.management;
 
+import ch.fortylove.presentation.views.Refreshable;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

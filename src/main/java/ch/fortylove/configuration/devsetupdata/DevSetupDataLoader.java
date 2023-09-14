@@ -5,12 +5,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @SpringComponent
-@Profile("develop")
+@DevSetupData
 public class DevSetupDataLoader implements InitializingBean {
 
     @Nonnull private final SetupDataLoaderService setupDataLoaderService;
