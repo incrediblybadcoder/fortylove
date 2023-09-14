@@ -7,7 +7,6 @@ import ch.fortylove.configuration.devsetupdata.data.UserDevSetupData;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 @DevSetupData
 public class DevSetupDataLoaderService {
 

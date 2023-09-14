@@ -1,0 +1,9 @@
+.elevated-panel {
+    box-shadow: var(--lumo-box-shadow-xs);
+}
+
+.elevated-panel:hover {
+    box-shadow: var(--lumo-box-shadow-s);
+    transition: box-shadow 0.2s ease;
+}
+

@@ -63,7 +63,7 @@ public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata
         createUserIfNotFound(TOURNAMENT, "Turnier", "Turnier", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
         createUserIfNotFound(INACTIVE, "Inaktiv", "Inaktiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.INACTIVE), false);
         createUserIfNotFound(GUEST1, "Hans", "Wurst", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound(GUEST2, "Ramsi", "Hartmann", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST2, "Hans", "Wegmann", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
         createUserIfNotFound(GUEST3, "Pauli", "Paulson", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
     }
 

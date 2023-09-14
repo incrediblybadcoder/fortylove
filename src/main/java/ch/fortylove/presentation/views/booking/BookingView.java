@@ -1,10 +1,12 @@
 package ch.fortylove.presentation.views.booking;
 
+import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.views.MainLayout;
 import ch.fortylove.presentation.views.booking.articlegrid.ArticleGrid;
 import ch.fortylove.presentation.views.booking.bookinggrid.BookingGrid;
 import ch.fortylove.presentation.views.booking.dateselection.DateSelection;
 import ch.fortylove.presentation.views.booking.dateselection.events.DateChangeEvent;
+import ch.fortylove.security.AuthenticationService;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
@@ -16,6 +18,7 @@ import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Route(value = BookingView.ROUTE, layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
@@ -30,8 +33,11 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     @Nonnull private final DateSelection dateSelection;
     @Nonnull private final BookingGrid bookingGrid;
 
+    private final boolean isShowArticles;
+
     @Autowired
-    public BookingView(@Nonnull final ArticleGrid articleGrid,
+    public BookingView(@Nonnull final AuthenticationService authenticationService,
+                       @Nonnull final ArticleGrid articleGrid,
                        @Nonnull final DateSelection dateSelection,
                        @Nonnull final BookingGrid bookingGrid) {
         this.articleGrid = articleGrid;
@@ -41,11 +47,17 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
         addClassName("booking-view");
         setSizeFull();
 
+        final Optional<User> user = authenticationService.getAuthenticatedUser();
+        isShowArticles = user.isPresent() && user.get().getUserSettings().isShowArticles();
+
         constructUI();
     }
 
     private void constructUI() {
-        add(articleGrid, getDateSelection(), bookingGrid);
+        if (isShowArticles) {
+            add(articleGrid);
+        }
+        add(getDateSelection(), bookingGrid);
     }
 
     @Nonnull
@@ -55,16 +67,22 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     }
 
     private void dateChanged(@Nonnull final DateChangeEvent event) {
-        refresh(event.getDate());
+        refreshBookingGrid(event.getDate());
     }
 
     @Override
     public void afterNavigation(@Nonnull final AfterNavigationEvent event) {
-        refresh(dateSelection.getDate());
+        refreshArticleGrid();
+        refreshBookingGrid(dateSelection.getDate());
     }
 
-    private void refresh(@Nonnull final LocalDate date) {
-        articleGrid.refresh();
+    private void refreshBookingGrid(@Nonnull final LocalDate date) {
         bookingGrid.refresh(date);
+    }
+
+    private void refreshArticleGrid() {
+        if (isShowArticles) {
+            articleGrid.refresh();
+        }
     }
 }

@@ -1,6 +1,8 @@
 @import url("./shared-styles.css");
 @import url("./presentation/views/main-layout.css");
 
+@import url("./presentation/components/containers/elevated-panel.css");
+
 @import url("./presentation/views/booking/booking-view.css");
 @import url("./presentation/views/booking/booking-grid/booking-grid.css");
 @import url("./presentation/views/booking/article-grid/article-grid.css");

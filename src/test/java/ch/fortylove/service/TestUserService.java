@@ -75,6 +75,6 @@ class TestUserService extends ServiceTest {
 
     @Nonnull
     private UserSettings getUserSettings() {
-        return new UserSettings(Theme.LIGHT);
+        return new UserSettings(Theme.LIGHT, true);
     }
 }
