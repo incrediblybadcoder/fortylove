@@ -256,7 +256,7 @@ public class UserManagementViewTab extends ManagementViewTab {
         final DatabaseResult<User> result = userService.changeUserStatusToMember(user, acceptAdmissionEvent.getPlayerStatus());
         notificationUtil.databaseNotification(result);
         if (result.isSuccessful() &! acceptAdmissionEvent.getMessage().isBlank()){
-            emailServiceProvider.sendEmail(user.getEmail(), "Herzliche Willkommben beim TC Untervaz", " Hallo " + user.getFullName()+ " Dein Beitrittsgesuch wurde akzeptiert. Du bist nun Mitglied beim TC Untervaz. \n Wir freuen uns auf dich! Folgende Nachricht wurde dir vom Club zugesendet: <\n" + acceptAdmissionEvent.getMessage() + "\n> Dein fortylove Team");
+            emailServiceProvider.sendEmail(user.getEmail(), "Herzliche willkommen beim TC Untervaz", " Hallo " + user.getFullName()+ " Dein Beitrittsgesuch wurde akzeptiert. Du bist nun Mitglied beim TC Untervaz. \n Wir freuen uns auf dich! Folgende Nachricht wurde dir vom Club zugesendet: <\n" + acceptAdmissionEvent.getMessage() + "\n> Dein fortylove Team");
         }
         refresh();
     }
