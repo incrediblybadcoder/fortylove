@@ -4,6 +4,7 @@ import ch.fortylove.FortyloveApplication;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.presentation.components.ButtonFactory;
+import ch.fortylove.presentation.components.dialog.Dialog;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.management.ManagementView;
@@ -12,7 +13,7 @@ import ch.fortylove.presentation.views.usermenu.settingsview.SettingsView;
 import ch.fortylove.presentation.views.usermenu.userprofile.UserProfileView;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.RoleService;
-import ch.fortylove.util.NotificationUtil;
+import ch.fortylove.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -22,11 +23,13 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -34,6 +37,7 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
@@ -53,23 +57,22 @@ public class MainLayout extends AppLayout {
     private static final String CSS_CLASS_XSMALL_MARGIN_RIGHT = LumoUtility.Margin.Right.XSMALL;
     private static final String CSS_CLASS_RIGHT_PADDING_MEDIUM = LumoUtility.Padding.Right.MEDIUM;
 
-    
 
     @Nonnull private final AuthenticationService authenticationService;
+    @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final ButtonFactory buttonFactory;
-    @Nonnull private final NotificationUtil notificationUtil;
 
     private H2 viewTitle;
 
     public MainLayout(@Nonnull final AuthenticationService authenticationService,
+                      @Nonnull final UserService userService,
                       @Nonnull final RoleService roleService,
-                      @Nonnull final ButtonFactory buttonFactory,
-                      @Nonnull final NotificationUtil notificationUtil) {
+                      @Nonnull final ButtonFactory buttonFactory) {
         this.authenticationService = authenticationService;
+        this.userService = userService;
         this.roleService = roleService;
         this.buttonFactory = buttonFactory;
-        this.notificationUtil = notificationUtil;
         initHeader();
         if (authenticationService.getAuthenticatedUser().isPresent()) {
             createHeader();
@@ -107,8 +110,7 @@ public class MainLayout extends AppLayout {
         }
 
 
-
-}
+    }
 
 
     private UserStatus getUserStatus() {
@@ -139,8 +141,49 @@ public class MainLayout extends AppLayout {
     }
 
     private void membershipRequestHandler() {
-        notificationUtil.informationNotification("Membership request sent");
+        Dialog dialog = new Dialog();
+        dialog.setCloseOnEsc(true);
+        dialog.setCloseOnOutsideClick(true);
 
+        VerticalLayout layout = new VerticalLayout();
+        layout.setPadding(true);
+        layout.setSpacing(true);
+        layout.setWidth("100%");
+
+        H2 title = new H2("TCU Mitgliedschaftsanfrage");
+        Anchor link = new Anchor("https://www.tcuntervaz.ch/club/reglemente-statuten/", "TCU Statuten");
+        link.setTarget("_blank");
+        Paragraph description = new Paragraph("Rechte und Pflichten einer Mitgliedschaft im TCU sind in der TCU Statuten festgehalten"+
+                " Der aktuelle Mitgliedschaftsstatus kann im Benutzerprofil eingesehen werden.");
+
+        Button closeButton = buttonFactory.createNeutralButton("Abbrechen", event -> dialog.close());
+        closeButton.setWidth("auto");
+
+        Button sendButton = buttonFactory.createPrimaryButton("Anfrage senden", event -> {
+            handleSendButtonClicked();
+            dialog.close();
+        });
+        sendButton.setWidth("auto");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setWidth("100%");
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        buttonLayout.add(sendButton, closeButton);
+        layout.add(title, description, link, buttonLayout);
+
+        dialog.add(layout);
+        dialog.open();
+    }
+
+    private void handleSendButtonClicked() {
+        final Optional<User> authenticatedUser = authenticationService.getAuthenticatedUser();
+        if (authenticatedUser.isPresent()) {
+            final User user = authenticatedUser.get();
+            user.setUserStatus(UserStatus.GUEST_PENDING);
+            userService.update(user);
+        }
+        UI.getCurrent().getPage().reload();
     }
 
     @Nonnull
