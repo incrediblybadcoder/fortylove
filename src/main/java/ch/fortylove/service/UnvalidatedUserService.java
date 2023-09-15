@@ -2,14 +2,13 @@ package ch.fortylove.service;
 
 import ch.fortylove.persistence.entity.UnvalidatedUser;
 import ch.fortylove.persistence.entity.User;
+import ch.fortylove.persistence.error.EmailSendingException;
 import ch.fortylove.persistence.repository.UnvalidatedUserRepository;
-import ch.fortylove.service.email.EmailServiceProvider;
+import ch.fortylove.service.email.IEmailServiceProvider;
 import ch.fortylove.service.util.DatabaseResult;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,18 +19,17 @@ public class UnvalidatedUserService {
 
     @Nonnull private final UnvalidatedUserRepository unvalidatedUserRepository;
     @Nonnull private final UserService userService;
-    @Nonnull private final EmailServiceProvider emailServiceProvider;
+    @Nonnull private final IEmailServiceProvider emailServiceProvider;
     @Nonnull private final String baseUrl;
 
     @Autowired
     public UnvalidatedUserService(@Nonnull final UnvalidatedUserRepository unvalidatedUserRepository,
                                   @Nonnull final UserService userService,
-                                  @Value("${email.service}") String emailProvider,
-                                  @Nonnull final ApplicationContext context) {
+                                  @Nonnull IEmailServiceProvider emailServiceProvider) {
         this.unvalidatedUserRepository = unvalidatedUserRepository;
         this.userService = userService;
         baseUrl = System.getenv("BASE_URL");
-        emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
+        this.emailServiceProvider = emailServiceProvider;
     }
 
     @Nonnull
@@ -61,8 +59,8 @@ public class UnvalidatedUserService {
 
             try {
                 emailServiceProvider.sendEmail(unvalidatedUser.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (EmailSendingException e) {
+                throw new EmailSendingException("Error while sending the email using ", e);
             }
         }
         return new DatabaseResult<>(unvalidatedUserRepository.save(unvalidatedUser));

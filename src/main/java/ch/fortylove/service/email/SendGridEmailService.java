@@ -1,6 +1,6 @@
 package ch.fortylove.service.email;
 
-import ch.fortylove.persistence.error.EmailNotSentException;
+import ch.fortylove.persistence.error.EmailSendingException;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service("sendGridEmailService")
-public class SendGridEmailService implements EmailServiceProvider {
+public class SendGridEmailService implements IEmailServiceProvider {
 
     @Nonnull private final String apiKey = System.getenv("MAIL_PASSWORD");
 
@@ -39,11 +39,11 @@ public class SendGridEmailService implements EmailServiceProvider {
             System.out.println("Body: " + response.getBody());
 
             if (response.getStatusCode() != 202) {
-                throw new EmailNotSentException("Failed to send email. Status code: " + response.getStatusCode() + ", Response: " + response.getBody());
+                throw new EmailSendingException("Failed to send email. Status code: " + response.getStatusCode() + ", Response: " + response.getBody());
             }
 
         } catch (IOException ex) {
-            throw new EmailNotSentException("Error while sending the email", ex);
+            throw new EmailSendingException("Error while sending the email using SendGrid", ex);
         }
     }
 }
