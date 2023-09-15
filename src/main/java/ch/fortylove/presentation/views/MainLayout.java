@@ -4,7 +4,7 @@ import ch.fortylove.FortyloveApplication;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.presentation.components.ButtonFactory;
-import ch.fortylove.presentation.components.dialog.Dialog;
+import ch.fortylove.presentation.components.dialog.MembershipRequestDialog;
 import ch.fortylove.presentation.views.booking.BookingView;
 import ch.fortylove.presentation.views.legalnotice.LegalNoticeView;
 import ch.fortylove.presentation.views.management.ManagementView;
@@ -23,13 +23,11 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -37,7 +35,6 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
@@ -49,15 +46,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class MainLayout extends AppLayout {
-
     private static final String CSS_CLASS_LARGE_FONT = LumoUtility.FontSize.LARGE;
     private static final String CSS_CLASS_NO_MARGIN = LumoUtility.Margin.NONE;
     private static final String CSS_CLASS_XSMALL_HEIGHT = LumoUtility.Height.XSMALL;
     private static final String CSS_CLASS_XSMALL_WIDTH = LumoUtility.Width.XSMALL;
     private static final String CSS_CLASS_XSMALL_MARGIN_RIGHT = LumoUtility.Margin.Right.XSMALL;
     private static final String CSS_CLASS_RIGHT_PADDING_MEDIUM = LumoUtility.Padding.Right.MEDIUM;
-
-
     @Nonnull private final AuthenticationService authenticationService;
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
@@ -98,7 +92,7 @@ public class MainLayout extends AppLayout {
         addToNavbar(true, toggle, headerContent);
     }
 
-    private void handleUserStatus(final HorizontalLayout headerContent, final UserStatus userStatus) {
+    private void handleUserStatus(@Nonnull final HorizontalLayout headerContent, @Nonnull final UserStatus userStatus) {
         switch (userStatus) {
             case GUEST -> {
                 addMembershipRequestButtonToHeaderContent(headerContent);
@@ -108,11 +102,10 @@ public class MainLayout extends AppLayout {
             default -> {
             }
         }
-
-
     }
 
 
+    @Nonnull
     private UserStatus getUserStatus() {
         return authenticationService.getAuthenticatedUser()
                 .map(User::getUserStatus)
@@ -127,52 +120,21 @@ public class MainLayout extends AppLayout {
         return headerContent;
     }
 
-    private void addMembershipRequestButtonToHeaderContent(HorizontalLayout headerContent) {
+    private void addMembershipRequestButtonToHeaderContent(@Nonnull HorizontalLayout headerContent) {
         Button requestMembership = buttonFactory.createPrimaryButton("TCU Beitreten", this::membershipRequestHandler);
         styleMembershipButton(requestMembership);
         headerContent.removeAll();
         headerContent.add(viewTitle, requestMembership, getUserMenu());
     }
 
-    private void styleMembershipButton(Button requestMembership) {
+    private void styleMembershipButton(@Nonnull Button requestMembership) {
         requestMembership.getElement().getStyle().set("padding-left", "10px");
         requestMembership.getElement().getStyle().set("padding-right", "10px");
         requestMembership.setWidth("auto");
     }
 
     private void membershipRequestHandler() {
-        Dialog dialog = new Dialog();
-        dialog.setCloseOnEsc(true);
-        dialog.setCloseOnOutsideClick(true);
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.setPadding(true);
-        layout.setSpacing(true);
-        layout.setWidth("100%");
-
-        H2 title = new H2("TCU Mitgliedschaftsanfrage");
-        Anchor link = new Anchor("https://www.tcuntervaz.ch/club/reglemente-statuten/", "TCU Statuten");
-        link.setTarget("_blank");
-        Paragraph description = new Paragraph("Rechte und Pflichten einer Mitgliedschaft im TCU sind in der TCU Statuten festgehalten"+
-                " Der aktuelle Mitgliedschaftsstatus kann im Benutzerprofil eingesehen werden.");
-
-        Button closeButton = buttonFactory.createNeutralButton("Abbrechen", event -> dialog.close());
-        closeButton.setWidth("auto");
-
-        Button sendButton = buttonFactory.createPrimaryButton("Anfrage senden", event -> {
-            handleSendButtonClicked();
-            dialog.close();
-        });
-        sendButton.setWidth("auto");
-
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setWidth("100%");
-        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-
-        buttonLayout.add(sendButton, closeButton);
-        layout.add(title, description, link, buttonLayout);
-
-        dialog.add(layout);
+        MembershipRequestDialog dialog = new MembershipRequestDialog(buttonFactory, this::handleSendButtonClicked);
         dialog.open();
     }
 
