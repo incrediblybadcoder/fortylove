@@ -19,12 +19,17 @@ public class UserSettings extends AbstractEntity {
     @Column(name = "theme")
     private Theme theme;
 
+    @Column(name= "show_articles")
+    private boolean showArticles;
+
     protected UserSettings() {
     }
 
-    public UserSettings(@Nonnull final Theme theme) {
+    public UserSettings(@Nonnull final Theme theme,
+                        final boolean showArticles) {
         super(UUID.randomUUID());
         this.theme = theme;
+        this.showArticles = showArticles;
     }
 
     @Nonnull
@@ -45,10 +50,19 @@ public class UserSettings extends AbstractEntity {
         this.theme = theme;
     }
 
+    public boolean isShowArticles() {
+        return showArticles;
+    }
+
+    public void setShowArticles(final boolean showArticles) {
+        this.showArticles = showArticles;
+    }
+
     @Override
     public String toString() {
         return "UserSettings{" +
-                "theme=" + theme +
+                ", theme=" + theme +
+                ", showArticles=" + showArticles +
                 '}';
     }
 }

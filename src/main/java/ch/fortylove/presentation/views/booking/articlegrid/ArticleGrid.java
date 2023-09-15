@@ -3,12 +3,12 @@ package ch.fortylove.presentation.views.booking.articlegrid;
 import ch.fortylove.persistence.entity.Article;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.presentation.components.dialog.DeleteConfirmationDialog;
+import ch.fortylove.presentation.views.Refreshable;
 import ch.fortylove.presentation.views.booking.articlegrid.articledialog.ArticleDialog;
 import ch.fortylove.presentation.views.booking.articlegrid.articledialog.ArticleDialogEvent;
 import ch.fortylove.presentation.views.booking.articlegrid.events.DeleteArticleEvent;
 import ch.fortylove.presentation.views.booking.articlegrid.events.EditArticleEvent;
 import ch.fortylove.presentation.views.booking.articlegrid.events.NewArticleEvent;
-import ch.fortylove.presentation.views.management.Refreshable;
 import ch.fortylove.security.AuthenticationService;
 import ch.fortylove.service.ArticleService;
 import ch.fortylove.service.RoleService;
@@ -18,6 +18,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,7 +53,8 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
 
         addClassName("article-grid");
         setSelectionMode(SelectionMode.NONE);
-        addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS);
+        addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        addClassName(LumoUtility.Padding.Top.LARGE);
 
         constructUI();
         initArticleDialog();
@@ -71,7 +73,7 @@ public class ArticleGrid extends Grid<Article> implements Refreshable {
             if (userHasManagementRole) {
                 // create article to identify last article in list
                 newArticleItem = getNewArticleItem();
-                articles.add(newArticleItem);
+                articles.add(0, newArticleItem);
             } else {
                 if (articles.isEmpty()) {
                     setVisible(false);

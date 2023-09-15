@@ -14,6 +14,8 @@
  /* article grid borders */
 .article-grid .article-grid-item {
     padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+}
+.article-grid::part(last-row-cell) {
     border-bottom: 1px solid var(--lumo-contrast-20pct);
 }
 
@@ -44,7 +46,7 @@
 }
 
 .article-grid .icon {
-    color: var(--lumo-primary-color);
+    color: var(--lumo-tertiary-text-color);
     height: calc(var(--lumo-icon-size-s) * 0.8);
     margin-right: var(--lumo-space-s);
     width: calc(var(--lumo-icon-size-s) * 0.8);

@@ -10,6 +10,6 @@ public class UserSettingsFactory {
 
     @Nonnull
     public UserSettings newUserSettings() {
-        return new UserSettings(Theme.LIGHT);
+        return new UserSettings(Theme.LIGHT, true);
     }
 }

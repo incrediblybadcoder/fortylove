@@ -41,7 +41,7 @@ public class User extends AbstractEntity implements HasIdentifier, Comparable<Us
     private AuthenticationDetails authenticationDetails;
 
     @NotNull
-    @Column(name = "userstatus")
+    @Column(name = "user_status")
     private UserStatus userStatus;
 
     @Column(name = "enabled")

@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @SpringComponent
-@Profile({"production", "local"})
+@Profile({"production"})
 public class SetupDataLoader implements InitializingBean {
 
     @Nonnull private final SetupDataLoaderService setupDataLoaderService;
