@@ -11,6 +11,7 @@ import ch.fortylove.presentation.views.management.usermanagement.admissiondialog
 import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.AcceptAdmissionEvent;
 import ch.fortylove.presentation.views.management.usermanagement.admissiondialog.events.RejectAdmissionEvent;
 import ch.fortylove.service.UserService;
+import ch.fortylove.service.email.IEmailServiceProvider;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.ClickEvent;
@@ -55,16 +56,20 @@ public class UserManagementViewTab extends ManagementViewTab {
     @Nonnull private final Grid<User> grid = new Grid<>(User.class, false);
     @Nonnull final private UserFilter userFilter = new UserFilter();
 
+    @Nonnull private final IEmailServiceProvider emailServiceProvider;
+
     @Autowired
     public UserManagementViewTab(@Nonnull final UserService userService,
                                  @Nonnull final NotificationUtil notificationUtil,
                                  @Nonnull final AdmissionDialog admissionDialog,
-                                 @Nonnull final UserForm userForm) {
+                                 @Nonnull final UserForm userForm,
+                                 @Nonnull IEmailServiceProvider emailServiceProvider){
         super(VaadinIcon.USERS.create(), "Benutzer");
         this.notificationUtil = notificationUtil;
         this.admissionDialog = admissionDialog;
         this.userForm = userForm;
         this.userService = userService;
+        this.emailServiceProvider = emailServiceProvider;
 
         constructUI();
     }
@@ -225,6 +230,7 @@ public class UserManagementViewTab extends ManagementViewTab {
     public void saveEvent(@Nonnull final ManagementFormSaveEvent<User> managementFormSaveEvent) {
         final User user = managementFormSaveEvent.getItem();
         final DatabaseResult<User> userDatabaseResult = userService.create(user);
+        emailServiceProvider.sendEmail(user.getEmail(), "Aufschlag bei FortyLove - Du bist drin!", " Hallo " + user.getFullName()+ "\n Hast du deine Tennisschuhe schon geschnürt? Wir hoffen, du bist bereit für einige grandiose Aufschläge und flinke Ballwechsel, denn der Tennisclub Untervaz rollt den roten Teppich (wortwörtlich) für dich aus! Komm vorbei und geniess unsere schöne Anlage. \n Wir freuen uns auf dich! \n Dein FortyLove Team");
         userService.generateAndSaveResetToken(user.getEmail(), 10000);
         notificationUtil.databaseNotification(userDatabaseResult);
         notificationUtil.persistentInformationNotification(String.format("Der Benutzer %s wurde erstellt.\n Ein Link um das Passwort zu ändern wurde an %s gesendet.", user.getIdentifier(), user.getEmail()));
