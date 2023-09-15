@@ -6,15 +6,14 @@ import ch.fortylove.persistence.entity.UnvalidatedUser;
 import ch.fortylove.persistence.entity.User;
 import ch.fortylove.persistence.entity.UserStatus;
 import ch.fortylove.persistence.entity.factory.UserFactory;
+import ch.fortylove.persistence.error.EmailSendingException;
 import ch.fortylove.persistence.repository.UserRepository;
-import ch.fortylove.service.email.EmailServiceProvider;
+import ch.fortylove.service.email.IEmailServiceProvider;
 import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.DateTimeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class UserService {
     @Nonnull private final PlayerStatusService playerStatusService;
     @Nonnull private final DateTimeUtil dateTimeUtil;
 
-    @Nonnull private final EmailServiceProvider emailServiceProvider;
+    @Nonnull private final IEmailServiceProvider emailServiceProvider;
     @Nonnull private final String baseUrl;
 
     @Nonnull private final UserFactory userFactory;
@@ -39,15 +38,14 @@ public class UserService {
     public UserService(@Nonnull final UserRepository userRepository,
                        @Nonnull final PlayerStatusService playerStatusService,
                        @Nonnull final DateTimeUtil dateTimeUtil,
-                       @Value("${email.service}") String emailProvider,
-                       @Nonnull final ApplicationContext context,
+                       @Nonnull IEmailServiceProvider emailServiceProvider,
                        @Nonnull final UserFactory userFactory) {
         this.userRepository = userRepository;
         this.playerStatusService = playerStatusService;
         this.dateTimeUtil = dateTimeUtil;
         this.userFactory = userFactory;
         baseUrl = System.getenv("BASE_URL");
-        emailServiceProvider = context.getBean(emailProvider, EmailServiceProvider.class);
+        this.emailServiceProvider = emailServiceProvider;
     }
 
     @Nonnull
@@ -162,8 +160,8 @@ public class UserService {
 
         try {
             emailServiceProvider.sendEmail(user.getEmail(), "Passwort zurücksetzen", htmlContent);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (EmailSendingException e) {
+            throw new EmailSendingException("Error while sending the email using ", e);
         }
         userRepository.save(user);
         return true;
