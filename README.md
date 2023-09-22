@@ -19,6 +19,8 @@ The following dependencies need to be installed before running the application.
 
 - [Java JDK](https://www.oracle.com/java/technologies/javase-downloads.html) (version 17 or higher)
 
+To run the application with a live database, a postgresql database is needed. To run the application in development mode, an in-memory database can be used. See [Database](#database) for more information.
+
 ## Getting Started
 
 ### Building
@@ -39,7 +41,7 @@ Run
 
 In order to run the application, the following environment variables need to be set up
 
-| Environment Variable | Description | Development Sample Configuration |
+| Environment Variable | Description | Sample Development Configuration |
 | ------ | ------ | ------ |
 | SPRING_PROFILE | The spring profile configures the application to run in different modes. The available profiles are described in section [Profiles](#profiles) | develop |
 | SPRING_DATASOURCE_URL | Url of the database | jdbc:h2:mem:fortylovedb |
@@ -61,6 +63,12 @@ The following spring profiles exist
 | develop | A in-memory database (h2) is used and demo data is generated at application start for development purposes |
 | sql-generation | Same as the production profile, but configured to use spring-hibernate database management and **create-drop** all existing tables. Use this profile to let hibernate generate databse tables from entity classes. Sql statements can then be generated through a DBMS and used for database migration tool flyway. |
 | test | To run application tests |
+
+## Database
+
+To use a live postgresql database, the postgresql server needs to have an empty database with name `fortylovedb`. On first start, this database will be set up by the application.
+<br>
+To run the application in development mode, an in-memory database can be used. Simply use the `develop` profile and specify the spring environment-variables for the h2 in-memory database as described in the sample development configuration in [Environment Variables](#environment-variables).
 
 ## Intellij Run-Configurations
 
