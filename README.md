@@ -11,6 +11,7 @@ Fortylove is a tennis club management system built with Java on Spring Boot with
   - [Running](#running)
   - [Environment Variables](#environment-variables)
   - [Profiles](#profiles)
+- [Database](#database)
 - [Intellij Run-Configurations](#intellij-run-configurations)
 
 ## Prerequisites
