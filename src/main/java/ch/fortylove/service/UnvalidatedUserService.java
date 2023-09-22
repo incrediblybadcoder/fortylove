@@ -34,12 +34,12 @@ public class UnvalidatedUserService {
 
     @Nonnull
     public DatabaseResult<UnvalidatedUser> create(@Nonnull final UnvalidatedUser unvalidatedUser) {
-        return this.create(unvalidatedUser, false);
+        return create(unvalidatedUser, false);
     }
 
     @Nonnull
     public DatabaseResult<UnvalidatedUser> create(@Nonnull final UnvalidatedUser unvalidatedUser,
-                                                  boolean sendActivationMail) {
+                                                  final boolean sendActivationMail) {
         if (unvalidatedUserRepository.findById(unvalidatedUser.getId()).isPresent()) {
             return new DatabaseResult<>("Benutzer existiert bereits: " + unvalidatedUser.getIdentifier());
         }
@@ -60,7 +60,7 @@ public class UnvalidatedUserService {
             try {
                 emailServiceProvider.sendEmail(unvalidatedUser.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);
             } catch (EmailSendingException e) {
-                throw new EmailSendingException("Error while sending the email using ", e);
+                return new DatabaseResult<>("Error while sending the email using " + e);
             }
         }
         return new DatabaseResult<>(unvalidatedUserRepository.save(unvalidatedUser));
