@@ -18,8 +18,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "courts")
-@FilterDef(name = "bookingDateFilter", parameters = @ParamDef(name = "date", type = LocalDate.class), defaultCondition = "booking_date = :date")
+@FilterDef(name = Court.BOOKING_DATE_FILTER, parameters = @ParamDef(name = Court.BOOKING_DATE_FILTER_PARAMETER, type = LocalDate.class), defaultCondition = "booking_date = :" + Court.BOOKING_DATE_FILTER_PARAMETER)
 public class Court extends AbstractEntity implements HasIdentifier {
+
+    @Nonnull public static final String BOOKING_DATE_FILTER = "bookingDateFilter";
+    @Nonnull public static final String BOOKING_DATE_FILTER_PARAMETER = "date";
 
     @NotNull
     @Column(name = "court_type")
@@ -38,7 +41,7 @@ public class Court extends AbstractEntity implements HasIdentifier {
     private String name;
 
     @OneToMany(mappedBy = "court", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Filter(name = "bookingDateFilter")
+    @Filter(name = BOOKING_DATE_FILTER)
     private Set<Booking> bookings = new HashSet<>();
 
     protected Court() {

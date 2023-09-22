@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SpringComponent
 @UIScope
@@ -75,8 +76,18 @@ public class BookingGrid extends Grid<Court> {
 
     public void refresh(@Nonnull final LocalDate date) {
         this.date = date;
-        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
-        setItems(courts);
+        notificationUtil.persistentInformationNotification("refresh grid with date: " + date);
+//        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
+
+        final List<Court> allCourts = courtService.findAll();
+        for (final Court allCourt : allCourts) {
+            final Set<Booking> allBookings = allCourt.getBookings();
+            final Set<Booking> filteredBookings = allBookings.stream().filter(booking -> booking.getDate().equals(date)).collect(Collectors.toSet());
+            allCourt.setBookings(filteredBookings);
+        }
+
+
+        setItems(allCourts);
     }
 
     private void constructGrid() {
