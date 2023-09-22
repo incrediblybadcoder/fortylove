@@ -21,6 +21,19 @@ import java.util.Set;
 @DevSetupData
 public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata.data.DevSetupData {
 
+    @Nonnull public static final String ADMIN = "admin@fortylove.ch";
+    @Nonnull public static final String STAFF = "staff@fortylove.ch";
+    @Nonnull public static final String USER1 = "marco@fortylove.ch";
+    @Nonnull public static final String USER2 = "jonas@fortylove.ch";
+    @Nonnull public static final String USER3 = "daniel@fortylove.ch";
+    @Nonnull public static final String ACTIVE = "aktiv@fortylove.ch";
+    @Nonnull public static final String PASSIVE = "passiv@fortylove.ch";
+    @Nonnull public static final String TOURNAMENT = "turnier@fortylove.ch";
+    @Nonnull public static final String INACTIVE = "inaktiv@fortylove.ch";
+    @Nonnull public static final String GUEST1 = "gast1@fortylove.ch";
+    @Nonnull public static final String GUEST2 = "gast2@fortylove.ch";
+    @Nonnull public static final String GUEST3 = "gast3@fortylove.ch";
+
     @Nonnull private final UserService userService;
     @Nonnull private final RoleService roleService;
     @Nonnull private final PlayerStatusService playerStatusService;
@@ -38,23 +51,20 @@ public class UserDevSetupData implements ch.fortylove.configuration.devsetupdata
 
     @Override
     public void createDevData() {
-        createUserIfNotFound("lukas.meier@yahoo.com", "Lukas", "Meier", "password", UserStatus.MEMBER, getAdminRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
-        createUserIfNotFound("lena.müller@hotmail.com", "Lena", "Müller", "password", UserStatus.MEMBER, getStaffRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
-        createUserIfNotFound("anna.schneider@gmail.com", "Anna", "Schneider", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("marco.solombrino@gmail.com", "Marco", "Solombrino", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
-        createUserIfNotFound("jonas.cahenzli@gmail.com", "Jonas", "Cahenzli", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
-        createUserIfNotFound("david.huber@gmx.ch", "David", "Huber", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("sara.frey@yahoo.com", "Sara", "Frey", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
-        createUserIfNotFound("benjamin.graf@hotmail.com", "Benjamin", "Graf", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIVE), true);
-        createUserIfNotFound("laura.fuchs@gmail.com", "Laura", "Fuchs", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
-        createUserIfNotFound("simon.wirth@gmx.ch", "Simon", "Wirth", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.INACTIVE), false);
-        createUserIfNotFound("sophie.gerber@yahoo.com", "Sophie", "Gerber", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("martin.weiss@hotmail.com", "Martin", "Weiss", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
-        createUserIfNotFound("maria.bianchi@yahoo.it", "Maria", "Bianchi", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("roberto.rossi@gmx.it", "Roberto", "Rossi", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("julia.schmidt@gmx.de", "Julia", "Schmidt", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
-        createUserIfNotFound("tobias.wolf@hotmail.de", "Tobias", "Wolf", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
-        createUserIfNotFound("jihoon.lee@gmail.com", "Ju-Hoon", "Lee", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(ADMIN, "Admin", "Admin", "password", UserStatus.MEMBER, getAdminRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(STAFF, "Staff", "Staff", "password", UserStatus.MEMBER, getStaffRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+
+        createUserIfNotFound(USER1, "Marco", "Solombrino", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(USER2, "Jonas", "Cahenzli", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(USER3, "Daniel", "Tobler", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+
+        createUserIfNotFound(ACTIVE, "Aktiv", "Aktiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.ACTIVE), true);
+        createUserIfNotFound(PASSIVE, "Passiv", "Passiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.PASSIVE), true);
+        createUserIfNotFound(TOURNAMENT, "Turnier", "Turnier", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.TOURNAMENT), true);
+        createUserIfNotFound(INACTIVE, "Inaktiv", "Inaktiv", "password", UserStatus.MEMBER, getUserRole(), getPlayerStatus(PlayerStatusSetupData.INACTIVE), false);
+        createUserIfNotFound(GUEST1, "Martina", "Hingis", "password", UserStatus.GUEST, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST2, "Anna", "Kurnikowa", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
+        createUserIfNotFound(GUEST3, "Andre", "Agassi", "password", UserStatus.GUEST_PENDING, getUserRole(), getPlayerStatus(PlayerStatusSetupData.GUEST), true);
     }
 
     @Nonnull

@@ -61,30 +61,46 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
 
     private void createBookingsToday(@Nonnull final List<Court> courts,
                                      @Nonnull final SortedSet<Timeslot> timeslots) {
-        final LocalDate today = dateTimeUtil.today();
+        final LocalDate today = LocalDate.now();
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
         bookings.put(0, List.of(
-                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("lukas.meier@yahoo.com"), getOpponents("tobias.wolf@hotmail.de"), today, timeslot)),
-                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("sara.frey@yahoo.com"), getOpponents("jihoon.lee@gmail.com"), today, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot))
         ));
 
         bookings.put(1, List.of(
-                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("marco.solombrino@gmail.com"), getOpponents("lena.müller@hotmail.com"), today, timeslot))
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), today, timeslot))
         ));
 
         bookings.put(2, List.of(
-                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("maria.bianchi@yahoo.it"), getOpponents("roberto.rossi@gmx.it"), today, timeslot))
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), today, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), today, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), today, timeslot))
         ));
 
         bookings.put(3, List.of(
-                court -> getTimeslot(timeslots, 20).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas.cahenzli@gmail.com"), getOpponents("martin.weiss@hotmail.com"), today, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), today, timeslot))
         ));
 
         bookings.put(4, List.of(
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER1), today, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), today, timeslot))
         ));
 
         bookings.put(5, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), today, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), today, timeslot))
         ));
 
         createBookings(courts, bookings);
@@ -92,31 +108,39 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
 
     private void createBookingsYesterday(@Nonnull final List<Court> courts,
                                          @Nonnull final SortedSet<Timeslot> timeslots) {
-        final LocalDate yesterday = dateTimeUtil.today().minusDays(1);
+        final LocalDate yesterday = LocalDate.now().minusDays(1);
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
         bookings.put(0, List.of(
-                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("lukas.meier@yahoo.com"), getOpponents("lena.müller@hotmail.com"), yesterday, timeslot)),
-                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("david.huber@gmx.ch"), getOpponents("jihoon.lee@gmail.com"), yesterday, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 11).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 15).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), yesterday, timeslot))
         ));
 
         bookings.put(1, List.of(
-                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("david.huber@gmx.ch"), getOpponents("sara.frey@yahoo.com"), yesterday, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER1), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), yesterday, timeslot))
         ));
 
         bookings.put(2, List.of(
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), yesterday, timeslot))
         ));
 
         bookings.put(3, List.of(
-                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("sophie.gerber@yahoo.com"), getOpponents("martin.weiss@hotmail.com"), yesterday, timeslot))
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER1), yesterday, timeslot))
         ));
 
         bookings.put(4, List.of(
-                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("benjamin.graf@hotmail.com"), getOpponents("laura.fuchs@gmail.com"), yesterday, timeslot))
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), yesterday, timeslot))
         ));
 
         bookings.put(5, List.of(
-                court -> getTimeslot(timeslots, 19).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("roberto.rossi@gmx.it"), getOpponents("jonas.cahenzli@gmail.com"), yesterday, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), yesterday, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER1), yesterday, timeslot))
         ));
 
         createBookings(courts, bookings);
@@ -124,29 +148,34 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
 
     private void createBookingsTomorrow(@Nonnull final List<Court> courts,
                                         @Nonnull final SortedSet<Timeslot> timeslots) {
-        final LocalDate tomorrow = dateTimeUtil.today().plusDays(1);
+        final LocalDate tomorrow = LocalDate.now().plusDays(1);
         final SortedMap<Integer, List<Consumer<Court>>> bookings = new TreeMap<>();
 
         bookings.put(0, List.of(
-                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("julia.schmidt@gmx.de"), getOpponents("martin.weiss@hotmail.com"), tomorrow, timeslot))
+                court -> getTimeslot(timeslots, 9).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER3), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), tomorrow, timeslot))
         ));
 
         bookings.put(1, List.of(
-                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("david.huber@gmx.ch"), getOpponents("marco.solombrino@gmail.com"), tomorrow, timeslot))
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 12).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER1), tomorrow, timeslot)),
+                court -> getTimeslot(timeslots, 13).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), tomorrow, timeslot))
         ));
 
         bookings.put(2, List.of(
+                court -> getTimeslot(timeslots, 8).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), tomorrow, timeslot))
         ));
 
         bookings.put(3, List.of(
-                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("lena.müller@hotmail.com"), getOpponents("tobias.wolf@hotmail.de"), tomorrow, timeslot))
+                court -> getTimeslot(timeslots, 14).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER2), getOpponents(UserDevSetupData.USER3), tomorrow, timeslot))
         ));
 
         bookings.put(4, List.of(
+                court -> getTimeslot(timeslots, 10).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER3), getOpponents(UserDevSetupData.USER2), tomorrow, timeslot))
         ));
 
         bookings.put(5, List.of(
-                court -> getTimeslot(timeslots, 19).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner("jonas.cahenzli@gmail.com"), getOpponents("sara.frey@yahoo.com"), tomorrow, timeslot))
+                court -> getTimeslot(timeslots, 7).ifPresent(timeslot -> createBookingIfNotFound(court, getOwner(UserDevSetupData.USER1), getOpponents(UserDevSetupData.USER2), tomorrow, timeslot))
         ));
 
         createBookings(courts, bookings);
@@ -208,7 +237,7 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
 
         if (isNewBooking(bookings, date, timeslot)) {
             final Booking booking = new Booking(court, owner, opponents, timeslot, date);
-            bookingRepository.save(booking);    // bypass validation for dev setup data
+            bookingService.create(booking);
             court.addBooking(booking);
         }
     }
