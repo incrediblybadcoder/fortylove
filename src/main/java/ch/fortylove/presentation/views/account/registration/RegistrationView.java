@@ -65,9 +65,7 @@ public class RegistrationView extends VerticalLayout {
                 unvalidatedUser.setEncryptedPassword(passwordEncoder.encode(registrationEvent.getPlainPassword()));
 
                 final DatabaseResult<UnvalidatedUser> databaseResult = unvalidatedUserService.create(unvalidatedUser, true);
-                if (!databaseResult.isSuccessful()) {
-                    notificationUtil.databaseNotification(databaseResult, "Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
-                }
+                notificationUtil.databaseNotification(databaseResult, "Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
 
                 gotToLoginPage();
         }
