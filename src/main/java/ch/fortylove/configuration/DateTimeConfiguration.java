@@ -11,7 +11,7 @@ public class DateTimeConfiguration {
 
     @PostConstruct
     public void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
         Locale.setDefault(Locale.GERMANY);
     }
 }
