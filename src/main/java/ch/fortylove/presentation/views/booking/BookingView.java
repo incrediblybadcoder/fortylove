@@ -67,7 +67,9 @@ public class BookingView extends VerticalLayout implements AfterNavigationObserv
     }
 
     private void dateChanged(@Nonnull final DateChangeEvent event) {
-        refreshBookingGrid(event.getDate());
+        if (dateSelection.getDate().equals(event.getDate())) {
+            refreshBookingGrid(event.getDate());
+        }
     }
 
     @Override
