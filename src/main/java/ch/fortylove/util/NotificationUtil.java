@@ -41,8 +41,13 @@ public class NotificationUtil {
     }
 
     public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult) {
+        databaseNotification(databaseResult, "Erfolgreich");
+    }
+
+    public void databaseNotification(@Nonnull final DatabaseResult<?> databaseResult,
+                                     @Nonnull final String successMessage) {
         if (databaseResult.isSuccessful()) {
-            informationNotification("Erfolgreich");
+            informationNotification(successMessage);
         } else {
             errorNotification(databaseResult.getMessage());
         }
