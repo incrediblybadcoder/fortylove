@@ -17,7 +17,7 @@ public class CourtDevSetupData implements ch.fortylove.configuration.devsetupdat
     private static final int[] NUMBERS = {1, 2, 3, 4, 5, 6};
     private static final String[] NAMES = {"Calanda", "Holcim", "Raiffeisen", "Sportshop41", "Toldo", "Gasser Baumaterialien"};
     private static final CourtType[] COURT_TYPES = {CourtType.REDCOURT, CourtType.REDCOURT, CourtType.REDCOURT, CourtType.REDCOURT, CourtType.HARD, CourtType.HARD};
-    private static final CourtIcon[] COURT_ICONS = {CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.GREY, CourtIcon.GREY};
+    private static final CourtIcon[] COURT_ICONS = {CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.ORANGE, CourtIcon.BLUE, CourtIcon.BLUE};
 
     @Nonnull private final CourtService courtService;
 
