@@ -60,7 +60,7 @@ public class UnvalidatedUserService {
             try {
                 emailServiceProvider.sendEmail(unvalidatedUser.getEmail(), "Aktivierung Ihres fortylove Kontos", htmlContent);
             } catch (EmailSendingException e) {
-                return new DatabaseResult<>("Error while sending the email using " + e);
+                return new DatabaseResult<>(e.getMessage());
             }
         }
         return new DatabaseResult<>(unvalidatedUserRepository.save(unvalidatedUser));
