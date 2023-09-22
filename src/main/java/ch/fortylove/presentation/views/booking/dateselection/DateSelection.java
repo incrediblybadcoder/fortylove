@@ -10,16 +10,17 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 import java.time.LocalDate;
 import java.util.Locale;
 
 @SpringComponent
-@UIScope
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DateSelection extends HorizontalLayout {
 
     private LocalDate date;

@@ -54,9 +54,9 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
     public void createDevData() {
         final SortedSet<Timeslot> timeslots = bookingSettingsService.getBookingSettings().getTimeslots();
         final List<Court> courts = courtService.findAll();
-//        createBookingsToday(courts, timeslots);
-//        createBookingsYesterday(courts, timeslots);
-//        createBookingsTomorrow(courts, timeslots);
+        createBookingsToday(courts, timeslots);
+        createBookingsYesterday(courts, timeslots);
+        createBookingsTomorrow(courts, timeslots);
     }
 
     private void createBookingsToday(@Nonnull final List<Court> courts,
