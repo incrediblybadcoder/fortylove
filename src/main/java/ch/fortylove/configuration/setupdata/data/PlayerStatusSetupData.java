@@ -28,11 +28,11 @@ public class PlayerStatusSetupData implements ch.fortylove.configuration.setupda
 
     @Override
     public void createData() {
-        createPlayerStatusIfNotFound(ACTIVE, 4, 7);
+        createPlayerStatusIfNotFound(ACTIVE, 2, 7);
         createPlayerStatusIfNotFound(PASSIVE, 1, 3);
         createPlayerStatusIfNotFound(INACTIVE, 0, 0);
-        createPlayerStatusIfNotFound(TOURNAMENT, 5, 7);
-        createPlayerStatusIfNotFound(GUEST, 3, 7);
+        createPlayerStatusIfNotFound(TOURNAMENT, 3, 7);
+        createPlayerStatusIfNotFound(GUEST, 2, 7);
     }
 
     @Nonnull
