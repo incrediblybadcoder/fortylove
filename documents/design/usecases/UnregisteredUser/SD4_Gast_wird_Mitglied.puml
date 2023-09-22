@@ -1,0 +1,42 @@
+@startuml
+autonumber
+participant "App fortylove" as App
+participant "RegistrationView" as RegView
+participant "UnregisteredUsers Table" as UnregTab
+participant "Email System" as Email
+participant "Users Table" as UsersTab
+participant "Benutzer" as User
+participant "ManagementView" as ManView
+participant "Admin" as Admin
+
+User -> App : Navigation auf App fortylove
+User -> App : Klick auf "Registration"
+App -> RegView : Zeige RegistrationView
+User -> RegView : Eingabe: Vorname, Nachname, E-Mail, Passwort
+RegView -> App : Anfrage zur Validierung und Registrierung
+App -> App : Pruefe ob Benutzer existiert
+alt E-Mail Adresse existiert
+    App -> RegView : Meldung: E-Mail Adresse existiert schon
+else E-Mail Adresse nicht vorhanden
+    App -> UnregTab : Eintrag erstellen
+    App -> Email : Senden Aktivierungslink
+end
+User -> Email : Öffnen E-Mail
+User -> App : Klick auf Aktivierungslink
+App -> UsersTab : Eintrag erstellen mit Rolle GUEST
+User -> App : Login
+User -> App : Klick auf "Mitglied werden"
+App -> UsersTab : Status ändern zu GUEST_PENDING
+Admin -> ManView : Navigation
+ManView -> App : Zeige Anfragen
+alt Annahme
+    Admin -> ManView : Anfrage annehmen
+    App -> UsersTab : Status ändern zu MEMBER
+    App -> Email : Senden E-Mail (Bestätigung)
+else Ablehnung
+    Admin -> ManView : Anfrage ablehnen
+    App -> UsersTab : Status ändern zu GUEST
+    App -> Email : Senden E-Mail (Ablehnung)
+end
+
+@enduml
