@@ -108,7 +108,13 @@ public class BookingGrid extends Grid<Court> {
             final Booking booking = bookingOptional.get();
             if (isActive) {
                 final boolean isOwner = user.equals(booking.getOwner());
+
+                if (isOwner) {
+                    notificationUtil.persistentInformationNotification("owner booking on date: " + booking.getDate());
+                }
+
                 return BookedCell.active(isOwner, booking, event -> bookedCellClickEvent(booking));
+
             } else {
                 return BookedCell.inActive(booking);
             }
@@ -152,6 +158,9 @@ public class BookingGrid extends Grid<Court> {
     private void newBookingEvent(@Nonnull final Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
         notificationUtil.databaseNotification(bookingDatabaseResult);
+        final Booking newbooking = bookingDatabaseResult.getData().get();
+        notificationUtil.persistentInformationNotification("new booking: " + booking.getDateFormatted() + booking.getTimeslot().getStartTime());
+        notificationUtil.persistentInformationNotification("new bookingsave: " + newbooking.getDateFormatted() + newbooking.getTimeslot().getStartTime());
         refresh(date);
     }
 
