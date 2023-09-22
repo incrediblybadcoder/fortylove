@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @DevSetupData
 public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupdata.data.DevSetupData {
@@ -25,18 +26,10 @@ public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupd
 
     @Override
     public void createDevData() {
-        createArticle("Cluberöffnung", "Good News Everybody! Der TCS Untervaz wurde soeben eröffnet!", yesterday());
-        createArticle("Sand im Clubhaus", "Bitte reinigt eure Schuhe nach dem Verlassen des Tennisplatzes" +
-                "und vor dem Betreten des Clubhauses gründlich. Unsere Böden sehen vermehrt aus wie die Strände vom Mallorca!", yesterday());
-        createArticle("Rücktritt Clubpresident", "Hanspeter Peterhans wird uns Ende Jahr nach nur kurzer Amtszeit" +
-                "leider verlassen. Es hat sich herausgestellt, dass er eine Allergie gegen Tennisballhaare entwickelt hat.", yesterday());
-        createArticle("Tennisschläger Aktion", "Wir dürfen euch mit Freude mitteilen, dass unser Partner " +
-                "\"Brackets105\" ihre neuste Kollektion an Profischläger zu vergünstigten Preisen anbietet. Der Flyer " +
-                "liegt in der Küche im Clubhaus aus.", yesterday());
-        createArticle("Sommerturnier", "Soeben eröffnet findet auch gleich das erste Turnier statt!" +
-                " Alle sind herzlich eingeladen, an unserem Sommerturnier nächste Woche Samstag teilzunehmen", today());
-        createArticle("Zukünftige Wartungsarbeiten", "Die Plätze 2 und 3 werden kommende Woche gewartet." +
-                "Aus diesem Grund wurden sie bereits gesperrt. Alle bereits bestehenden Buchungen wurde aufgelöst.", today());
+        createArticle("Einführung fortylove", "Der TC Untervaz ist neu mit fortylove unterwegs! Hier könnt ihr ab jetzt eure Platzbuchungen vornehmen.", yesterday(LocalTime.of(13, 25)));
+        createArticle("Tennisschläger Aktion", "Wir dürfen euch mit Freude mitteilen, dass unser Partner \"Tennisshop41\" ihre neuste Kollektion an Profischläger zu vergünstigten Preisen anbietet. Der Flyer " +
+                "liegt in der Küche im Clubhaus aus.", yesterday(LocalTime.of(18, 2)));
+        createArticle("Anmeldung Clubabend", "Denkt daran, euch für den Clubabend am 21. Oktober anzumelden. Die Frist läuft noch bis kommenden Freitag.", today(LocalTime.of(9, 54)));
     }
 
     @Transactional
@@ -47,12 +40,12 @@ public class ArticleDevSetupData implements ch.fortylove.configuration.devsetupd
     }
 
     @Nonnull
-    private LocalDateTime today() {
-        return dateTimeUtil.todayNow();
+    private LocalDateTime today(@Nonnull final LocalTime time) {
+        return LocalDateTime.of(dateTimeUtil.today(), time);
     }
 
     @Nonnull
-    private LocalDateTime yesterday() {
-        return dateTimeUtil.todayNow().minusDays(1);
+    private LocalDateTime yesterday(@Nonnull final LocalTime time) {
+        return LocalDateTime.of(dateTimeUtil.today().minusDays(1), time);
     }
 }
