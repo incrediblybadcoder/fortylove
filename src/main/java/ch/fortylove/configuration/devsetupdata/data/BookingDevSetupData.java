@@ -208,7 +208,7 @@ public class BookingDevSetupData implements ch.fortylove.configuration.devsetupd
 
         if (isNewBooking(bookings, date, timeslot)) {
             final Booking booking = new Booking(court, owner, opponents, timeslot, date);
-            bookingRepository.save(booking);    // bypass validation for dev setup data
+            bookingRepository.save(booking);
             court.addBooking(booking);
         }
     }

@@ -76,6 +76,7 @@ public class BookingGrid extends Grid<Court> {
     public void refresh(@Nonnull final LocalDate date) {
         this.date = date;
         final List<Court> courts = courtService.findAllWithBookingsByDate(date);
+
         setItems(courts);
     }
 
@@ -109,6 +110,7 @@ public class BookingGrid extends Grid<Court> {
             if (isActive) {
                 final boolean isOwner = user.equals(booking.getOwner());
                 return BookedCell.active(isOwner, booking, event -> bookedCellClickEvent(booking));
+
             } else {
                 return BookedCell.inActive(booking);
             }
