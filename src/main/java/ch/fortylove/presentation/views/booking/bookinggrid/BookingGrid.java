@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @SpringComponent
 @UIScope
@@ -76,18 +75,9 @@ public class BookingGrid extends Grid<Court> {
 
     public void refresh(@Nonnull final LocalDate date) {
         this.date = date;
-        notificationUtil.persistentInformationNotification("refresh grid with date: " + date);
-//        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
+        final List<Court> courts = courtService.findAllWithBookingsByDate(date);
 
-        final List<Court> allCourts = courtService.findAll();
-        for (final Court allCourt : allCourts) {
-            final Set<Booking> allBookings = allCourt.getBookings();
-            final Set<Booking> filteredBookings = allBookings.stream().filter(booking -> booking.getDate().equals(date)).collect(Collectors.toSet());
-            allCourt.setBookings(filteredBookings);
-        }
-
-
-        setItems(allCourts);
+        setItems(courts);
     }
 
     private void constructGrid() {
@@ -119,11 +109,6 @@ public class BookingGrid extends Grid<Court> {
             final Booking booking = bookingOptional.get();
             if (isActive) {
                 final boolean isOwner = user.equals(booking.getOwner());
-
-                if (isOwner) {
-                    notificationUtil.persistentInformationNotification("owner booking on date: " + booking.getDate());
-                }
-
                 return BookedCell.active(isOwner, booking, event -> bookedCellClickEvent(booking));
 
             } else {
@@ -147,8 +132,6 @@ public class BookingGrid extends Grid<Court> {
             final ValidationResult validationResult = bookingService.isBookingModifiableOnDate(booking);
             if (validationResult.isSuccessful()) {
                 bookingDialog.openExisting(booking);
-            } else {
-                notificationUtil.persistentInformationNotification(validationResult.getMessage());
             }
         });
     }
@@ -169,9 +152,6 @@ public class BookingGrid extends Grid<Court> {
     private void newBookingEvent(@Nonnull final Booking booking) {
         final DatabaseResult<Booking> bookingDatabaseResult = bookingService.create(booking);
         notificationUtil.databaseNotification(bookingDatabaseResult);
-        final Booking newbooking = bookingDatabaseResult.getData().get();
-        notificationUtil.persistentInformationNotification("new booking: " + booking.getDateFormatted() + booking.getTimeslot().getStartTime());
-        notificationUtil.persistentInformationNotification("new bookingsave: " + newbooking.getDateFormatted() + newbooking.getTimeslot().getStartTime());
         refresh(date);
     }
 
