@@ -123,9 +123,7 @@ public class BookingGrid extends Grid<Court> {
 
     private void bookedCellClickEvent(@Nonnull final Booking booking) {
         authenticationService.getAuthenticatedUser().ifPresent(currentUser -> {
-            notificationUtil.persistentInformationNotification("bookedCellClickEvent");
             if (!currentUser.equals(booking.getOwner())) {
-                notificationUtil.persistentInformationNotification("current user: " + currentUser + "booking user: " + booking.getOwner());
                 return;
             }
 

@@ -101,7 +101,7 @@ public class BookingService {
     protected ValidationResult isBookingModifiableOnDateInternal(@Nonnull final Booking booking,
                                                                  @Nonnull final LocalDateTime currentDateTime) {
         if (timeSlotService.isInPast(currentDateTime, booking.getDate(), booking.getTimeslot())) {
-            return ValidationResult.failure("Datum liegt in der Vergangenheit");
+            return ValidationResult.failure(String.format("Datum (%s) liegt in der Vergangenheit (%s)", LocalDateTime.of(booking.getDate(), booking.getTimeslot().getStartTime()), currentDateTime));
         }
 
         return ValidationResult.success();
