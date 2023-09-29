@@ -1,0 +1,43 @@
+@startuml
+
+package ch.fortylove.service {
+
+  class UserService {
+    -userRepository: UserRepository
+    -playerStatusService: PlayerStatusService
+    -dateTimeUtil: DateTimeUtil
+    -emailServiceProvider: IEmailServiceProvider
+    -baseUrl: String
+    -userFactory: UserFactory
+
+    +create(user: User): DatabaseResult<User>
+    +create(unvalidatedUser: UnvalidatedUser): DatabaseResult<User>
+    +update(user: User): DatabaseResult<User>
+    +findByEmail(email: String): Optional<User>
+    +findAll(): List<User>
+    +delete(id: UUID): DatabaseResult<UUID>
+    +getPossibleBookingOpponents(currentUser: User): List<User>
+    +getAllVisibleUsers(): List<User>
+    +generateAndSaveResetToken(email: String, tokenExpiryHours: int): boolean
+    +resetPasswordUsingToken(token: String, newPasswordEncrypted: String): boolean
+    +changeUserStatusToMember(user: User, playerStatus: PlayerStatus): DatabaseResult<User>
+    +changeUserStatusToGuest(user: User): DatabaseResult<User>
+    +findById(id: UUID): Optional<User>
+  }
+
+  class UserRepository
+  class PlayerStatusService
+  class DateTimeUtil
+  interface IEmailServiceProvider
+  class UserFactory
+
+  UserService --> UserRepository: uses
+  UserService --> PlayerStatusService: uses
+  UserService --> DateTimeUtil: uses
+  UserService --> IEmailServiceProvider: uses
+  UserService --> UserFactory: uses
+
+}
+note "Typische Service-Klasse der auf Spring-Boot\nbasierten fortylove App.\nDie Service Klassen sollen die Geschaefts-\nlogik der entsprechenden Entities (hier 'User')\nkapseln." as test
+
+@enduml

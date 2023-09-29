@@ -1,0 +1,66 @@
+@startuml
+
+package ch.fortylove.persistence.entity {
+
+  class User {
+    -firstName: String
+    -lastName: String
+    -email: String
+    -authenticationDetails: AuthenticationDetails
+    -userStatus: UserStatus
+    -enabled: boolean
+    -roles: Set<Role>
+    -ownerBookings: Set<Booking>
+    -opponentBookings: Set<Booking>
+    -playerStatus: PlayerStatus
+    -userSettings: UserSettings
+
+    +getFirstName(): String
+    +setFirstName(firstName: String): void
+    +getAuthenticationDetails(): AuthenticationDetails
+    +setAuthenticationDetails(authenticationDetails: AuthenticationDetails): void
+    +getUserStatus(): UserStatus
+    +setUserStatus(userStatus: UserStatus): void
+    +getLastName(): String
+    +setLastName(lastName: String): void
+    +getFullName(): String
+    +getEmail(): String
+    +setEmail(username: String): void
+    +getRoles(): Set<Role>
+    +setRoles(roles: Set<Role>): void
+    +isEnabled(): boolean
+    +setEnabled(enabled: boolean): void
+    +getOwnerBookings(): Set<Booking>
+    +setOwnerBookings(ownerBookings: Set<Booking>): void
+    +getOpponentBookings(): Set<Booking>
+    +setOpponentBookings(opponentBookings: Set<Booking>): void
+    +getPlayerStatus(): PlayerStatus
+    +setPlayerStatus(playerStatus: PlayerStatus): void
+    +getUserSettings(): UserSettings
+    +setUserSettings(userSettings: UserSettings): void
+    +getIdentifier(): String
+    +toString(): String
+    +compareTo(otherUser: User): int
+  }
+
+  class AuthenticationDetails
+  class UserStatus
+  class Role
+  class Booking
+  class PlayerStatus
+  class UserSettings
+
+  User --> AuthenticationDetails: OneToOne
+  User --> UserStatus: hasOne
+  User --> Role: ManyToMany
+  User --> Booking: OneToMany (ownerBookings)
+  User --> Booking: ManyToMany (opponentBookings)
+  User --> PlayerStatus: ManyToOne
+  User --> UserSettings: OneToOne
+
+}
+
+note "Typische JPA-Entitaetsklasse, welche\ndie Datenstruktur fuer einen Benutzer\nim System repraesentiert." as test
+
+
+@enduml
