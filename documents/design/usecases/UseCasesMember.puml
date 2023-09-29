@@ -13,6 +13,7 @@ rectangle fortylove {
     Actor --> (Favoriten erstellen)
     Actor --> (Profil aus System loeschen)
     Actor --> (Einloggen ins System)
+    Actor --> (Passwort aendern)
 }
 
 @enduml
