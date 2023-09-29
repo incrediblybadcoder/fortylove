@@ -4,7 +4,9 @@ actor :App-Developer:
 actor :Unregistered-User:
 note bottom: - Besitzt kein fortylove Konto\n- Kann keine Plaetze reservieren
 actor :Guest:
-note bottom: - Besitzt fortylove Konto\n- Vereinslos\n- Kann Plaetze reservieren
+note bottom: - Besitzt fortylove Konto\n- Vereinslos\n- Kann Plaetze reservieren\n- Erhält bei Buchung E-Mail mit Twint-Code\n  und Erklärung wie man zum Schlüssel kommt
+actor :Guest_Pending:
+note bottom: - Gleiche Rechte wie Guest\n- Wartet bis Admin-User Mitgliedschaft bestaetigt
 actor :Member:
-note bottom: - Besitzt fortylove Konto\n- Gehoert Verein an\n- Kann Plaetze reservieren
+note bottom: - Besitzt fortylove Konto\n- Gehoert Verein an\n- Kann Plaetze "gratis" reservieren
 @enduml

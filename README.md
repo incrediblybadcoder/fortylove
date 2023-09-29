@@ -1,6 +1,8 @@
 # fortylove
 
-[![Build Status](https://dev.azure.com/fortylove/fortylove/_apis/build/status%2FBuild%20and%20Test?branchName=refs%2Fpull%2F270%2Fmerge)](https://dev.azure.com/fortylove/fortylove/_build/latest?definitionId=9&branchName=refs%2Fpull%2F270%2Fmerge) ![Static Badge](https://img.shields.io/badge/Spring%20Boot-3.1.0-brightgreen) ![Static Badge](https://img.shields.io/badge/Vaadin%20Flow-24.2.0-blue)
+[![Build Status](https://dev.azure.com/fortylove/fortylove/_apis/build/status%2FBuild%20and%20Test?branchName=refs%2Fpull%2F270%2Fmerge)](https://dev.azure.com/fortylove/fortylove/_build/latest?definitionId=9&branchName=refs%2Fpull%2F270%2Fmerge) 
+![Static Badge](https://img.shields.io/badge/Spring%20Boot-3.1.0-brightgreen) 
+![Static Badge](https://img.shields.io/badge/Vaadin%20Flow-24.2.0-blue)
 
 Fortylove is a tennis club management system built with Java on Spring Boot with the web framework Vaadin. For persistence postgresql is used.
 
@@ -12,7 +14,7 @@ Fortylove is a tennis club management system built with Java on Spring Boot with
   - [Environment Variables](#environment-variables)
   - [Profiles](#profiles)
 - [Database](#database)
-- [Intellij Run-Configurations](#intellij-run-configurations)
+- [IntelliJ Run-Configurations](#intellij-run-configurations)
 
 ## Prerequisites
 
@@ -71,6 +73,6 @@ To use a live postgresql database, the postgresql server needs to have an empty 
 <br>
 To run the application in development mode, an in-memory database can be used. Simply use the `develop` profile and specify the spring environment-variables for the h2 in-memory database as described in the sample development configuration in [Environment Variables](#environment-variables).
 
-## Intellij Run-Configurations
+## IntelliJ Run-Configurations
 
-Template Intellij run-configurations are checked in to this repository. All non-critical environment variables are predefined.
+Template IntelliJ run-configurations are checked in to this repository. All non-critical environment variables are predefined.

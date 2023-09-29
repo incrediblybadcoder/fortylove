@@ -6,6 +6,10 @@ rectangle fortylove {
     Actor --> (Tennisplaetze loeschen)
     Actor --> (Tennisplaetze konfigurieren)
     Actor --> (UC_3\nMember verwalten)
+    Actor --> (Mitgliedschaftsanfragen verwalten)
+    Actor --> (Buchungsregeln verwalten)
+    Actor --> (Plaetze sperren)
+    Actor --> (Vereinsmitteilungen verwalten)
 }
 
 @enduml
