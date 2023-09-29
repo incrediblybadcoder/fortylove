@@ -12,7 +12,7 @@ package "ch.fortylove"{
     [Entity]
     [Repository]
     [Error]
-    note "Datenmodelle und Datenzugriff\nüber Repositories.\nSpezifsche Exceptions." as NotePersistence
+    note "Datenmodelle und Datenzugriff\nüber Repositories.\nSpezifische Exceptions." as NotePersistence
   }
 
   package "Presentation" as Presentation {
