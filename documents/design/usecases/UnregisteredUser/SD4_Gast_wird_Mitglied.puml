@@ -21,21 +21,21 @@ else E-Mail Adresse nicht vorhanden
     App -> UnregTab : Eintrag erstellen
     App -> Email : Senden Aktivierungslink
 end
-User -> Email : Öffnen E-Mail
+User -> Email : Oeffnen E-Mail
 User -> App : Klick auf Aktivierungslink
 App -> UsersTab : Eintrag erstellen mit Rolle GUEST
 User -> App : Login
 User -> App : Klick auf "Mitglied werden"
-App -> UsersTab : Status ändern zu GUEST_PENDING
+App -> UsersTab : Status aendern zu GUEST_PENDING
 Admin -> ManView : Navigation
 ManView -> App : Zeige Anfragen
 alt Annahme
     Admin -> ManView : Anfrage annehmen
-    App -> UsersTab : Status ändern zu MEMBER
-    App -> Email : Senden E-Mail (Bestätigung)
+    App -> UsersTab : Status aendern zu MEMBER
+    App -> Email : Senden E-Mail (Bestaetigung)
 else Ablehnung
     Admin -> ManView : Anfrage ablehnen
-    App -> UsersTab : Status ändern zu GUEST
+    App -> UsersTab : Status aendern zu GUEST
     App -> Email : Senden E-Mail (Ablehnung)
 end
 
