@@ -26,6 +26,7 @@ public class MailTrapEmailService implements IEmailServiceProvider {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true); // true indicates HTML content
+            System.out.println("Sending mailtrap mail to " + to);
             mailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new EmailSendingException("Error while sending the email using MailTrap", e);

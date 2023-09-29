@@ -6,6 +6,7 @@ import ch.fortylove.presentation.views.account.registration.events.CancelRegistr
 import ch.fortylove.presentation.views.account.registration.events.RegistrationEvent;
 import ch.fortylove.service.UnvalidatedUserService;
 import ch.fortylove.service.UserService;
+import ch.fortylove.service.util.DatabaseResult;
 import ch.fortylove.util.NotificationUtil;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
@@ -62,9 +63,11 @@ public class RegistrationView extends VerticalLayout {
                 notificationUtil.errorNotification("Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.");
             } else {
                 unvalidatedUser.setEncryptedPassword(passwordEncoder.encode(registrationEvent.getPlainPassword()));
-                unvalidatedUserService.create(unvalidatedUser, true);
+
+                final DatabaseResult<UnvalidatedUser> databaseResult = unvalidatedUserService.create(unvalidatedUser, true);
+                notificationUtil.databaseNotification(databaseResult, "Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
+
                 gotToLoginPage();
-                notificationUtil.informationNotification("Überprüfe deine E-Mails um deine Registrierung abzuschliessen.");
         }
     }
 

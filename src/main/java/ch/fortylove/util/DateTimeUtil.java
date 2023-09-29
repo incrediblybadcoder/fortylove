@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @SpringComponent
 public class DateTimeUtil {
@@ -17,7 +18,8 @@ public class DateTimeUtil {
 
     @Nonnull
     public LocalTime now() {
-        return LocalTime.now();
+        ZoneId zoneId = ZoneId.of("Europe/Berlin");
+        return LocalTime.now(zoneId);
     }
 
     @Nonnull

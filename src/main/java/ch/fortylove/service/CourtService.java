@@ -72,10 +72,10 @@ public class CourtService {
     @Nonnull
     public List<Court> findAllWithBookingsByDate(@Nonnull final LocalDate date) {
         final Session session = entityManager.unwrap(Session.class);
-        final Filter filter = session.enableFilter("bookingDateFilter");
-        filter.setParameter("date", date);
+        final Filter filter = session.enableFilter(Court.BOOKING_DATE_FILTER);
+        filter.setParameter(Court.BOOKING_DATE_FILTER_PARAMETER, date);
         final List<Court> courts = findAll();
-        session.disableFilter("bookingDateFilter");
+        session.disableFilter(Court.BOOKING_DATE_FILTER);
 
         return courts;
     }
