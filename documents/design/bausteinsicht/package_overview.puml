@@ -1,0 +1,88 @@
+@startuml
+
+package "ch" {
+  package "fortylove" {
+
+    package "configuration" {
+      package "devsetupdata" {
+        class data
+      }
+      package "setupdata" {
+        class data
+      }
+    }
+
+    package "persistence" {
+      package "entity" {
+        package "converter" {}
+        package "factory" {}
+      }
+      package "error" {}
+      package "repository" {}
+    }
+
+    package "presentation" {
+      package "components" {
+        package "containers" {}
+        package "dialog" {}
+        package "managementform" {
+          package "events" {}
+        }
+      }
+      package "fieldvalidators" {}
+      package "views" {
+        package "account" {
+          package "forgotpassword" {
+            package "events" {}
+          }
+          package "login" {}
+          package "logout" {}
+          package "registration" {
+            package "events" {}
+          }
+        }
+        package "booking" {
+          package "articlegrid" {
+            class articledialog
+            package "events" {}
+          }
+          package "bookinggrid" {
+            class bookingdialog
+            package "cells" {}
+            package "events" {}
+            package "util" {}
+          }
+          package "dateselection" {
+            package "events" {}
+          }
+        }
+        package "legalnotice" {}
+        package "management" {
+          package "courtmanagement" {}
+          package "playerstatusmanagement" {}
+          package "usermanagement" {
+            package "admissiondialog" {
+              package "events" {}
+            }
+          }
+        }
+        package "support" {}
+        package "usermenu" {
+          package "settingsview" {}
+          package "userprofile" {}
+        }
+      }
+    }
+
+    package "security" {}
+
+    package "service" {
+      package "email" {}
+      package "util" {}
+    }
+
+    package "util" {}
+  }
+}
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+
+package "ch.fortylove"{
+
+  package "Configuration" as Configuration {
+    [DevSetupData]
+    [SetupData]
+    note "Daten für die Entwicklung\nund allgemeine App-Konfiguration." as NoteConfig
+  }
+
+  package "Persistence" as Persistence {
+    [Entity]
+    [Repository]
+    [Error]
+    note "Datenmodelle und Datenzugriff\nueber Repositories.\nSpezifische Exceptions." as NotePersistence
+  }
+
+  package "Presentation" as Presentation {
+    [Views]
+    [Dialogs]
+    [Forms]
+    note "UI-Elemente, Dialoge und\nEingabeformulare." as NotePresentation
+  }
+
+  package "Service" as Service {
+    [UserService]
+    [BookingService]
+    [CourtService]
+    [BookingService]
+    note "Geschaeftslogik, gekapselt in Services\npro Entitaet." as NoteService
+  }
+
+  package "Util" as Util {
+    [NotificationUtils]
+    [DateUtils]
+    note "Allgemeine Hilfsklassen." as NoteUtil
+  }
+
+}
+note "zur Uebersichtlichkeitshalber\nsind nur die wichtigsten Komponenten dargestellt" as test
+
+@enduml
