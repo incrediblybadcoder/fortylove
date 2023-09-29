@@ -2,17 +2,17 @@
 package "System Kontext" {
 
     [Web App \n(fortylove)] as App
-    [Datenbank \n(Postgre)] as DB
+    [Datenbank \n(PostgreSQL)] as DB
     [E-Mail Dienstleister \n(SendGrid)] as Email
     [Azure Cloud] as Azure
     [Domainprovider \n(Hostpoint)] as URL
     note bottom of URL: www.fortylove.ch
     [PGAdmin] as PGAdminTool
 
-    App --> DB: Daten Maniplation
+    App --> DB: Daten Manipulation
     App --> Email: E-Mail Senden
     App --> URL: URL Abfrage
-    PGAdminTool --> DB: Daten Maniplation
+    PGAdminTool --> DB: Daten Manipulation
 
     App -down-> Azure: Gehostet auf
     DB -down-> Azure: Gehostet auf
@@ -20,8 +20,8 @@ package "System Kontext" {
     note bottom of App: Nur online nutzbar
 
     :Benutzer: as User
-    User --> App: Interaktion über Homescreen-App auf Smartphone
-    User --> App: Interaktion über Webbrowser
+    User --> App: Interaktion ueber Homescreen-App auf Smartphone
+    User --> App: Interaktion ueber Webbrowser
 
     :Systemuser: as SystemUser
     SystemUser --> PGAdminTool: DB Management
